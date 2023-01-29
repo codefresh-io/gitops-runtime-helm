@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: v0.0.1
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime-sandbox
-version: 0.0.1
+version: 0.0.2
 home: https://github.com/codefresh-sandbox/gitops-runtime-charts
 keywords:
   - codefresh

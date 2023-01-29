@@ -12,6 +12,6 @@ docker run \
      quay.io/helmpack/chart-testing:v3.7.0 \
      -c cd /workdir \
      ct lint \
-     --config .configs/ct-lint.yaml \
-     --lint-conf .configs/lintconf.yaml \
+     --config ./.config/ct-lint.yaml \
+     --lint-conf ./.config/lintconf.yaml \
      --debug
