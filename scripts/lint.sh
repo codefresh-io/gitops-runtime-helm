@@ -6,11 +6,12 @@ set -eux
 SRCROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo -e "\n-- Linting all Helm Charts --\n"
-docker run \
+docker run -it \
      -v "$SRCROOT:/workdir" \
      --entrypoint /bin/sh \
      quay.io/helmpack/chart-testing:v3.7.0 \
      -c cd /workdir \
+     sh
      ct lint \
      --config ./.config/ct-lint.yaml \
      --lint-conf ./.config/lintconf.yaml \
