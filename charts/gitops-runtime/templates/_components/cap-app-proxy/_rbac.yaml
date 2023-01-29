@@ -1,0 +1,82 @@
+
+{{- define "cap-app-proxy.resources.rbac" }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app: cap-app-proxy
+  name: cap-app-proxy
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+      - configmap
+      - pods
+    verbs:
+      - get
+      - create
+      - delete
+      - deletecollection
+      - update
+      - patch
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - "apps"
+    resources:
+      - deployments
+    verbs:
+      - get
+      - list
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - deployments
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - applications
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cap-app-proxy-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argo-server-cluster-role
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "cap-app-proxy.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app: cap-app-proxy
+  name: cap-app-proxy
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cap-app-proxy
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "cap-app-proxy.serviceAccountName" . }}
+{{- end }}

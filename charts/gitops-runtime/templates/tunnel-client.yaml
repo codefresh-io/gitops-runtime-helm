@@ -1,0 +1,13 @@
+{{/* 
+Tunnel based (ingressless) runtime support. We use libraries to generate the resources so we can use Helm templating
+to intruduce the subdomainPrefix to the tunnel.
+Since the prefix is comprised of <accoundId>-<runtime name>, we can tempalate it and thus 
+reduce complexity of installation and number or mandatory values to provide for the installation to work.
+ */}}
+{{- if not .Values.global.runtime.ingress.enabled}}
+{{ $tunnelClientContext := (index .Subcharts "tunnel-client")}}
+{{ $accoundId := required "codefresh.accountId is required" .Values.global.codefresh.accountId }}
+{{ $runtimeName := required "runtime.name is required" .Values.global.runtime.name }}
+{{ $_ := set $tunnelClientContext.Values.tunnel "subdomainPrefix" (printf "%s-%s" $accoundId $runtimeName)}}
+{{- include "codefresh-tunnel-client.resources" $tunnelClientContext }}
+{{- end }}

@@ -1,0 +1,9 @@
+{{- define "event-reporters.events-reporter.resources"}}
+  {{- include "event-reporters.events-reporter.sa" .}}
+---
+  {{- include "event-reporters.events-reporter.rbac" .}}
+---
+  {{- include "event-reporters.events-reporter.eventsource" .}}
+---
+  {{- include "event-reporters.events-reporter.sensor" .}}
+{{- end }}

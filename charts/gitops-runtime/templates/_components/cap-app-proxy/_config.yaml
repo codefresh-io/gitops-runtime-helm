@@ -1,0 +1,14 @@
+{{- define "cap-app-proxy.resources.configmap" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cap-app-proxy-cm
+  labels:
+    {{- include "cap-app-proxy.labels" . | nindent 4 }}
+data:
+  argoCdUrl: {{ .Values.config.argoCdUrl }}
+  argoCdUsername: {{ .Values.config.argoCdUsername }}
+  argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
+  env: {{ .Values.config.env }}
+  runtimeName: {{ .Values.global.runtime.name }}
+{{- end }}

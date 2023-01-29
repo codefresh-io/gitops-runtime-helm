@@ -1,0 +1,96 @@
+{{- define "event-reporters.rollout-reporter.sensor"}}
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: rollout-reporter
+  labels:
+    {{- include "event-reporters.rollout-reporter.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.rollout.sensor.replicas }}
+  dependencies:
+    - eventName: rollouts
+      eventSourceName: rollout-reporter
+      name: rollouts
+    - eventName: replicasets
+      eventSourceName: rollout-reporter
+      name: replicasets
+    - eventName: analysisruns
+      eventSourceName: rollout-reporter
+      name: analysisruns
+  eventBusName: {{ .Values.global.runtime.eventBusName }}
+  template:
+    container:
+      name: ""
+      resources:
+      {{- with .Values.rollout.eventSource.resources  }}
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
+    serviceAccountName: {{ include "event-reporters.rollout-reporter.serviceAccountName" .}}
+  triggers:
+    - retryStrategy:
+        duration: 0
+        steps: 3
+      template:
+        conditions: rollouts
+        http:
+          headers:
+            Content-Type: application/json
+          method: POST
+          payload:
+            - dest: data.object
+              src:
+                dataKey: body
+                dependencyName: rollouts
+          secureHeaders:
+            - name: Authorization
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: codefresh-token
+          url: {{ printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote }}
+        name: rollouts
+    - retryStrategy:
+        duration: 0
+        steps: 3
+      template:
+        conditions: replicasets
+        http:
+          headers:
+            Content-Type: application/json
+          method: POST
+          payload:
+            - dest: data.object
+              src:
+                dataKey: body
+                dependencyName: replicasets
+          secureHeaders:
+            - name: Authorization
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: codefresh-token
+          url: {{ printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote }}
+        name: replicasets
+    - retryStrategy:
+        duration: 0
+        steps: 3
+      template:
+        conditions: analysisruns
+        http:
+          headers:
+            Content-Type: application/json
+          method: POST
+          payload:
+            - dest: data.object
+              src:
+                dataKey: body
+                dependencyName: analysisruns
+          secureHeaders:
+            - name: Authorization
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: codefresh-token
+          url: {{ printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote }}
+        name: analysisruns
+{{- end }}

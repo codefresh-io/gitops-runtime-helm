@@ -1,0 +1,13 @@
+
+{{/* Check if installation token is string or secretKeyRef and add the value with currect structure to app-proxy values */}}
+{{ $components := include "codefresh-gitops-runtime.component-list" . }}
+{{ $installationTokenEnvTplOutput := include "codefresh-gitops-runtime.installation-token-env-var-value" . | fromYaml }}
+{{ $argoCdUrl := include "codefresh-gitops-runtime.argocd.server.url" . }}
+{{ $appProxyContext := deepCopy . }}
+{{ $_ := set $appProxyContext "Values" (get .Values "app-proxy") }}
+{{- $_ := set $appProxyContext.Values "global" (get .Values "global") }}
+{{ $_ := set $appProxyContext.Values.config "argoCdUrl" $argoCdUrl }}
+{{ $_ := set $appProxyContext.Values.initContainer.env "COMPONENTS" $components }}
+{{ $_ := set $appProxyContext.Values.initContainer.env "USER_TOKEN" $installationTokenEnvTplOutput }}
+{{ $_ := set $appProxyContext.Values.env "USER_TOKEN" $installationTokenEnvTplOutput }}
+{{- include "cap-app-proxy.resources" $appProxyContext }}

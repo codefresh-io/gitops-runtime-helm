@@ -1,0 +1,24 @@
+{{- define "event-reporters.events-reporter.rbac"}}
+# allow default service account to read the codefresh-cm configmap
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: events-reporter
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets"]
+    resourceNames: ["codefresh-cm", "codefresh-token"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: events-reporter
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: events-reporter
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "event-reporters.events-reporter.serviceAccountName" .}}
+{{- end }}

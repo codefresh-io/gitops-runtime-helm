@@ -1,0 +1,9 @@
+output
+.vscode
+.DS_Store
+.idea
+**/__snapshot__
+**/*.tgz
+**/charts/**/charts
+#local-scripts/
+values.yaml

@@ -1,0 +1,53 @@
+suite: Enabling/disabling argo-workflows should accordingly enable/disable the event reporter and set/unset the routing in internal router
+templates:
+  - event-reporters/workflow-reporter.yaml
+  - internal-router.yaml
+tests:
+
+- it: event reporter not generated when workflows disabled
+  template: 'event-reporters/workflow-reporter.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.enabled: false
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: event reporter generated when workflows enabled
+  template: 'event-reporters/workflow-reporter.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.enabled: true
+  asserts:
+  - containsDocument:
+      apiVersion: argoproj.io/v1alpha1
+      kind: EventSource
+  - containsDocument:
+      apiVersion: argoproj.io/v1alpha1
+      kind: Sensor
+
+- it: internal router config doesn't have workflows route when workflows disabled
+  template: 'internal-router.yaml'
+  documentIndex: 0
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.enabled: false
+  asserts:
+  - notMatchRegex:
+      path: data.default\.conf\.template
+      pattern: .+/workflows.+
+
+- it: internal router config has workflows route when workflows enabled
+  template: 'internal-router.yaml'
+  documentIndex: 0
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.enabled: true
+  asserts:
+  - matchRegex:
+      path: data.default\.conf\.template
+      pattern: .+/workflows.+

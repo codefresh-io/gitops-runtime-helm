@@ -1,0 +1,34 @@
+apiVersion: v2
+appVersion: v0.0.1
+description: A Helm chart for Codefresh gitops runtime
+name: gitops-runtime-sandbox
+version: 0.0.1
+home: https://github.com/codefresh-sandbox/gitops-runtime-charts
+keywords:
+  - codefresh
+  - gitops
+maintainers:
+  - name: codefresh
+    url: https://codefresh-io.github.io/
+dependencies:
+- name: argo-cd
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 5.7.0-2-CR-16709-init-app-proxy
+- name: argo-events
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 2.0.5-1-cf-init
+- name: argo-workflows
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 0.22.8-1-cf-init
+  condition: argo-workflows.enabled
+- name: argo-rollouts
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 2.22.1-1-cap-sw
+  condition: argo-rollouts.enabled
+- name: sealed-secrets
+  repository: https://bitnami-labs.github.io/sealed-secrets/
+  version: 2.1.6
+- name: codefresh-tunnel-client
+  repository: https://chartmuseum.codefresh.io/codefresh-tunnel-client
+  version: "0.1.11"
+  alias: tunnel-client

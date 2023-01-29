@@ -1,0 +1,50 @@
+{{- define "event-reporters.rollout-reporter.eventsource"}}
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: rollout-reporter
+  labels:
+    {{- include "event-reporters.rollout-reporter.labels" . | nindent 4}}
+spec:
+  replicas: {{ .Values.rollout.eventSource.replicas }}
+  eventBusName: {{ .Values.global.runtime.eventBusName }}
+  resource:
+    analysisruns:
+      eventTypes:
+        - ADD
+        - UPDATE
+        - DELETE
+      filter:
+        createdBy: null
+      group: argoproj.io
+      resource: analysisruns
+      version: v1alpha1
+    replicasets:
+      eventTypes:
+        - ADD
+        - UPDATE
+        - DELETE
+      filter:
+        createdBy: null
+      group: apps
+      resource: replicasets
+      version: v1
+    rollouts:
+      eventTypes:
+        - ADD
+        - UPDATE
+        - DELETE
+      filter:
+        createdBy: null
+      group: argoproj.io
+      resource: rollouts
+      version: v1alpha1
+  template:
+    container:
+      name: ""
+      resources:
+      {{- with .Values.rollout.eventSource.resources  }}
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
+    serviceAccountName: {{ include "event-reporters.rollout-reporter.serviceAccountName" .}}
+{{- end }}

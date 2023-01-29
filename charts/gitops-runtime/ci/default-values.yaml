@@ -1,0 +1,21 @@
+global:
+  codefresh:
+    accountId: 628a80b693a15c0f9c13ab75 # Codefresh Account id for ilia-codefresh for now, needs to be some test account
+    userToken:
+      secretKeyRef:
+        name: mysecret
+        key: myvalue
+        optional: true
+      
+  runtime:
+    name: test-runtime1
+    cluster: test-cluster
+
+    ingress:
+      className: "nginx"
+      hosts:
+      - runtime.codefresh.local
+
+
+argo-rollouts:
+  enabled: true

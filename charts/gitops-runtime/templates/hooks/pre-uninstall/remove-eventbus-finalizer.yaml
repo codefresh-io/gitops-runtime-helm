@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: remove-events-finalizers
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      serviceAccount: argocd-application-controller
+      restartPolicy: Never
+      containers:
+      - name: remove-eventbus-finalizer
+        image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
+        imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
+        command: ["sh", "-c"]
+        args: 
+        - |
+          kubectl patch EventBus $(kubectl get eventbus -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge && \
+          kubectl patch Eventsource $(kubectl get EventSource -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge && \
+          kubectl patch Sensor $(kubectl get Sensor -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge ;
+          return 0

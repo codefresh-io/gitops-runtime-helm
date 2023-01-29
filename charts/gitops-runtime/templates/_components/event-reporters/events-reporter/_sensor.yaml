@@ -1,0 +1,45 @@
+{{- define "event-reporters.events-reporter.sensor"}}
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  labels:
+    {{- include "event-reporters.events-reporter.labels" . | nindent 4}}
+  name: events-reporter
+spec:
+  replicas: {{ .Values.events.sensor.replicas }}
+  template:
+    serviceAccountName: {{ include "event-reporters.events-reporter.serviceAccountName" .}}
+    container:
+      resources:
+      {{- with .Values.events.sensor.resources  }}
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
+  dependencies:
+  - eventName: events
+    eventSourceName: events-reporter
+    name: events
+  eventBusName: {{ .Values.global.runtime.eventBusName }}
+  triggers:
+  - retryStrategy:
+      duration: 0
+      steps: 3
+    template:
+      conditions: events
+      http:
+        headers:
+          Content-Type: application/json
+        method: POST
+        payload:
+        - dest: data
+          src:
+            dataKey: body
+            dependencyName: events
+        secureHeaders:
+        - name: Authorization
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name: codefresh-token
+        url: {{ printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote }}
+      name: events
+{{- end }}

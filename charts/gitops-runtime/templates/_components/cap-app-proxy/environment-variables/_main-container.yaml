@@ -1,0 +1,117 @@
+{{- define "cap-app-proxy.environment-variables.defaults" -}}
+ARGO_CD_URL:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: argoCdUrl
+      optional: true
+ARGO_CD_USERNAME:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: argoCdUsername
+      optional: true
+ARGO_CD_PASSWORD:
+  valueFrom:
+    secretKeyRef:
+      name: argocd-initial-admin-secret
+      key: password
+ARGO_WORKFLOWS_INSECURE:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: argoWorkflowsInsecure
+      optional: true
+ARGO_WORKFLOWS_URL:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: argoWorkflowsUrl
+      optional: true
+CF_HOST:
+  valueFrom:
+    configMapKeyRef:
+      name: codefresh-cm
+      key: base-url
+      optional: true
+CORS:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: cors
+      optional: true
+ENV:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: env
+      optional: true
+GRAPHQL_DEBUG:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: graphqlDebug
+      optional: true
+GRAPHQL_PLAYGROUND:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: graphqlPlayground
+      optional: true
+NAMESPACE:
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+PORT:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: port
+      optional: true
+REPOS_DIR:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: reposDir
+      optional: true
+RUNTIME_NAME:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: runtimeName
+RUNTIME_TOKEN:
+  valueFrom:
+    secretKeyRef:
+      name: codefresh-token
+      key: token
+      optional: true
+RUNTIME_STORE_IV:
+  valueFrom:
+    secretKeyRef:
+      name: codefresh-token
+      key: encryptionIV
+      optional: true
+STORE_BACKEND:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: storeBackend
+      optional: true
+STRIP_PREFIX:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: stripPrefix
+      optional: true
+NODE_EXTRA_CA_CERTS: /app/config/all/all.cer
+{{- end -}}
+
+{{/*
+Read defaults from the template above and merge with the values provided in values file
+*/}}
+{{- define "cap-app-proxy.environment-variables" -}}
+{{- $defaults := (include "cap-app-proxy.environment-variables.defaults" . | fromYaml ) }}
+{{- $overrides := .Values.env }}
+{{- $mergedValues := merge $overrides $defaults }}
+{{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" $mergedValues }}
+{{- end -}}

@@ -1,0 +1,31 @@
+{{- define "event-reporters.workflow-reporter.eventsource"}}
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: workflow-reporter
+  labels:
+    {{- include "event-reporters.workflow-reporter.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.workflow.eventSource.replicas }}
+  eventBusName: {{ .Values.global.runtime.eventBusName }}
+  resource:
+    workflows:
+      eventTypes:
+        - ADD
+        - UPDATE
+        - DELETE
+      filter:
+        createdBy: null
+      namespace: {{ .Release.Namespace }}
+      group: argoproj.io
+      resource: workflows
+      version: v1alpha1
+  template:
+    container:
+      name: ""
+      resources:
+      {{- with .Values.workflow.eventSource.resources  }}
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
+    serviceAccountName: {{ include "event-reporters.workflow-reporter.serviceAccountName" .}}
+{{- end }}

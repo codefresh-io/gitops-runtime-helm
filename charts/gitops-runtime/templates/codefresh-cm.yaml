@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: codefresh-cm
+  labels:
+    {{- include "codefresh-gitops-runtime.labels" . | nindent 4 }}
+data:
+  base-url: {{ .Values.global.codefresh.url }}
+  bootstrapRevision: {{ .Chart.Version }}
+  cluster: {{ .Values.global.runtime.cluster }}
+  ingressClassName: {{ .Values.global.runtime.ingress.className | default "" | quote }}
+  ingressController: {{ .Values.global.runtime.ingress.className | default "" | quote }}
+  ingressHost: {{ include "codefresh-gitops-runtime.ingress-url" . }}
+  version: {{ .Chart.Version }}

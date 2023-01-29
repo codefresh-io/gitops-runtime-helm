@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventBus
+metadata:
+  name: codefresh-eventbus
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  labels:
+    app.kubernetes.io/part-of: argo-events
+    codefresh.io/internal: "true"
+spec:
+  {{- with .Values.global.runtime.eventBus }}
+  {{- . | toYaml | nindent 2}}
+  {{- end}}
