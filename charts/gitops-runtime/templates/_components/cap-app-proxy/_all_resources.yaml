@@ -1,11 +1,11 @@
 {{- define "cap-app-proxy.resources" }}
-  {{- include "cap-app-proxy.resources.configmap" . }}
+  {{ include "cap-app-proxy.resources.configmap" . }}
 ---
-  {{- include "cap-app-proxy.resources.deployment" . }}
+  {{ include "cap-app-proxy.resources.deployment" . }}
 ---
-  {{- include "cap-app-proxy.resources.rbac" . }}
+  {{ include "cap-app-proxy.resources.rbac" . }}
 ---
-  {{- include "cap-app-proxy.resources.service" . }}
+  {{ include "cap-app-proxy.resources.service" . }}
 ---
-  {{- include "cap-app-proxy.resources.sa" .}}
+  {{ include "cap-app-proxy.resources.sa" .}}
 {{- end }}

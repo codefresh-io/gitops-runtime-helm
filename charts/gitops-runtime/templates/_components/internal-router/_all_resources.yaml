@@ -1,9 +1,9 @@
 {{- define "internal-router.resources" }}
-  {{- include "internal-router.resources.configmap" . }}
+  {{ include "internal-router.resources.configmap" . }}
 ---
-  {{- include "internal-router.resources.deployment" . }}
+  {{ include "internal-router.resources.deployment" . }}
 ---
-  {{- include "internal-router.resources.service" . }}
+  {{ include "internal-router.resources.service" . }}
 ---
-  {{- include "internal-router.resources.sa" .}}
+  {{ include "internal-router.resources.sa" .}}
 {{- end }}

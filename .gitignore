@@ -6,4 +6,3 @@ output
 **/*.tgz
 **/charts/**/charts
 #local-scripts/
-values.yaml
