@@ -6,7 +6,7 @@ global:
     # -- Events API endpoint URL suffix
     apiEventsPath: "/2.0/api/events"
     # -- Codefresh Account id
-    accountId: "" 
+    accountId: ""
     # -- Internal shared config repository URL for this Codefresh account
     iscRepo: ""
     # -- User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided.
@@ -28,7 +28,6 @@ global:
       tls: {}
       annotations: {}
       hosts: []
-    
     # -- To be able to see the runtime in CodefreshUI, it is required to create and ArgoCD application that referneces it's components
     # For that purpose we can create an ArgoApp that referneces the chart.
     argoCDApplication:
@@ -96,30 +95,30 @@ argo-cd:
       accounts.admin: apiKey,login
     params:
       server.insecure: true
-# -----------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
 # Argo Events
-# -----------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
 argo-events:
   fullnameOverride: argo-events
   crds:
     install: false
-# -----------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
 # Argo Workflows
-# -----------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
 argo-workflows:
   fullnameOverride: argo
   enabled: true
-# -----------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
 # Argo rollouts
-# -----------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
 argo-rollouts:
   enabled: false
   fullnameOverride: argo-rollouts
   controller:
     replicas: 1
-# -----------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
 # Event reporters
-# -----------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
 event-reporters:
   events:
     # -- Do not set this value unless you are totally sure you need to override ArgoCD service name. Otherwise, it is determinted by chart logic
@@ -211,7 +210,7 @@ internal-router:
   # -- Internal routing settings. Do not change this unless you are absolutely certain - the values are determined by chart's logic.
   routing: {}
   #  Example of values:
-    # workflows: 
+    # workflows:
     #   enabled: true
     #   internalUrl: "https://argo-server1:2746/"
     # app-proxy:
@@ -285,28 +284,28 @@ app-proxy:
     allowPrivilegeEscalation: false
 
   readinessProbe:
-      # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
-      failureThreshold: 3
-      # -- Number of seconds after the container has started before [probe] is initiated
-      initialDelaySeconds: 10
-      # -- How often (in seconds) to perform the [probe]
-      periodSeconds: 10
-      # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
-      successThreshold: 1
-      # -- Number of seconds after which the [probe] times out
-      timeoutSeconds: 10
+    # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+    failureThreshold: 3
+    # -- Number of seconds after the container has started before [probe] is initiated
+    initialDelaySeconds: 10
+    # -- How often (in seconds) to perform the [probe]
+    periodSeconds: 10
+    # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+    successThreshold: 1
+    # -- Number of seconds after which the [probe] times out
+    timeoutSeconds: 10
 
   livenessProbe:
-      # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
-      failureThreshold: 10
-      # -- Number of seconds after the container has started before [probe] is initiated
-      initialDelaySeconds: 10
-      # -- How often (in seconds) to perform the [probe]
-      periodSeconds: 10
-      # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
-      successThreshold: 1
-      # -- Number of seconds after which the [probe] times out
-      timeoutSeconds: 10
+    # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+    failureThreshold: 10
+    # -- Number of seconds after the container has started before [probe] is initiated
+    initialDelaySeconds: 10
+    # -- How often (in seconds) to perform the [probe]
+    periodSeconds: 10
+    # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+    successThreshold: 1
+    # -- Number of seconds after which the [probe] times out
+    timeoutSeconds: 10
 
   service:
     type: ClusterIP

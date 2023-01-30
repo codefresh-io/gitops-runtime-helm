@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: v0.0.1
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime-sandbox
-version: 0.0.2
+version: 0.0.1
 home: https://github.com/codefresh-sandbox/gitops-runtime-charts
 keywords:
   - codefresh
@@ -30,5 +30,5 @@ dependencies:
   version: 2.1.6
 - name: codefresh-tunnel-client
   repository: https://chartmuseum.codefresh.io/codefresh-tunnel-client
-  version: "0.1.11"
+  version: "0.1.12"
   alias: tunnel-client

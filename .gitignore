@@ -5,4 +5,6 @@ output
 **/__snapshot__
 **/*.tgz
 **/charts/**/charts
+**/charts/**/Chart.lock
 #local-scripts/
+values.yaml

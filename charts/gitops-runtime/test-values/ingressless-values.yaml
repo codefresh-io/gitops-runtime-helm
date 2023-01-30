@@ -8,14 +8,11 @@ global:
         optional: true
 
   runtime:
-    name: default
+    name: test-runtime1
     cluster: test-cluster
 
     ingress:
-      className: "nginx"
-      hosts:
-      - runtime.codefresh.local
-
+      enabled: false
 
 argo-rollouts:
   enabled: true

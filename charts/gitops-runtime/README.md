@@ -1,6 +1,6 @@
 # gitops-runtime-sandbox
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
+![Version: 0.0.1-test30-cleanup-1](https://img.shields.io/badge/Version-0.0.1--test30--cleanup--1-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -20,7 +20,6 @@ A Helm chart for Codefresh gitops runtime
 | https://chartmuseum.codefresh.io/codefresh-tunnel-client | tunnel-client(codefresh-tunnel-client) | 0.1.11 |
 | https://codefresh-io.github.io/argo-helm | argo-cd | 5.7.0-2-CR-16709-init-app-proxy |
 | https://codefresh-io.github.io/argo-helm | argo-events | 2.0.5-1-cf-init |
-| https://codefresh-io.github.io/argo-helm | argo-rollouts | 2.22.1-1-cap-sw |
 | https://codefresh-io.github.io/argo-helm | argo-workflows | 0.22.8-1-cf-init |
 
 ## Values
@@ -82,9 +81,7 @@ A Helm chart for Codefresh gitops runtime
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
-| argo-rollouts.controller.replicas | int | `1` |  |
 | argo-rollouts.enabled | bool | `false` |  |
-| argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.fullnameOverride | string | `"argo"` |  |
 | event-reporters.events.argoCDServerServiceName | string | `nil` | Do not set this value unless you are totally sure you need to override ArgoCD service name. Otherwise, it is determinted by chart logic |
@@ -104,7 +101,6 @@ A Helm chart for Codefresh gitops runtime
 | event-reporters.workflow.sensor.replicas | int | `1` |  |
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","iscRepo":"","url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account id |
 | global.codefresh.apiEventsPath | string | `"/2.0/api/events"` | Events API endpoint URL suffix |
 | global.codefresh.iscRepo | string | `""` | Internal shared config repository URL for this Codefresh account |
@@ -112,14 +108,9 @@ A Helm chart for Codefresh gitops runtime
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | secretKeyRef to an existing secret containing the token |
 | global.codefresh.userToken.token | string | `""` | Token in plain text (A secret for this token will be created and managed by the chart) |
-| global.runtime | object | `{"argoCDApplication":{"chartRepo":"https://chartmuseum-dev.codefresh.io/gitops-runtime-sandbox","chartVersion":"","enabled":false,"name":"codefresh-gitops-runtime"},"cluster":null,"eventBus":{"nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}}},"eventBusName":"codefresh-eventbus","ingress":{"annotations":{},"className":"nginx","enabled":true,"hosts":[],"tls":{}},"name":null}` | Runtime level settings |
-| global.runtime.argoCDApplication | object | `{"chartRepo":"https://chartmuseum-dev.codefresh.io/gitops-runtime-sandbox","chartVersion":"","enabled":false,"name":"codefresh-gitops-runtime"}` | To be able to see the runtime in CodefreshUI, it is required to create and ArgoCD application that referneces it's components For that purpose we can create an ArgoApp that referneces the chart. |
-| global.runtime.eventBus | object | `{"nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}}}` | EventBus spec |
-| global.runtime.eventBusName | string | `"codefresh-eventbus"` | Eventbus name |
-| global.runtime.ingress | object | `{"annotations":{},"className":"nginx","enabled":true,"hosts":[],"tls":{}}` | Ingress settings |
-| global.runtime.ingress.enabled | bool | `true` | Whether ingress is enabled. If disabled, tunnel-based runtime will be deployed |
-| global.runtime.name | string | `nil` | Runtime name. Must be equal to namepsace in which it is intalled and unique per platform account |
-| installer | object | `{"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer-sandbox","tag":"alpha2"}}` | Runtime installer - Used for running hooks and checks on the release |
+| global.eventBusName | string | `"codefresh-eventbus"` | Eventbus name |
+| installer | object | `{"codefreshToken":null,"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer-sandbox","tag":"alpha2"}}` | Runtime installer - Used for running hooks and checks. |
+| installer.codefreshToken | string | `nil` | Codefresh user token used for runtime installation. Important: Also accepts secretKeyRef as value - so you can provide your own secret. |
 | internal-router.affinity | object | `{}` |  |
 | internal-router.env | object | `{}` | Environment variables - see values.yaml inside the chart for usage |
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
@@ -145,6 +136,23 @@ A Helm chart for Codefresh gitops runtime
 | internal-router.serviceAccount.create | bool | `true` |  |
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
+| runtime.argoCDApplication | object | `{"chartRepo":"https://chartmuseum-dev.codefresh.io/gitops-runtime-sandbox","chartVersion":"","enabled":true,"name":"codefresh-gitops-runtime"}` | To be able to see the runtime in CodefreshUI, it is required to create and ArgoCD application that referneces it's components For that purpose we can create an ArgoApp that referneces the chart. |
+| runtime.cluster | string | `nil` |  |
+| runtime.eventBus.nats.native.auth | string | `"token"` |  |
+| runtime.eventBus.nats.native.containerTemplate.resources.limits.cpu | string | `"500m"` |  |
+| runtime.eventBus.nats.native.containerTemplate.resources.limits.ephemeral-storage | string | `"2Gi"` |  |
+| runtime.eventBus.nats.native.containerTemplate.resources.limits.memory | string | `"4Gi"` |  |
+| runtime.eventBus.nats.native.containerTemplate.resources.requests.cpu | string | `"200m"` |  |
+| runtime.eventBus.nats.native.containerTemplate.resources.requests.ephemeral-storage | string | `"2Gi"` |  |
+| runtime.eventBus.nats.native.containerTemplate.resources.requests.memory | string | `"1Gi"` |  |
+| runtime.eventBus.nats.native.maxPayload | string | `"4MB"` |  |
+| runtime.eventBus.nats.native.replicas | int | `3` |  |
+| runtime.ingress.annotations | object | `{}` |  |
+| runtime.ingress.className | string | `"nginx"` |  |
+| runtime.ingress.enabled | bool | `true` |  |
+| runtime.ingress.hosts | list | `[]` |  |
+| runtime.ingress.tls | object | `{}` |  |
+| runtime.name | string | `nil` |  |
 | sealed-secrets.fullnameOverride | string | `"sealed-secrets"` |  |
 | sealed-secrets.image.registry | string | `"quay.io"` |  |
 | sealed-secrets.image.repository | string | `"codefresh/sealed-secrets-controller"` |  |
