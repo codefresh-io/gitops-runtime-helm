@@ -1,10 +1,10 @@
-# gitops-runtime-sandbox
+# gitops-runtime
 
 ![Version: 0.0.1-alpha-1](https://img.shields.io/badge/Version-0.0.1--alpha--1-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
-**Homepage:** <https://github.com/codefresh-sandbox/gitops-runtime-charts>
+**Homepage:** <https://github.com/codefresh-io/gitops-runtime-helm>
 
 ## Maintainers
 
