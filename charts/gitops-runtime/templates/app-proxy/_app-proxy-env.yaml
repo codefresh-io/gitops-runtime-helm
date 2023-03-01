@@ -6,8 +6,10 @@ app-proxy components are generated.
 {{- define "codefresh-gitops-runtime.app-proxy.calculated-env-vars"}}
 USER_TOKEN:
   {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 2 }}
+  {{- if and .Values.global.codefresh.gitIntegration.provider.name .Values.global.codefresh.gitIntegration.provider.apiUrl }}
 GIT_INTEGRATION_PROVIDER: {{ include "codefresh-gitops-runtime.git-integration.provider" .}}
 GIT_INTEGRATION_APIURL: {{ include "codefresh-gitops-runtime.git-integration.apiUrl" . }}
+  {{- end }}
   {{- if or .Values.global.runtime.gitCredentials.password.value .Values.global.runtime.gitCredentials.password.secretKeyRef }}
 GIT_USERNAME: {{ .Values.global.runtime.gitCredentials.username }}
 GIT_PASSWORD: 

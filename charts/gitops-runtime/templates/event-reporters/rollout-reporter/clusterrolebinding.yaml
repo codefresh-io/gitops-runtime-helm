@@ -1,10 +1,11 @@
 {{/* Mapping of argo rollouts clusterrole if such is created (see https://github.com/codefresh-io/argo-helm/blob/argo-rollouts/charts/argo-rollouts/templates/controller/clusterrolebinding.yaml)
  to the reporters ServiceAccount
 */}}
-{{- if and (index (get .Values "argo-rollouts") "clusterInstall") (index (get .Values "argo-rollouts") "controller" "createClusterRole") }}
-  {{- $eventReporterContext := deepCopy . }}
-  {{- $_ := set $eventReporterContext "Values" (get .Values "event-reporters") }}
-  {{- $_ := set $eventReporterContext.Values "global" (get .Values "global") }}
+{{- if index (get .Values "argo-rollouts") "enabled" }}
+  {{- if and (index (get .Values "argo-rollouts") "clusterInstall") (index (get .Values "argo-rollouts") "controller" "createClusterRole") }}
+    {{- $eventReporterContext := deepCopy . }}
+    {{- $_ := set $eventReporterContext "Values" (get .Values "event-reporters") }}
+    {{- $_ := set $eventReporterContext.Values "global" (get .Values "global") }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -17,4 +18,5 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "event-reporters.rollout-reporter.serviceAccountName" $eventReporterContext }}
     namespace: {{ .Release.Namespace }}
+  {{- end }}
 {{- end }}
