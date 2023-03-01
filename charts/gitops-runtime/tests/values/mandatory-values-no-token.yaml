@@ -1,5 +1,9 @@
 global:
   codefresh:
+    gitIntegration:
+      provider:
+        name: 'GITHUB'
+        apiUrl: 'https://api.github.com'
     accountId: 628a80b693a15c0f9c13ab75 # Codefresh Account id for ilia-codefresh for now, needs to be some test account
 
   runtime:

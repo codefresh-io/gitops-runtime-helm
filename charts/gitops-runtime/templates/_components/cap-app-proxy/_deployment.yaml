@@ -45,7 +45,7 @@ spec:
         resources:
           {{- toYaml .Values.initContainer.resources | nindent 12 }}
       containers:
-      - name: 'app-proxy'
+      - name: 'cap-app-proxy'
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

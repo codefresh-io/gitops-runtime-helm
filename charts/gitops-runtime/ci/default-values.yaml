@@ -6,6 +6,10 @@ global:
         name: mysecret
         key: myvalue
         optional: true
+    gitIntegration:
+      provider:
+        name: 'GITHUB'
+        apiUrl: 'https://api.github.com'
 
   runtime:
     name: default
@@ -15,6 +19,11 @@ global:
       className: "nginx"
       hosts:
       - runtime.codefresh.local
+
+    repoCredentialsTemplate:
+      url: 'https://github.com'
+      username: 'username'
+      password: 'dummy'
 
 
 argo-rollouts:

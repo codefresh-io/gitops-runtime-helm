@@ -1,40 +1,55 @@
 global:
-  # -- Codefresh platform and account related settings
+  # -- Codefresh platform and account-related settings
   codefresh:
-    # -- URL of Codefresh platform
+    # -- URL of Codefresh platform.
     url: "https://g.codefresh.io"
-    # -- Events API endpoint URL suffix
+    # -- Events API endpoint URL suffix.
     apiEventsPath: "/2.0/api/events"
-    # -- Codefresh Account id
+    # -- Codefresh Account ID.
     accountId: ""
-    # -- Internal shared config repository URL for this Codefresh account
-    iscRepo: ""
+    # -- Git integration for this runtime.  Requires the Git provider name and the provider's API URL.
+    gitIntegration:
+      # -- The Git provider to use. We currently support GitHub, GitLab, Bitbucket Server, and Bitbucket Cloud.
+      provider:
+        # -- Name of the Git provider: github, gitlab, bitbucket-server, or bitbucket-cloud.
+        name:
+        # -- Provider API URL. Example for GitHub, https://api.github.com.
+        apiUrl:
     # -- User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided.
     userToken:
-      # -- Token in plain text (A secret for this token will be created and managed by the chart)
+      # -- User token in plain text. The chart creates and manages the secret for this token.
       token: ""
-      # -- secretKeyRef to an existing secret containing the token
+      # -- User token that references an existing secret containing the token.
       secretKeyRef: {}
   # -- Runtime level settings
   runtime:
-    # -- Runtime name. Must be equal to namepsace in which it is intalled and unique per platform account
+    # -- Runtime name. Must be identical to the namepsace in which it is intalled and must be unique per platform account.
     name:
-    cluster:
+    # -- Runtime cluster. Should not be changed.
+    cluster: https://kubernetes.default.svc
     # -- Ingress settings
     ingress:
-      # -- Whether ingress is enabled. If disabled, tunnel-based runtime will be deployed
-      enabled: true
+      # -- The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https.
+      protocol: https
+      # -- Defines if ingress-based access mode is enabled for runtime. To use tunnel-based (ingressless) access mode, set to false.
+      enabled: false
       className: nginx
       tls: {}
       annotations: {}
+      # -- Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime.
       hosts: []
-    # -- To be able to see the runtime in CodefreshUI, it is required to create and ArgoCD application that referneces it's components
-    # For that purpose we can create an ArgoApp that referneces the chart.
-    argoCDApplication:
-      name: codefresh-gitops-runtime
-      enabled: false
-      chartRepo: https://chartmuseum-dev.codefresh.io/gitops-runtime-sandbox
-      chartVersion: ""
+
+    # -- Git credentials runtime. Runtime is not fully functional without those credentials.
+    # If not provided through the installation, they must be provided through the Codefresh UI.
+    gitCredentials:
+      # -- Username. Optional when using token in password.
+      username: "username"
+      # -- Password. If using GitHub token, please provide it here.
+      password:
+        # -- Plain text password
+        value:
+        # -- secretKeyReference for Git credentials password. Provide name and key fields.
+        secretKeyRef: {}
 
     # -- Eventbus name
     eventBusName: 'codefresh-eventbus'
@@ -58,11 +73,11 @@ global:
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
-# -- Runtime installer - Used for running hooks and checks on the release
+# -- Runtime installer used for running hooks and checks on the release
 installer:
   image:
-    repository: quay.io/codefresh/gitops-runtime-installer-sandbox
-    tag: alpha2
+    repository: quay.io/codefresh/gitops-runtime-installer
+    tag: ""
     pullPolicy: IfNotPresent
 # -----------------------------------------------------------------------------------------------------------------------
 # Sealed secrets
@@ -88,7 +103,7 @@ sealed-secrets:
 argo-cd:
   fullnameOverride: argo-cd
   crds:
-    install: false
+    install: true
   configs:
     cm:
       timeout.reconciliation: 20s
@@ -108,6 +123,9 @@ argo-events:
 argo-workflows:
   fullnameOverride: argo
   enabled: true
+  crds:
+    # -- Install and upgrade CRDs
+    install: true
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo rollouts
 #-----------------------------------------------------------------------------------------------------------------------
@@ -116,14 +134,15 @@ argo-rollouts:
   fullnameOverride: argo-rollouts
   controller:
     replicas: 1
+  installCRDs: true
 #-----------------------------------------------------------------------------------------------------------------------
 # Event reporters
 #-----------------------------------------------------------------------------------------------------------------------
 event-reporters:
   events:
-    # -- Do not set this value unless you are totally sure you need to override ArgoCD service name. Otherwise, it is determinted by chart logic
+    # -- LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service name.
     argoCDServerServiceName:
-    # -- Do not set this value unless you are totally sure you need to override ArgoCD service port. Otherwise, it is determinted by chart logic
+    # -- LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service port.
     argoCDServerServicePort:
     serviceAccount:
       create: true
@@ -235,14 +254,14 @@ app-proxy:
   image:
     repository: quay.io/codefresh/cap-app-proxy
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "CR-16355-dummy-components"
+    tag: 1.2115.0
     pullPolicy: IfNotPresent
 
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
       # Overrides the image tag whose default is the chart appVersion.
-      tag: "CR-16355-dummy-components"
+      tag: 1.2115.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -284,27 +303,27 @@ app-proxy:
     allowPrivilegeEscalation: false
 
   readinessProbe:
-    # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+    # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded.
     failureThreshold: 3
-    # -- Number of seconds after the container has started before [probe] is initiated
+    # -- Number of seconds after the container has started before [probe] is initiated.
     initialDelaySeconds: 10
-    # -- How often (in seconds) to perform the [probe]
+    # -- How often (in seconds) to perform the [probe].
     periodSeconds: 10
-    # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+    # -- Minimum consecutive successes for the [probe] to be considered successful after having failed.
     successThreshold: 1
-    # -- Number of seconds after which the [probe] times out
+    # -- Number of seconds after which the [probe] times out.
     timeoutSeconds: 10
 
   livenessProbe:
-    # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+    # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded.
     failureThreshold: 10
-    # -- Number of seconds after the container has started before [probe] is initiated
+    # -- Number of seconds after the container has started before [probe] is initiated.
     initialDelaySeconds: 10
-    # -- How often (in seconds) to perform the [probe]
+    # -- How often (in seconds) to perform the [probe].
     periodSeconds: 10
-    # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+    # -- Minimum consecutive successes for the [probe] to be considered successful after having failed.
     successThreshold: 1
-    # -- Number of seconds after which the [probe] times out
+    # -- Number of seconds after which the [probe] times out.
     timeoutSeconds: 10
 
   service:

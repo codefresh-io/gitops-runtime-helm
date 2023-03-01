@@ -1,0 +1,7 @@
+{{/* Check if installation token is string or secretKeyRef and add the value with currect structure to app-proxy values */}}
+{{ $argoCdUrl := include "codefresh-gitops-runtime.argocd.server.url" . }}
+{{ $appProxyContext := deepCopy . }}
+{{ $_ := set $appProxyContext "Values" (get .Values "app-proxy") }}
+{{ $_ := set $appProxyContext.Values "global" (get .Values "global") }}
+{{ $_ := set $appProxyContext.Values.config "argoCdUrl" $argoCdUrl }}
+{{- include "cap-app-proxy.resources.configmap" $appProxyContext }}

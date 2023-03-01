@@ -1,0 +1,105 @@
+# Test components that depend on templates from Argo projects. 
+# This is extremely important since currently templates are used that may change between versions of Argo charts.
+suite: Test integration of outputs from Argo Project templates with components that use them in the runtime chart
+templates:
+  - app-proxy/deplyoment.yaml
+  - app-proxy/workflows-crb.yaml
+  - app-proxy/config.yaml
+  - internal-router/config.yaml
+  - event-reporters/events-reporter/eventsource.yaml
+  - event-reporters/rollout-reporter/clusterrolebinding.yaml
+tests: 
+# ------------------------------------------------------------------------
+# ArgoCD 
+# Affected templates: app-proxy configmap and events-reporter eventsource
+# ------------------------------------------------------------------------
+- it: test app proxy argocd url - http
+  template: 'app-proxy/config.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-cd.fullnameOverride: argo-cd-test
+    argo-cd.configs.params.server\.insecure: true
+  asserts:
+  - equal:
+      path: data.argoCdUrl
+      value: http://argo-cd-test-server:80
+
+- it: test app proxy argocd url - https
+  template: 'app-proxy/config.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-cd.fullnameOverride: argo-cd-test
+    argo-cd.configs.params.server\.insecure: false
+  asserts:
+  - equal:
+      path: data.argoCdUrl
+      value: https://argo-cd-test-server:443
+
+- it: events reporter eventsource argocd url - http
+  template: 'event-reporters/events-reporter/eventsource.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-cd.fullnameOverride: argo-cd-test
+    argo-cd.configs.params.server\.insecure: true
+  asserts:
+  - equal:
+      path: spec.generic.events.url
+      value: argo-cd-test-server:80
+
+- it: events reporter eventsource argocd url - http
+  template: 'event-reporters/events-reporter/eventsource.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-cd.fullnameOverride: argo-cd-test
+    argo-cd.configs.params.server\.insecure: false
+  asserts:
+  - equal:
+      path: spec.generic.events.url
+      value: argo-cd-test-server:443
+# ------------------------------------------------------------------------------------------
+# Argo Workflows 
+# Affected templates: app-proxy ClusterRoleBinding to argo-server role, intenal-url config
+# ------------------------------------------------------------------------------------------
+- it: test app proxy ClusterRoleBinding to argo workflows role
+  template: 'app-proxy/workflows-crb.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.enabled: true
+    argo-workflows.fullnameOverride: argo-test
+  asserts:
+  - equal:
+      path: roleRef.name
+      value: argo-test-server
+
+- it: check worklfow route users argo-workflows server name
+  template: 'internal-router/config.yaml'
+  documentIndex: 0
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.enabled: true
+    argo-workflows.fullnameOverride: argo-test
+  asserts:
+  - matchRegex:
+      path: data.default\.conf\.template
+      pattern: .proxy_pass https://argo-test-server:2746+
+# ------------------------------------------------------------------------------------------
+# Argo rollouts 
+# Affected templates - rollouts reporter clusterrolebinding
+# ------------------------------------------------------------------------------------------
+- it: test rollout reporter ClusterRoleBinding to argo rollouts role
+  template: 'event-reporters/rollout-reporter/clusterrolebinding.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-rollouts.enabled: true
+    argo-rollouts.fullnameOverride: rollouts-test
+  asserts:
+  - equal:
+      path: roleRef.name
+      value: rollouts-test

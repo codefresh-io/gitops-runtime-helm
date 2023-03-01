@@ -4,11 +4,7 @@ CF_HOST:
     configMapKeyRef:
       name: codefresh-cm
       key: base-url
-CLUSTER:
-  valueFrom:
-    configMapKeyRef:
-      name: codefresh-cm
-      key: cluster
+CLUSTER: https://kubernetes.default.svc
 INGRESS_CLASS_NAME: 
   valueFrom:
     configMapKeyRef:
@@ -24,6 +20,7 @@ INGRESS_HOST:
     configMapKeyRef:
       name: codefresh-cm
       key: ingressHost
+INSTALLATION_TYPE: HELM
 NAMESPACE: 
   valueFrom:
     fieldRef:
@@ -52,6 +49,6 @@ Read defaults from the template above and merge with the values provided in valu
 {{- define "cap-app-proxy.environment-variables.init-container" -}}
 {{- $defaults := (include "cap-app-proxy.environment-variables.init-container-defaults" . | fromYaml ) -}}
 {{- $overrides := .Values.initContainer.env -}}
-{{- $mergedValues := merge $overrides $defaults -}}
+{{- $mergedValues := mergeOverwrite $defaults $overrides -}}
 {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" $mergedValues -}}
 {{- end -}}

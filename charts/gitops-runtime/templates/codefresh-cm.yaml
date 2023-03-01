@@ -7,7 +7,10 @@ metadata:
 data:
   base-url: {{ .Values.global.codefresh.url }}
   bootstrapRevision: {{ .Chart.Version }}
+  helmReleaseName: {{ .Release.Name }}
   cluster: {{ .Values.global.runtime.cluster }}
+  components: |-
+    {{- include "codefresh-gitops-runtime.component-list" . | nindent 4}}
   ingressClassName: {{ .Values.global.runtime.ingress.className | default "" | quote }}
   ingressController: {{ .Values.global.runtime.ingress.className | default "" | quote }}
   ingressHost: {{ include "codefresh-gitops-runtime.ingress-url" . }}

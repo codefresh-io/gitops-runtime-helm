@@ -18,7 +18,10 @@ global:
     cluster: test-cluster
 
     ingress:
-      enabled: false
+      enabled: true
+      protocol: foo
+      hosts:
+      - test-runtime2.codefresh.local
 
 argo-rollouts:
   enabled: true

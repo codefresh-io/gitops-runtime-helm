@@ -1,0 +1,18 @@
+
+{{- if index (get .Values "argo-workflows") "enabled" }}
+{{- $appProxyContext := deepCopy . }}
+{{- $_ := set $appProxyContext "Values" (get .Values "app-proxy") }}
+{{- $_ := set $appProxyContext.Values "global" (get .Values "global") }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cap-app-proxy-argo-workflows
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "codefresh-gitops-runtime.argo-workflows.server.name" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "cap-app-proxy.serviceAccountName" $appProxyContext }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

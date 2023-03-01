@@ -1,16 +1,15 @@
 suite: test installation token in app proxy
 templates:
-  - cap-app-proxy.yaml
+  - app-proxy/deployment.yaml
   - installation-token-secret.yaml
 
 tests:
 - it: app proxy plain string value
-  template: 'cap-app-proxy.yaml'
+  template: 'app-proxy/deployment.yaml'
   values:
   - ./values/mandatory-values-no-token.yaml
   set:
     global.codefresh.userToken.token: dummy
-  documentIndex: 1
   asserts:
   - contains:
       path: spec.template.spec.initContainers[0].env
@@ -32,13 +31,12 @@ tests:
             optional: true
 
 - it: app proxy secretkeyref
-  template: 'cap-app-proxy.yaml'
+  template: 'app-proxy/deployment.yaml'
   values:
   - ./values/mandatory-values-no-token.yaml
   set:
     global.codefresh.userToken.secretKeyRef.name: mysecret
     global.codefresh.userToken.secretKeyRef.key: mykey
-  documentIndex: 1
   asserts:
   - contains:
       path: spec.template.spec.containers[0].env

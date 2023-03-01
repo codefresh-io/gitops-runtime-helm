@@ -1,9 +1,7 @@
 {{- $eventReporterContext := deepCopy . }}
 {{- $_ := set $eventReporterContext "Values" (get .Values "event-reporters") }}
 {{- $_ := set $eventReporterContext.Values "global" (get .Values "global") }}
-
 # should allow overwriting in values.yaml
 {{- $_ := set $eventReporterContext.Values.events "argoCDServerServiceName" ( include "codefresh-gitops-runtime.argocd.server.servicename" . ) }}
 {{- $_ := set $eventReporterContext.Values.events "argoCDServerServicePort" ( include "codefresh-gitops-runtime.argocd.server.serviceport" . ) }}
-
-{{- include "event-reporters.events-reporter.resources" $eventReporterContext }}
+{{- include "event-reporters.events-reporter.eventsource" $eventReporterContext }}

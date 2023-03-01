@@ -112,6 +112,6 @@ Read defaults from the template above and merge with the values provided in valu
 {{- define "cap-app-proxy.environment-variables" -}}
 {{- $defaults := (include "cap-app-proxy.environment-variables.defaults" . | fromYaml ) }}
 {{- $overrides := .Values.env }}
-{{- $mergedValues := merge $overrides $defaults }}
+{{- $mergedValues := mergeOverwrite $defaults $overrides }}
 {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" $mergedValues }}
 {{- end -}}

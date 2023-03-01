@@ -117,17 +117,27 @@ Determine argocd server url. Must be called with chart root context
 {{- $serverName := include "codefresh-gitops-runtime.argocd.server.servicename" . }}
 {{- $port := include "codefresh-gitops-runtime.argocd.server.serviceport" . }}
 {{- if (eq $port "80") }}
-  {{- $protocol := "http" }}
+  {{- $protocol = "http" }}
 {{- end }}
 {{- printf "%s://%s:%s" $protocol $serverName $port }}
 {{- end}}
+
+{{/*
+Determine argo worklofws server name
+*/}}
+{{- define "codefresh-gitops-runtime.argo-workflows.server.name" -}}
+{{/* For now use template from argo worklow chart until better approach */}}
+{{- template "argo-workflows.server.fullname" (dict "Values" (get .Values "argo-workflows")) }}
+{{- end }}
+
+
 
 {{/*
 Determine argo workflows server url. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argo-workflows.server.url" -}}
 {{/* For now use template from Argo workflows chart until better approach */}}
-{{- printf "https://%s:2746" (include "argo-workflows.server.fullname" (dict "Values" (get .Values "argo-workflows"))) }}
+{{- printf "https://%s:2746" (include "codefresh-gitops-runtime.argo-workflows.server.name" .) }}
 {{- end }}
 
 {{/*
@@ -164,7 +174,12 @@ Get ingress url for both tunnel based and ingress based runtimes
 */}}
 {{- define "codefresh-gitops-runtime.ingress-url"}}
     {{- if .Values.global.runtime.ingress.enabled }}
-      {{- print (index .Values.global.runtime.ingress.hosts 0)}}
+      {{- $supportedProtocols := list "http" "https" }}
+      {{- if has .Values.global.runtime.ingress.protocol $supportedProtocols }}
+        {{- printf "%s://%s" .Values.global.runtime.ingress.protocol  (index .Values.global.runtime.ingress.hosts 0)}}
+      {{- else }}
+          {{ fail (printf "ERROR: Unsupported protocol %s for ingress. Only http and https supported" .Values.global.runtime.ingress.protocol)}}
+      {{- end }}
     {{- else }}
       {{- $accoundId := required "codefresh.accountId is required" .Values.global.codefresh.accountId }}
       {{- $runtimeName := required "runtime.name is required" .Values.global.runtime.name }}
@@ -178,17 +193,92 @@ Get ingress url for both tunnel based and ingress based runtimes
 Output comma separated list of installed runtime components
 */}}
 {{- define "codefresh-gitops-runtime.component-list"}}
-  {{- $comptList := list "argocd" "argo-events" "app-proxy" "events-reporter" "sealed-secrets" "internal-router"}}
+  {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
+  {{- $argoEvents := dict "name" "argo-events" "version" (get .Subcharts "argo-events").Chart.AppVersion }}
+  {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
+  {{- $internalRouter := dict "name" "internal-router" "version" .Chart.Version }}
+  {{- $eventsReporter := dict "name" "events-reporter" "version" .Chart.Version }}
+  {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
+  {{- $comptList := list $argoCD $argoEvents $appProxy $eventsReporter $sealedSecrets $internalRouter}}
   {{- if index (get .Values "argo-rollouts") "enabled" }}
-    {{- $comptList = append $comptList "argo-rollouts" }}
-    {{- $comptList = append $comptList "rollout-reporter" }}
+    {{- $rolloutReporter := dict "name" "rollout-reporter" "version" .Chart.Version }}
+    {{- $argoRollouts := dict "name" "argo-rollouts" "version" (get .Subcharts "argo-rollouts").Chart.AppVersion }}
+    {{- $comptList = append $comptList $argoRollouts }}
+    {{- $comptList = append $comptList $rolloutReporter }}
   {{- end }}
   {{- if index (get .Values "argo-workflows") "enabled" }}
-    {{- $comptList = append $comptList "argo-wokflows"}}
-    {{- $comptList = append $comptList "workflow-reporter" }}
+    {{- $workflowReporter := dict "name" "workflow-reporter" "version" .Chart.Version }}
+    {{- $argoWorkflows := dict "name" "argo-workflows" "version" (get .Subcharts "argo-workflows").Chart.AppVersion }}
+    {{- $comptList = append $comptList $workflowReporter}}
+    {{- $comptList = append $comptList $argoWorkflows }}
   {{- end }}
   {{- if not .Values.global.runtime.ingress.enabled }}
-  {{- $comptList = append $comptList "tunnel-client" }}
+    {{- $tunnelClient := dict "name" "codefresh-tunnel-client" "version" (get .Subcharts "tunnel-client").Chart.AppVersion }}
+    {{- $comptList = append $comptList $tunnelClient }}
   {{- end }}
-  {{- print (join "," $comptList) }}
+{{- $comptList | toYaml }}
 {{- end }}
+
+# ------------------------------------------------------------------------------------------------------------
+# Git integration
+------------------------------------------------------------------------------------------------------------
+{{- define "codefresh-gitops-runtime.git-integration.provider"}}
+  {{- if .Values.global.codefresh.gitIntegration.provider.name }}
+    {{- $supportedProviders := list "GITHUB" "GITLAB" "BITBUCKET" "BITBUCKET_CLOUD" }}
+    {{- if has .Values.global.codefresh.gitIntegration.provider.name $supportedProviders }}
+      {{- print .Values.global.codefresh.gitIntegration.provider.name }}
+    {{- else }}
+      {{ fail (printf "ERROR: Unsupported git provider %s. Currently supported: GITHUB,GITLAB,BITBUCKET,BITBUCKET_CLOUD" .Values.global.codefresh.gitIntegration.provider.name)}}
+    {{- end }}
+  {{- else }}
+    {{ fail "Values.global.codefresh.gitIntegration.provider.name is required"}}
+  {{- end }}
+{{- end }}
+
+{{- define "codefresh-gitops-runtime.git-integration.apiUrl"}}
+  {{- if .Values.global.codefresh.gitIntegration.provider.apiUrl }}
+    {{- print .Values.global.codefresh.gitIntegration.provider.apiUrl }}
+  {{- else }}
+    {{ fail "Values.global.codefresh.gitIntegration.provider.apiUrl is required"}}
+  {{- end }}
+{{- end }}
+
+# ------------------------------------------------------------------------------------------------------------
+# runtime git credentials
+# ------------------------------------------------------------------------------------------------------------
+{{- define "codefresh-gitops-runtime.runtime-gitcreds.password.default-secret-name" }}
+{{- printf "%s-git-password" .Values.global.runtime.name }}
+{{- end }}
+
+{{- define "codefresh-gitops-runtime.runtime-gitcreds.password.secretname" }}
+  {{- if .Values.global.runtime.gitCredentials.password.value}}
+  {{- include "codefresh-gitops-runtime.runtime-gitcreds.password.default-secret-name" . }}
+  {{- else if .Values.global.runtime.gitCredentials.password.secretKeyRef }}
+    {{- if hasKey .Values.global.runtime.gitCredentials.password.secretKeyRef "name" }}
+      {{- print .Values.global.runtime.gitCredentials.password.secretKeyRef.name }}
+    {{- else }}
+    {{ fail "secretKeyRef for global.runtime.gitCredentials.password illegal - must have name field"}}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- define "codefresh-gitops-runtime.runtime-gitcreds.password.secretkey" }}
+  {{- if .Values.global.runtime.gitCredentials.password.value}}
+  {{- print "password" }}
+  {{- else if .Values.global.runtime.gitCredentials.password.secretKeyRef }}
+    {{- if hasKey .Values.global.runtime.gitCredentials.password.secretKeyRef "key" }}
+      {{- print .Values.global.runtime.gitCredentials.password.secretKeyRef.key }}
+    {{- else }}
+    {{ fail "secretKeyRef for global.runtime.gitCredentials.password illegal - must have key field"}}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- define "codefresh-gitops-runtime.runtime-gitcreds.password.env-var-value"}}
+valueFrom:
+  secretKeyRef:
+    name: {{ include "codefresh-gitops-runtime.runtime-gitcreds.password.secretname" . }}
+    key: {{ include "codefresh-gitops-runtime.runtime-gitcreds.password.secretkey" . }}
+    optional: true
+{{- end }}
+# ------------------------------------------------------------------------------------------------------------

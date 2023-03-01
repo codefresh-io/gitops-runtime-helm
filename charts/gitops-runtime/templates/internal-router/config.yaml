@@ -1,7 +1,6 @@
 {{- $internalRouterContext := deepCopy . }}
 {{- $_ := set $internalRouterContext "Values" (get .Values "internal-router") }}
 {{- $_ := set $internalRouterContext.Values "global" (get .Values "global") }}
-
 {{/*
 Set workflows routing
 */}}
@@ -12,12 +11,10 @@ Set workflows routing
 {{- else }}
 {{ $_ := set $internalRouterContext.Values.routing "workflows" (dict "enabled" false)}}
 {{- end }}
-
 {{/*
 Set app-proxy routing
 */}}
 {{- if not (index $internalRouterContext.Values "routing" "app-proxy") }}
   {{ $_ := set $internalRouterContext.Values.routing "app-proxy" (dict "enabled" true "internalUrl" ( include "codefresh-gitops-runtime.app-proxy.url" . )) }}
 {{- end }}
-
-{{- include "internal-router.resources" $internalRouterContext }}
+{{- include "internal-router.resources.configmap" $internalRouterContext }}
