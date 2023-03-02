@@ -6,5 +6,3 @@ output
 **/*.tgz
 **/charts/**/charts
 **/charts/**/Chart.lock
-#local-scripts/
-values.yaml
