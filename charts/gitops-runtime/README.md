@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.0-alpha-1](https://img.shields.io/badge/Version-0.2.0--alpha--1-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
+![Version: 0.2.0-alpha-2](https://img.shields.io/badge/Version-0.2.0--alpha--2-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -35,7 +35,7 @@ A Helm chart for Codefresh gitops runtime
 | app-proxy.fullnameOverride | string | `"cap-app-proxy"` |  |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2115.0"` |  |
+| app-proxy.image.tag | string | `"1.2140.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |

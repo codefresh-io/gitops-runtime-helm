@@ -254,7 +254,7 @@ app-proxy:
   image:
     repository: quay.io/codefresh/cap-app-proxy
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 1.2115.0
+    tag: 1.2140.0
     pullPolicy: IfNotPresent
 
   initContainer:
