@@ -130,7 +130,7 @@ argo-workflows:
 # Argo rollouts
 #-----------------------------------------------------------------------------------------------------------------------
 argo-rollouts:
-  enabled: false
+  enabled: true
   fullnameOverride: argo-rollouts
   controller:
     replicas: 1
