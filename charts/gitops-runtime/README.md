@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.0-alpha-2](https://img.shields.io/badge/Version-0.2.0--alpha--2-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
+![Version: 0.2.0-alpha-3](https://img.shields.io/badge/Version-0.2.0--alpha--3-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -83,7 +83,7 @@ A Helm chart for Codefresh gitops runtime
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
 | argo-rollouts.controller.replicas | int | `1` |  |
-| argo-rollouts.enabled | bool | `false` |  |
+| argo-rollouts.enabled | bool | `true` |  |
 | argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
 | argo-rollouts.installCRDs | bool | `true` |  |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
