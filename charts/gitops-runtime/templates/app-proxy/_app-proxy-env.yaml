@@ -22,4 +22,7 @@ GIT_PASSWORD:
 {{- define "codefresh-gitops-runtime.app-proxy.init-container.calculated-env-vars"}}
 USER_TOKEN:
   {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 2 }}
+  {{- if .Values.global.codefresh.gitIntegration.provider.name }}
+GIT_INTEGRATION_PROVIDER: {{ include "codefresh-gitops-runtime.git-integration.provider" .}}
+  {{- end }}
 {{- end }}
