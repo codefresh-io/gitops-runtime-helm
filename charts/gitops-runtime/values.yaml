@@ -83,7 +83,7 @@ installer:
 # Sealed secrets
 # -----------------------------------------------------------------------------------------------------------------------
 sealed-secrets:
-  fullnameOverride: sealed-secrets
+  fullnameOverride: sealed-secrets-controller
   keyrenewperiod: "720h"
   image:
     registry: 'quay.io'
