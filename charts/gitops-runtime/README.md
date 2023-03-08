@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.0-alpha-5](https://img.shields.io/badge/Version-0.2.0--alpha--5-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
+![Version: 0.2.0-alpha-6](https://img.shields.io/badge/Version-0.2.0--alpha--6-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -106,13 +106,13 @@ A Helm chart for Codefresh gitops runtime
 | event-reporters.workflow.sensor.replicas | int | `1` |  |
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","gitIntegration":{"provider":{"apiUrl":null,"name":null}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
+| global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","gitIntegration":{"provider":{"apiUrl":"https://api.github.com","name":"GITHUB"}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |
 | global.codefresh.apiEventsPath | string | `"/2.0/api/events"` | Events API endpoint URL suffix. |
-| global.codefresh.gitIntegration | object | `{"provider":{"apiUrl":null,"name":null}}` | Git integration for this runtime.  Requires the Git provider name and the provider's API URL. |
-| global.codefresh.gitIntegration.provider | object | `{"apiUrl":null,"name":null}` | The Git provider to use. We currently support GitHub, GitLab, Bitbucket Server, and Bitbucket Cloud. |
-| global.codefresh.gitIntegration.provider.apiUrl | string | `nil` | Provider API URL. Example for GitHub, https://api.github.com. |
-| global.codefresh.gitIntegration.provider.name | string | `nil` | Name of the Git provider: github, gitlab, bitbucket-server, or bitbucket-cloud. |
+| global.codefresh.gitIntegration | object | `{"provider":{"apiUrl":"https://api.github.com","name":"GITHUB"}}` | Git integration for this runtime.  Requires the Git provider name and the provider's API URL. |
+| global.codefresh.gitIntegration.provider | object | `{"apiUrl":"https://api.github.com","name":"GITHUB"}` | The Git provider to use. We currently support GitHub, GitLab, Bitbucket Server, and Bitbucket Cloud. |
+| global.codefresh.gitIntegration.provider.apiUrl | string | `"https://api.github.com"` | Provider API URL. Example for GitHub, https://api.github.com. |
+| global.codefresh.gitIntegration.provider.name | string | `"GITHUB"` | Name of the Git provider: BITBUCKET, BITBUCKET_SERVER, GITHUB, GITLAB |
 | global.codefresh.url | string | `"https://g.codefresh.io"` | URL of Codefresh platform. |
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |

@@ -6,3 +6,6 @@ output
 **/*.tgz
 **/charts/**/charts
 **/charts/**/Chart.lock
+
+# only ignore the values.yaml file at the root of the repo
+/values.yaml

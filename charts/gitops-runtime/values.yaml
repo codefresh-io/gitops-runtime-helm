@@ -11,10 +11,10 @@ global:
     gitIntegration:
       # -- The Git provider to use. We currently support GitHub, GitLab, Bitbucket Server, and Bitbucket Cloud.
       provider:
-        # -- Name of the Git provider: github, gitlab, bitbucket-server, or bitbucket-cloud.
-        name:
+        # -- Name of the Git provider: BITBUCKET, BITBUCKET_SERVER, GITHUB, GITLAB
+        name: GITHUB
         # -- Provider API URL. Example for GitHub, https://api.github.com.
-        apiUrl:
+        apiUrl: https://api.github.com
     # -- User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided.
     userToken:
       # -- User token in plain text. The chart creates and manages the secret for this token.
