@@ -6,13 +6,6 @@ set -eux
 SRCROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo -e "\n-- Linting all Helm Charts --\n"
-docker run -it \
-     -v "$SRCROOT:/workdir" \
-     --entrypoint /bin/sh \
-     quay.io/helmpack/chart-testing:v3.7.0 \
-     -c cd /workdir \
-     sh
-     ct lint \
-     --config ./.config/ct-lint.yaml \
-     --lint-conf ./.config/lintconf.yaml \
-     --debug
+rm -f charts/*/Chart.lock
+rm -f charts/*/charts/*.tgz
+docker run -v "$SRCROOT:/workdir" --entrypoint /bin/sh quay.io/helmpack/chart-testing:v3.7.1 -c "cd /workdir && git config --global --add safe.directory /workdir && ct lint --config charts/gitops-runtime/ci/lint-config/ct-lint.yaml --lint-conf charts/gitops-runtime/ci/lint-config/lintconf.yaml --debug"

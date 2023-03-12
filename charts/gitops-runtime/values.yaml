@@ -258,7 +258,7 @@ app-proxy:
     serviceAccount:
       # -- Whether to create the service account or use an existing one
       create: true
-      # -- Name of the service account to create or the name of the existing one to use 
+      # -- Name of the service account to create or the name of the existing one to use
       name: codefresh-image-enrichment-sa
       # -- Annotations on the service account
       annotations:
