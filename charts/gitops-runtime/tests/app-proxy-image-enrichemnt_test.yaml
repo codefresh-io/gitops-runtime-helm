@@ -53,13 +53,12 @@ tests:
       path: data.enrichmentServiceAccountName
       value: test
 
-- it: app proxy environment variables set
+- it: app proxy environment variables set for enrichemnt and match the values in the configmap
   template: 'app-proxy/deployment.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
     app-proxy.image-enrichment.enabled: true
-    global.codefresh.userToken.secretKeyRef.key: mykey
   asserts:
   - contains:
       path: spec.template.spec.containers[0].env
@@ -124,4 +123,36 @@ tests:
             name: cap-app-proxy-cm
             key: enrichmentServiceAccountName
             optional: true
+
+- it: Verify correct name of serviceAccount
+  template: 'app-proxy/enrichment/sa.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.image-enrichment.serviceAccount.name: test
+  asserts:
+    - equal:
+        path: metadata.name
+        value: test
+
+- it: Correct serviceaccount is set in role binding
+  template: 'app-proxy/enrichment/rbac.yaml'
+  documentIndex: 1
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.image-enrichment.serviceAccount.name: test
+  asserts:
+  - contains:
+      path: subjects
+      content:
+        kind: ServiceAccount
+        name: test
+  - equal:
+      path: roleRef.name
+      value: cap-app-proxy-enrichment
+        
+  
+
+
   
