@@ -4,4 +4,8 @@
 {{ $_ := set $appProxyContext "Values" (get .Values "app-proxy") }}
 {{ $_ := set $appProxyContext.Values "global" (get .Values "global") }}
 {{ $_ := set $appProxyContext.Values.config "argoCdUrl" $argoCdUrl }}
+{{- if index (get .Values "argo-workflows") "enabled" }}
+  {{- $argoWorkflowsUrl := include "codefresh-gitops-runtime.argo-workflows.server.url" . }}
+  {{- $_ := set $appProxyContext.Values.config "argoWorkflowsUrl" $argoWorkflowsUrl }}
+{{- end}}
 {{- include "cap-app-proxy.resources.configmap" $appProxyContext }}

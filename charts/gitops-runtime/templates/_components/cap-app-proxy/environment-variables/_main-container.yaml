@@ -103,6 +103,48 @@ STRIP_PREFIX:
       name: cap-app-proxy-cm
       key: stripPrefix
       optional: true
+IRW_SERVICE_ACCOUNT:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: enrichmentServiceAccountName
+      optional: true
+IRW_CONCURRENCY_CM_NAME:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: enrichmentConcurrencyCmName
+      optional: true
+IRW_CONCURRENCY_CM_KEY:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: enrichmentConcurrencyCmKey
+      optional: true
+IRW_POD_GC_STRATEGY:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: enrichmentPodGcStrategy
+      optional: true
+IRW_TTL_AFTER_COMPLETION_IN_SECONDS:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: enrichmentTtlAfterCompletionInSeconds
+      optional: true
+IRW_TTL_ACTIVE_IN_SECONDS:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: enrichmentTtlActiveInSeconds
+      optional: true
+IRW_HEARTBEAT_INTERVAL_IN_SECONDS:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: enrichmentClientHeartbeatIntervalInSeconds
+      optional: true
 NODE_EXTRA_CA_CERTS: /app/config/all/all.cer
 {{- end -}}
 
