@@ -41,7 +41,7 @@ A Helm chart for Codefresh gitops runtime
 | app-proxy.image-enrichment.config.podGcStrategy | string | `"OnWorkflowCompletion"` | Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes. |
 | app-proxy.image-enrichment.config.ttlActiveInSeconds | int | `900` | Maximum allowed runtime for the enrichment workflow |
 | app-proxy.image-enrichment.config.ttlAfterCompletionInSeconds | int | `86400` | Number of seconds to live after completion |
-| app-proxy.image-enrichment.enabled | bool | `true` | Enable of disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well. |
+| app-proxy.image-enrichment.enabled | bool | `true` | Enable or disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well. |
 | app-proxy.image-enrichment.serviceAccount | object | `{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}` | Service account that will be used for enrichemnt process |
 | app-proxy.image-enrichment.serviceAccount.annotations | string | `nil` | Annotations on the service account |
 | app-proxy.image-enrichment.serviceAccount.create | bool | `true` | Whether to create the service account or use an existing one |

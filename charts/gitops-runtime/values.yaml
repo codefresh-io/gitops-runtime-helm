@@ -252,7 +252,7 @@ app-proxy:
   replicaCount: 1
   # -- Image enrichment process configuration
   image-enrichment:
-    # -- Enable of disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.
+    # -- Enable or disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.
     enabled: true
      # -- Service account that will be used for enrichemnt process
     serviceAccount:
