@@ -1,0 +1,16 @@
+{{- define "cap-app-proxy.image-enrichment.resources.role-binding" }}
+ {{- $enrichmentValues := get .Values "image-enrichment" }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "cap-app-proxy.fullname" . }}-enrichment
+  labels:
+    {{- include "cap-app-proxy.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: ""
+  kind: Role
+  name: {{ include "cap-app-proxy.fullname" . }}-enrichment
+subjects:
+  - kind: ServiceAccount
+    name: {{ $enrichmentValues.serviceAccount.name }}
+{{- end }}

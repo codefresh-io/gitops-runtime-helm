@@ -76,7 +76,7 @@ tests:
       path: roleRef.name
       value: argo-test-server
 
-- it: check worklfow route users argo-workflows server name
+- it: check worklfow route users argo-workflows server name and protocol https
   template: 'internal-router/config.yaml'
   documentIndex: 0
   values:
@@ -84,10 +84,51 @@ tests:
   set:
     argo-workflows.enabled: true
     argo-workflows.fullnameOverride: argo-test
+    argo-workflows.server.secure: true
   asserts:
   - matchRegex:
       path: data.default\.conf\.template
       pattern: .proxy_pass https://argo-test-server:2746+
+
+- it: check worklfow route users argo-workflows server name and protocol http
+  template: 'internal-router/config.yaml'
+  documentIndex: 0
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.enabled: true
+    argo-workflows.fullnameOverride: argo-test
+    argo-workflows.server.secure: false
+  asserts:
+  - matchRegex:
+      path: data.default\.conf\.template
+      pattern: .proxy_pass http://argo-test-server:2746+
+
+- it: test app proxy argocd workflows url - http
+  template: 'app-proxy/config.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.enabled: true
+    argo-workflows.fullnameOverride: argo-test
+    argo-workflows.server.secure: false
+  asserts:
+  - equal:
+      path: data.argoWorkflowsUrl
+      value: http://argo-test-server:2746
+
+- it: test app proxy argocd workflows url - https
+  template: 'app-proxy/config.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.enabled: true
+    argo-workflows.fullnameOverride: argo-test
+    argo-workflows.server.secure: true
+  asserts:
+  - equal:
+      path: data.argoWorkflowsUrl
+      value: https://argo-test-server:2746
 # ------------------------------------------------------------------------------------------
 # Argo rollouts 
 # Affected templates - rollouts reporter clusterrolebinding

@@ -1,0 +1,3 @@
+{{- if and (index (get .Values "app-proxy") "image-enrichment" "enabled") (not (index (get .Values "argo-workflows") "enabled")) }}
+  {{- fail "ERROR: app-proxy.image-enrichment is enabled but argo-workflows is disabled. This is not suppurted. Either disable erichment or enable workflows"}}
+{{- end }}

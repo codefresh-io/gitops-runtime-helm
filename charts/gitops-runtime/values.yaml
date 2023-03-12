@@ -250,6 +250,32 @@ tunnel-client:
 #-----------------------------------------------------------------------------------------------------------------------
 app-proxy:
   replicaCount: 1
+  # -- Image enrichment process configuration
+  image-enrichment:
+    # -- Enable of disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.
+    enabled: true
+     # -- Service account that will be used for enrichemnt process
+    serviceAccount:
+      # -- Whether to create the service account or use an existing one
+      create: true
+      # -- Name of the service account to create or the name of the existing one to use 
+      name: codefresh-image-enrichment-sa
+      # -- Annotations on the service account
+      annotations:
+    # -- Configurations for image enrichment workflow
+    config:
+      # -- The name of the configmap to use as synchronization semaphore, see https://argoproj.github.io/argo-workflows/synchronization/
+      concurrencyCmName: 'workflow-synchronization-semaphores'
+      # -- The name of the key in the configmap to use as synchronization semaphore
+      concurrencyCmKey: 'imageReportExecutor'
+      # -- Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes.
+      podGcStrategy: 'OnWorkflowCompletion'
+      # -- Number of seconds to live after completion
+      ttlAfterCompletionInSeconds: 86400
+      # -- Maximum allowed runtime for the enrichment workflow
+      ttlActiveInSeconds: 900
+      # -- Client heartbeat interval in seconds for image enrichemnt workflow
+      clientHeartbeatIntervalInSeconds: 5
 
   image:
     repository: quay.io/codefresh/cap-app-proxy

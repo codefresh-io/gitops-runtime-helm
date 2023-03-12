@@ -3,6 +3,7 @@ templates:
   - event-reporters/workflow-reporter/eventsource.yaml
   - event-reporters/workflow-reporter/sensor.yaml
   - internal-router/config.yaml
+  - app-proxy/config.yaml
 tests:
 
 - it: event reporter eventsource not generated when workflows disabled
@@ -58,3 +59,14 @@ tests:
   - matchRegex:
       path: data.default\.conf\.template
       pattern: .+/workflows.+
+
+- it: test app proxy empty argo workflows url when disabled
+  template: 'app-proxy/config.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.enabled: false
+  asserts:
+  - equal:
+      path: data.argoWorkflowsUrl
+      value:

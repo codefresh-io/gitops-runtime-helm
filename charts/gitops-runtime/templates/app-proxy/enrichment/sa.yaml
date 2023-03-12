@@ -1,0 +1,6 @@
+{{- $appProxyContext := deepCopy . }}
+{{- $_ := set $appProxyContext "Values" (get .Values "app-proxy") }}
+{{- $_ := set $appProxyContext.Values "global" (get .Values "global") }}
+{{- if (index  (get $appProxyContext "Values") "image-enrichment" "enabled") }}
+{{- include "cap-app-proxy.image-enrichment.resources.sa" $appProxyContext }}
+{{- end }}

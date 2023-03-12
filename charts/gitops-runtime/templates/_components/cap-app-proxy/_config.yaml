@@ -10,5 +10,16 @@ data:
   argoCdUsername: {{ .Values.config.argoCdUsername }}
   argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
   env: {{ .Values.config.env }}
+  argoWorkflowsUrl: {{ default "" .Values.config.argoWorkflowsUrl }}
   runtimeName: {{ .Values.global.runtime.name }}
+  {{- $enrichmentValues := get .Values "image-enrichment" }}
+  {{- if $enrichmentValues.enabled }}
+  enrichmentConcurrencyCmName: {{ $enrichmentValues.config.concurrencyCmName }}
+  enrichmentConcurrencyCmKey: {{ $enrichmentValues.config.concurrencyCmKey }}
+  enrichmentServiceAccountName: {{ $enrichmentValues.serviceAccount.name }}
+  enrichmentPodGcStrategy: {{ $enrichmentValues.config.podGcStrategy }}
+  enrichmentTtlAfterCompletionInSeconds: {{ $enrichmentValues.config.ttlAfterCompletionInSeconds }}
+  enrichmentTtlActiveInSeconds: {{ $enrichmentValues.config.ttlActiveInSeconds }}
+  enrichmentClientHeartbeatIntervalInSeconds: {{ $enrichmentValues.config.clientHeartbeatIntervalInSeconds }}
+  {{- end }}
 {{- end }}

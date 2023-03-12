@@ -1,0 +1,127 @@
+suite: Test integration of outputs from Argo Project templates with components that use them in the runtime chart
+templates:
+  - app-proxy/deployment.yaml
+  - app-proxy/config.yaml
+  - app-proxy/enrichment/sa.yaml
+  - app-proxy/enrichment/rbac.yaml
+  - app-proxy/enrichment/enforce-workflows-enabled.yaml
+tests:
+- it: Fail template if enrichment is enabled and workflows disabled
+  template: 'app-proxy/enrichment/enforce-workflows-enabled.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.enabled: false
+    app-proxy.image-enrichment.enabled: true
+  asserts:
+  - failedTemplate:
+      errorMessage: 'app-proxy.image-enrichment is enabled but argo-workflows is disabled. This is not suppurted. Either disable erichment or enable workflows'
+
+- it: Set correct values in app-proxy configmap
+  template: 'app-proxy/config.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.image-enrichment.enabled: true
+    app-proxy.image-enrichment.config.concurrencyCmName: test
+    app-proxy.image-enrichment.config.concurrencyCmKey: test
+    app-proxy.image-enrichment.config.podGcStrategy: test
+    app-proxy.image-enrichment.config.ttlAfterCompletionInSeconds: 1
+    app-proxy.image-enrichment.config.ttlActiveInSeconds: 1
+    app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds: 1
+    app-proxy.image-enrichment.serviceAccount.name: test
+  asserts:
+  - equal:
+      path: data.enrichmentConcurrencyCmName
+      value: test
+  - equal:
+      path: data.enrichmentConcurrencyCmKey
+      value: test
+  - equal:
+      path: data.enrichmentPodGcStrategy
+      value: test
+  - equal:
+      path: data.enrichmentTtlAfterCompletionInSeconds
+      value: 1
+  - equal:
+      path: data.enrichmentTtlActiveInSeconds
+      value: 1
+  - equal: 
+      path: data.enrichmentClientHeartbeatIntervalInSeconds
+      value: 1
+  - equal: 
+      path: data.enrichmentServiceAccountName
+      value: test
+
+- it: app proxy environment variables set
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.image-enrichment.enabled: true
+    global.codefresh.userToken.secretKeyRef.key: mykey
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: IRW_CONCURRENCY_CM_NAME
+        valueFrom:
+          configMapKeyRef:
+            name: cap-app-proxy-cm
+            key: enrichmentConcurrencyCmName
+            optional: true
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: IRW_CONCURRENCY_CM_KEY
+        valueFrom:
+          configMapKeyRef:
+            name: cap-app-proxy-cm
+            key: enrichmentConcurrencyCmKey
+            optional: true
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: IRW_POD_GC_STRATEGY
+        valueFrom:
+          configMapKeyRef:
+            name: cap-app-proxy-cm
+            key: enrichmentPodGcStrategy
+            optional: true
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: IRW_TTL_AFTER_COMPLETION_IN_SECONDS
+        valueFrom:
+          configMapKeyRef:
+            name: cap-app-proxy-cm
+            key: enrichmentTtlAfterCompletionInSeconds
+            optional: true
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: IRW_TTL_ACTIVE_IN_SECONDS
+        valueFrom:
+          configMapKeyRef:
+            name: cap-app-proxy-cm
+            key: enrichmentTtlActiveInSeconds
+            optional: true
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: IRW_HEARTBEAT_INTERVAL_IN_SECONDS
+        valueFrom:
+          configMapKeyRef:
+            name: cap-app-proxy-cm
+            key: enrichmentClientHeartbeatIntervalInSeconds
+            optional: true
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: IRW_SERVICE_ACCOUNT
+        valueFrom:
+          configMapKeyRef:
+            name: cap-app-proxy-cm
+            key: enrichmentServiceAccountName
+            optional: true
+  
