@@ -42,13 +42,13 @@ tests:
       value: test
   - equal:
       path: data.enrichmentTtlAfterCompletionInSeconds
-      value: 1
+      value: "1"
   - equal:
       path: data.enrichmentTtlActiveInSeconds
-      value: 1
+      value: "1"
   - equal: 
       path: data.enrichmentClientHeartbeatIntervalInSeconds
-      value: 1
+      value: "1"
   - equal: 
       path: data.enrichmentServiceAccountName
       value: test
