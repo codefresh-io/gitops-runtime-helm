@@ -18,8 +18,8 @@ data:
   enrichmentConcurrencyCmKey: {{ $enrichmentValues.config.concurrencyCmKey }}
   enrichmentServiceAccountName: {{ $enrichmentValues.serviceAccount.name }}
   enrichmentPodGcStrategy: {{ $enrichmentValues.config.podGcStrategy }}
-  enrichmentTtlAfterCompletionInSeconds: {{ $enrichmentValues.config.ttlAfterCompletionInSeconds }}
-  enrichmentTtlActiveInSeconds: {{ $enrichmentValues.config.ttlActiveInSeconds }}
-  enrichmentClientHeartbeatIntervalInSeconds: {{ $enrichmentValues.config.clientHeartbeatIntervalInSeconds }}
+  enrichmentTtlAfterCompletionInSeconds: {{ $enrichmentValues.config.ttlAfterCompletionInSeconds | quote }}
+  enrichmentTtlActiveInSeconds: {{ $enrichmentValues.config.ttlActiveInSeconds | quote }}
+  enrichmentClientHeartbeatIntervalInSeconds: {{ $enrichmentValues.config.clientHeartbeatIntervalInSeconds | quote }}
   {{- end }}
 {{- end }}
