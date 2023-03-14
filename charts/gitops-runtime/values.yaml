@@ -252,9 +252,9 @@ app-proxy:
   replicaCount: 1
   # -- Image enrichment process configuration
   image-enrichment:
-    # -- Enable or disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.
+    # -- Enable or disable enrichment process. Please note that for enrichment, argo-workflows must be enabled as well.
     enabled: true
-     # -- Service account that will be used for enrichemnt process
+     # -- Service account to use for enrichment process
     serviceAccount:
       # -- Whether to create the service account or use an existing one
       create: true
@@ -268,7 +268,7 @@ app-proxy:
       concurrencyCmName: 'workflow-synchronization-semaphores'
       # -- The name of the key in the configmap to use as synchronization semaphore
       concurrencyCmKey: 'imageReportExecutor'
-      # -- Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes.
+      # -- Pod garbage collection strategy. By default all pods will be deleted when the enrichment workflow completes.
       podGcStrategy: 'OnWorkflowCompletion'
       # -- Number of seconds to live after completion
       ttlAfterCompletionInSeconds: 86400
