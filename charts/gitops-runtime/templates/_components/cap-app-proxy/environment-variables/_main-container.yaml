@@ -103,6 +103,18 @@ STRIP_PREFIX:
       name: cap-app-proxy-cm
       key: stripPrefix
       optional: true
+SKIP_PERMISSIONS_VALIDATION:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: skipGitPermissionValidation
+      optional: true
+LOG_LEVEL:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: logLevel
+      optional: true
 IRW_SERVICE_ACCOUNT:
   valueFrom:
     configMapKeyRef:

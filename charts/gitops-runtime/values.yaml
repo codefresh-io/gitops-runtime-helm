@@ -280,14 +280,14 @@ app-proxy:
   image:
     repository: quay.io/codefresh/cap-app-proxy
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 1.2142.0
+    tag: CR-17702-fix-runtime-name-crash
     pullPolicy: IfNotPresent
 
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
       # Overrides the image tag whose default is the chart appVersion.
-      tag: 1.2142.0
+      tag: CR-17702-fix-runtime-name-crash
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -310,6 +310,10 @@ app-proxy:
     argoCdUsername: "admin"
     argoWorkflowsInsecure: "true"
     env: "production"
+    # -- Skit git permissions validation
+    skipGitPermissionValidation: "false"
+    # -- Log Level
+    logLevel: "info"
 
   env: {}
 
