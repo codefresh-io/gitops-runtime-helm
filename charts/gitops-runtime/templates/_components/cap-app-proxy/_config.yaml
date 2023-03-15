@@ -9,15 +9,17 @@ data:
   argoCdUrl: {{ .Values.config.argoCdUrl }}
   argoCdUsername: {{ .Values.config.argoCdUsername }}
   argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
-  env: {{ .Values.config.env }}
+  env: {{ .Values.config.env | quote}}
   argoWorkflowsUrl: {{ default "" .Values.config.argoWorkflowsUrl }}
-  runtimeName: {{ .Values.global.runtime.name }}
+  runtimeName: {{ .Values.global.runtime.name | quote}}
+  skipGitPermissionValidation: {{ .Values.config.skipGitPermissionValidation | quote }}
+  logLevel: {{ .Values.config.logLevel | quote }}
   {{- $enrichmentValues := get .Values "image-enrichment" }}
   {{- if $enrichmentValues.enabled }}
-  enrichmentConcurrencyCmName: {{ $enrichmentValues.config.concurrencyCmName }}
-  enrichmentConcurrencyCmKey: {{ $enrichmentValues.config.concurrencyCmKey }}
-  enrichmentServiceAccountName: {{ $enrichmentValues.serviceAccount.name }}
-  enrichmentPodGcStrategy: {{ $enrichmentValues.config.podGcStrategy }}
+  enrichmentConcurrencyCmName: {{ $enrichmentValues.config.concurrencyCmName | quote}}
+  enrichmentConcurrencyCmKey: {{ $enrichmentValues.config.concurrencyCmKey | quote}}
+  enrichmentServiceAccountName: {{ $enrichmentValues.serviceAccount.name | quote}}
+  enrichmentPodGcStrategy: {{ $enrichmentValues.config.podGcStrategy | quote}}
   enrichmentTtlAfterCompletionInSeconds: {{ $enrichmentValues.config.ttlAfterCompletionInSeconds | quote }}
   enrichmentTtlActiveInSeconds: {{ $enrichmentValues.config.ttlActiveInSeconds | quote }}
   enrichmentClientHeartbeatIntervalInSeconds: {{ $enrichmentValues.config.clientHeartbeatIntervalInSeconds | quote }}
