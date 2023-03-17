@@ -34,7 +34,7 @@ global:
       # -- Defines if ingress-based access mode is enabled for runtime. To use tunnel-based (ingressless) access mode, set to false.
       enabled: false
       className: nginx
-      tls: {}
+      tls: []
       annotations: {}
       # -- Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime.
       hosts: []
