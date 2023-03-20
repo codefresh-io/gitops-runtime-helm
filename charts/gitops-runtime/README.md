@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.0-alpha-10](https://img.shields.io/badge/Version-0.2.0--alpha--10-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
+![Version: 0.2.0-alpha-11](https://img.shields.io/badge/Version-0.2.0--alpha--11-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -132,7 +132,7 @@ A Helm chart for Codefresh gitops runtime
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","eventBus":{"nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}}},"eventBusName":"codefresh-eventbus","gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","tls":{}},"name":null}` | Runtime level settings |
+| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","eventBus":{"nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}}},"eventBusName":"codefresh-eventbus","gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","tls":[]},"name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.eventBus | object | `{"nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}}}` | EventBus spec |
 | global.runtime.eventBusName | string | `"codefresh-eventbus"` | Eventbus name |
@@ -141,7 +141,7 @@ A Helm chart for Codefresh gitops runtime
 | global.runtime.gitCredentials.password.secretKeyRef | object | `{}` | secretKeyReference for Git credentials password. Provide name and key fields. |
 | global.runtime.gitCredentials.password.value | string | `nil` | Plain text password |
 | global.runtime.gitCredentials.username | string | `"username"` | Username. Optional when using token in password. |
-| global.runtime.ingress | object | `{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","tls":{}}` | Ingress settings |
+| global.runtime.ingress | object | `{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","tls":[]}` | Ingress settings |
 | global.runtime.ingress.enabled | bool | `false` | Defines if ingress-based access mode is enabled for runtime. To use tunnel-based (ingressless) access mode, set to false. |
 | global.runtime.ingress.hosts | list | `[]` | Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime. |
 | global.runtime.ingress.protocol | string | `"https"` | The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https. |
