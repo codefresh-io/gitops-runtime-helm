@@ -1,4 +1,4 @@
-suite: Test integration of outputs from Argo Project templates with components that use them in the runtime chart
+suite: Enrichment flow related unit tests
 templates:
   - app-proxy/deployment.yaml
   - app-proxy/config.yaml
