@@ -1,0 +1,134 @@
+suite: misc tests on app-proxy templates generation
+templates:
+  - app-proxy/deployment.yaml
+  - app-proxy/config.yaml
+tests:
+- it: overriding of environment variables on main container
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.env.PORT: '8787'
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: PORT
+        value: 8787
+- it: setting security context on main container
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.securityContext.runAsUser: 1000
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].securityContext.runAsUser
+      value: 1000
+- it: override readiness and liveness probes values
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.readinessProbe.initialDelaySeconds: 1
+    app-proxy.readinessProbe.periodSeconds: 1
+    app-proxy.readinessProbe.timeoutSeconds: 1
+    app-proxy.readinessProbe.successThreshold: 1
+    app-proxy.readinessProbe.failureThreshold: 1
+    app-proxy.livenessProbe.initialDelaySeconds: 1
+    app-proxy.livenessProbe.periodSeconds: 1
+    app-proxy.livenessProbe.timeoutSeconds: 1
+    app-proxy.livenessProbe.successThreshold: 1
+    app-proxy.livenessProbe.failureThreshold: 1
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].readinessProbe.initialDelaySeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[0].readinessProbe.periodSeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[0].readinessProbe.timeoutSeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[0].readinessProbe.successThreshold
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[0].readinessProbe.failureThreshold
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[0].livenessProbe.initialDelaySeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[0].livenessProbe.periodSeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[0].livenessProbe.timeoutSeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[0].livenessProbe.successThreshold
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[0].livenessProbe.failureThreshold
+      value: 1
+
+- it: setting node selector
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.nodeSelector: 
+      test.io/node: "test"
+  asserts:
+  - equal:
+      path: spec.template.spec.nodeSelector
+      value:
+        test.io/node: "test"
+
+- it: setting tolerations
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.tolerations:
+      - key: "arch"
+        operator: "Equal"
+        value: "arm64"
+        effect: "NoSchedule"
+  asserts:
+  - contains:
+      path: spec.template.spec.tolerations
+      content:
+        key: "arch"
+        operator: "Equal"
+        value: "arm64"
+        effect: "NoSchedule"
+
+- it: setting affinity
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.affinity: 
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: topology.kubernetes.io/zone
+              operator: In
+              values:
+              - antarctica-east1
+              - antarctica-west1
+  asserts:
+  - equal:
+      path: spec.template.spec.affinity
+      value:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - antarctica-east1
+                - antarctica-west1
