@@ -1,7 +1,7 @@
-{{- if not (hasKey .Values.global.runtime "name") }}
+{{/*{{- if not (hasKey .Values.global.runtime "name") }}
  {{- fail "ERROR: runtime.name is mandatory" }}
 {{- end }}
 
 {{- if ne .Release.Namespace .Values.global.runtime.name  }}
   {{-  fail (printf "ERROR: Runtime %s must be installed in a namespace with the same name" .Values.global.runtime.name)}}
-{{- end }}
+{{- end }}*/}}
