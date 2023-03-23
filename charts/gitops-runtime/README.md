@@ -28,8 +28,10 @@ A Helm chart for Codefresh gitops runtime
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | app-proxy.affinity | object | `{}` |  |
-| app-proxy.config.argoCdUsername | string | `"admin"` |  |
+| app-proxy.config.argoCdUrl | string | `nil` | ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to |
+| app-proxy.config.argoCdUsername | string | `"admin"` | ArgoCD user to be used by app-proxy |
 | app-proxy.config.argoWorkflowsInsecure | string | `"true"` |  |
+| app-proxy.config.argoWorkflowsUrl | string | `nil` | Workflows server url. Determined by chart logic. Do not change unless you are certain you need to |
 | app-proxy.config.env | string | `"production"` |  |
 | app-proxy.config.logLevel | string | `"info"` | Log Level |
 | app-proxy.config.skipGitPermissionValidation | string | `"false"` | Skit git permissions validation |

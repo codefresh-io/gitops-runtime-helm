@@ -15,6 +15,20 @@ tests:
       content:
         name: PORT
         value: 8787
+- it: overriding of argoCD and workflows Url through values
+  template: 'app-proxy/config.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.config.argoCdUrl: 'https://test-argocd'
+    app-proxy.config.argoWorkflowsUrl: 'https://test-workflows'
+  asserts:
+  - equal:
+      path: data.argoCdUrl
+      value: https://test-argocd
+  - equal:
+      path: data.argoWorkflowsUrl
+      value: https://test-workflows
 - it: setting security context on main container
   template: 'app-proxy/deployment.yaml'
   values:
