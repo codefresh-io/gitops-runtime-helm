@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.0-alpha-13](https://img.shields.io/badge/Version-0.2.0--alpha--13-informational?style=flat-square) ![AppVersion: 0.1.26-helm-alpha](https://img.shields.io/badge/AppVersion-0.1.26--helm--alpha-informational?style=flat-square)
+![Version: 0.2.0-alpha-14](https://img.shields.io/badge/Version-0.2.0--alpha--14-informational?style=flat-square) ![AppVersion: 0.1.27-helm-alpha](https://img.shields.io/badge/AppVersion-0.1.27--helm--alpha-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
