@@ -88,7 +88,7 @@ sealed-secrets:
   image:
     registry: 'quay.io'
     repository: 'codefresh/sealed-secrets-controller'
-    tag: 'v0.17.5'
+    tag: 'v0.19.4'
   resources:
     limits:
       cpu: 500m
@@ -280,14 +280,14 @@ app-proxy:
   image:
     repository: quay.io/codefresh/cap-app-proxy
     # Overrides the image tag whose default is the chart appVersion.
-    tag: CR-17702-fix-runtime-name-crash
+    tag: 1.2170.0
     pullPolicy: IfNotPresent
 
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
       # Overrides the image tag whose default is the chart appVersion.
-      tag: CR-17702-fix-runtime-name-crash
+      tag: 1.2170.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -307,7 +307,12 @@ app-proxy:
   fullnameOverride: "cap-app-proxy"
 
   config:
+    # -- ArgoCD user to be used by app-proxy
     argoCdUsername: "admin"
+    # -- ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to
+    argoCdUrl:
+    # -- Workflows server url. Determined by chart logic. Do not change unless you are certain you need to
+    argoWorkflowsUrl:
     argoWorkflowsInsecure: "true"
     env: "production"
     # -- Skit git permissions validation

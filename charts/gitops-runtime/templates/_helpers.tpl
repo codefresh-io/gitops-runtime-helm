@@ -200,18 +200,18 @@ Output comma separated list of installed runtime components
   {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
   {{- $argoEvents := dict "name" "argo-events" "version" (get .Subcharts "argo-events").Chart.AppVersion }}
   {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
-  {{- $internalRouter := dict "name" "internal-router" "version" .Chart.Version }}
-  {{- $eventsReporter := dict "name" "events-reporter" "version" .Chart.Version }}
+  {{- $internalRouter := dict "name" "internal-router" "version" .Chart.AppVersion }}
+  {{- $eventsReporter := dict "name" "events-reporter" "version" .Chart.AppVersion }}
   {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
   {{- $comptList := list $argoCD $argoEvents $appProxy $eventsReporter $sealedSecrets $internalRouter}}
   {{- if index (get .Values "argo-rollouts") "enabled" }}
-    {{- $rolloutReporter := dict "name" "rollout-reporter" "version" .Chart.Version }}
+    {{- $rolloutReporter := dict "name" "rollout-reporter" "version" .Chart.AppVersion }}
     {{- $argoRollouts := dict "name" "argo-rollouts" "version" (get .Subcharts "argo-rollouts").Chart.AppVersion }}
     {{- $comptList = append $comptList $argoRollouts }}
     {{- $comptList = append $comptList $rolloutReporter }}
   {{- end }}
   {{- if index (get .Values "argo-workflows") "enabled" }}
-    {{- $workflowReporter := dict "name" "workflow-reporter" "version" .Chart.Version }}
+    {{- $workflowReporter := dict "name" "workflow-reporter" "version" .Chart.AppVersion }}
     {{- $argoWorkflows := dict "name" "argo-workflows" "version" (get .Subcharts "argo-workflows").Chart.AppVersion }}
     {{- $comptList = append $comptList $workflowReporter}}
     {{- $comptList = append $comptList $argoWorkflows }}

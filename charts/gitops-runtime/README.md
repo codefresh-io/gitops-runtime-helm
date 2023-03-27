@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.0-alpha-12](https://img.shields.io/badge/Version-0.2.0--alpha--12-informational?style=flat-square) ![AppVersion: v0.0.1](https://img.shields.io/badge/AppVersion-v0.0.1-informational?style=flat-square)
+![Version: 0.2.0-alpha-14](https://img.shields.io/badge/Version-0.2.0--alpha--14-informational?style=flat-square) ![AppVersion: 0.1.27-helm-alpha](https://img.shields.io/badge/AppVersion-0.1.27--helm--alpha-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -16,9 +16,9 @@ A Helm chart for Codefresh gitops runtime
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://bitnami-labs.github.io/sealed-secrets/ | sealed-secrets | 2.1.6 |
+| https://bitnami-labs.github.io/sealed-secrets/ | sealed-secrets | 2.7.3 |
 | https://chartmuseum.codefresh.io/codefresh-tunnel-client | tunnel-client(codefresh-tunnel-client) | 0.1.12 |
-| https://codefresh-io.github.io/argo-helm | argo-cd | 5.16.0-2-cap-CR-16950 |
+| https://codefresh-io.github.io/argo-helm | argo-cd | 5.27.1-1-cap-CR-17237 |
 | https://codefresh-io.github.io/argo-helm | argo-events | 2.0.5-1-cf-init |
 | https://codefresh-io.github.io/argo-helm | argo-rollouts | 2.22.1-1-cap-sw |
 | https://codefresh-io.github.io/argo-helm | argo-workflows | 0.22.8-1-cf-init |
@@ -28,8 +28,10 @@ A Helm chart for Codefresh gitops runtime
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | app-proxy.affinity | object | `{}` |  |
-| app-proxy.config.argoCdUsername | string | `"admin"` |  |
+| app-proxy.config.argoCdUrl | string | `nil` | ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to |
+| app-proxy.config.argoCdUsername | string | `"admin"` | ArgoCD user to be used by app-proxy |
 | app-proxy.config.argoWorkflowsInsecure | string | `"true"` |  |
+| app-proxy.config.argoWorkflowsUrl | string | `nil` | Workflows server url. Determined by chart logic. Do not change unless you are certain you need to |
 | app-proxy.config.env | string | `"production"` |  |
 | app-proxy.config.logLevel | string | `"info"` | Log Level |
 | app-proxy.config.skipGitPermissionValidation | string | `"false"` | Skit git permissions validation |
@@ -50,13 +52,13 @@ A Helm chart for Codefresh gitops runtime
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"CR-17702-fix-runtime-name-crash"` |  |
+| app-proxy.image.tag | string | `"1.2170.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"CR-17702-fix-runtime-name-crash"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2170.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -172,7 +174,7 @@ A Helm chart for Codefresh gitops runtime
 | internal-router.serviceAccount.create | bool | `true` |  |
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
-| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"v0.17.5"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
+| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"v0.19.4"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
 | tunnel-client | object | `{"libraryMode":true,"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Only relevant when runtime.ingress.enabled = false |
 | tunnel-client.libraryMode | bool | `true` | Do not change this value! Breaks chart logic |
 
