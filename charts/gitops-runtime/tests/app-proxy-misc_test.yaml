@@ -169,3 +169,16 @@ tests:
   - equal:
       path: data.myconf
       value: test
+
+- it: Release name exists in app-proxy env
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  release:
+    name: my-release
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: HELM_RELEASE_NAME
+        value: my-release

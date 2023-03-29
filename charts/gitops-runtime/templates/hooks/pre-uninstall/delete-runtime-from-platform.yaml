@@ -2,14 +2,13 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: delete-runtime-from-platform
-  #annotations:
-    #"helm.sh/hook": pre-delete
-    #"helm.sh/hook-delete-policy": hook-succeeded
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
 spec:
   backoffLimit: 3
   template:
     spec:
-      serviceAccount: argocd-application-controller
       restartPolicy: Never
       containers:
       - name: delete-runtime-from-platform
@@ -25,24 +24,8 @@ spec:
         command: ["sh", "-c"]
         args: 
         - |
-          token=""
-
-          if [ ! -z "${RUNTIME_TOKEN}" ]; then
-            token=$RUNTIME_TOKEN
-          elif [ ! -z "${USER_TOKEN}" ]; then
-            token=$USER_TOKEN
-          fi
-          
           if [ ! -z "$USER_TOKEN" ]; then
-            curl ${PLATFORM_URL}/2.0/api/graphql \
-            -H "Authorization: ${USER_TOKEN}" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"query\": \"mutation deleteRuntime(\$name: String"'!'") {\n  deleteRuntime(name: \$name)\",
-              \"variables\": {
-                \"name\": \"${RUNTIME_NAME}\"
-              }
-            }"
+            curl ${PLATFORM_URL}/2.0/api/graphql -H "Authorization: ${USER_TOKEN}" -H "Content-Type: application/json" -d "{\"query\": \"mutation deleteRuntime(\$name: String"'!'") {\n  deleteRuntime(name: \$name) }\",\"variables\": {\"name\": \"${RUNTIME_NAME}\"}}"
           else
             echo "User token unavailable, unable to remove runtime ${RUNTIME_NAME} from platform, please remove it from UI"
             exit 1
