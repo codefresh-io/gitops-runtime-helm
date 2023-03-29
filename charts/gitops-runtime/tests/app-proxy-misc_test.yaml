@@ -15,6 +15,18 @@ tests:
       content:
         name: PORT
         value: 8787
+- it: adding environment variables on main container
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.env.SOME_ENV: 'test'
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: SOME_ENV
+        value: test
 - it: overriding of argoCD and workflows Url through values
   template: 'app-proxy/config.yaml'
   values:
@@ -146,3 +158,14 @@ tests:
                 values:
                 - antarctica-east1
                 - antarctica-west1
+
+- it: add some other config option to app-proxy
+  template: 'app-proxy/config.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.config.myconf: 'test'
+  asserts:
+  - equal:
+      path: data.myconf
+      value: test
