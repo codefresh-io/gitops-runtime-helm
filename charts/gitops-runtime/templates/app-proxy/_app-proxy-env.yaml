@@ -4,6 +4,7 @@ to keep the separation of components as pseudo library charts, they are defined 
 app-proxy components are generated.
 */}}
 {{- define "codefresh-gitops-runtime.app-proxy.calculated-env-vars"}}
+HELM_RELEASE_NAME: {{ .Release.Name }}
 USER_TOKEN:
   {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 2 }}
 GIT_INTEGRATION_PROVIDER: {{ include "codefresh-gitops-runtime.git-integration.provider" .}}

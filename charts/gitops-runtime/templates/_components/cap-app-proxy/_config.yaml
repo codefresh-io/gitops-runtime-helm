@@ -1,4 +1,28 @@
+{{- define "cap-app-proxy.resources.configmap-documented-configs"}}
+argoCdUrl: {{ .Values.config.argoCdUrl }}
+argoCdUsername: {{ .Values.config.argoCdUsername }}
+argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
+env: {{ .Values.config.env | quote}}
+argoWorkflowsUrl: {{ default "" .Values.config.argoWorkflowsUrl }}
+runtimeName: {{ .Values.global.runtime.name | quote}}
+skipGitPermissionValidation: {{ .Values.config.skipGitPermissionValidation | quote }}
+logLevel: {{ .Values.config.logLevel | quote }}
+  {{- $enrichmentValues := get .Values "image-enrichment" }}
+  {{- if $enrichmentValues.enabled }}
+enrichmentConcurrencyCmName: {{ $enrichmentValues.config.concurrencyCmName | quote}}
+enrichmentConcurrencyCmKey: {{ $enrichmentValues.config.concurrencyCmKey | quote}}
+enrichmentServiceAccountName: {{ $enrichmentValues.serviceAccount.name | quote}}
+enrichmentPodGcStrategy: {{ $enrichmentValues.config.podGcStrategy | quote}}
+enrichmentTtlAfterCompletionInSeconds: {{ $enrichmentValues.config.ttlAfterCompletionInSeconds | quote }}
+enrichmentTtlActiveInSeconds: {{ $enrichmentValues.config.ttlActiveInSeconds | quote }}
+enrichmentClientHeartbeatIntervalInSeconds: {{ $enrichmentValues.config.clientHeartbeatIntervalInSeconds | quote }}
+  {{- end }}
+{{- end }}
+
 {{- define "cap-app-proxy.resources.configmap" }}
+{{- $documentedConfigs := (include "cap-app-proxy.resources.configmap-documented-configs" . | fromYaml ) }}
+{{- $overrides := .Values.config }}
+{{- $mergedConfig := mergeOverwrite $documentedConfigs $overrides }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,22 +30,5 @@ metadata:
   labels:
     {{- include "cap-app-proxy.labels" . | nindent 4 }}
 data:
-  argoCdUrl: {{ .Values.config.argoCdUrl }}
-  argoCdUsername: {{ .Values.config.argoCdUsername }}
-  argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
-  env: {{ .Values.config.env | quote}}
-  argoWorkflowsUrl: {{ default "" .Values.config.argoWorkflowsUrl }}
-  runtimeName: {{ .Values.global.runtime.name | quote}}
-  skipGitPermissionValidation: {{ .Values.config.skipGitPermissionValidation | quote }}
-  logLevel: {{ .Values.config.logLevel | quote }}
-  {{- $enrichmentValues := get .Values "image-enrichment" }}
-  {{- if $enrichmentValues.enabled }}
-  enrichmentConcurrencyCmName: {{ $enrichmentValues.config.concurrencyCmName | quote}}
-  enrichmentConcurrencyCmKey: {{ $enrichmentValues.config.concurrencyCmKey | quote}}
-  enrichmentServiceAccountName: {{ $enrichmentValues.serviceAccount.name | quote}}
-  enrichmentPodGcStrategy: {{ $enrichmentValues.config.podGcStrategy | quote}}
-  enrichmentTtlAfterCompletionInSeconds: {{ $enrichmentValues.config.ttlAfterCompletionInSeconds | quote }}
-  enrichmentTtlActiveInSeconds: {{ $enrichmentValues.config.ttlActiveInSeconds | quote }}
-  enrichmentClientHeartbeatIntervalInSeconds: {{ $enrichmentValues.config.clientHeartbeatIntervalInSeconds | quote }}
-  {{- end }}
+  {{- $mergedConfig | toYaml | nindent 2}}
 {{- end }}
