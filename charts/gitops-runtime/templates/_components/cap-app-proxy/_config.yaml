@@ -2,8 +2,9 @@
 argoCdUrl: {{ .Values.config.argoCdUrl }}
 argoCdUsername: {{ .Values.config.argoCdUsername }}
 argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
-env: {{ .Values.config.env | quote}}
 argoWorkflowsUrl: {{ default "" .Values.config.argoWorkflowsUrl }}
+cors: {{ .Values.global.codefresh.url }}
+env: {{ .Values.config.env | quote}}
 runtimeName: {{ .Values.global.runtime.name | quote}}
 skipGitPermissionValidation: {{ .Values.config.skipGitPermissionValidation | quote }}
 logLevel: {{ .Values.config.logLevel | quote }}
