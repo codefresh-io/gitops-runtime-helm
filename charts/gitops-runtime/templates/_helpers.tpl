@@ -224,30 +224,6 @@ Output comma separated list of installed runtime components
 {{- end }}
 
 # ------------------------------------------------------------------------------------------------------------
-# Git integration
-------------------------------------------------------------------------------------------------------------
-{{- define "codefresh-gitops-runtime.git-integration.provider"}}
-  {{- if .Values.global.codefresh.gitIntegration.provider.name }}
-    {{- $supportedProviders := list "GITHUB" "GITLAB" "BITBUCKET" "BITBUCKET_CLOUD" }}
-    {{- if has .Values.global.codefresh.gitIntegration.provider.name $supportedProviders }}
-      {{- print .Values.global.codefresh.gitIntegration.provider.name }}
-    {{- else }}
-      {{ fail (printf "ERROR: Unsupported git provider %s. Currently supported: GITHUB,GITLAB,BITBUCKET,BITBUCKET_CLOUD" .Values.global.codefresh.gitIntegration.provider.name)}}
-    {{- end }}
-  {{- else }}
-    {{ fail "Values.global.codefresh.gitIntegration.provider.name is required"}}
-  {{- end }}
-{{- end }}
-
-{{- define "codefresh-gitops-runtime.git-integration.apiUrl"}}
-  {{- if .Values.global.codefresh.gitIntegration.provider.apiUrl }}
-    {{- print .Values.global.codefresh.gitIntegration.provider.apiUrl }}
-  {{- else }}
-    {{ fail "Values.global.codefresh.gitIntegration.provider.apiUrl is required"}}
-  {{- end }}
-{{- end }}
-
-# ------------------------------------------------------------------------------------------------------------
 # runtime git credentials
 # ------------------------------------------------------------------------------------------------------------
 {{- define "codefresh-gitops-runtime.runtime-gitcreds.password.default-secret-name" }}

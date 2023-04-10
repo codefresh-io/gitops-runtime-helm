@@ -6,10 +6,6 @@ global:
         name: mysecret
         key: myvalue
         optional: true
-    gitIntegration:
-      provider:
-        name: 'GITHUB'
-        apiUrl: 'https://api.github.com'
 
   runtime:
     name: default
