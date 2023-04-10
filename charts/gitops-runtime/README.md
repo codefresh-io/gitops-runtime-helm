@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.1-alpha.3](https://img.shields.io/badge/Version-0.2.1--alpha.3-informational?style=flat-square) ![AppVersion: 0.1.27-helm-alpha](https://img.shields.io/badge/AppVersion-0.1.27--helm--alpha-informational?style=flat-square)
+![Version: 0.2.1-alpha.4](https://img.shields.io/badge/Version-0.2.1--alpha.4-informational?style=flat-square) ![AppVersion: 0.1.27-helm-alpha](https://img.shields.io/badge/AppVersion-0.1.27--helm--alpha-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -52,13 +52,13 @@ A Helm chart for Codefresh gitops runtime
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2172.0"` |  |
+| app-proxy.image.tag | string | `"1.2190.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2172.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2190.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
