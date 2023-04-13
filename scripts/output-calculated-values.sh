@@ -1,14 +1,52 @@
 #!/bin/bash
 MYDIR=$(dirname $0)
 CHARTDIR="${MYDIR}/../charts/gitops-runtime"
-VALUESFILE="${CHARTDIR}/ci/ingressless-values.yaml"
+VALUESFILE="${CHARTDIR}/ci/values-all-images.yaml"
 OUTPUTFILE=$1
-ALL_VALUES_TEMPLATE=$(cat <<-END
+# This template prints all values and also sets tags for all images with non-empty repository value, where the tag is empty and should be derived from the appVersion of the subchart.
+ALL_VALUES_TEMPLATE=$(cat <<END
+{{- define "recurse-set-image-tags"}}
+  {{- \$map := .Values }}
+  {{- \$root := .root }}
+  {{- \$rootKey := .rootKey}}
+  {{- range \$key, \$val := \$map -}}
+    {{- if eq \$key "image" }}
+      {{/* If tag is not provided, check for subchart appVersion*/}}
+        {{ if kindOf \$val | eq "map" }}
+          {{- if hasKey \$val "tag" }}
+            {{/* If tag has no value*/}}
+            {{- if and (not \$val.tag) \$val.repository}}
+              {{- \$suspectedSubChart := \$rootKey }}
+              {{- if hasKey \$root.Subcharts \$suspectedSubChart }}
+                {{ \$subchart := get \$root.Subcharts \$suspectedSubChart }}
+                {{- \$_ := set \$val "tag"  \$subchart.Chart.AppVersion }}
+              {{- else if eq \$rootKey "installer" }}
+                {{- \$_ := set \$val "tag"  \$root.Chart.Version }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+    {{- else if kindOf \$val | eq "map" }}
+{{- include "recurse-set-image-tags" (dict "rootKey" \$rootKey "root" \$root "Values" \$val) }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- if .Values.getImages }}
+{{- \$mergedImagesDict := dict }}
+{{- /* Iterate over all top level components (argocd, rollouts workflows, etc)*/}}
+  {{- range \$key, \$val := .Values -}}
+    {{- if kindOf \$val | eq "map" }}
+      {{- /* Recursively get all paths containing image value */}}
+      {{- \$imagesValsDict := include "recurse-set-image-tags" (dict "rootKey" \$key "root" $ "Values" \$val) | fromYaml }}
+    {{- end }}
+  {{- end }}
 {{ .Values | toYaml }}
+{{- end }}
 END
 )
 
-echo $ALL_VALUES_TEMPLATE > $CHARTDIR/templates/all-values.yaml
+echo -e "$ALL_VALUES_TEMPLATE" > $CHARTDIR/templates/all-values.yaml
 helm dependency update $CHARTDIR
-helm template --values $VALUESFILE --show-only templates/all-values.yaml $CHARTDIR > $OUTPUTFILE
+helm template --values $VALUESFILE --set getImages=true --show-only templates/all-values.yaml $CHARTDIR > $OUTPUTFILE
 rm $CHARTDIR/templates/all-values.yaml

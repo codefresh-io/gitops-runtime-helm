@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.1-alpha.5](https://img.shields.io/badge/Version-0.2.1--alpha.5-informational?style=flat-square) ![AppVersion: 0.1.27-helm-alpha](https://img.shields.io/badge/AppVersion-0.1.27--helm--alpha-informational?style=flat-square)
+![Version: 0.2.1-alpha.6](https://img.shields.io/badge/Version-0.2.1--alpha.6-informational?style=flat-square) ![AppVersion: 0.1.27-helm-alpha](https://img.shields.io/badge/AppVersion-0.1.27--helm--alpha-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -21,7 +21,7 @@ A Helm chart for Codefresh gitops runtime
 | https://codefresh-io.github.io/argo-helm | argo-cd | 5.28.1-1-cap-CR-17237 |
 | https://codefresh-io.github.io/argo-helm | argo-events | 2.0.5-1-cf-init |
 | https://codefresh-io.github.io/argo-helm | argo-rollouts | 2.22.1-1-cap-sw |
-| https://codefresh-io.github.io/argo-helm | argo-workflows | 0.22.8-1-cf-init |
+| https://codefresh-io.github.io/argo-helm | argo-workflows | 0.22.9-1-CR-17426 |
 
 ## Values
 
