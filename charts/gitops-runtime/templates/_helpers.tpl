@@ -228,11 +228,11 @@ Output comma separated list of installed runtime components
 ------------------------------------------------------------------------------------------------------------
 {{- define "codefresh-gitops-runtime.git-integration.provider"}}
   {{- if .Values.global.codefresh.gitIntegration.provider.name }}
-    {{- $supportedProviders := list "GITHUB" "GITLAB" "BITBUCKET" "BITBUCKET_CLOUD" }}
+    {{- $supportedProviders := list "GITHUB" "GITLAB" "BITBUCKET" "BITBUCKET_SERVER" }}
     {{- if has .Values.global.codefresh.gitIntegration.provider.name $supportedProviders }}
       {{- print .Values.global.codefresh.gitIntegration.provider.name }}
     {{- else }}
-      {{ fail (printf "ERROR: Unsupported git provider %s. Currently supported: GITHUB,GITLAB,BITBUCKET,BITBUCKET_CLOUD" .Values.global.codefresh.gitIntegration.provider.name)}}
+      {{ fail (printf "ERROR: Unsupported git provider %s. Currently supported: GITHUB,GITLAB,BITBUCKET,BITBUCKET_SERVER" .Values.global.codefresh.gitIntegration.provider.name)}}
     {{- end }}
   {{- else }}
     {{ fail "Values.global.codefresh.gitIntegration.provider.name is required"}}
