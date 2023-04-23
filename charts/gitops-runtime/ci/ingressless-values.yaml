@@ -1,10 +1,6 @@
 global:
   codefresh:
     accountId: 628a80b693a15c0f9c13ab75 # Codefresh Account id for ilia-codefresh for now, needs to be some test account
-    gitIntegration:
-      provider:
-        name: 'GITHUB'
-        apiUrl: 'https://api.github.com'
     userToken:
       secretKeyRef:
         name: mysecret
