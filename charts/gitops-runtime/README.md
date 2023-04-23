@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.1-alpha.8](https://img.shields.io/badge/Version-0.2.1--alpha.8-informational?style=flat-square) ![AppVersion: 0.1.27](https://img.shields.io/badge/AppVersion-0.1.27-informational?style=flat-square)
+![Version: 0.2.1-alpha.9](https://img.shields.io/badge/Version-0.2.1--alpha.9-informational?style=flat-square) ![AppVersion: 0.1.27](https://img.shields.io/badge/AppVersion-0.1.27-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -52,13 +52,13 @@ A Helm chart for Codefresh gitops runtime
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2193.0"` |  |
+| app-proxy.image.tag | string | `"1.2207.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2193.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2207.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -123,13 +123,9 @@ A Helm chart for Codefresh gitops runtime
 | event-reporters.workflow.sensor.replicas | int | `1` |  |
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","gitIntegration":{"provider":{"apiUrl":"https://api.github.com","name":"GITHUB"}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
+| global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |
 | global.codefresh.apiEventsPath | string | `"/2.0/api/events"` | Events API endpoint URL suffix. |
-| global.codefresh.gitIntegration | object | `{"provider":{"apiUrl":"https://api.github.com","name":"GITHUB"}}` | Git integration for this runtime.  Requires the Git provider name and the provider's API URL. |
-| global.codefresh.gitIntegration.provider | object | `{"apiUrl":"https://api.github.com","name":"GITHUB"}` | The Git provider to use. We currently support GitHub, GitLab, Bitbucket Server, and Bitbucket Cloud. |
-| global.codefresh.gitIntegration.provider.apiUrl | string | `"https://api.github.com"` | Provider API URL. Example for GitHub, https://api.github.com. |
-| global.codefresh.gitIntegration.provider.name | string | `"GITHUB"` | Name of the Git provider: BITBUCKET, BITBUCKET_SERVER, GITHUB, GITLAB |
 | global.codefresh.url | string | `"https://g.codefresh.io"` | URL of Codefresh platform. |
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |

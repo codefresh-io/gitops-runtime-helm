@@ -7,14 +7,6 @@ global:
     apiEventsPath: "/2.0/api/events"
     # -- Codefresh Account ID.
     accountId: ""
-    # -- Git integration for this runtime.  Requires the Git provider name and the provider's API URL.
-    gitIntegration:
-      # -- The Git provider to use. We currently support GitHub, GitLab, Bitbucket Server, and Bitbucket Cloud.
-      provider:
-        # -- Name of the Git provider: BITBUCKET, BITBUCKET_SERVER, GITHUB, GITLAB
-        name: GITHUB
-        # -- Provider API URL. Example for GitHub, https://api.github.com.
-        apiUrl: https://api.github.com
     # -- User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided.
     userToken:
       # -- User token in plain text. The chart creates and manages the secret for this token.
@@ -280,14 +272,14 @@ app-proxy:
   image:
     repository: quay.io/codefresh/cap-app-proxy
     # Overrides the image tag whose default is the chart appVersion.
-    tag: 1.2193.0
+    tag: 1.2207.0
     pullPolicy: IfNotPresent
 
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
       # Overrides the image tag whose default is the chart appVersion.
-      tag: 1.2193.0
+      tag: 1.2207.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
