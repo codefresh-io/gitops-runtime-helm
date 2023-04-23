@@ -40,10 +40,7 @@ CORS:
       name: cap-app-proxy-cm
       key: cors
       optional: true
-DEPLOYMENT_NAME:
-  valueFrom:
-    fieldRef:
-      fieldPath: metadata.name
+DEPLOYMENT_NAME: {{ include "cap-app-proxy.fullname" . }}
 ENV:
   valueFrom:
     configMapKeyRef:
