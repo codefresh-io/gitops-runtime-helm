@@ -272,14 +272,14 @@ app-proxy:
   image:
     repository: quay.io/codefresh/cap-app-proxy
     # Overrides the image tag whose default is the chart appVersion.
-    tag: CR-18274-fix-ap-restart-2
+    tag: 1.2221.0
     pullPolicy: IfNotPresent
 
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
       # Overrides the image tag whose default is the chart appVersion.
-      tag: CR-18274-fix-ap-restart-2
+      tag: 1.2221.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
