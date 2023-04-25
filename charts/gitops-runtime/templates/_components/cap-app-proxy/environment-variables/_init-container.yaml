@@ -1,4 +1,5 @@
 {{- define "cap-app-proxy.environment-variables.init-container-defaults" -}}
+CHART_VERSION: {{ .Chart.Version }}
 CF_HOST:
   valueFrom:
     configMapKeyRef:
