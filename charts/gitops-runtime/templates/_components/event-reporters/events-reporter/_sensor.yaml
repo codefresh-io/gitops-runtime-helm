@@ -20,5 +20,5 @@ spec:
         {{- . | toYaml | nindent 8 }}
       {{- end }}
   triggers:
-  {{- include "event-reporters.http.trigger" (dict "name" "events" "Values" .Values) | indent 2 }}
+    {{- include "event-reporters.http.trigger" (dict "name" "events" "Values" .Values) | nindent 4 }}
 {{- end }}
