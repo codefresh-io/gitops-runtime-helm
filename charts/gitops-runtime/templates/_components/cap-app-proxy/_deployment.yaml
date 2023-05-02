@@ -98,10 +98,11 @@ spec:
         emptyDir: {}
       - name: argocd-tls-certs
         configMap:
-          defaultMode: 420
           name: argocd-tls-certs-cm
-      - name: codefresh-ca-cert
-        configMap:
           defaultMode: 420
-          name: codefresh-ca-cert
+      - name: codefresh-ca-cert
+        secret:
+          secretName: codefresh-ca-cert
+          defaultMode: 420
+          optional: true
 {{- end }}
