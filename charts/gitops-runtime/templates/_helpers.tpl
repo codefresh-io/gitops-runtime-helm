@@ -151,17 +151,8 @@ Determine app proxy url. Must be called with chart root context
 {{- end }}
 
 {{/*
-Determine platform hostname
-*/}}
-{{- define "codefresh-gitops-runtime.platform.hostname" -}}
-{{/* Using templates from app-proxy */}}
-{{- printf ( urlParse .Values.global.codefresh.url).host }}
-{{- end }}
-
-{{/*
 Environemnt variable value of Codefresh installation token
 */}}
-
 {{- define "codefresh-gitops-runtime.installation-token-env-var-value" -}}
   {{- if .Values.global.codefresh.userToken.token }}
 valueFrom:
