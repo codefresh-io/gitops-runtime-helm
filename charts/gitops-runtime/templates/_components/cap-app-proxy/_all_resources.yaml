@@ -1,10 +1,8 @@
 {{- define "cap-app-proxy.resources" }}
   {{ include "cap-app-proxy.resources.configmap" . }}
 ---
-{{- if .Values.global.codefresh.caCertificate }}
   {{ include "cap-app-proxy.resources.tls-certs-cm" . }}
 ---
-{{- end }}
   {{ include "cap-app-proxy.resources.deployment" . }}
 ---
   {{ include "cap-app-proxy.resources.rbac" . }}
