@@ -65,8 +65,8 @@ global:
 
   # Repository TLS certificates
   tls:
-    # -- TLS certificates for Git repositories
-    # @default -- `{}` (See [values.yaml])
+    # -- TLS certificates for Git repositories or on-prem codefresh platform
+    # @default -- `{}`
     certificates: {}
       # server.example.com: |
       #   -----BEGIN CERTIFICATE-----
