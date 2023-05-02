@@ -160,8 +160,9 @@ Create the name of the service account to use
       url: {{ $url }}
   {{- if .Values.global.codefresh.caCertificate }}
       tls:
-        clientCertSecret: codefresh-ca-cert
-        clientKeySecret: cert
+        clientCertSecret:
+          name: codefresh-ca-cert
+          key: cert
   {{- end }}
       headers:
         Content-Type: application/json
