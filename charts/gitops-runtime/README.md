@@ -123,10 +123,9 @@ A Helm chart for Codefresh gitops runtime
 | event-reporters.workflow.sensor.replicas | int | `1` |  |
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","caCertificate":"","url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
+| global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |
 | global.codefresh.apiEventsPath | string | `"/2.0/api/events"` | Events API endpoint URL suffix. |
-| global.codefresh.caCertificate | string | `""` | Root certificate of codefresh platform. |
 | global.codefresh.url | string | `"https://g.codefresh.io"` | URL of Codefresh platform. |
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
@@ -145,6 +144,7 @@ A Helm chart for Codefresh gitops runtime
 | global.runtime.ingress.hosts | list | `[]` | Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime. |
 | global.runtime.ingress.protocol | string | `"https"` | The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https. |
 | global.runtime.name | string | `nil` | Runtime name. Must be identical to the namepsace in which it is intalled and must be unique per platform account. |
+| global.tls.certificates | object | `{}` (See [values.yaml]) | TLS certificates for Git repositories |
 | installer | object | `{"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""}}` | Runtime installer used for running hooks and checks on the release |
 | internal-router.affinity | object | `{}` |  |
 | internal-router.env | object | `{}` | Environment variables - see values.yaml inside the chart for usage |
