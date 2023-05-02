@@ -1,0 +1,1 @@
+{{- include "cap-app-proxy.resources.codefresh-tls-certs" . }}

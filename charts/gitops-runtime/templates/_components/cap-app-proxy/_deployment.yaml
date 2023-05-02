@@ -37,11 +37,11 @@ spec:
         command:
           {{- toYaml .Values.initContainer.command | nindent 8 }}
         volumeMounts:
-          - mountPath: /app/config/argocd-tls
+          - mountPath: /app/config/argocd-tls-certs
             name: argocd-tls-certs
             readOnly: true
-          - mountPath: /app/config/codefresh-ca-cert
-            name: codefresh-ca-cert
+          - mountPath: /app/config/codefresh-tls-certs
+            name: codefresh-tls-certs
             readOnly: true
           - mountPath: /app/config/all
             name: all-certs
@@ -100,9 +100,9 @@ spec:
         configMap:
           name: argocd-tls-certs-cm
           defaultMode: 420
-      - name: codefresh-ca-cert
+      - name: codefresh-tls-certs
         secret:
-          secretName: codefresh-ca-cert
+          secretName: codefresh-tls-certs
           defaultMode: 420
           optional: true
 {{- end }}
