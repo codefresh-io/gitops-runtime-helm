@@ -1,0 +1,3 @@
+{{- if .Values.global.codefresh.caCertificate }}
+{{- include "cap-app-proxy.resources.codefresh-ca-cert" . }}
+{{- end }}

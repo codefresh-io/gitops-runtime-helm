@@ -31,7 +31,6 @@ helm.sh/chart: {{ include "event-reporters.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: Helm
-app.kubernetes.io/part-of: events-reporter
 codefresh.io/internal: "true"
 {{- end }}
 
@@ -79,7 +78,6 @@ helm.sh/chart: {{ include "event-reporters.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: Helm
-app.kubernetes.io/part-of: rollout-reporter
 codefresh.io/internal: "true"
 {{- end }}
 
@@ -127,7 +125,6 @@ helm.sh/chart: {{ include "event-reporters.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: Helm
-app.kubernetes.io/part-of: workflow-reporter
 codefresh.io/internal: "true"
 {{- end }}
 
@@ -147,4 +144,36 @@ Create the name of the service account to use
   {{- else }}
     {{- default "default" .Values.workflow.serviceAccount.name }}
   {{- end }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "event-reporters.http.trigger" }}
+{{- $url := (printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote) }}
+{{- $host := (include "codefresh-gitops-runtime.platform.hostname" .) }}
+- name: {{ .name }}
+  template:
+    conditions: {{ .name }}
+    http:
+      method: POST
+      url: {{ $url }}
+  {{- if .Values.global.codefresh.caCertificate }}
+      tls:
+        clientCertSecret: codefresh-ca-cert
+        clientKeySecret: cert
+  {{- end }}
+      headers:
+        Content-Type: application/json
+      secureHeaders:
+      - name: Authorization
+        valueFrom:
+          secretKeyRef:
+            key: token
+            name: codefresh-token
+      payload:
+      - dest: data
+        src:
+          dataKey: body
+          dependencyName: {{ .name }}
 {{- end }}
