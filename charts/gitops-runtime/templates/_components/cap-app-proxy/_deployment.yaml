@@ -40,8 +40,8 @@ spec:
           - mountPath: /app/config/argocd-tls
             name: argocd-tls-certs
             readOnly: true
-          - mountPath: /app/config/codefresh-tls
-            name: codefresh-tls-certs
+          - mountPath: /app/config/codefresh-ca-cert
+            name: codefresh-ca-cert
             readOnly: true
           - mountPath: /app/config/all
             name: all-certs
@@ -100,8 +100,8 @@ spec:
         configMap:
           defaultMode: 420
           name: argocd-tls-certs-cm
-      - name: codefresh-tls-certs
+      - name: codefresh-ca-cert
         configMap:
           defaultMode: 420
-          name: codefresh-tls-certs-cm
+          name: codefresh-ca-cert
 {{- end }}
