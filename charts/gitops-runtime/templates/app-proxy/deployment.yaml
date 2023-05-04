@@ -5,4 +5,11 @@
 {{- $mainContainerMergedValues := mergeOverwrite $appProxyContext.Values.env (include "codefresh-gitops-runtime.app-proxy.calculated-env-vars" . | fromYaml) }}
 {{- $_ := set $appProxyContext.Values.initContainer "env" $initContainerMergedValues }}
 {{- $_ := set $appProxyContext.Values "env" $mainContainerMergedValues }}
+
+{{- $calculatedVolumes := include "codefresh-gitops-runtime.app-proxy.additional-volumes" . | fromYaml }}
+{{- if $calculatedVolumes.extraVolumes }}
+{{- $additionalVolumes := concat (get $calculatedVolumes "extraVolumes") $appProxyContext.Values.extraVolumes }}
+{{- $_ := set $appProxyContext.Values "extraVolumes" $additionalVolumes }}
+{{- end }}
+
 {{- include "cap-app-proxy.resources.deployment" $appProxyContext }}

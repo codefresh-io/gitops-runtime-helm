@@ -1,9 +1,0 @@
-{{- define "event-reporters.rollout-reporter.resources"}}
-  {{- include "event-reporters.rollout-reporter.sa" .}}
----
-  {{- include "event-reporters.rollout-reporter.rbac" .}}
----
-  {{- include "event-reporters.rollout-reporter.eventsource" .}}
----
-  {{- include "event-reporters.rollout-reporter.sensor" .}}
-{{- end }}

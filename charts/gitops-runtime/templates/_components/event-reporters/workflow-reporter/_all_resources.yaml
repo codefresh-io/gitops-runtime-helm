@@ -1,9 +1,0 @@
-{{- define "event-reporters.workflow-reporter.resources"}}
-  {{- include "event-reporters.workflow-reporter.sa" .}}
----
-  {{- include "event-reporters.workflow-reporter.rbac" .}}
----
-  {{- include "event-reporters.workflow-reporter.eventsource" .}}
----
-  {{- include "event-reporters.workflow-reporter.sensor" .}}
-{{- end }}

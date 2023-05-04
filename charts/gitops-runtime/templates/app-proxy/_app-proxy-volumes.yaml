@@ -1,0 +1,13 @@
+{{- define "codefresh-gitops-runtime.app-proxy.additional-volumes"}}
+extraVolumes:
+  {{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef}}
+  - name: codefresh-tls-certs
+    secret:
+      secretName:  {{ .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
+      defaultMode: 420
+      optional: true
+  {{- end }}
+{{- end }}
+
+{{- define "codefresh-gitops-runtime.app-proxy.extraVolumes" }}
+{{- end }}
