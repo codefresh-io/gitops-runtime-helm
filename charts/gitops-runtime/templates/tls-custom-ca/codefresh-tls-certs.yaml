@@ -4,7 +4,7 @@ kind: Secret
 metadata:
   name: codefresh-tls-certs
   labels:
-    {{- include "cap-app-proxy.labels" . | nindent 4 }}
+    {{- include "codefresh-gitops-runtime.labels" . | nindent 4 }}
   {{- with .Values.global.codefresh.tls.caCerts.secret.annotations }}
   annotations: {{ . | toYaml | nindent 4 }}
   {{- end }}

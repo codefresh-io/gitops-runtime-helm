@@ -35,6 +35,8 @@ global:
       
       # -- Certificates to be used in argo workflows pipelines created in Codefresh UI. Those will be merged with the certificats defined in argo-cd.configs.tls.certificates
       workflowPipelinesGitWebhooks:
+        # Annotations on the secret resource
+        annotatins: {}
         certificates: {}
           # server.example.com: |
           #   -----BEGIN CERTIFICATE-----
