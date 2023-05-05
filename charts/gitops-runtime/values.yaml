@@ -33,7 +33,8 @@ global:
           # ... encoded certificate data here ...
           # -----END CERTIFICATE-----
       
-      # -- Certificates to be used in argo workflows pipelines created in Codefresh UI. Those will be merged with the certificats defined in argo-cd.configs.tls.certificates
+      # -- Certificates to be used in argo workflows pipelines created in Codefresh UI. 
+      # -- Those will be merged with the certificats defined in argo-cd.configs.tls.certificates - so if the certificates are already provided for ArgoCD, there is no need to provide them again. 
       workflowPipelinesGitWebhooks:
         # Annotations on the secret resource
         annotatins: {}

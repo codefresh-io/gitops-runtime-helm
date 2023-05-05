@@ -34,3 +34,12 @@ global:
 
 argo-rollouts:
   enabled: true
+
+argo-cd:
+  configs:
+    tls:
+      certificates:
+        my-example2.com: |
+            -----BEGIN CERTIFICATE-----
+             ... encoded certificate data here ...
+             -----END CERTIFICATE-----

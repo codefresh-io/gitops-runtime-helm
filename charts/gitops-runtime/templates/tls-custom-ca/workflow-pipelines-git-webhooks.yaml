@@ -9,4 +9,5 @@ metadata:
   {{- end }}
 type: Opaque
 stringData:
-  {{- .Values.global.codefresh.tls.workflowPipelinesGitWebhooks.certificates | toYaml | nindent 2 }}
+  {{- $argocdTlsCerts := index .Values "argo-cd" "configs" "tls" "certificates"}}
+  {{- mergeOverwrite $argocdTlsCerts .Values.global.codefresh.tls.workflowPipelinesGitWebhooks.certificates | toYaml | nindent 2 }}
