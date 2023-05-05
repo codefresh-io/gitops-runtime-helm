@@ -43,9 +43,6 @@ spec:
           - mountPath: /app/config/argocd-tls-certs
             name: argocd-tls-certs
             readOnly: true
-          - mountPath: /app/config/codefresh-tls-certs
-            name: codefresh-tls-certs
-            readOnly: true
           - mountPath: /app/config/all
             name: all-certs
         resources:
