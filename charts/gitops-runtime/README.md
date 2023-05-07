@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.1-alpha.13](https://img.shields.io/badge/Version-0.2.1--alpha.13-informational?style=flat-square) ![AppVersion: 0.1.29](https://img.shields.io/badge/AppVersion-0.1.29-informational?style=flat-square)
+![Version: 0.2.1-alpha.14](https://img.shields.io/badge/Version-0.2.1--alpha.14-informational?style=flat-square) ![AppVersion: 0.1.29](https://img.shields.io/badge/AppVersion-0.1.29-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -36,6 +36,8 @@ A Helm chart for Codefresh gitops runtime
 | app-proxy.config.logLevel | string | `"info"` | Log Level |
 | app-proxy.config.skipGitPermissionValidation | string | `"false"` | Skit git permissions validation |
 | app-proxy.env | object | `{}` |  |
+| app-proxy.extraVolumeMounts | list | `[]` | Extra volume mounts for main container |
+| app-proxy.extraVolumes | list | `[]` | extra volumes |
 | app-proxy.fullnameOverride | string | `"cap-app-proxy"` |  |
 | app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
 | app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
@@ -56,6 +58,7 @@ A Helm chart for Codefresh gitops runtime
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
+| app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
 | app-proxy.initContainer.image.tag | string | `"1.2221.0"` |  |
@@ -123,9 +126,15 @@ A Helm chart for Codefresh gitops runtime
 | event-reporters.workflow.sensor.replicas | int | `1` |  |
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
+| global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","tls":{"caCerts":{"secret":{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"},"secretKeyRef":{}},"workflowPipelinesGitWebhooks":{"annotatins":{},"certificates":{}}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |
 | global.codefresh.apiEventsPath | string | `"/2.0/api/events"` | Events API endpoint URL suffix. |
+| global.codefresh.tls.caCerts | object | `{"secret":{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"},"secretKeyRef":{}}` | Custom CA certificates bundle for platform access with ssl |
+| global.codefresh.tls.caCerts.secret | object | `{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"}` | Chart managed secret for custom platform CA certificates |
+| global.codefresh.tls.caCerts.secret.create | bool | `false` | Whether to create the secret. |
+| global.codefresh.tls.caCerts.secret.key | string | `"ca-bundle.crt"` | The secret key that holds the ca bundle |
+| global.codefresh.tls.caCerts.secretKeyRef | object | `{}` | Reference to existing secret |
+| global.codefresh.tls.workflowPipelinesGitWebhooks | object | `{"annotatins":{},"certificates":{}}` | Those will be merged with the certificats defined in argo-cd.configs.tls.certificates - so if the certificates are already provided for ArgoCD, there is no need to provide them again.  |
 | global.codefresh.url | string | `"https://g.codefresh.io"` | URL of Codefresh platform. |
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
@@ -144,7 +153,6 @@ A Helm chart for Codefresh gitops runtime
 | global.runtime.ingress.hosts | list | `[]` | Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime. |
 | global.runtime.ingress.protocol | string | `"https"` | The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https. |
 | global.runtime.name | string | `nil` | Runtime name. Must be identical to the namepsace in which it is intalled and must be unique per platform account. |
-| global.tls.certificates | object | `{}` | TLS certificates for Git repositories or on-prem codefresh platform |
 | installer | object | `{"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""}}` | Runtime installer used for running hooks and checks on the release |
 | internal-router.affinity | object | `{}` |  |
 | internal-router.env | object | `{}` | Environment variables - see values.yaml inside the chart for usage |
