@@ -182,3 +182,40 @@ tests:
       content:
         name: HELM_RELEASE_NAME
         value: my-release
+
+- it: Adding extra volumes and volume mounts
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.extraVolumes:
+    - name: my-secret
+      secret:
+        secretName: my-secret
+        defaultMode: 420
+        optional: true
+    app-proxy.extraVolumeMounts:
+    - name: my-secret
+      mountPath: /my-secret
+    app-proxy.initContainer.extraVolumeMounts:
+    - name: my-secret
+      mountPath: /my-secret
+  asserts:
+  - contains:
+      path: spec.template.spec.volumes
+      content:
+        name: my-secret
+        secret:
+          secretName: my-secret
+          defaultMode: 420
+          optional: true
+  - contains:
+      path: spec.template.spec.containers[0].volumeMounts
+      content:
+        name: my-secret
+        mountPath: /my-secret
+  - contains:
+      path: spec.template.spec.initContainers[0].volumeMounts
+      content:
+        name: my-secret
+        mountPath: /my-secret 
