@@ -150,7 +150,7 @@ A Helm chart for Codefresh gitops runtime
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
 | internal-router.image.repository | string | `"nginx"` |  |
-| internal-router.image.tag | string | `"nginx:1.22-bullseye"` |  |
+| internal-router.image.tag | string | `"1.22-bullseye"` |  |
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.nameOverride | string | `""` |  |
 | internal-router.nodeSelector | object | `{}` |  |
