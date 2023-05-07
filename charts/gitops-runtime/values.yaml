@@ -63,7 +63,7 @@ global:
                 memory: 1Gi
                 ephemeral-storage: 2Gi
 
-  # Repository TLS certificates
+  # TLS certificates
   tls:
     # -- TLS certificates for Git repositories or on-prem codefresh platform
     # @default -- `{}`
