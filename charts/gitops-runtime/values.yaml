@@ -13,6 +13,34 @@ global:
       token: ""
       # -- User token that references an existing secret containing the token.
       secretKeyRef: {}
+    
+    tls:
+       # --  Custom CA certificates bundle for platform access with ssl
+      caCerts:
+        # -- Reference to existing secret
+        secretKeyRef: {}
+        # -- Chart managed secret for custom platform CA certificates
+        secret:
+          # -- Whether to create the secret.
+          create: false
+          # -- The secret key that holds the ca bundle
+          key: 'ca-bundle.crt'
+          # Annotations
+          annotations: {}
+          # Certificate content
+          content: ""
+          # -----BEGIN CERTIFICATE-----
+          # ... encoded certificate data here ...
+          # -----END CERTIFICATE-----
+      
+      # -- Certificates to be used in argo workflows pipelines created in Codefresh UI. Those will be merged with the certificats defined in argo-cd.configs.tls.certificates
+      workflowPipelinesGitWebhooks:
+        certificates: {}
+          # server.example.com: |
+          #   -----BEGIN CERTIFICATE-----
+          #   ...
+          #   -----END CERTIFICATE-----
+
   # -- Runtime level settings
   runtime:
     # -- Runtime name. Must be identical to the namepsace in which it is intalled and must be unique per platform account.
@@ -305,6 +333,8 @@ app-proxy:
         memory: 256Mi
         cpu: '0.2'
 
+    extraVolumeMounts: []
+
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "cap-app-proxy"
@@ -381,4 +411,5 @@ app-proxy:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  extraVolumes: []
 ########################################################################################################################
