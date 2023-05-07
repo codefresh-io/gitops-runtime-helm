@@ -150,8 +150,8 @@ Create the name of the service account to use
 Create a single event-source sensor http trigger
 assumes the name, condition and payload.dependencyName are identical
 */}}
-{{- define "event-reporters.http.trigger" }}
-{{- $url := (printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote) }}
+{{- define "event-reporters.http.trigger" -}}
+{{- $url := (printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote) -}}
 - name: {{ .name }}
   template:
     conditions: {{ .name }}
@@ -177,4 +177,4 @@ assumes the name, condition and payload.dependencyName are identical
         src:
           dataKey: body
           dependencyName: {{ .name }}
-{{- end }}
+{{- end -}}
