@@ -2,6 +2,7 @@
 suite: Tes custom CA
 templates:
   - tls-custom-ca/codefresh-tls-certs.yaml
+  - tls-custom-ca/workflow-pipelines-git-webhooks.yaml
   - app-proxy/deployment.yaml
   - event-reporters/workflow-reporter/sensor.yaml
   - event-reporters/events-reporter/sensor.yaml
@@ -305,6 +306,51 @@ tests:
   asserts:
   - isEmpty:
       path: spec.triggers[0].template.http.tls
+
+# --------------------------------------------------------
+# workflowPipelinesGitWebhooks
+# --------------------------------------------------------
+- it: workflowPipelinesGitWebhooks - take certificates from argocd
+  template: tls-custom-ca/workflow-pipelines-git-webhooks.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-cd.configs.tls.certificates:
+      asd: |
+        -----BEGIN CERTIFICATE-----
+        ... encoded certificate data here ...
+        -----END CERTIFICATE-----
+  asserts:
+    - equal:
+        path: stringData
+        value:
+          asd: |-
+            -----BEGIN CERTIFICATE-----
+            ... encoded certificate data here ...
+            -----END CERTIFICATE-----
+- it: workflowPipelinesGitWebhooks - merge overwrite with argocd-cm
+  template: tls-custom-ca/workflow-pipelines-git-webhooks.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-cd.configs.tls.certificates:
+      asd: |
+        -----BEGIN CERTIFICATE-----
+        ... encoded certificate data here ...
+        -----END CERTIFICATE-----
+    global.codefresh.tls.workflowPipelinesGitWebhooks.certificates:
+      asd: |
+        -----BEGIN CERTIFICATE-----
+        override
+        -----END CERTIFICATE-----
+  asserts:
+    - equal:
+        path: stringData
+        value:
+          asd: |-
+            -----BEGIN CERTIFICATE-----
+            override
+            -----END CERTIFICATE-----
 
 
   
