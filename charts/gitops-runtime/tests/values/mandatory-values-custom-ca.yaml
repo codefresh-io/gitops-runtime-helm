@@ -17,7 +17,14 @@ global:
              -----BEGIN CERTIFICATE-----
              ... encoded certificate data here ...
              -----END CERTIFICATE-----
-              
+      
+      workflowPipelinesGitWebhooks:
+        certificates:
+          my.example.com: |
+            -----BEGIN CERTIFICATE-----
+             ... encoded certificate data here ...
+             -----END CERTIFICATE-----
+
 
   runtime:
     name: test-runtime1

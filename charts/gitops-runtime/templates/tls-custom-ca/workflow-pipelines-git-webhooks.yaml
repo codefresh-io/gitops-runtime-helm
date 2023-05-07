@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: codefresh-workflow-pipelines-tls
+  labels:
+    {{- include "codefresh-gitops-runtime.labels" . | nindent 4 }}
+  {{- with .Values.global.codefresh.tls.workflowPipelinesGitWebhooks.annotatins }}
+  annotations: {{ . | toYaml | nindent 4 }}
+  {{- end }}
+type: Opaque
+stringData:
+  {{- .Values.global.codefresh.tls.workflowPipelinesGitWebhooks.certificates | toYaml | nindent 2 }}

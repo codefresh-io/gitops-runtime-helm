@@ -8,6 +8,3 @@ extraVolumes:
       optional: true
   {{- end }}
 {{- end }}
-
-{{- define "codefresh-gitops-runtime.app-proxy.extraVolumes" }}
-{{- end }}
