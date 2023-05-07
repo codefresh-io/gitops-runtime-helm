@@ -144,7 +144,7 @@ A Helm chart for Codefresh gitops runtime
 | global.runtime.ingress.hosts | list | `[]` | Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime. |
 | global.runtime.ingress.protocol | string | `"https"` | The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https. |
 | global.runtime.name | string | `nil` | Runtime name. Must be identical to the namepsace in which it is intalled and must be unique per platform account. |
-| global.tls.certificates | object | `{}` (See [values.yaml]) | TLS certificates for Git repositories |
+| global.tls.certificates | object | `{}` | TLS certificates for Git repositories or on-prem codefresh platform |
 | installer | object | `{"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""}}` | Runtime installer used for running hooks and checks on the release |
 | internal-router.affinity | object | `{}` |  |
 | internal-router.env | object | `{}` | Environment variables - see values.yaml inside the chart for usage |
