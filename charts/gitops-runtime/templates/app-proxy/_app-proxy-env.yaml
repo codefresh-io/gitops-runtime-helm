@@ -12,6 +12,7 @@ GIT_USERNAME: {{ .Values.global.runtime.gitCredentials.username }}
 GIT_PASSWORD: 
   {{- include "codefresh-gitops-runtime.runtime-gitcreds.password.env-var-value" . | nindent 2 }}
   {{- end }}
+WORKFLOW_PIPELINES_WEBHOOKS_TLS_SECRET: codefresh-workflow-pipelines-tls
 {{- end }}
 
 {{- define "codefresh-gitops-runtime.app-proxy.init-container.calculated-env-vars"}}

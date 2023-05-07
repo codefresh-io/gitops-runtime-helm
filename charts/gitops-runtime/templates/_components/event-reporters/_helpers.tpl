@@ -152,18 +152,17 @@ assumes the name, condition and payload.dependencyName are identical
 */}}
 {{- define "event-reporters.http.trigger" -}}
 {{- $url := (printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote) -}}
-{{- $host := ((urlParse .Values.global.codefresh.url).host ) -}}
 - template:
     name: {{ .name }}
     conditions: {{ .name }}
     http:
       method: POST
       url: {{ $url }}
-  {{- if hasKey .Values.global.tls.certificates $host }}
+  {{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef}}
       tls:
         caCertSecret:
-          name: codefresh-tls-certs
-          key: {{ $host }}
+          name: {{ .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
+          key: {{ .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
   {{- end }}
       headers:
         Content-Type: application/json
