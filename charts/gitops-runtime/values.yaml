@@ -93,17 +93,6 @@ global:
                 cpu: 200m
                 memory: 1Gi
                 ephemeral-storage: 2Gi
-
-  # TLS certificates
-  tls:
-    # -- TLS certificates for Git repositories or on-prem codefresh platform
-    # @default -- `{}`
-    certificates: {}
-      # server.example.com: |
-      #   -----BEGIN CERTIFICATE-----
-      #   ...
-      #   -----END CERTIFICATE-----
-
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
