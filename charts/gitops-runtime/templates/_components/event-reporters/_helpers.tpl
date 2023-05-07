@@ -147,11 +147,11 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Create the name of the service account to use
+Create a single event-source sensor http trigger
+assumes the name, condition and payload.dependencyName are identical
 */}}
 {{- define "event-reporters.http.trigger" }}
 {{- $url := (printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote) }}
-{{- $host := (include "codefresh-gitops-runtime.platform.hostname" .) }}
 - name: {{ .name }}
   template:
     conditions: {{ .name }}
