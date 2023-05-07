@@ -152,15 +152,15 @@ assumes the name, condition and payload.dependencyName are identical
 */}}
 {{- define "event-reporters.http.trigger" -}}
 {{- $url := (printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote) -}}
-- name: {{ .name }}
-  template:
+- template:
+    name: {{ .name }}
     conditions: {{ .name }}
     http:
       method: POST
       url: {{ $url }}
   {{- if .Values.global.codefresh.caCertificate }}
       tls:
-        clientCertSecret:
+        caCertSecret:
           name: codefresh-ca-cert
           key: cert
   {{- end }}

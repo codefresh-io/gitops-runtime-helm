@@ -1,10 +1,11 @@
 {{- define "cap-app-proxy.resources.codefresh-ca-cert" }}
 apiVersion: v1
-kind: ConfigMap
+kind: Secret
 metadata:
   name: codefresh-ca-cert
   labels:
     {{- include "cap-app-proxy.labels" . | nindent 4 }}
-data:
+type: Opaque
+stringData:
   cert: {{- .Values.global.codefresh.caCertificate | toYaml | indent 2 }}
 {{- end }}
