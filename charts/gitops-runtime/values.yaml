@@ -171,7 +171,7 @@ internal-router:
   image:
     repository: nginx
     pullPolicy: IfNotPresent
-    tag: nginx:1.22-bullseye
+    tag: 1.22-bullseye
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
