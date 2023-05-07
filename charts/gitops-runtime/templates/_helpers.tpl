@@ -130,8 +130,6 @@ Determine argo worklofws server name
 {{- template "argo-workflows.server.fullname" (dict "Values" (get .Values "argo-workflows")) }}
 {{- end }}
 
-
-
 {{/*
 Determine argo workflows server url. Must be called with chart root context
 */}}
@@ -150,6 +148,14 @@ Determine app proxy url. Must be called with chart root context
 {{- define "codefresh-gitops-runtime.app-proxy.url" -}}
 {{/* Using templates from app-proxy */}}
 {{- printf "http://%s:%s" (include "cap-app-proxy.fullname" (dict "Values" (get .Values "app-proxy"))) (index (get .Values "app-proxy") "service" "port" | toString ) }}
+{{- end }}
+
+{{/*
+Determine platform hostname
+*/}}
+{{- define "codefresh-gitops-runtime.platform.hostname" -}}
+{{/* Using templates from app-proxy */}}
+{{- printf ( urlParse .Values.global.codefresh.url).host }}
 {{- end }}
 
 {{/*

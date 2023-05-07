@@ -21,26 +21,5 @@ spec:
         {{- . | toYaml | nindent 8 }}
       {{- end }}
   triggers:
-    - retryStrategy:
-        duration: 0
-        steps: 3
-      template:
-        conditions: workflows
-        http:
-          headers:
-            Content-Type: application/json
-          method: POST
-          payload:
-            - dest: data.object
-              src:
-                dataKey: body
-                dependencyName: workflows
-          secureHeaders:
-            - name: Authorization
-              valueFrom:
-                secretKeyRef:
-                  key: token
-                  name: codefresh-token
-          url: {{ printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote }}
-        name: workflows
+  {{- include "event-reporters.http.trigger" (dict "name" "workflows" "Values" .Values) | indent 2 }}
 {{- end }}

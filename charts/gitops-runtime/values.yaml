@@ -3,6 +3,8 @@ global:
   codefresh:
     # -- URL of Codefresh platform.
     url: "https://g.codefresh.io"
+    # -- Root certificate of codefresh platform.
+    caCertificate: ""
     # -- Events API endpoint URL suffix.
     apiEventsPath: "/2.0/api/events"
     # -- Codefresh Account ID.
@@ -62,8 +64,6 @@ global:
                 cpu: 200m
                 memory: 1Gi
                 ephemeral-storage: 2Gi
-
-  tls: {}
 
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
