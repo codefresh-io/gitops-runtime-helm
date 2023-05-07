@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.1-alpha.12](https://img.shields.io/badge/Version-0.2.1--alpha.12-informational?style=flat-square) ![AppVersion: 0.1.27](https://img.shields.io/badge/AppVersion-0.1.27-informational?style=flat-square)
+![Version: 0.2.1-alpha.13](https://img.shields.io/badge/Version-0.2.1--alpha.13-informational?style=flat-square) ![AppVersion: 0.1.27](https://img.shields.io/badge/AppVersion-0.1.27-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -150,7 +150,7 @@ A Helm chart for Codefresh gitops runtime
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
 | internal-router.image.repository | string | `"nginx"` |  |
-| internal-router.image.tag | string | `"1.22-alpine"` |  |
+| internal-router.image.tag | string | `"1.22-bullseye"` |  |
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.nameOverride | string | `""` |  |
 | internal-router.nodeSelector | object | `{}` |  |
