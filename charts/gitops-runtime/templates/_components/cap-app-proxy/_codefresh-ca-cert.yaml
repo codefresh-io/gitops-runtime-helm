@@ -7,5 +7,5 @@ metadata:
     {{- include "cap-app-proxy.labels" . | nindent 4 }}
 type: Opaque
 stringData:
-  cert: {{- .Values.global.codefresh.caCertificate | toYaml | indent 2 }}
+  {{- .Values.global.tls.certificates | toYaml | nindent 2 }}
 {{- end }}
