@@ -162,7 +162,7 @@ assumes the name, condition and payload.dependencyName are identical
   {{- if hasKey .Values.global.tls.certificates $host }}
       tls:
         caCertSecret:
-          name: codefresh-ca-cert
+          name: codefresh-tls-certs
           key: {{ $host }}
   {{- end }}
       headers:

@@ -1,8 +1,8 @@
-{{- define "cap-app-proxy.resources.codefresh-ca-cert" }}
+{{- define "cap-app-proxy.resources.codefresh-tls-certs" }}
 apiVersion: v1
 kind: Secret
 metadata:
-  name: codefresh-ca-cert
+  name: codefresh-tls-certs
   labels:
     {{- include "cap-app-proxy.labels" . | nindent 4 }}
 type: Opaque
