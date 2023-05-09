@@ -121,6 +121,38 @@ tests:
         name: codefresh-tls-certs
         readOnly: true
 
+- it: environment variable in app-proxy init container - secret ref
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secretKeyRef.name: my-secret
+    global.codefresh.tls.caCerts.secretKeyRef.key: my-key
+  asserts:
+  - contains:
+      path: spec.template.spec.initContainers[0].env
+      content:
+        name: SSL_CERT_FILE
+        value:  /app/config/my-secret/my-key
+
+- it: environment variable in app-proxy init container - chart created secret
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - contains:
+      path: spec.template.spec.initContainers[0].env
+      content:
+        name: SSL_CERT_FILE
+        value:  /app/config/codefresh-tls-certs/ca-bundle.crt
+
+
 - it: events reporter sensor - check chart created secret with default key
   template: event-reporters/events-reporter/sensor.yaml
   values:
@@ -324,7 +356,7 @@ tests:
     - equal:
         path: stringData
         value:
-          asd: |-
+          asd: |
             -----BEGIN CERTIFICATE-----
             ... encoded certificate data here ...
             -----END CERTIFICATE-----
@@ -347,7 +379,7 @@ tests:
     - equal:
         path: stringData
         value:
-          asd: |-
+          asd: |
             -----BEGIN CERTIFICATE-----
             override
             -----END CERTIFICATE-----
