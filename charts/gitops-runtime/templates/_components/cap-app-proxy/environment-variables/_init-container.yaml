@@ -42,6 +42,11 @@ RUNTIME_VERSION:
     configMapKeyRef:
       name: codefresh-cm
       key: version
+{{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
+{{- $name := .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
+{{- $key := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+SSL_CERT_FILE: /app/config/{{ $name }}/{{ $key }}
+{{- end }}
 {{- end -}}
 
 {{/*
