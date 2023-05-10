@@ -130,8 +130,6 @@ Determine argo worklofws server name
 {{- template "argo-workflows.server.fullname" (dict "Values" (get .Values "argo-workflows")) }}
 {{- end }}
 
-
-
 {{/*
 Determine argo workflows server url. Must be called with chart root context
 */}}
@@ -155,7 +153,6 @@ Determine app proxy url. Must be called with chart root context
 {{/*
 Environemnt variable value of Codefresh installation token
 */}}
-
 {{- define "codefresh-gitops-runtime.installation-token-env-var-value" -}}
   {{- if .Values.global.codefresh.userToken.token }}
 valueFrom:

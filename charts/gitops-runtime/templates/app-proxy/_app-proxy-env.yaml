@@ -12,9 +12,15 @@ GIT_USERNAME: {{ .Values.global.runtime.gitCredentials.username }}
 GIT_PASSWORD: 
   {{- include "codefresh-gitops-runtime.runtime-gitcreds.password.env-var-value" . | nindent 2 }}
   {{- end }}
+WORKFLOW_PIPELINES_WEBHOOKS_TLS_SECRET: codefresh-workflow-pipelines-tls
 {{- end }}
 
 {{- define "codefresh-gitops-runtime.app-proxy.init-container.calculated-env-vars"}}
+  {{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
+{{- $name := .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
+{{- $key := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+SSL_CERT_FILE: /app/config/{{ $name }}/{{ $key }}
+  {{- end }}
 USER_TOKEN:
   {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 2 }}
 {{- end }}

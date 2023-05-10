@@ -31,7 +31,6 @@ helm.sh/chart: {{ include "event-reporters.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: Helm
-app.kubernetes.io/part-of: events-reporter
 codefresh.io/internal: "true"
 {{- end }}
 
@@ -79,7 +78,6 @@ helm.sh/chart: {{ include "event-reporters.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: Helm
-app.kubernetes.io/part-of: rollout-reporter
 codefresh.io/internal: "true"
 {{- end }}
 
@@ -127,7 +125,6 @@ helm.sh/chart: {{ include "event-reporters.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: Helm
-app.kubernetes.io/part-of: workflow-reporter
 codefresh.io/internal: "true"
 {{- end }}
 
@@ -148,3 +145,36 @@ Create the name of the service account to use
     {{- default "default" .Values.workflow.serviceAccount.name }}
   {{- end }}
 {{- end }}
+
+{{/*
+Create a single event-source sensor http trigger
+assumes the name, condition and payload.dependencyName are identical
+*/}}
+{{- define "event-reporters.http.trigger" -}}
+{{- $url := (printf "%s%s" .Values.global.codefresh.url .Values.global.codefresh.apiEventsPath | quote) -}}
+- template:
+    name: {{ .name }}
+    conditions: {{ .name }}
+    http:
+      method: POST
+      url: {{ $url }}
+  {{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef}}
+      tls:
+        caCertSecret:
+          name: {{ .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
+          key: {{ .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+  {{- end }}
+      headers:
+        Content-Type: application/json
+      secureHeaders:
+      - name: Authorization
+        valueFrom:
+          secretKeyRef:
+            key: token
+            name: codefresh-token
+      payload:
+      - dest: data
+        src:
+          dataKey: body
+          dependencyName: {{ .name }}
+{{- end -}}

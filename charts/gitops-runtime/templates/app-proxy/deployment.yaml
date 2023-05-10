@@ -1,8 +1,23 @@
 {{- $appProxyContext := deepCopy . }}
 {{- $_ := set $appProxyContext "Values" (get .Values "app-proxy") }}
 {{- $_ := set $appProxyContext.Values "global" (get .Values "global") }}
+
+{{/* Merge environment variables with the ones in _app-proxy-env.yaml */}}
 {{- $initContainerMergedValues := mergeOverwrite $appProxyContext.Values.initContainer.env (include "codefresh-gitops-runtime.app-proxy.init-container.calculated-env-vars" . | fromYaml) }}
 {{- $mainContainerMergedValues := mergeOverwrite $appProxyContext.Values.env (include "codefresh-gitops-runtime.app-proxy.calculated-env-vars" . | fromYaml) }}
 {{- $_ := set $appProxyContext.Values.initContainer "env" $initContainerMergedValues }}
 {{- $_ := set $appProxyContext.Values "env" $mainContainerMergedValues }}
+
+{{/* Add extra volumes (used for cutom tls) */}}
+{{- $calculatedVolumes := include "codefresh-gitops-runtime.app-proxy.extra-volumes" . | fromYaml }}
+{{- if $calculatedVolumes.extraVolumes }}
+{{- $additionalVolumes := concat (get $calculatedVolumes "extraVolumes") $appProxyContext.Values.extraVolumes }}
+{{- $_ := set $appProxyContext.Values "extraVolumes" $additionalVolumes }}
+{{- end }}
+{{- $initContainerCalculatedVolumeMounts := include "codefresh-gitops-runtime.app-proxy.init.extra-volume-mounts" . | fromYaml }}
+{{- if $initContainerCalculatedVolumeMounts.extraVolumeMounts }}
+{{- $initContainerExtraVolumeMounts := concat (get $initContainerCalculatedVolumeMounts "extraVolumeMounts") $appProxyContext.Values.extraVolumeMounts }}
+{{- $_ := set $appProxyContext.Values.initContainer "extraVolumeMounts" $initContainerExtraVolumeMounts }}
+{{- end }}
+
 {{- include "cap-app-proxy.resources.deployment" $appProxyContext }}
