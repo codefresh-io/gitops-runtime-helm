@@ -37,8 +37,11 @@ spec:
         command:
           {{- toYaml .Values.initContainer.command | nindent 8 }}
         volumeMounts:
-          - mountPath: /app/config/tls
-            name: tls-certs
+        {{- with .Values.initContainer.extraVolumeMounts }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+          - mountPath: /app/config/git-tls-certs
+            name: git-tls-certs
             readOnly: true
           - mountPath: /app/config/all
             name: all-certs
@@ -75,6 +78,9 @@ spec:
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         volumeMounts:
+        {{- with .Values.extraVolumeMounts }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
         - mountPath: /app/config/all
           name: all-certs
           readOnly: true
@@ -91,10 +97,14 @@ spec:
         {{- toYaml . | nindent 6 }}
       {{- end }}
       volumes:
+      {{- with .Values.extraVolumes }}
+          {{- toYaml . | nindent 6 }}
+      {{- end }}
+      - name: git-tls-certs
+        secret:
+          secretName: codefresh-workflow-pipelines-tls
+          defaultMode: 420
+          optional: true
       - name: all-certs
         emptyDir: {}
-      - name: tls-certs
-        configMap:
-          defaultMode: 420
-          name: argocd-tls-certs-cm
 {{- end }}

@@ -1,0 +1,17 @@
+{{- if .Values.global.codefresh.tls.caCerts.secret.create }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: codefresh-tls-certs
+  labels:
+    {{- include "codefresh-gitops-runtime.labels" . | nindent 4 }}
+  {{- with .Values.global.codefresh.tls.caCerts.secret.annotations }}
+  annotations: {{ . | toYaml | nindent 4 }}
+  {{- end }}
+type: Opaque
+stringData:
+    {{- if .Values.global.codefresh.tls.caCerts.secret.content }}
+  {{ default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key }}: | 
+    {{- .Values.global.codefresh.tls.caCerts.secret.content | nindent 4}}
+    {{- end }}
+  {{- end }}

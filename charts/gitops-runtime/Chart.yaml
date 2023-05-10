@@ -1,15 +1,20 @@
 apiVersion: v2
-appVersion: 0.1.27
+appVersion: 0.1.29
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.2.1-alpha.13
+version: 0.2.1-alpha.14
 home: https://github.com/codefresh-io/gitops-runtime-helm
+icon: https://codefresh.io/wp-content/uploads/2022/02/Codefresh_Logo_Vertical_LightBkgd.png
 keywords:
   - codefresh
   - gitops
 maintainers:
   - name: codefresh
     url: https://codefresh-io.github.io/
+annotations:
+  artifacthub.io/changes: |
+    - kind: added
+      description: Added support for custom CA
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm

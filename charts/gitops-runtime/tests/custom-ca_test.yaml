@@ -1,0 +1,385 @@
+# Test custom CA - affects app-proxy and event reporters
+suite: Tes custom CA
+templates:
+  - tls-custom-ca/codefresh-tls-certs.yaml
+  - tls-custom-ca/workflow-pipelines-git-webhooks.yaml
+  - app-proxy/deployment.yaml
+  - event-reporters/workflow-reporter/sensor.yaml
+  - event-reporters/events-reporter/sensor.yaml
+  - event-reporters/rollout-reporter/sensor.yaml
+tests:
+
+- it: test chart created secret contents - default secret key
+  template: tls-custom-ca/codefresh-tls-certs.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.annotations.test: 'test'
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+    - equal:
+        path: metadata.annotations.test
+        value: test
+    - equal:
+        path: stringData
+        value:
+          ca-bundle.crt: |
+            -----BEGIN CERTIFICATE-----
+            ... encoded certificate data here ...
+            -----END CERTIFICATE-----
+
+- it: test chart created secret contents - key override
+  template: tls-custom-ca/codefresh-tls-certs.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.key: my-key
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+    - equal:
+        path: stringData
+        value:
+          my-key: |
+            -----BEGIN CERTIFICATE-----
+            ... encoded certificate data here ...
+            -----END CERTIFICATE-----
+
+- it: volume in app-proxy - chart created secret
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - contains:
+      path: spec.template.spec.volumes
+      content:
+        name: codefresh-tls-certs
+        secret:
+          secretName: codefresh-tls-certs
+          defaultMode: 420
+          optional: true
+  - contains:
+      path: spec.template.spec.initContainers[0].volumeMounts
+      content:
+        mountPath: /app/config/codefresh-tls-certs
+        name: codefresh-tls-certs
+        readOnly: true
+
+- it: volume in app-proxy - no tls
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  asserts:
+  - notContains:
+      path: spec.template.spec.volumes
+      content:
+        name: codefresh-tls-certs
+        secret:
+          secretName: codefresh-tls-certs
+          defaultMode: 420
+          optional: true
+  - notContains:
+      path: spec.template.spec.initContainers[0].volumeMounts
+      content:
+        mountPath: /app/config/codefresh-tls-certs
+        name: codefresh-tls-certs
+        readOnly: true
+
+- it: volume in app-proxy - secret ref
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secretKeyRef.name: my-secret
+    global.codefresh.tls.caCerts.secretKeyRef.key: my-key
+  asserts:
+  - contains:
+      path: spec.template.spec.volumes
+      content:
+        name: codefresh-tls-certs
+        secret:
+          secretName: my-secret
+          defaultMode: 420
+          optional: true
+  - contains:
+      path: spec.template.spec.initContainers[0].volumeMounts
+      content:
+        mountPath: /app/config/codefresh-tls-certs
+        name: codefresh-tls-certs
+        readOnly: true
+
+- it: environment variable in app-proxy init container - secret ref
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secretKeyRef.name: my-secret
+    global.codefresh.tls.caCerts.secretKeyRef.key: my-key
+  asserts:
+  - contains:
+      path: spec.template.spec.initContainers[0].env
+      content:
+        name: SSL_CERT_FILE
+        value:  /app/config/my-secret/my-key
+
+- it: environment variable in app-proxy init container - chart created secret
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - contains:
+      path: spec.template.spec.initContainers[0].env
+      content:
+        name: SSL_CERT_FILE
+        value:  /app/config/codefresh-tls-certs/ca-bundle.crt
+
+
+- it: events reporter sensor - check chart created secret with default key
+  template: event-reporters/events-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.annotations.test: 'test'
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - equal:
+      path: spec.triggers[0].template.http.tls
+      value:
+        caCertSecret:
+          name: codefresh-tls-certs
+          key: ca-bundle.crt
+
+- it: rollout reporter sensor - check chart created secret with default key
+  template: event-reporters/rollout-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.annotations.test: 'test'
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - equal:
+      path: spec.triggers[0].template.http.tls
+      value:
+        caCertSecret:
+          name: codefresh-tls-certs
+          key: ca-bundle.crt
+
+- it: workflow reporter sensor - check chart created secret with default key
+  template: event-reporters/workflow-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.annotations.test: 'test'
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - equal:
+      path: spec.triggers[0].template.http.tls
+      value:
+        caCertSecret:
+          name: codefresh-tls-certs
+          key: ca-bundle.crt
+
+- it: events reporter sensor - secretKeyRef
+  template: event-reporters/events-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secretKeyRef.name: my-secret
+    global.codefresh.tls.caCerts.secretKeyRef.key: my-key
+  asserts:
+  - equal:
+      path: spec.triggers[0].template.http.tls
+      value:
+        caCertSecret:
+          name: my-secret
+          key: my-key
+
+- it: rollout reporter sensor - secretKeyRef
+  template: event-reporters/rollout-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secretKeyRef.name: my-secret
+    global.codefresh.tls.caCerts.secretKeyRef.key: my-key
+  asserts:
+  - equal:
+      path: spec.triggers[0].template.http.tls
+      value:
+        caCertSecret:
+          name: my-secret
+          key: my-key
+
+- it: workflow reporter sensor - secretKeyRef
+  template: event-reporters/workflow-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secretKeyRef.name: my-secret
+    global.codefresh.tls.caCerts.secretKeyRef.key: my-key
+  asserts:
+  - equal:
+      path: spec.triggers[0].template.http.tls
+      value:
+        caCertSecret:
+          name: my-secret
+          key: my-key
+
+- it: events reporter sensor - check chart created secret with custom key
+  template: event-reporters/events-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.annotations.test: 'test'
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.key: my-key
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - equal:
+      path: spec.triggers[0].template.http.tls
+      value:
+        caCertSecret:
+          name: codefresh-tls-certs
+          key: my-key
+
+- it: rollout reporter sensor - check chart created secret with custom key
+  template: event-reporters/rollout-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.annotations.test: 'test'
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.key: my-key
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - equal:
+      path: spec.triggers[0].template.http.tls
+      value:
+        caCertSecret:
+          name: codefresh-tls-certs
+          key: my-key
+
+- it: workflow reporter sensor - check chart created secret with custom key
+  template: event-reporters/workflow-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.annotations.test: 'test'
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.key: my-key
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - equal:
+      path: spec.triggers[0].template.http.tls
+      value:
+        caCertSecret:
+          name: codefresh-tls-certs
+          key: my-key
+
+- it: events reporter sensor - no tls
+  template: event-reporters/events-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  asserts:
+  - isEmpty:
+      path: spec.triggers[0].template.http.tls
+
+- it: rollout reporter sensor - no tls
+  template: event-reporters/rollout-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  asserts:
+  - isEmpty:
+      path: spec.triggers[0].template.http.tls
+
+- it: workflow reporter sensor - no tls
+  template: event-reporters/workflow-reporter/sensor.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  asserts:
+  - isEmpty:
+      path: spec.triggers[0].template.http.tls
+
+# --------------------------------------------------------
+# workflowPipelinesGitWebhooks
+# --------------------------------------------------------
+- it: workflowPipelinesGitWebhooks - take certificates from argocd
+  template: tls-custom-ca/workflow-pipelines-git-webhooks.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-cd.configs.tls.certificates:
+      asd: |
+        -----BEGIN CERTIFICATE-----
+        ... encoded certificate data here ...
+        -----END CERTIFICATE-----
+  asserts:
+    - equal:
+        path: stringData
+        value:
+          asd: |
+            -----BEGIN CERTIFICATE-----
+            ... encoded certificate data here ...
+            -----END CERTIFICATE-----
+- it: workflowPipelinesGitWebhooks - merge overwrite with argocd-cm
+  template: tls-custom-ca/workflow-pipelines-git-webhooks.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-cd.configs.tls.certificates:
+      asd: |
+        -----BEGIN CERTIFICATE-----
+        ... encoded certificate data here ...
+        -----END CERTIFICATE-----
+    global.codefresh.tls.workflowPipelinesGitWebhooks.certificates:
+      asd: |
+        -----BEGIN CERTIFICATE-----
+        override
+        -----END CERTIFICATE-----
+  asserts:
+    - equal:
+        path: stringData
+        value:
+          asd: |
+            -----BEGIN CERTIFICATE-----
+            override
+            -----END CERTIFICATE-----
