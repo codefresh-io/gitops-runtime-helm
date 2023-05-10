@@ -302,7 +302,7 @@ app-proxy:
 
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.2221.0
+    tag: 1.2243.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -311,7 +311,7 @@ app-proxy:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
       # Overrides the image tag whose default is the chart appVersion.
-      tag: 1.2221.0
+      tag: 1.2243.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
