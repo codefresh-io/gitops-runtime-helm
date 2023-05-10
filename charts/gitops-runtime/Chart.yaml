@@ -32,3 +32,4 @@ dependencies:
   repository: https://chartmuseum.codefresh.io/codefresh-tunnel-client
   version: "0.1.12"
   alias: tunnel-client
+  condition: tunnel-client.enabled
