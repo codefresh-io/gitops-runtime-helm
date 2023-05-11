@@ -19,6 +19,19 @@ tests:
   asserts:
   - hasDocuments:
       count: 0
+
+- it: no tunnel when ingress and tunnel are disabled
+  template: templates/tunnel-client.yaml
+  values:
+  - ./values/mandatory-values-ingress.yaml
+  set:
+    global.runtime.ingressUrl: https://test.test.test
+    tunnel-client.enabled: false
+    global.runtime.ingress.enabled: false
+  asserts:
+  - hasDocuments:
+      count: 0
+
 - it: tunnel client rendering fails when accountId not provided
   template: templates/tunnel-client.yaml
   values:
@@ -28,6 +41,8 @@ tests:
   asserts:
     - failedTemplate:
         errorMessage: codefresh.accountId is required
+
+
 
 - it: when both tunnel-client and ingress are disabled fail rendering if ingressUrl is not provided
   template: templates/codefresh-cm.yaml
