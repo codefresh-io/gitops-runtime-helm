@@ -174,19 +174,31 @@ valueFrom:
 Get ingress url for both tunnel based and ingress based runtimes
 */}}
 {{- define "codefresh-gitops-runtime.ingress-url"}}
+  {{- $supportedProtocols := list "http" "https" }}
     {{- if .Values.global.runtime.ingress.enabled }}
-      {{- $supportedProtocols := list "http" "https" }}
       {{- if has .Values.global.runtime.ingress.protocol $supportedProtocols }}
         {{- printf "%s://%s" .Values.global.runtime.ingress.protocol  (index .Values.global.runtime.ingress.hosts 0)}}
       {{- else }}
           {{ fail (printf "ERROR: Unsupported protocol %s for ingress. Only http and https supported" .Values.global.runtime.ingress.protocol)}}
       {{- end }}
-    {{- else }}
-      {{- $accoundId := required "codefresh.accountId is required" .Values.global.codefresh.accountId }}
-      {{- $runtimeName := required "runtime.name is required" .Values.global.runtime.name }}
+    {{/* If tunnel client is enabled - ingress url is <accoundId>-<runtimename>.<tunnel-subdomain> */}}
+    {{- else if index .Values "tunnel-client" "enabled" }}
+      {{- $accoundId := required "global.codefresh.accountId is required for tunnel based runtime" .Values.global.codefresh.accountId }}
+      {{- $runtimeName := required "global.runtime.name is required for tunnel based runtime" .Values.global.runtime.name }}
       {{- $tunnelPrefix := printf "%s-%s" .Values.global.codefresh.accountId .Values.global.runtime.name }}
       {{- $tunnelHost := index (get .Values "tunnel-client") "tunnelServer" "subdomainHost"}}
       {{- printf "https://%s.%s" $tunnelPrefix $tunnelHost }}
+    {{- else }}
+    {{/* If ingress is disabled and tunnel-client is disabled, the ingressHost must be explicitly defined in the values*/}}
+      {{- if .Values.global.runtime.ingressUrl }}
+          {{- if or (hasPrefix "http" .Values.global.runtime.ingressUrl) (hasPrefix "https" .Values.global.runtime.ingressUrl)}}
+            {{- print .Values.global.runtime.ingressUrl }}
+          {{- else }}
+            {{- fail "ERROR: Only http and https are supported for global.runtime.ingressUrl"}}
+          {{- end }}
+      {{- else }}
+        {{- fail "ERROR: When global.runtime.ingress.enabled is false and tunnel-client.enabled is false -  global.runtime.ingressUrl must be provided" }}
+      {{- end }}
     {{- end }}
 {{- end }}
 
@@ -213,7 +225,7 @@ Output comma separated list of installed runtime components
     {{- $comptList = append $comptList $workflowReporter}}
     {{- $comptList = append $comptList $argoWorkflows }}
   {{- end }}
-  {{- if not .Values.global.runtime.ingress.enabled }}
+  {{- if and ( not .Values.global.runtime.ingress.enabled) (index .Values "tunnel-client" "enabled") }}
     {{- $tunnelClient := dict "name" "codefresh-tunnel-client" "version" (get .Subcharts "tunnel-client").Chart.AppVersion }}
     {{- $comptList = append $comptList $tunnelClient }}
   {{- end }}

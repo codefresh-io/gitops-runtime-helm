@@ -61,7 +61,8 @@ global:
       annotations: {}
       # -- Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime.
       hosts: []
-
+    # -- Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false)
+    ingressUrl: ""
     # -- Git credentials runtime. Runtime is not fully functional without those credentials.
     # If not provided through the installation, they must be provided through the Codefresh UI.
     gitCredentials:
@@ -260,8 +261,10 @@ internal-router:
 #-----------------------------------------------------------------------------------------------------------------------
 # tunnel client
 #-----------------------------------------------------------------------------------------------------------------------
-# -- Tunnel based runtime. Only relevant when runtime.ingress.enabled = false
+# -- Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes.
 tunnel-client:
+  # -- Will only be used if global.runtime.ingress.enabled = false
+  enabled: true
   # -- Do not change this value! Breaks chart logic
   libraryMode: true
   tunnelServer:
