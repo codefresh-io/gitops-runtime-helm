@@ -4,7 +4,7 @@ description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
 version: 0.2.3-alpha
 home: https://github.com/codefresh-io/gitops-runtime-helm
-icon: https://codefresh.io/wp-content/uploads/2022/02/Codefresh_Logo_Vertical_LightBkgd.png
+icon: https://codefresh.io/docs/assets/brand/codefresh_purple_dark_logo.png
 keywords:
   - codefresh
   - gitops
