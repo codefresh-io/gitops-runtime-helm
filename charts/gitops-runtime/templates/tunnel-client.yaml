@@ -4,7 +4,7 @@ to intruduce the subdomainPrefix to the tunnel.
 Since the prefix is comprised of <accoundId>-<runtime name>, we can tempalate it and thus 
 reduce complexity of installation and number or mandatory values to provide for the installation to work.
  */}}
-{{- if not .Values.global.runtime.ingress.enabled}}
+{{- if and ( not .Values.global.runtime.ingress.enabled) (index .Values "tunnel-client" "enabled") }}
 {{ $tunnelClientContext := (index .Subcharts "tunnel-client")}}
 {{ $accoundId := required "codefresh.accountId is required" .Values.global.codefresh.accountId }}
 {{ $runtimeName := required "runtime.name is required" .Values.global.runtime.name }}

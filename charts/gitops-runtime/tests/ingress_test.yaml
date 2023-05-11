@@ -1,0 +1,118 @@
+suite: misc tests on app-proxy templates generation
+templates:
+  - templates/ingress.yaml
+  - templates/tunnel-client.yaml
+  - templates/codefresh-cm.yaml
+tests:
+- it: no ingress when tunnel runtime is configured
+  template: templates/ingress.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  asserts:
+    - hasDocuments:
+        count: 0
+
+- it: no tunnel when ingress is configured
+  template: templates/tunnel-client.yaml
+  values:
+  - ./values/mandatory-values-ingress.yaml
+  asserts:
+  - hasDocuments:
+      count: 0
+- it: tunnel client rendering fails when accountId not provided
+  template: templates/tunnel-client.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.accountId: ""
+  asserts:
+    - failedTemplate:
+        errorMessage: codefresh.accountId is required
+
+- it: when both tunnel-client and ingress are disabled fail rendering if ingressUrl is not provided
+  template: templates/codefresh-cm.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.runtime.ingress.enabled: false
+    tunnel-client.enabled: false
+  asserts:
+    - failedTemplate:
+        errorMessage: When global.runtime.ingress.enabled is false and tunnel-client.enabled is false -  global.runtime.ingressUrl must be provided
+
+- it: fail on ingressUrl that is not http or https
+  template: templates/codefresh-cm.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.runtime.ingress.enabled: false
+    tunnel-client.enabled: false
+    global.runtime.ingressUrl: test.test.fail
+  asserts:
+    - failedTemplate:
+        errorMessage: Only http and https are supported for global.runtime.ingressUrl
+
+- it: codefresh-cm ingressHost is set correctly when ingress enabled
+  template: templates/codefresh-cm.yaml
+  values:
+  - ./values/mandatory-values-ingress.yaml
+  set:
+    global.runtime.ingress.enabled: true
+    global.runtime.ingress.hosts: [test.example.com]
+    global.runtime.ingress.protocol: https
+  asserts:
+  - equal:
+      path: data.ingressHost
+      value:  https://test.example.com
+
+- it: codefresh-cm ingressHost is set correctly when tunnel based
+  template: templates/codefresh-cm.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.runtime.ingress.enabled: false
+    global.codefresh.accountId: aabbccdd
+    global.runtime.name: test
+    tunnel-client.enabled: true
+    tunnel-client.tunnelServer.subdomainHost: my-tunnels.com
+  asserts:
+  - equal:
+      path: data.ingressHost
+      value:  https://aabbccdd-test.my-tunnels.com
+
+- it: codefresh-cm ingressHost is set correctly when ingressUrl is used (ingress and tunnel both disabled)
+  template: templates/codefresh-cm.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.runtime.ingress.enabled: false
+    tunnel-client.enabled: false
+    global.runtime.ingressUrl: https://test.test.test
+  asserts:
+  - equal:
+      path: data.ingressHost
+      value:  https://test.test.test
+
+- it: ingress correctly rendered
+  template: templates/ingress.yaml
+  set:
+    global.runtime.ingress.enabled: true
+    global.runtime.ingress.hosts: [test.example.com]
+    global.runtime.ingress.protocol: https
+    global.runtime.ingress.className: myclass
+    global.runtime.ingress.tls: [{secretName: blah, hosts: [test.example.com]}]
+  values:
+  - ./values/mandatory-values-ingress.yaml
+  asserts:
+  - equal:
+      path: spec.ingressClassName
+      value:  myclass
+  - equal:
+      path: spec.rules[0].host
+      value: test.example.com
+  - equal:
+      path: spec.tls
+      value:
+      - hosts:
+        - "test.example.com"
+        secretName: blah
