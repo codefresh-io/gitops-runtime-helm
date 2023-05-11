@@ -4,7 +4,6 @@ kind: Service
 metadata:
   name: {{ include "cap-app-proxy.fullname" . }}
   labels:
-    app: cap-app-proxy
     {{- include "cap-app-proxy.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
