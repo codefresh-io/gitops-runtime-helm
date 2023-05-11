@@ -61,11 +61,8 @@ global:
       annotations: {}
       # -- Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime.
       hosts: []
-
     # -- Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false)
     ingressUrl: ""
-    
-
     # -- Git credentials runtime. Runtime is not fully functional without those credentials.
     # If not provided through the installation, they must be provided through the Codefresh UI.
     gitCredentials:
