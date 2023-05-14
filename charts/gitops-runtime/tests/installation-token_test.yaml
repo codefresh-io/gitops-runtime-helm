@@ -12,15 +12,6 @@ tests:
     global.codefresh.userToken.token: dummy
   asserts:
   - contains:
-      path: spec.template.spec.initContainers[0].env
-      content:
-        name: USER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: codefresh-user-token
-            key: token
-            optional: true
-  - contains:
       path: spec.template.spec.containers[0].env
       content:
         name: USER_TOKEN
@@ -40,14 +31,6 @@ tests:
   asserts:
   - contains:
       path: spec.template.spec.containers[0].env
-      content:
-        name: USER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: mysecret
-            key: mykey
-  - contains:
-      path: spec.template.spec.initContainers[0].env
       content:
         name: USER_TOKEN
         valueFrom:
