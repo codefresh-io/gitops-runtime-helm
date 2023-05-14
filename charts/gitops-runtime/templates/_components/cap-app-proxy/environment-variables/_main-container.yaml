@@ -77,7 +77,7 @@ INGRESS_HOST:
       name: codefresh-cm
       key: ingressHost
 INSTALLATION_TYPE: HELM
-MANAGED: "false"
+MANAGED: '"false"'
 NAMESPACE:
   valueFrom:
     fieldRef:
