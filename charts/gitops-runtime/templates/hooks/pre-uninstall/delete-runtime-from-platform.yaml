@@ -19,7 +19,13 @@ spec:
         - name: PLATFORM_URL
           value: {{ .Values.global.codefresh.url }}
         - name: USER_TOKEN
-          {{ include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 10 }}
+          {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 10 }}
+{{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
+  {{- $name := .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
+  {{- $key := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+        - name: SSL_CERT_FILE
+          value: /app/config/{{ $name }}/{{ $key }}
+{{- end }}
         imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
         command: ["sh", "-c"]
         args: 
