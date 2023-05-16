@@ -121,6 +121,37 @@ tests:
         name: codefresh-tls-certs
         readOnly: true
 
+- it: environment variable in pre-delete hook - secret ref
+  template: 'hooks/delete-runtime-from-platform.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secretKeyRef.name: my-secret
+    global.codefresh.tls.caCerts.secretKeyRef.key: my-key
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: SSL_CERT_FILE
+        value:  /app/config/my-secret/my-key
+
+- it: environment variable in pre-delete hook - chart created secret
+  template: 'hooks/delete-runtime-from-platform.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: SSL_CERT_FILE
+        value:  /app/config/codefresh-tls-certs/ca-bundle.crt
+
 - it: events reporter sensor - check chart created secret with default key
   template: event-reporters/events-reporter/sensor.yaml
   values:
