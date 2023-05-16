@@ -123,7 +123,7 @@ tests:
         readOnly: true
 
 - it: environment variable in pre-delete hook - secret ref
-  template: 'hooks/delete-runtime-from-platform.yaml'
+  template: 'hooks/pre-uninstall/delete-runtime-from-platform.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -137,7 +137,7 @@ tests:
         value:  /app/config/my-secret/my-key
 
 - it: environment variable in pre-delete hook - chart created secret
-  template: 'hooks/delete-runtime-from-platform.yaml'
+  template: 'hooks/pre-uninstall/delete-runtime-from-platform.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
