@@ -1,5 +1,5 @@
 # Test custom CA - affects app-proxy and event reporters
-suite: Tes custom CA
+suite: Test custom CA
 templates:
   - tls-custom-ca/codefresh-tls-certs.yaml
   - tls-custom-ca/workflow-pipelines-git-webhooks.yaml
@@ -7,7 +7,7 @@ templates:
   - event-reporters/workflow-reporter/sensor.yaml
   - event-reporters/events-reporter/sensor.yaml
   - event-reporters/rollout-reporter/sensor.yaml
-  - hooks/delete-runtime-from-platform.yaml
+  - hooks/pre-uninstall/delete-runtime-from-platform.yaml
 tests:
 
 - it: test chart created secret contents - default secret key
