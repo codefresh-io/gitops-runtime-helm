@@ -1,6 +1,3 @@
-{{- define "cap-app-proxy.environment-variables.init-container-defaults" -}}
-{{- end -}}
-
 {{/*
 Read defaults from the template above and merge with the values provided in values file
 */}}
