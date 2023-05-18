@@ -16,7 +16,7 @@ annotations:
   artifacthub.io/prerelease: "true"
   artifacthub.io/changes: |
     - kind: fixed
-      description: Moved runtime creation from `cap-app-proxy` initContainer into main container
+      description: bump `cap-app-proxy` to `1.2257.0` (fix convertToGitops)
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
