@@ -1,55 +1,6 @@
-{{- define "cap-app-proxy.environment-variables.init-container-defaults" -}}
-CHART_VERSION: {{ .Chart.Version }}
-CF_HOST:
-  valueFrom:
-    configMapKeyRef:
-      name: codefresh-cm
-      key: base-url
-CLUSTER: https://kubernetes.default.svc
-INGRESS_CLASS_NAME: 
-  valueFrom:
-    configMapKeyRef:
-      name: codefresh-cm
-      key: ingressClassName
-INGRESS_CONTROLLER: 
-  valueFrom:
-    configMapKeyRef:
-      name: codefresh-cm
-      key: ingressController
-INGRESS_HOST: 
-  valueFrom:
-    configMapKeyRef:
-      name: codefresh-cm
-      key: ingressHost
-INSTALLATION_TYPE: HELM
-NAMESPACE: 
-  valueFrom:
-    fieldRef:
-      fieldPath: metadata.namespace
-RUNTIME_NAME: 
-  valueFrom:
-    configMapKeyRef:
-      name: cap-app-proxy-cm
-      key: runtimeName
-RUNTIME_TOKEN: 
-  valueFrom:
-    secretKeyRef:
-      name: codefresh-token
-      key: token
-      optional: true
-RUNTIME_VERSION:
-  valueFrom:
-    configMapKeyRef:
-      name: codefresh-cm
-      key: version
-{{- end -}}
-
 {{/*
 Read defaults from the template above and merge with the values provided in values file
 */}}
 {{- define "cap-app-proxy.environment-variables.init-container" -}}
-{{- $defaults := (include "cap-app-proxy.environment-variables.init-container-defaults" . | fromYaml ) -}}
-{{- $overrides := .Values.initContainer.env -}}
-{{- $mergedValues := mergeOverwrite $defaults $overrides -}}
-{{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" $mergedValues -}}
+{{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" .Values.initContainer.env -}}
 {{- end -}}

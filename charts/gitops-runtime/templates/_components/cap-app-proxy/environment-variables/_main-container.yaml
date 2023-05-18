@@ -28,12 +28,14 @@ ARGO_WORKFLOWS_URL:
       name: cap-app-proxy-cm
       key: argoWorkflowsUrl
       optional: true
+CHART_VERSION: {{ .Chart.Version }}
 CF_HOST:
   valueFrom:
     configMapKeyRef:
       name: codefresh-cm
       key: base-url
       optional: true
+CLUSTER: https://kubernetes.default.svc
 CORS:
   valueFrom:
     configMapKeyRef:
@@ -59,6 +61,23 @@ GRAPHQL_PLAYGROUND:
       name: cap-app-proxy-cm
       key: graphqlPlayground
       optional: true
+INGRESS_CLASS_NAME: 
+  valueFrom:
+    configMapKeyRef:
+      name: codefresh-cm
+      key: ingressClassName
+INGRESS_CONTROLLER: 
+  valueFrom:
+    configMapKeyRef:
+      name: codefresh-cm
+      key: ingressController
+INGRESS_HOST: 
+  valueFrom:
+    configMapKeyRef:
+      name: codefresh-cm
+      key: ingressHost
+INSTALLATION_TYPE: HELM
+MANAGED: '"false"'
 NAMESPACE:
   valueFrom:
     fieldRef:
@@ -93,6 +112,11 @@ RUNTIME_STORE_IV:
       name: codefresh-token
       key: encryptionIV
       optional: true
+RUNTIME_VERSION:
+  valueFrom:
+    configMapKeyRef:
+      name: codefresh-cm
+      key: version
 STORE_BACKEND:
   valueFrom:
     configMapKeyRef:

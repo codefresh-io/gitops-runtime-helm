@@ -1,5 +1,5 @@
 # Test custom CA - affects app-proxy and event reporters
-suite: Tes custom CA
+suite: Test custom CA
 templates:
   - tls-custom-ca/codefresh-tls-certs.yaml
   - tls-custom-ca/workflow-pipelines-git-webhooks.yaml
@@ -7,6 +7,7 @@ templates:
   - event-reporters/workflow-reporter/sensor.yaml
   - event-reporters/events-reporter/sensor.yaml
   - event-reporters/rollout-reporter/sensor.yaml
+  - hooks/pre-uninstall/delete-runtime-from-platform.yaml
 tests:
 
 - it: test chart created secret contents - default secret key
@@ -121,8 +122,8 @@ tests:
         name: codefresh-tls-certs
         readOnly: true
 
-- it: environment variable in app-proxy init container - secret ref
-  template: 'app-proxy/deployment.yaml'
+- it: environment variable in pre-delete hook - secret ref
+  template: 'hooks/pre-uninstall/delete-runtime-from-platform.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -130,13 +131,13 @@ tests:
     global.codefresh.tls.caCerts.secretKeyRef.key: my-key
   asserts:
   - contains:
-      path: spec.template.spec.initContainers[0].env
+      path: spec.template.spec.containers[0].env
       content:
         name: SSL_CERT_FILE
         value:  /app/config/my-secret/my-key
 
-- it: environment variable in app-proxy init container - chart created secret
-  template: 'app-proxy/deployment.yaml'
+- it: environment variable in pre-delete hook - chart created secret
+  template: 'hooks/pre-uninstall/delete-runtime-from-platform.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -147,11 +148,10 @@ tests:
       -----END CERTIFICATE-----
   asserts:
   - contains:
-      path: spec.template.spec.initContainers[0].env
+      path: spec.template.spec.containers[0].env
       content:
         name: SSL_CERT_FILE
         value:  /app/config/codefresh-tls-certs/ca-bundle.crt
-
 
 - it: events reporter sensor - check chart created secret with default key
   template: event-reporters/events-reporter/sensor.yaml
