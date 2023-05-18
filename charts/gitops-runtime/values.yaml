@@ -46,7 +46,7 @@ global:
 
   # -- Runtime level settings
   runtime:
-    # -- Runtime name. Must be identical to the namepsace in which it is intalled and must be unique per platform account.
+    # -- Runtime name. Must be unique per platform account.
     name:
     # -- Runtime cluster. Should not be changed.
     cluster: https://kubernetes.default.svc
