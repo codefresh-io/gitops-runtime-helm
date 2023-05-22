@@ -1,6 +1,3 @@
-{{- $extraVolumes := include "codefresh-gitops-runtime.app-proxy.extra-volumes" . | fromYaml }}
-{{- $extraVolumeMounts := include "codefresh-gitops-runtime.app-proxy.init.extra-volume-mounts" . | fromYaml }}
-
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -30,6 +27,7 @@ spec:
         - name: SSL_CERT_FILE
           value: /app/config/{{ $name }}/{{ $key }}
 {{- end }}
+{{- $extraVolumeMounts := include "codefresh-gitops-runtime.app-proxy.init.extra-volume-mounts" . | fromYaml }}
 {{- if $extraVolumeMounts.extraVolumeMounts }}
         volumeMounts:
   {{- with $extraVolumeMounts.extraVolumeMounts }}
@@ -45,6 +43,7 @@ spec:
             echo "User token unavailable, unable to remove runtime ${RUNTIME_NAME} from platform, please remove it from UI"
             exit 1
           fi
+{{- $extraVolumes := include "codefresh-gitops-runtime.app-proxy.extra-volumes" . | fromYaml }}
 {{- if $extraVolumes.extraVolumes }}
       volumes:
   {{- with $extraVolumes.extraVolumes }}
