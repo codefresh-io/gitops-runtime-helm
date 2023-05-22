@@ -1,3 +1,9 @@
+{{- $customCASecretName := ""}}
+{{- $customCASecretKey := ""}}
+{{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
+  {{- $customCASecretName = .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
+  {{- $customCASecretKey = .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+{{- end }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -21,18 +27,15 @@ spec:
           value: {{ .Values.global.codefresh.url }}
         - name: USER_TOKEN
           {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 10 }}
-{{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
-  {{- $name := .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
-  {{- $key := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+{{- if $customCASecretName }}
         - name: SSL_CERT_FILE
-          value: /app/config/{{ $name }}/{{ $key }}
+          value: /app/config/codefresh-tls-certs/{{ $customCASecretKey }}
 {{- end }}
-{{- $extraVolumeMounts := include "codefresh-gitops-runtime.app-proxy.init.extra-volume-mounts" . | fromYaml }}
-{{- if $extraVolumeMounts.extraVolumeMounts }}
+{{- if $customCASecretName }}
         volumeMounts:
-  {{- with $extraVolumeMounts.extraVolumeMounts }}
-    {{- toYaml . | nindent 8 }}
-  {{- end }}
+        - mountPath: /app/config/codefresh-tls-certs
+          name: codefresh-tls-certs
+          readOnly: true
 {{- end }}
         command: ["sh", "-c"]
         args: 
@@ -43,10 +46,11 @@ spec:
             echo "User token unavailable, unable to remove runtime ${RUNTIME_NAME} from platform, please remove it from UI"
             exit 1
           fi
-{{- $extraVolumes := include "codefresh-gitops-runtime.app-proxy.extra-volumes" . | fromYaml }}
-{{- if $extraVolumes.extraVolumes }}
+{{- if $customCASecretName }}
       volumes:
-  {{- with $extraVolumes.extraVolumes }}
-    {{- toYaml . | nindent 6 }}
-  {{- end }}
+      - name: codefresh-tls-certs
+        secret:
+          secretName: {{ $customCASecretName }}
+          defaultMode: 420
+          optional: true
 {{- end }}

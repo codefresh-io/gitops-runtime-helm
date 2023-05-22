@@ -15,8 +15,10 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/prerelease: "true"
   artifacthub.io/changes: |
-    - kind: fixed
+    - kind: changed
       description: updated `argo-cd` to `v2.6.0-cap-CR-18430-del-app` (fix application/git-source deletion)
+    - kind: fixed
+      description: Fix delete runtime hook when using custom CA
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
