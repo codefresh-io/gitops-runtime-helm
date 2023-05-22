@@ -149,7 +149,7 @@ tests:
         readOnly: true
 
 - it: volume in pre-delete-hook - no tls
-  template: 'app-proxy/deployment.yaml'
+  template: 'hooks/pre-uninstall/delete-runtime-from-platform.yaml'
   values:
   - ./values/mandatory-values.yaml
   asserts:
