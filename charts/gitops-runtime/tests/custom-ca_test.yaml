@@ -156,7 +156,7 @@ tests:
   - isNull:
       path: spec.template.spec.volumes
   - isNull:
-      path: spec.template.spec.initContainers[0].volumeMounts
+      path: spec.template.spec.containers[0].volumeMounts
 
 - it: volume in pre-delete-hook - secret ref
   template: 'hooks/pre-uninstall/delete-runtime-from-platform.yaml'
