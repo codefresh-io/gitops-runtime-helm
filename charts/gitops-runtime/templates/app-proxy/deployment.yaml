@@ -9,13 +9,14 @@
 {{/* Add extra volumes (used for cutom tls) */}}
 {{- $calculatedVolumes := include "codefresh-gitops-runtime.app-proxy.extra-volumes" . | fromYaml }}
 {{- if $calculatedVolumes.extraVolumes }}
-{{- $additionalVolumes := concat (get $calculatedVolumes "extraVolumes") $appProxyContext.Values.extraVolumes }}
-{{- $_ := set $appProxyContext.Values "extraVolumes" $additionalVolumes }}
+  {{- $additionalVolumes := concat (get $calculatedVolumes "extraVolumes") $appProxyContext.Values.extraVolumes }}
+  {{- $_ := set $appProxyContext.Values "extraVolumes" $additionalVolumes }}
 {{- end }}
+
 {{- $initContainerCalculatedVolumeMounts := include "codefresh-gitops-runtime.app-proxy.init.extra-volume-mounts" . | fromYaml }}
 {{- if $initContainerCalculatedVolumeMounts.extraVolumeMounts }}
-{{- $initContainerExtraVolumeMounts := concat (get $initContainerCalculatedVolumeMounts "extraVolumeMounts") $appProxyContext.Values.extraVolumeMounts }}
-{{- $_ := set $appProxyContext.Values.initContainer "extraVolumeMounts" $initContainerExtraVolumeMounts }}
+  {{- $initContainerExtraVolumeMounts := concat (get $initContainerCalculatedVolumeMounts "extraVolumeMounts") $appProxyContext.Values.extraVolumeMounts }}
+  {{- $_ := set $appProxyContext.Values.initContainer "extraVolumeMounts" $initContainerExtraVolumeMounts }}
 {{- end }}
 
 {{- include "cap-app-proxy.resources.deployment" $appProxyContext }}

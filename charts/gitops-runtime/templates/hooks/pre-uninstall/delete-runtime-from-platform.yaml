@@ -1,3 +1,6 @@
+{{- $extraVolumes := include "codefresh-gitops-runtime.app-proxy.extra-volumes" . | fromYaml }}
+{{- $extraVolumeMounts := include "codefresh-gitops-runtime.app-proxy.init.extra-volume-mounts" . | fromYaml }}
+
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -13,6 +16,7 @@ spec:
       containers:
       - name: delete-runtime-from-platform
         image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
+        imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
         env:
         - name: RUNTIME_NAME
           value: {{ .Values.global.runtime.name }}
@@ -26,7 +30,12 @@ spec:
         - name: SSL_CERT_FILE
           value: /app/config/{{ $name }}/{{ $key }}
 {{- end }}
-        imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
+{{- if $extraVolumeMounts.extraVolumeMounts }}
+        volumeMounts:
+  {{- with $extraVolumeMounts.extraVolumeMounts }}
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
+{{- end }}
         command: ["sh", "-c"]
         args: 
         - |
@@ -36,3 +45,9 @@ spec:
             echo "User token unavailable, unable to remove runtime ${RUNTIME_NAME} from platform, please remove it from UI"
             exit 1
           fi
+{{- if $extraVolumes.extraVolumes }}
+      volumes:
+  {{- with $extraVolumes.extraVolumes }}
+    {{- toYaml . | nindent 6 }}
+  {{- end }}
+{{- end }}
