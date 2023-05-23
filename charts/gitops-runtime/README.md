@@ -1,6 +1,6 @@
 # gitops-runtime
 
-![Version: 0.2.5-alpha](https://img.shields.io/badge/Version-0.2.5--alpha-informational?style=flat-square) ![AppVersion: 0.1.29](https://img.shields.io/badge/AppVersion-0.1.29-informational?style=flat-square)
+![Version: 0.2.6-alpha](https://img.shields.io/badge/Version-0.2.6--alpha-informational?style=flat-square) ![AppVersion: 0.1.29](https://img.shields.io/badge/AppVersion-0.1.29-informational?style=flat-square)
 
 A Helm chart for Codefresh gitops runtime
 
@@ -18,7 +18,7 @@ A Helm chart for Codefresh gitops runtime
 |------------|------|---------|
 | https://bitnami-labs.github.io/sealed-secrets/ | sealed-secrets | 2.7.3 |
 | https://chartmuseum.codefresh.io/codefresh-tunnel-client | tunnel-client(codefresh-tunnel-client) | 0.1.12 |
-| https://codefresh-io.github.io/argo-helm | argo-cd | 5.29.1-1-cap-CR-17237 |
+| https://codefresh-io.github.io/argo-helm | argo-cd | 5.29.2-cap-CR-18430 |
 | https://codefresh-io.github.io/argo-helm | argo-events | 2.0.5-1-cf-init |
 | https://codefresh-io.github.io/argo-helm | argo-rollouts | 2.22.1-1-cap-sw |
 | https://codefresh-io.github.io/argo-helm | argo-workflows | 0.22.9-1-CR-17426 |

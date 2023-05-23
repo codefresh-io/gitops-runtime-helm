@@ -122,6 +122,65 @@ tests:
         name: codefresh-tls-certs
         readOnly: true
 
+- it: volume in pre-delete-hook - chart created secret
+  template: 'hooks/pre-uninstall/delete-runtime-from-platform.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - contains:
+      path: spec.template.spec.volumes
+      content:
+        name: codefresh-tls-certs
+        secret:
+          secretName: codefresh-tls-certs
+          defaultMode: 420
+          optional: true
+  - contains:
+      path: spec.template.spec.containers[0].volumeMounts
+      content:
+        mountPath: /app/config/codefresh-tls-certs
+        name: codefresh-tls-certs
+        readOnly: true
+
+- it: volume in pre-delete-hook - no tls
+  template: 'hooks/pre-uninstall/delete-runtime-from-platform.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  asserts:
+  - isNull:
+      path: spec.template.spec.volumes
+  - isNull:
+      path: spec.template.spec.containers[0].volumeMounts
+
+- it: volume in pre-delete-hook - secret ref
+  template: 'hooks/pre-uninstall/delete-runtime-from-platform.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secretKeyRef.name: my-secret
+    global.codefresh.tls.caCerts.secretKeyRef.key: my-key
+  asserts:
+  - contains:
+      path: spec.template.spec.volumes
+      content:
+        name: codefresh-tls-certs
+        secret:
+          secretName: my-secret
+          defaultMode: 420
+          optional: true
+  - contains:
+      path: spec.template.spec.containers[0].volumeMounts
+      content:
+        mountPath: /app/config/codefresh-tls-certs
+        name: codefresh-tls-certs
+        readOnly: true
+
 - it: environment variable in pre-delete hook - secret ref
   template: 'hooks/pre-uninstall/delete-runtime-from-platform.yaml'
   values:
@@ -134,7 +193,7 @@ tests:
       path: spec.template.spec.containers[0].env
       content:
         name: SSL_CERT_FILE
-        value:  /app/config/my-secret/my-key
+        value:  /app/config/codefresh-tls-certs/my-key
 
 - it: environment variable in pre-delete hook - chart created secret
   template: 'hooks/pre-uninstall/delete-runtime-from-platform.yaml'

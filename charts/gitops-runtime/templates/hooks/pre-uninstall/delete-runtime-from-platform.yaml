@@ -1,3 +1,9 @@
+{{- $customCASecretName := ""}}
+{{- $customCASecretKey := ""}}
+{{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
+  {{- $customCASecretName = .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
+  {{- $customCASecretKey = .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+{{- end }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -13,6 +19,7 @@ spec:
       containers:
       - name: delete-runtime-from-platform
         image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
+        imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
         env:
         - name: RUNTIME_NAME
           value: {{ .Values.global.runtime.name }}
@@ -20,13 +27,16 @@ spec:
           value: {{ .Values.global.codefresh.url }}
         - name: USER_TOKEN
           {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 10 }}
-{{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
-  {{- $name := .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
-  {{- $key := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+{{- if $customCASecretName }}
         - name: SSL_CERT_FILE
-          value: /app/config/{{ $name }}/{{ $key }}
+          value: /app/config/codefresh-tls-certs/{{ $customCASecretKey }}
 {{- end }}
-        imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
+{{- if $customCASecretName }}
+        volumeMounts:
+        - mountPath: /app/config/codefresh-tls-certs
+          name: codefresh-tls-certs
+          readOnly: true
+{{- end }}
         command: ["sh", "-c"]
         args: 
         - |
@@ -36,3 +46,11 @@ spec:
             echo "User token unavailable, unable to remove runtime ${RUNTIME_NAME} from platform, please remove it from UI"
             exit 1
           fi
+{{- if $customCASecretName }}
+      volumes:
+      - name: codefresh-tls-certs
+        secret:
+          secretName: {{ $customCASecretName }}
+          defaultMode: 420
+          optional: true
+{{- end }}
