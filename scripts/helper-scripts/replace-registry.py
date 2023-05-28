@@ -1,6 +1,7 @@
 import yaml
 import sys
 import re
+import csv
 
 
 
@@ -35,6 +36,31 @@ def recurse_replace_registry(currValue,new_registry):
         for item in currValue:
             recurse_replace_registry(item,new_registry)
 
+def recurse_get_source_target(currValue,new_registry,lstSourceTarget):
+    oldImage = ""
+    if type(currValue) is dict:
+        for key in currValue.keys():
+            if key == "registry":
+                oldImage += currValue[key] + "/"
+            if key == "repository":
+                 oldImage += currValue[key]
+            if key == "tag":
+               oldImage += ":" + currValue[key]
+            
+            elif type(currValue[key]) is str:
+                if is_docker_image(currValue[key]):
+                    oldImage = currValue[key]
+            
+            recurse_get_source_target(currValue[key],new_registry,lstSourceTarget)
+            
+        if len(oldImage) > 0:
+            lstSourceTarget.append({"source_image": oldImage, "target_image": replace_registry_in_image(oldImage,new_registry)})
+            
+
+    elif type(currValue) is list:
+        for item in currValue:
+            recurse_get_source_target(item,new_registry,lstSourceTarget)
+
 
 def main(yamlFilepath, newRegistry):
     # Open yaml
@@ -44,8 +70,12 @@ def main(yamlFilepath, newRegistry):
         except yaml.YAMLError as e:
             print(e)
         
-        recurse_replace_registry(d,newRegistry)
-        print(yaml.dump(d))
+        lstSourceTarget = []
+        recurse_get_source_target(d,newRegistry,lstSourceTarget)
+        print(yaml.dump(lstSourceTarget))
+        #recurse_replace_registry(d,newRegistry)
+        #print(yaml.dump(d))
+
         #
         
 if __name__ == "__main__":
