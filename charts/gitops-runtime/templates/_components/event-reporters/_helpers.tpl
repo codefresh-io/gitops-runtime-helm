@@ -140,7 +140,7 @@ Create the name of the service account to use
 */}}
 {{- define "event-reporters.workflow-reporter.serviceAccountName" -}}
   {{- if .Values.workflow.serviceAccount.create }}
-    {{- default (include "event-reporters.workflow-reporter.fullname" .) .Values.workflow.serviceAccount.name }}
+    {{- default "codefresh-sa" .Values.workflow.serviceAccount.name }}
   {{- else }}
     {{- default "default" .Values.workflow.serviceAccount.name }}
   {{- end }}
