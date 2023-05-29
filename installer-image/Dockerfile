@@ -1,5 +1,5 @@
 FROM --platform=$BUILDPLATFORM debian:bullseye-slim
-RUN apt-get update -y && apt-get install wget -y
+RUN apt-get update -y && apt-get install curl wget -y
 ARG CF_CLI_VERSION=v0.1.25
 ARG KUBECTL_VERSION=v1.26.0
 ARG TARGETARCH
