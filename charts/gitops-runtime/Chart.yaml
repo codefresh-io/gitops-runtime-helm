@@ -17,6 +17,8 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Updated `app-proxy` to `1.2268.0`
+    - kind: changed
+      description: updated default value of workflow-reporter SA to "codefresh-sa"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
