@@ -5,10 +5,10 @@
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
 ## Using with private registries - Helper utility
-The gitops runtime is comprised of multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
-To assist with that issue we have created a helper utility. The utility will create values files in the correct structure, overriding the registry for each image.
-You can then provide those values files when installing the chart to override all images.
-The utility will also create other files with data that will help you identify and correctly mirror all the images.
+The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
+We have created a helper utility to resolve this issue: 
+- The utility create values files in the correct structure, overriding the registry for each image. When installing the chart, you can then provide those values files to override all images.
+- The utility also creates other files with data to help you identify and correctly mirror all the images.
 
 #### Usage
 
