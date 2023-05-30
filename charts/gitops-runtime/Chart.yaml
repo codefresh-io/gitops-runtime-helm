@@ -16,7 +16,9 @@ annotations:
   artifacthub.io/prerelease: "true"
   artifacthub.io/changes: |
     - kind: changed
-      description: Add private registry utils
+      description: Add private registry utililies
+    - kind: changed
+      description: Installer image for hooks now runs rootless
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
