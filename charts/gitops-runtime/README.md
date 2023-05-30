@@ -10,15 +10,15 @@ To assist with that issue we have created a helper utility. The utility will cre
 You can then provide those values files when installing the chart to override all images.
 The utility will also create other files with data that will help you identify and correctly mirror all the images.
 
-#### Usage:
+#### Usage
 
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
 docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.2.7-alpha <local_registry>
 ```
-output_dir - is a local directory where the utility will output files. <br>
-local_registry - is your local registry where you want to mirror the images to
+`output_dir` - is a local directory where the utility will output files. <br>
+`local_registry` - is your local registry where you want to mirror the images to
 
 The utility will output 4 files into the folder:
 1. `image-list.txt` - is the list of all images used in this version of the chart. Those are the images that you need to mirror.
