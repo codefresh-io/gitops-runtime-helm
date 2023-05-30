@@ -1,20 +1,20 @@
-## Codefresh gitops runtime Helm chart
-![Version: 0.2.6-alpha](https://img.shields.io/badge/Version-0.2.6--alpha-informational?style=flat-square) ![AppVersion: 0.1.29](https://img.shields.io/badge/AppVersion-0.1.29-informational?style=flat-square)
+## Codefresh gitops runtime
+![Version: 0.2.7-alpha](https://img.shields.io/badge/Version-0.2.7--alpha-informational?style=flat-square) ![AppVersion: 0.1.29](https://img.shields.io/badge/AppVersion-0.1.29-informational?style=flat-square)
 
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
 ## Using with private registries
-As the chart is comprised of multiple components and images - some belonging to dependency charts with varying values schemas making overriding all values containing images rather difficult,
-we have created a utility to help with that. The utility will create values files with the correct structure with the private registry included.
-You can then provide those when installing the chart to override all images.
+The gitops runtime is comprised of multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
+To assist with that issue we have created a helper utility. The utility will create values files in the correct structure, overriding the registry for each image.
+You can then provide those values files when installing the chart to override all images.
 The utility will also create other files with data that will help you identify and correctly mirror all the images.
 
 ### Usage
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.2.6-alpha <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.2.7-alpha <local_registry>
 ```
 output_dir - is a local directory where the utility will output files. <br>
 local_registry - is your local registry where you want to mirror the images to
