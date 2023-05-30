@@ -1,6 +1,6 @@
 #!/bin/bash
 MYDIR=$(dirname $0)
-CHARTDIR="${MYDIR}/../charts/gitops-runtime"
+CHARTDIR="/chart"
 VALUESFILE="${CHARTDIR}/ci/values-all-images.yaml"
 OUTPUTFILE=$1
 # This template prints all values and also sets tags for all images with non-empty repository value, where the tag is empty and should be derived from the appVersion of the subchart.
@@ -47,6 +47,5 @@ END
 )
 
 echo -e "$ALL_VALUES_TEMPLATE" > $CHARTDIR/templates/all-values.yaml
-helm dependency update $CHARTDIR
 helm template --values $VALUESFILE --set getImages=true --show-only templates/all-values.yaml $CHARTDIR > $OUTPUTFILE
 rm $CHARTDIR/templates/all-values.yaml
