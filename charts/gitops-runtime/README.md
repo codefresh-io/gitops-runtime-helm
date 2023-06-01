@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.2.7-alpha](https://img.shields.io/badge/Version-0.2.7--alpha-informational?style=flat-square) ![AppVersion: 0.1.29](https://img.shields.io/badge/AppVersion-0.1.29-informational?style=flat-square)
+![Version: 0.2.8-alpha](https://img.shields.io/badge/Version-0.2.8--alpha-informational?style=flat-square) ![AppVersion: 0.1.29](https://img.shields.io/badge/AppVersion-0.1.29-informational?style=flat-square)
 
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/

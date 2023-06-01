@@ -173,7 +173,7 @@ assumes the name, condition and payload.dependencyName are identical
             key: token
             name: codefresh-token
       payload:
-      - dest: data
+      - dest: {{ .payloadDest }}
         src:
           dataKey: body
           dependencyName: {{ .name }}
