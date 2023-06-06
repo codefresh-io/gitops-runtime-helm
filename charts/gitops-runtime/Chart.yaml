@@ -16,7 +16,7 @@ annotations:
   artifacthub.io/prerelease: "true"
   artifacthub.io/changes: |
     - kind: fixed
-      description: rollout-reporter and workflow-reporter trigger values were wrong (resulting in event not reaching the platform)
+      description: Fix image list generation in private registry helper utility
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
