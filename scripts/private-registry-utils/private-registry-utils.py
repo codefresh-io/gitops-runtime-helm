@@ -44,9 +44,15 @@ def recurse_replace_registry(currValue,new_registry):
                     currValue[key] = replace_registry_in_image(currValue[key],new_registry)
             else:
                 recurse_replace_registry(currValue[key],new_registry)
+
     elif type(currValue) is list:
-        for item in currValue:
-            recurse_replace_registry(item,new_registry)
+        for index,item in enumerate(currValue):
+            if type(item) is dict or type(item) is list:
+                recurse_replace_registry(item,new_registry)
+            elif type(item) is str:
+                if is_docker_image(item):
+                    currValue[index] = replace_registry_in_image(item,new_registry)
+    
 
 def recurse_remove_tags(currValue):
     if type(currValue) is dict:
@@ -73,7 +79,6 @@ def recurse_get_source_target(currValue,new_registry,lstSourceTarget):
             else:
               recurse_get_source_target(currValue[key],new_registry,lstSourceTarget)  
         if len(sourceImage) > 0:
-            print(sourceImage)
             lstSourceTarget.append({"source_image": sourceImage, "target_image": replace_registry_in_image(sourceImage,new_registry)})
 
     elif type(currValue) is list:
@@ -81,7 +86,6 @@ def recurse_get_source_target(currValue,new_registry,lstSourceTarget):
             recurse_get_source_target(item,new_registry,lstSourceTarget)
     elif type(currValue) is str:
         if is_docker_image(currValue):
-            print(currValue)
             lstSourceTarget.append({"source_image": currValue, "target_image": replace_registry_in_image(sourceImage,new_registry)})
 
 def generate_file_from_field(list_of_dicts, field_name, output_file):
@@ -106,7 +110,6 @@ def generate_image_list():
     print("Generating image list")
 
 def generate_mirror_csv(lstSourceTarget, outputDir):
-    
     fields = ['source_image', 'target_image']
 
     with open(f"{outputDir}/image-mirror.csv", 'w+') as csvfile:
@@ -137,13 +140,19 @@ def main():
 
         
     if args.action == "generate-mirror-csv" or args.action is None:
+        print("Creating image-mirror.csv..")
         generate_mirror_csv(lstSourceTarget,args.output_dir)
+        print("Done!")
 
     if args.action == "generate-image-list" or args.action is None:
+        print("Creating image-list.txt...")
         generate_file_from_field(lstSourceTarget,"source_image", f"{args.output_dir}/image-list.txt")
+        print("Done!")
 
     if args.action == "generate-image-values" or args.action is None:
+        print("Creating values files...")
         generate_image_values(dictImageValues,args.output_dir)
+        print("Done!")
 
 if __name__ == "__main__":
     main()
