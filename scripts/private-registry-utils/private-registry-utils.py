@@ -70,20 +70,19 @@ def recurse_get_source_target(currValue,new_registry,lstSourceTarget):
                  sourceImage += currValue[key]
             if key == "tag":
                sourceImage += ":" + currValue[key]
-            
-            elif type(currValue[key]) is str:
-                if is_docker_image(currValue[key]):
-                    sourceImage = currValue[key]
-            
-            recurse_get_source_target(currValue[key],new_registry,lstSourceTarget)
-            
+            else:
+              recurse_get_source_target(currValue[key],new_registry,lstSourceTarget)  
         if len(sourceImage) > 0:
+            print(sourceImage)
             lstSourceTarget.append({"source_image": sourceImage, "target_image": replace_registry_in_image(sourceImage,new_registry)})
-            
 
     elif type(currValue) is list:
         for item in currValue:
             recurse_get_source_target(item,new_registry,lstSourceTarget)
+    elif type(currValue) is str:
+        if is_docker_image(currValue):
+            print(currValue)
+            lstSourceTarget.append({"source_image": currValue, "target_image": replace_registry_in_image(sourceImage,new_registry)})
 
 def generate_file_from_field(list_of_dicts, field_name, output_file):
     with open(output_file, 'w+') as file:
