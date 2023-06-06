@@ -9,3 +9,4 @@ output
 
 # only ignore the values.yaml file at the root of the repo
 /values.yaml
+.devcontainer
