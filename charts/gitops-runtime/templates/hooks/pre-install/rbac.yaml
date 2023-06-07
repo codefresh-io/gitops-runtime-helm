@@ -3,7 +3,7 @@ kind: ClusterRole
 metadata:
   name: validate-values-cr
   annotations:
-    helm.sh/hook: pre-install
+    helm.sh/hook: pre-install,pre-upgrade
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
     helm.sh/hook-weight: "-10"
 rules:
@@ -19,7 +19,7 @@ kind: ClusterRoleBinding
 metadata:
   name: validate-values-crb
   annotations:
-    helm.sh/hook: pre-install
+    helm.sh/hook: pre-install,pre-upgrade
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
     helm.sh/hook-weight: "-10"
 roleRef:
@@ -36,6 +36,6 @@ kind: ServiceAccount
 metadata:
   name: validate-values-sa
   annotations:
-    helm.sh/hook: pre-install
+    helm.sh/hook: pre-install,pre-upgrade
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
     helm.sh/hook-weight: "-10"

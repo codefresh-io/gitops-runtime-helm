@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: validate-values
   annotations:
-    helm.sh/hook: pre-install
+    helm.sh/hook: pre-install,pre-upgrade
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
 spec:
   backoffLimit: 1
