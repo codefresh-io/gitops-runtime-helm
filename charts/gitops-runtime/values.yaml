@@ -52,6 +52,8 @@ global:
     cluster: https://kubernetes.default.svc
     # -- Ingress settings
     ingress:
+      # -- if set to true, pre-install hook will *not* attempt to find the ingressClass nor will it make a request to the host
+      skipValidation: false
       # -- The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https.
       protocol: https
       # -- Defines if ingress-based access mode is enabled for runtime. To use tunnel-based (ingressless) access mode, set to false.
