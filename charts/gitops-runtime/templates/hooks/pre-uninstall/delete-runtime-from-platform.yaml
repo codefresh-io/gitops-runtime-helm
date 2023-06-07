@@ -31,7 +31,8 @@ spec:
         - name: SSL_CERT_FILE
           value: /app/config/codefresh-tls-certs/{{ $customCASecretKey }}
 {{- end }}
-{{- if $customCASecretName }}
+{{- $extraVolumeMounts := include "codefresh-gitops-runtime.app-proxy.init.extra-volume-mounts" . | fromYaml }}
+{{- if $extraVolumeMounts.extraVolumeMounts }}
         volumeMounts:
         - mountPath: /app/config/codefresh-tls-certs
           name: codefresh-tls-certs
@@ -46,7 +47,8 @@ spec:
             echo "User token unavailable, unable to remove runtime ${RUNTIME_NAME} from platform, please remove it from UI"
             exit 1
           fi
-{{- if $customCASecretName }}
+{{- $extraVolumes := include "codefresh-gitops-runtime.app-proxy.extra-volumes" . | fromYaml }}
+{{- if $extraVolumes.extraVolumes }}
       volumes:
       - name: codefresh-tls-certs
         secret:
