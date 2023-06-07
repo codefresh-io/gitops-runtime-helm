@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: validate-values
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      serviceAccount: validate-values-sa
+      restartPolicy: Never
+      containers:
+      - name: validate-values
+        image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
+        imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: VERSION
+          value: {{ .Chart.Version }}
+        command: ["sh", "-c"]
+        args: 
+        - |
+          echo {{ .Values | toYaml | quote }} > values.yaml
+          echo "cf helm validate --values values.yaml --namespace ${NAMESPACE} --version ${VERSION}" --hook
+          sleep 300
