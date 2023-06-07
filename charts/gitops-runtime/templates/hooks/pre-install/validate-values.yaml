@@ -3,8 +3,8 @@ kind: Job
 metadata:
   name: validate-values
   annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
+    helm.sh/hook: pre-install
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
 spec:
   backoffLimit: 1
   template:
@@ -26,5 +26,4 @@ spec:
         args: 
         - |
           echo {{ .Values | toYaml | quote }} > values.yaml
-          echo "cf helm validate --values values.yaml --namespace ${NAMESPACE} --version ${VERSION}" --hook
-          sleep 300
+          cf helm validate --values values.yaml --namespace ${NAMESPACE} --version ${VERSION} --hook --log-level debug
