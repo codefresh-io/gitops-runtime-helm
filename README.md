@@ -12,7 +12,7 @@ See official documentation here: https://codefresh.io/docs/docs/installation/git
 
 run
 ```shell
-kubectl log jobs/validate-values -n ${NAMESPACE}
+kubectl logs jobs/validate-values -n ${NAMESPACE}
 ```
 (use your selected namespace)  
 the output should help find the error in the values file.
