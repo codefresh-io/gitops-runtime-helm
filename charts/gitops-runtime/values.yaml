@@ -99,6 +99,8 @@ global:
 # -------------------------------------------------------------------------------------------------------------------------
 # -- Runtime installer used for running hooks and checks on the release
 installer:
+  # -- if set to true, pre-install hook will *not* run
+  skipValidation: false
   image:
     repository: quay.io/codefresh/gitops-runtime-installer
     tag: ""

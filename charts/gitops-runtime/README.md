@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.2.9-alpha](https://img.shields.io/badge/Version-0.2.9--alpha-informational?style=flat-square) ![AppVersion: 0.1.30](https://img.shields.io/badge/AppVersion-0.1.30-informational?style=flat-square)
+![Version: 0.2.10-alpha](https://img.shields.io/badge/Version-0.2.10--alpha-informational?style=flat-square) ![AppVersion: 0.1.30](https://img.shields.io/badge/AppVersion-0.1.30-informational?style=flat-square)
 
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
@@ -15,7 +15,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.2.9-alpha <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.2.10-alpha <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -157,7 +157,8 @@ The utility will output 4 files into the folder:
 | global.runtime.ingress.protocol | string | `"https"` | The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https. |
 | global.runtime.ingressUrl | string | `""` | Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false) |
 | global.runtime.name | string | `nil` | Runtime name. Must be unique per platform account. |
-| installer | object | `{"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""}}` | Runtime installer used for running hooks and checks on the release |
+| installer | object | `{"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""},"skipValidation":false}` | Runtime installer used for running hooks and checks on the release |
+| installer.skipValidation | bool | `false` | if set to true, pre-install hook will *not* run |
 | internal-router.affinity | object | `{}` |  |
 | internal-router.env | object | `{}` | Environment variables - see values.yaml inside the chart for usage |
 | internal-router.fullnameOverride | string | `"internal-router"` |  |

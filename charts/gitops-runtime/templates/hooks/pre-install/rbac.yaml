@@ -1,0 +1,43 @@
+{{- if  not .Values.installer.skipValidation }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: validate-values-cr
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
+    helm.sh/hook-weight: "-10"
+rules:
+- apiGroups:
+  - "*"
+  resources:
+  - "*"
+  verbs:
+  - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: validate-values-crb
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
+    helm.sh/hook-weight: "-10"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: validate-values-cr
+subjects:
+- kind: ServiceAccount
+  name: validate-values-sa
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: validate-values-sa
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
+    helm.sh/hook-weight: "-10"
+{{- end }}
