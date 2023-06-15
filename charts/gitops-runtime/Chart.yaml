@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.30
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.2.11-alpha
+version: 0.2.12-alpha
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -16,7 +16,7 @@ annotations:
   artifacthub.io/prerelease: "true"
   artifacthub.io/changes: |
     - kind: changed
-      description: pre-install hook is now skipped by default, due to a bug. will be fixed and re-enabled shortly.
+      description: re-enabled pre-install hook by default, after validation code was fixed.
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
