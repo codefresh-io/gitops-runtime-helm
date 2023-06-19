@@ -1,0 +1,12 @@
+{{- $eventBusName := default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
+{{- if .Values.global.runtime.eventBus.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $eventBusName }}
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      eventbus-name: {{ $eventBusName }}
+{{- end }}

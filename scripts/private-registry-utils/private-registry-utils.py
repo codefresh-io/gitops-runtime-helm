@@ -24,7 +24,8 @@ def replace_registry_in_image(image_string, new_registry):
             parts[0] = new_registry
             return '/'.join(parts)
     else:
-        return new_registry + '/' + image_string
+        newimage = new_registry + '/' + image_string
+        return newimage
 
 # Try to identify whether a string is a docker image
 def is_docker_image(image_string):
@@ -86,7 +87,7 @@ def recurse_get_source_target(currValue,new_registry,lstSourceTarget):
             recurse_get_source_target(item,new_registry,lstSourceTarget)
     elif type(currValue) is str:
         if is_docker_image(currValue):
-            lstSourceTarget.append({"source_image": currValue, "target_image": replace_registry_in_image(sourceImage,new_registry)})
+            lstSourceTarget.append({"source_image": currValue, "target_image": replace_registry_in_image(currValue,new_registry)})
 
 def generate_file_from_field(list_of_dicts, field_name, output_file):
     with open(output_file, 'w+') as file:
