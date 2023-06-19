@@ -11,7 +11,7 @@ spec:
     - eventName: workflows
       eventSourceName: workflow-reporter
       name: workflows
-  eventBusName: {{ .Values.global.runtime.eventBusName }}
+  eventBusName: {{ default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
   template:
     serviceAccountName: {{ include "event-reporters.workflow-reporter.serviceAccountName" .}}
     container:
