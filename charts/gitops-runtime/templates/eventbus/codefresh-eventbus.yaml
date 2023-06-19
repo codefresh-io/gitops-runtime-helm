@@ -1,0 +1,21 @@
+{{- $eventBusName := default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
+{{- $eventBusSpec := .Values.global.runtime.eventBus }}
+{{/* Remove name from eventbus spec */}}
+{{- if hasKey $eventBusSpec "name" }}
+{{- $eventBusSpec = unset $eventBusSpec "name" }}
+{{- end }}
+{{/* Remove pdb from eventbus spec */}}
+{{- if hasKey $eventBusSpec "pdb" }}
+{{- $eventBusSpec = unset $eventBusSpec "pdb" }}
+{{- end }}
+apiVersion: argoproj.io/v1alpha1
+kind: EventBus
+metadata:
+  name: {{ $eventBusName }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  labels:
+    app.kubernetes.io/part-of: argo-events
+    codefresh.io/internal: "true"
+spec:
+  {{- $eventBusSpec | toYaml | nindent 2}}
