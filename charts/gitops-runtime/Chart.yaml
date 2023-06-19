@@ -15,8 +15,10 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/prerelease: "true"
   artifacthub.io/changes: |
-    - kind: changed
-      description: re-enabled pre-install hook by default, after validation code was fixed.
+    - kind: fixed
+      description: csv generation for private registry utility
+    - kind: added
+      description: pdb for eventbus
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
