@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.30
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.2.13-alpha
+version: 0.2.13-alpha.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -19,6 +19,8 @@ annotations:
       description: csv generation for private registry utility
     - kind: added
       description: pdb for eventbus
+    - kind: fixed
+      description: fix eventbusname
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
