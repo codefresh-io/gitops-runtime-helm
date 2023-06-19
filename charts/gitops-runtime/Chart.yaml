@@ -19,6 +19,8 @@ annotations:
       description: csv generation for private registry utility
     - kind: added
       description: pdb for eventbus
+    - kind: fixed
+      description: fix eventbusname
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
