@@ -6,8 +6,7 @@ metadata:
 data:
   default.conf.template: |
     server {
-      listen 80 default_server;
-      root /usr/local/app;
+      listen 8080;
       access_log /dev/stdout main;
       error_log /dev/stdout;
     
