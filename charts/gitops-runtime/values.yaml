@@ -15,7 +15,7 @@ global:
       secretKeyRef: {}
 
     tls:
-       # --  Custom CA certificates bundle for platform access with ssl
+      # --  Custom CA certificates bundle for platform access with ssl
       caCerts:
         # -- Reference to existing secret
         secretKeyRef: {}
@@ -287,7 +287,7 @@ app-proxy:
   image-enrichment:
     # -- Enable or disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.
     enabled: true
-     # -- Service account that will be used for enrichemnt process
+    # -- Service account that will be used for enrichemnt process
     serviceAccount:
       # -- Whether to create the service account or use an existing one
       create: true
@@ -312,7 +312,7 @@ app-proxy:
       # -- Enrichemnt images
       images:
         # -- Report image enrichment task image
-        reportImage: 
+        reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
           tag: 1.1.10-main
@@ -326,7 +326,6 @@ app-proxy:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
           tag: 1.1.10-main
-          
   image:
     repository: quay.io/codefresh/cap-app-proxy
     tag: 1.2318.1
