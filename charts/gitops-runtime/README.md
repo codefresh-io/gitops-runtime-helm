@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.2.13-alpha.1](https://img.shields.io/badge/Version-0.2.13--alpha.1-informational?style=flat-square) ![AppVersion: 0.1.30](https://img.shields.io/badge/AppVersion-0.1.30-informational?style=flat-square)
+![Version: 0.2.13-alpha.1](https://img.shields.io/badge/Version-0.2.13--alpha.1-informational?style=flat-square) ![AppVersion: 0.1.32](https://img.shields.io/badge/AppVersion-0.1.32-informational?style=flat-square)
 
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
@@ -57,14 +57,14 @@ The utility will output 4 files into the folder:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2268.0"` |  |
+| app-proxy.image.tag | string | `"1.2318.1"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2268.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2318.1"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |

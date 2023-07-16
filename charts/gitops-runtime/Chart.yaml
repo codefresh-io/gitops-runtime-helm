@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/prerelease: "true"
   artifacthub.io/changes: |
     - kind: changed
+      description: Updated `app-proxy` to `1.2318.1`
+    - kind: changed      
       description: Update ArgoCD version to v2.7.0-cap-CR-18361-custom-instance-label
     - kind: changed
       description: Switch internal router to unprivileged (rootless) nginx
