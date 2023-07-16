@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.2.13-alpha.1](https://img.shields.io/badge/Version-0.2.13--alpha.1-informational?style=flat-square) ![AppVersion: 0.1.32](https://img.shields.io/badge/AppVersion-0.1.32-informational?style=flat-square)
+![Version: 0.2.14](https://img.shields.io/badge/Version-0.2.14-informational?style=flat-square) ![AppVersion: 0.1.32](https://img.shields.io/badge/AppVersion-0.1.32-informational?style=flat-square)
 
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
@@ -15,7 +15,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.2.13-alpha.1 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.2.14 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -42,11 +42,13 @@ The utility will output 4 files into the folder:
 | app-proxy.extraVolumeMounts | list | `[]` | Extra volume mounts for main container |
 | app-proxy.extraVolumes | list | `[]` | extra volumes |
 | app-proxy.fullnameOverride | string | `"cap-app-proxy"` |  |
-| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
-| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
+| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.10-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.10-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.10-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
+| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.10-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.10-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.10-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
 | app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds | int | `5` | Client heartbeat interval in seconds for image enrichemnt workflow |
 | app-proxy.image-enrichment.config.concurrencyCmKey | string | `"imageReportExecutor"` | The name of the key in the configmap to use as synchronization semaphore |
 | app-proxy.image-enrichment.config.concurrencyCmName | string | `"workflow-synchronization-semaphores"` | The name of the configmap to use as synchronization semaphore, see https://argoproj.github.io/argo-workflows/synchronization/ |
+| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.10-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.10-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.10-main"}}` | Enrichemnt images |
+| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.10-main"}` | Report image enrichment task image |
 | app-proxy.image-enrichment.config.podGcStrategy | string | `"OnWorkflowCompletion"` | Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes. |
 | app-proxy.image-enrichment.config.ttlActiveInSeconds | int | `900` | Maximum allowed runtime for the enrichment workflow |
 | app-proxy.image-enrichment.config.ttlAfterCompletionInSeconds | int | `86400` | Number of seconds to live after completion |
@@ -164,8 +166,8 @@ The utility will output 4 files into the folder:
 | internal-router.env | object | `{}` | Environment variables - see values.yaml inside the chart for usage |
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
-| internal-router.image.repository | string | `"nginx"` |  |
-| internal-router.image.tag | string | `"1.22-bullseye"` |  |
+| internal-router.image.repository | string | `"nginxinc/nginx-unprivileged"` |  |
+| internal-router.image.tag | string | `"1.23-alpine"` |  |
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.nameOverride | string | `""` |  |
 | internal-router.nodeSelector | object | `{}` |  |

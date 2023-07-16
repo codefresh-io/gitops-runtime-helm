@@ -9,5 +9,5 @@ COPY scripts/private-registry-utils /scripts
 RUN chmod -R +x /scripts
 WORKDIR /scripts
 # Output calculated values and filter image values
-RUN ./output-calculated-values.sh ./all-values.yaml && python3 ./helper-scripts/yaml-filter.py all-values.yaml image.repository,image.registry,image.tag,argo-events.configs.nats.versions,argo-events.configs.jetstream.versions > all-image-values.yaml
+RUN ./output-calculated-values.sh ./all-values.yaml && python3 ./helper-scripts/yaml-filter.py all-values.yaml image.repository,image.registry,image.tag,argo-events.configs.nats.versions,argo-events.configs.jetstream.versions,app-proxy.image-enrichment.config.images > all-image-values.yaml
 ENTRYPOINT ["python3", "private-registry-utils.py", "all-image-values.yaml"]
