@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.32
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.2.13-alpha.1
+version: 0.2.14-alpha
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -17,10 +17,16 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Updated `app-proxy` to `1.2318.1`
+    - kind: changed      
+      description: Update ArgoCD version to v2.7.0-cap-CR-18361-custom-instance-label
+    - kind: changed
+      description: Switch internal router to unprivileged (rootless) nginx
+    - kind: fixed
+      description: Private registry utility - the utility omitted repositories for images with short names (i.e natsio/prometheus-nats-exporter:0.8.0 was created as registry.example.com/prometheus-nats-exporter:0.8.0). In this version it works as expected.
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.29.2-cap-CR-18430
+  version: 5.38.1-1-cap-CR-18361
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.5-1-cf-init

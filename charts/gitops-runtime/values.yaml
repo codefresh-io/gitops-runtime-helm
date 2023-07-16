@@ -208,9 +208,9 @@ event-reporters:
 internal-router:
   replicaCount: 1
   image:
-    repository: nginx
+    repository: nginxinc/nginx-unprivileged
     pullPolicy: IfNotPresent
-    tag: 1.22-bullseye
+    tag: 1.23-alpine
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"

@@ -18,14 +18,12 @@ def remove_duplicates(list_of_dicts, key):
     return deduplicated_list
 
 def replace_registry_in_image(image_string, new_registry):
-    if '/' in image_string:
-        parts = image_string.split('/')
-        if len(parts) >= 2:
-            parts[0] = new_registry
-            return '/'.join(parts)
-    else:
-        newimage = new_registry + '/' + image_string
-        return newimage
+    parts = image_string.split('/')
+    
+    if len(parts) > 2:
+        parts.pop(0)
+        
+    return '/'.join([new_registry] + parts)
 
 # Try to identify whether a string is a docker image
 def is_docker_image(image_string):

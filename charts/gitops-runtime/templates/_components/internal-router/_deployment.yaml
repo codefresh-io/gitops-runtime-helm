@@ -38,20 +38,20 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           readinessProbe:
             initialDelaySeconds: 10
             timeoutSeconds: 10
             httpGet:
-              port: 80
+              port: http
               path: /readyz
           livenessProbe:
             initialDelaySeconds: 10
             timeoutSeconds: 10
             failureThreshold: 10
             httpGet:
-              port: 80
+              port: http
               path: /healthz
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
