@@ -105,6 +105,7 @@ The utility will output 4 files into the folder:
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
 | argo-cd.crds.install | bool | `true` |  |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
+| argo-cd.notifications.bots.slack | string | `nil` |  |
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
 | argo-rollouts.controller.replicas | int | `1` |  |
@@ -163,6 +164,9 @@ The utility will output 4 files into the folder:
 | installer | object | `{"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""},"skipValidation":false}` | Runtime installer used for running hooks and checks on the release |
 | installer.skipValidation | bool | `false` | if set to true, pre-install hook will *not* run |
 | internal-router.affinity | object | `{}` |  |
+| internal-router.clusterDomain | string | `"cluster.local"` |  |
+| internal-router.dnsNamespace | string | `"kube-system"` |  |
+| internal-router.dnsService | string | `"kube-dns"` |  |
 | internal-router.env | object | `{}` | Environment variables - see values.yaml inside the chart for usage |
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
