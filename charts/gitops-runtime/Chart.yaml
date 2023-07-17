@@ -21,6 +21,8 @@ annotations:
       description: pdb for eventbus
     - kind: fixed
       description: fix eventbusname
+    - kind: fixed
+      description: test e2e
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
