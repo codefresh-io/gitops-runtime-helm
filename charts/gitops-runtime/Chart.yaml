@@ -26,6 +26,8 @@ annotations:
       description: Include enrichment images in the chart with possibility to override through values
     - kind: fixed
       description: Private registry utility - the utility omitted repositories for images with short names (i.e natsio/prometheus-nats-exporter:0.8.0 was created as registry.example.com/prometheus-nats-exporter:0.8.0). In this version it works as expected.
+    - kind: changed
+      description: App-proxy container port changed to 8080
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
