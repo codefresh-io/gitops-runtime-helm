@@ -17,6 +17,9 @@ enrichmentPodGcStrategy: {{ $enrichmentValues.config.podGcStrategy | quote}}
 enrichmentTtlAfterCompletionInSeconds: {{ $enrichmentValues.config.ttlAfterCompletionInSeconds | quote }}
 enrichmentTtlActiveInSeconds: {{ $enrichmentValues.config.ttlActiveInSeconds | quote }}
 enrichmentClientHeartbeatIntervalInSeconds: {{ $enrichmentValues.config.clientHeartbeatIntervalInSeconds | quote }}
+enrichmentImageReportingImage: {{ printf "%s/%s:%s" $enrichmentValues.config.images.reportImage.registry $enrichmentValues.config.images.reportImage.repository $enrichmentValues.config.images.reportImage.tag | quote }}
+enrichmentGitEnrichmentImage: {{ printf "%s/%s:%s" $enrichmentValues.config.images.gitEnrichment.registry $enrichmentValues.config.images.gitEnrichment.repository $enrichmentValues.config.images.gitEnrichment.tag | quote }}
+enrichmentJiraEnrichmentImage: {{ printf "%s/%s:%s" $enrichmentValues.config.images.jiraEnrichment.registry $enrichmentValues.config.images.jiraEnrichment.repository $enrichmentValues.config.images.jiraEnrichment.tag | quote }}
   {{- end }}
 {{- end }}
 

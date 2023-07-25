@@ -30,6 +30,21 @@ tests:
     app-proxy.image-enrichment.config.ttlActiveInSeconds: 1
     app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds: 1
     app-proxy.image-enrichment.serviceAccount.name: test
+    app-proxy.image-enrichment.config.images:
+      reportImage: 
+        registry: registry.example
+        repository: codefresh/report-image
+        tag: 1-test-report
+        # Git enrichment task image
+      gitEnrichment:
+        registry: reg.ex
+        repository: codefresh/git-enrich
+        tag: 1-test-git
+        # Jira enrichment task image
+      jiraEnrichment:
+        registry: my.reg
+        repository: codefresh/jira-enrich
+        tag: 1-test-jira
   asserts:
   - equal:
       path: data.enrichmentConcurrencyCmName
@@ -52,6 +67,15 @@ tests:
   - equal: 
       path: data.enrichmentServiceAccountName
       value: test
+  - equal: 
+      path: data.enrichmentImageReportingImage
+      value: registry.example/codefresh/report-image:1-test-report
+  - equal: 
+      path: data.enrichmentGitEnrichmentImage
+      value: reg.ex/codefresh/git-enrich:1-test-git
+  - equal: 
+      path: data.enrichmentJiraEnrichmentImage
+      value: my.reg/codefresh/jira-enrich:1-test-jira
 
 - it: app proxy environment variables set for enrichemnt and match the values in the configmap
   template: 'app-proxy/deployment.yaml'
@@ -122,6 +146,33 @@ tests:
           configMapKeyRef:
             name: cap-app-proxy-cm
             key: enrichmentServiceAccountName
+            optional: true
+  - contains: 
+      path: spec.template.spec.containers[0].env
+      content:
+        name: IRW_REPORT_IMAGE_TASK_IMAGE
+        valueFrom:
+          configMapKeyRef:
+            name: cap-app-proxy-cm
+            key: enrichmentImageReportingImage
+            optional: true
+  - contains: 
+      path: spec.template.spec.containers[0].env
+      content:
+        name: IRW_GIT_ENRICHMENT_TASK_IMAGE
+        valueFrom:
+          configMapKeyRef:
+            name: cap-app-proxy-cm
+            key: enrichmentGitEnrichmentImage
+            optional: true
+  - contains: 
+      path: spec.template.spec.containers[0].env
+      content:
+        name: IRW_JIRA_ENRICHMENT_TASK_IMAGE
+        valueFrom:
+          configMapKeyRef:
+            name: cap-app-proxy-cm
+            key: enrichmentJiraEnrichmentImage
             optional: true
 
 - it: Verify correct name of serviceAccount

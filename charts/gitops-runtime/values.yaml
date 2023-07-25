@@ -15,7 +15,7 @@ global:
       secretKeyRef: {}
 
     tls:
-       # --  Custom CA certificates bundle for platform access with ssl
+      # --  Custom CA certificates bundle for platform access with ssl
       caCerts:
         # -- Reference to existing secret
         secretKeyRef: {}
@@ -141,6 +141,9 @@ argo-cd:
       accounts.admin: apiKey,login
     params:
       server.insecure: true
+  notifications:
+    bots:
+      slack:
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Events
 #-----------------------------------------------------------------------------------------------------------------------
@@ -208,9 +211,9 @@ event-reporters:
 internal-router:
   replicaCount: 1
   image:
-    repository: nginx
+    repository: nginxinc/nginx-unprivileged
     pullPolicy: IfNotPresent
-    tag: 1.22-bullseye
+    tag: 1.23-alpine
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
@@ -265,6 +268,10 @@ internal-router:
     #   internalUrl: "https://argo-server1:2746/"
     # app-proxy:
     #   internalUrl: "http://cap-app-proxy:3017"
+
+  dnsService: kube-dns
+  dnsNamespace: kube-system
+  clusterDomain: cluster.local
 #-----------------------------------------------------------------------------------------------------------------------
 # tunnel client
 #-----------------------------------------------------------------------------------------------------------------------
@@ -287,7 +294,7 @@ app-proxy:
   image-enrichment:
     # -- Enable or disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.
     enabled: true
-     # -- Service account that will be used for enrichemnt process
+    # -- Service account that will be used for enrichemnt process
     serviceAccount:
       # -- Whether to create the service account or use an existing one
       create: true
@@ -309,10 +316,26 @@ app-proxy:
       ttlActiveInSeconds: 900
       # -- Client heartbeat interval in seconds for image enrichemnt workflow
       clientHeartbeatIntervalInSeconds: 5
-
+      # -- Enrichemnt images
+      images:
+        # -- Report image enrichment task image
+        reportImage:
+          registry: quay.io
+          repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
+          tag: 1.1.10-main
+        # Git enrichment task image
+        gitEnrichment:
+          registry: quay.io
+          repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
+          tag: 1.1.10-main
+        # Jira enrichment task image
+        jiraEnrichment:
+          registry: quay.io
+          repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
+          tag: 1.1.10-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.2268.0
+    tag: 1.2337.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -320,7 +343,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.2268.0
+      tag: 1.2337.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh

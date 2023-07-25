@@ -183,6 +183,24 @@ IRW_HEARTBEAT_INTERVAL_IN_SECONDS:
       name: cap-app-proxy-cm
       key: enrichmentClientHeartbeatIntervalInSeconds
       optional: true
+IRW_REPORT_IMAGE_TASK_IMAGE:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: enrichmentImageReportingImage
+      optional: true
+IRW_GIT_ENRICHMENT_TASK_IMAGE:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: enrichmentGitEnrichmentImage
+      optional: true
+IRW_JIRA_ENRICHMENT_TASK_IMAGE:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: enrichmentJiraEnrichmentImage
+      optional: true
 NODE_EXTRA_CA_CERTS: /app/config/all/all.cer
 {{- end -}}
 
