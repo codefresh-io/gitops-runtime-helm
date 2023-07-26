@@ -48,5 +48,10 @@ data:
       location /healthz {
         return 200 'ok';
       }
+
+      location = / {
+        return 200 'OK';
+        auth_basic off;
+      }
     }
 {{- end }}
