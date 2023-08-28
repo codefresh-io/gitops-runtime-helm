@@ -37,7 +37,7 @@ internal-router:
 argo-cd:
   redis:
     securityContext:
-      runAsUser: 1000680000 # Arbitrary user ID from allowed range
+      runAsUser: 1000680000 # Arbitrary user ID within allowed range
 
   openshift:
     enabled: true
