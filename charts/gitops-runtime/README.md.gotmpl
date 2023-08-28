@@ -6,7 +6,7 @@ Prior to running the installation please see the official documentation at: http
 
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
-We have created a helper utility to resolve this issue:  
+We have created a helper utility to resolve this issue:
 - The utility create values files in the correct structure, overriding the registry for each image. When installing the chart, you can then provide those values files to override all images.
 - The utility also creates other files with data to help you identify and correctly mirror all the images.
 
@@ -25,5 +25,34 @@ The utility will output 4 files into the folder:
 2. `image-mirror.csv` - is a csv file with 2 fields - source_image and target_image. source_image is the image with the original registry and target_image is the image with the private registry. Can be used as an input file for a mirroring script.
 3. `values-images-no-tags.yaml` - a values file with all image values with the private registry **excluding tags**. If provided through --values to helm install/upgrade command - it will override all images to use the private registry.
 4. `values-images-with-tags.yaml` - The same as 3 but with tags **included**.
+
+#### Openshift
+
+```yaml
+internal-router:
+  dnsService: dns-default
+  dnsNamespace: openshift-dns
+  clusterDomain: cluster.local
+
+argo-cd:
+  redis:
+    securityContext:
+      runAsUser: 1000680000 # Arbitrary user ID from allowed range
+
+  openshift:
+    enabled: true
+
+argo-events:
+  openshift: true
+
+  webhook:
+    port: 8443
+
+sealed-secrets:
+  podSecurityContext:
+    enabled: false
+  containerSecurityContext:
+    enabled: false
+```
 
 {{ template "chart.valuesSection" . }}
