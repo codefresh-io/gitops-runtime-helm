@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.33
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.2.15
+version: 0.2.16
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,16 +15,14 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Updated `app-proxy` to `1.2400.4`
-    - kind: changed
-      description: Update ArgoCD version to v2.7.0-cap-CR-19754-deletion-fix
+      description: Update `argo-events` to 2.0.5-1-cf-init
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
   version: 5.38.1-2-cap-CR-19754
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
-  version: 2.0.5-1-cf-init
+  version: 2.0.9-1-cap-CR-19893
 - name: argo-workflows
   repository: https://codefresh-io.github.io/argo-helm
   version: 0.22.9-1-CR-17426
