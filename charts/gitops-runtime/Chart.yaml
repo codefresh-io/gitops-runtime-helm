@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Update `argo-events` to 2.0.5-1-cf-init
+    - kind: changed
+      description: Add ipv6 support in internal-router
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
