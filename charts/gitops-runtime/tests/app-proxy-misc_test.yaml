@@ -14,7 +14,7 @@ tests:
       path: spec.template.spec.containers[0].env
       content:
         name: PORT
-        value: 8787
+        value: "8787"
 - it: adding environment variables on main container
   template: 'app-proxy/deployment.yaml'
   values:
@@ -103,7 +103,7 @@ tests:
   values:
   - ./values/mandatory-values.yaml
   set:
-    app-proxy.nodeSelector: 
+    app-proxy.nodeSelector:
       test.io/node: "test"
   asserts:
   - equal:
@@ -135,7 +135,7 @@ tests:
   values:
   - ./values/mandatory-values.yaml
   set:
-    app-proxy.affinity: 
+    app-proxy.affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
@@ -218,4 +218,4 @@ tests:
       path: spec.template.spec.initContainers[0].volumeMounts
       content:
         name: my-secret
-        mountPath: /my-secret 
+        mountPath: /my-secret
