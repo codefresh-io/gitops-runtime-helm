@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Update `argo-events` to 2.0.5-1-cf-init
+    - kind: changed
+      description: Update env-vars helper template
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
