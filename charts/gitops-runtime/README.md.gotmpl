@@ -26,7 +26,7 @@ The utility will output 4 files into the folder:
 3. `values-images-no-tags.yaml` - a values file with all image values with the private registry **excluding tags**. If provided through --values to helm install/upgrade command - it will override all images to use the private registry.
 4. `values-images-with-tags.yaml` - The same as 3 but with tags **included**.
 
-#### Openshift
+## Openshift
 
 ```yaml
 internal-router:
