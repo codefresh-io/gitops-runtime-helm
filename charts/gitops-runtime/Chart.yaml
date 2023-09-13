@@ -23,6 +23,8 @@ annotations:
     - kind: changed
       description: Update Argo Events version to v1.7.3-cap-CR-19893
     - kind: changed
+      description: Update env-vars helper template
+    - kind: changed
       description: Add ipv6 support in internal-router
 dependencies:
 - name: argo-cd

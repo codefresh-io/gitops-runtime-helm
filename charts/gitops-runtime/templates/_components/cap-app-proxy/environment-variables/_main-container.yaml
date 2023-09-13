@@ -61,23 +61,23 @@ GRAPHQL_PLAYGROUND:
       name: cap-app-proxy-cm
       key: graphqlPlayground
       optional: true
-INGRESS_CLASS_NAME: 
+INGRESS_CLASS_NAME:
   valueFrom:
     configMapKeyRef:
       name: codefresh-cm
       key: ingressClassName
-INGRESS_CONTROLLER: 
+INGRESS_CONTROLLER:
   valueFrom:
     configMapKeyRef:
       name: codefresh-cm
       key: ingressController
-INGRESS_HOST: 
+INGRESS_HOST:
   valueFrom:
     configMapKeyRef:
       name: codefresh-cm
       key: ingressHost
 INSTALLATION_TYPE: HELM
-MANAGED: '"false"'
+MANAGED: false
 NAMESPACE:
   valueFrom:
     fieldRef:
