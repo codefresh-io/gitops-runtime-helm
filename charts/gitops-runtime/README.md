@@ -1,12 +1,12 @@
 ## Codefresh gitops runtime
-![Version: 0.2.15](https://img.shields.io/badge/Version-0.2.15-informational?style=flat-square) ![AppVersion: 0.1.33](https://img.shields.io/badge/AppVersion-0.1.33-informational?style=flat-square)
+![Version: 0.2.16](https://img.shields.io/badge/Version-0.2.16-informational?style=flat-square) ![AppVersion: 0.1.34](https://img.shields.io/badge/AppVersion-0.1.34-informational?style=flat-square)
 
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
-We have created a helper utility to resolve this issue: 
+We have created a helper utility to resolve this issue:
 - The utility create values files in the correct structure, overriding the registry for each image. When installing the chart, you can then provide those values files to override all images.
 - The utility also creates other files with data to help you identify and correctly mirror all the images.
 
@@ -15,7 +15,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.2.15 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.2.16 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -25,6 +25,35 @@ The utility will output 4 files into the folder:
 2. `image-mirror.csv` - is a csv file with 2 fields - source_image and target_image. source_image is the image with the original registry and target_image is the image with the private registry. Can be used as an input file for a mirroring script.
 3. `values-images-no-tags.yaml` - a values file with all image values with the private registry **excluding tags**. If provided through --values to helm install/upgrade command - it will override all images to use the private registry.
 4. `values-images-with-tags.yaml` - The same as 3 but with tags **included**.
+
+## Openshift
+
+```yaml
+internal-router:
+  dnsService: dns-default
+  dnsNamespace: openshift-dns
+  clusterDomain: cluster.local
+
+argo-cd:
+  redis:
+    securityContext:
+      runAsUser: 1000680000 # Arbitrary user ID within allowed range
+
+  openshift:
+    enabled: true
+
+argo-events:
+  openshift: true
+
+  webhook:
+    port: 8443
+
+sealed-secrets:
+  podSecurityContext:
+    enabled: false
+  containerSecurityContext:
+    enabled: false
+```
 
 ## Values
 
@@ -59,14 +88,14 @@ The utility will output 4 files into the folder:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2400.4"` |  |
+| app-proxy.image.tag | string | `"1.2411.2"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2400.4"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2411.2"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |

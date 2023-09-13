@@ -9,14 +9,14 @@ env: []
   {{- else -}}
 env:
     {{- range $name, $val := . }}
-      {{- if kindIs "string" $val}}
+      {{- if or (kindIs "string" $val) (kindIs "bool" $val) (kindIs "int" $val) (kindIs "float64" $val) }}
 - name: {{ $name }}
-  value: {{ $val }}
+  value: {{ $val | quote }}
       {{- else if kindIs "map" $val}}
         {{- if hasKey $val "valueFrom" }}
           {{- if or (hasKey $val.valueFrom "secretKeyRef") (hasKey $val.valueFrom "configMapKeyRef") (hasKey $val.valueFrom "fieldRef") }}
 - name: {{ $name }}
-{{- $val | toYaml | nindent 2}}        
+{{- $val | toYaml | nindent 2}}
           {{- else}}
             {{ fail "ERROR: Only secretKeyRef/configMapKeyRef/fieldRef are supported for valueFrom block for environment variables" }}
           {{- end}}
