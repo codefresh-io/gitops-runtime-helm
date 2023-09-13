@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 0.1.33
+appVersion: 0.1.34
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
 version: 0.2.16
@@ -15,11 +15,15 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Update `argo-events` to 2.0.5-1-cf-init
+      description: Updated `app-proxy` to `1.2411.2`
+    - kind: changed
+      description: Update ArgoCD version to v2.8.1-cap-CR-20116-rollout-sync-sha
+    - kind: changed
+      description: Update Argo Events version to v1.7.3-cap-CR-19893
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.38.1-2-cap-CR-19754
+  version: 5.46.2-1-cap-CR-20116
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
