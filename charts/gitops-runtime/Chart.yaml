@@ -15,13 +15,17 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
+      description: Update `argo-events` to 2.0.5-1-cf-init
+    - kind: changed
       description: Updated `app-proxy` to `1.2411.2`
     - kind: changed
       description: Update ArgoCD version to v2.8.1-cap-CR-20116-rollout-sync-sha
     - kind: changed
       description: Update Argo Events version to v1.7.3-cap-CR-19893
     - kind: changed
-      description: Update env-vars helper template      
+      description: Update env-vars helper template
+    - kind: changed
+      description: Add ipv6 support in internal-router
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm

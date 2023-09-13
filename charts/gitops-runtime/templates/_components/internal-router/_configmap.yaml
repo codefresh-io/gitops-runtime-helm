@@ -7,6 +7,7 @@ data:
   default.conf.template: |
     server {
       listen 8080;
+      listen [::]:80 default_server;
       access_log /dev/stdout main;
       error_log /dev/stdout;
 
