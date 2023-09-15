@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: fixed
-      description: Fix ipv6 port number
+      description: Fix IPv6 port number in internal-router config
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
