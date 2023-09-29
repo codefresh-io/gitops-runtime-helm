@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.35
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.2.18
+version: 0.2.19
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Update ArgoCD version to v2.8.1-cap-CR-player-and-vuln-fix
+      description: Update Argo Rollouts to v1.5.0
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -29,7 +29,7 @@ dependencies:
   condition: argo-workflows.enabled
 - name: argo-rollouts
   repository: https://codefresh-io.github.io/argo-helm
-  version: 2.22.1-1-cap-sw
+  version: 2.31.6-1-cf-init
   condition: argo-rollouts.enabled
 - name: sealed-secrets
   repository: https://bitnami-labs.github.io/sealed-secrets/
