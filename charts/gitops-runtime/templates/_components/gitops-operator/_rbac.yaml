@@ -59,4 +59,5 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ include "gitops-operator.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
 {{- end }}
