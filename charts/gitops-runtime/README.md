@@ -165,7 +165,7 @@ sealed-secrets:
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | gitops-operator.image.repository | string | `"quay.io/codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"v0.0.1"` |  |
+| gitops-operator.image.tag | string | `"v0.1.0-alpha.1"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.kube-rbac-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | gitops-operator.kube-rbac-proxy.image.repository | string | `"gcr.io/kubebuilder/kube-rbac-proxy"` |  |
