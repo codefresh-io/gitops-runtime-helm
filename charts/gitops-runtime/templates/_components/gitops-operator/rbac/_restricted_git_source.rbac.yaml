@@ -47,4 +47,34 @@ rules:
   - restrictedgitsources/status
   verbs:
   - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
+  name: restrictedgitsource-editor
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: restrictedgitsource-editor
+subjects:
+- kind: ServiceAccount
+  name: {{ include "gitops-operator.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
+  name: restrictedgitsource-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: restrictedgitsource-viewer
+subjects:
+- kind: ServiceAccount
+  name: {{ include "gitops-operator.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
 {{- end }}
