@@ -139,8 +139,10 @@ argo-cd:
     cm:
       timeout.reconciliation: 20s
       accounts.admin: apiKey,login
+      application.resourceTrackingMethod: annotation+label
     params:
       server.insecure: true
+      application.namespaces: 'cf-*'
   notifications:
     bots:
       slack:

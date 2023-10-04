@@ -88,14 +88,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2411.2"` |  |
+| app-proxy.image.tag | string | `"1.2461.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2411.2"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2461.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -130,7 +130,9 @@ sealed-secrets:
 | app-proxy.serviceAccount.name | string | `"cap-app-proxy"` |  |
 | app-proxy.tolerations | list | `[]` |  |
 | argo-cd.configs.cm."accounts.admin" | string | `"apiKey,login"` |  |
+| argo-cd.configs.cm."application.resourceTrackingMethod" | string | `"annotation+label"` |  |
 | argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
+| argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
 | argo-cd.crds.install | bool | `true` |  |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
