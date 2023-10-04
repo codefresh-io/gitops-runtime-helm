@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.35
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.2.19
+version: 0.2.20
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,11 +15,11 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Update Argo Rollouts to v1.5.0
+      description: Update ArgoCD to v2.8.1-cap-CR-not-setup-kustomize-ns
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.46.2-2-cap-CR-player-and-vuln-fix
+  version: 5.46.2-3-cap-CR-not-setup-kustomize-ns
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
