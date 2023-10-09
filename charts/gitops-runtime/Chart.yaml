@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.35
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.2.20
+version: 0.2.21
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -14,8 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
-    - kind: changed
-      description: Update ArgoCD to v2.8.1-cap-CR-not-setup-kustomize-ns
+    - kind: fixed
+      description: Fix argoCDServerServiceName and argoCDServerServicePort overrides
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
