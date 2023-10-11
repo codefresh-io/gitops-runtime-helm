@@ -28,4 +28,8 @@ spec:
         {{- . | toYaml | nindent 8 }}
       {{- end }}
     serviceAccountName: {{ include "event-reporters.workflow-reporter.serviceAccountName" .}}
+    tolerations:
+    {{- with .Values.workflow.eventSource.tolerations }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
 {{- end }}

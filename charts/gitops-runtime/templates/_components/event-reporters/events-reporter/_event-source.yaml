@@ -23,4 +23,8 @@ spec:
       {{- with .Values.events.eventSource.resources  }}
         {{- . | toYaml | nindent 8 }}
       {{- end }}
+    tolerations:
+    {{- with .Values.events.eventSource.tolerations }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
 {{- end }}

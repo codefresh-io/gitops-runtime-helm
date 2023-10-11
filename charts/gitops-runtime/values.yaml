@@ -183,6 +183,7 @@ event-reporters:
     eventSource:
       replicas: 1
       resources: {}
+      tolerations: []
     sensor:
       replicas: 1
       resources: {}
@@ -192,6 +193,7 @@ event-reporters:
     eventSource:
       replicas: 1
       resources: {}
+      tolerations: []
     sensor:
       replicas: 1
       resources: {}
@@ -201,6 +203,7 @@ event-reporters:
     eventSource:
       replicas: 1
       resources: {}
+      tolerations: []
     sensor:
       replicas: 1
       resources: {}
