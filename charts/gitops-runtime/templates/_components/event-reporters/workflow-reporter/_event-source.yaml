@@ -32,4 +32,12 @@ spec:
     {{- with .Values.workflow.eventSource.tolerations }}
       {{- toYaml . | nindent 6 }}
     {{- end }}
+    nodeSelector:
+    {{- with .Values.workflow.eventSource.nodeSelector }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    affinity:
+    {{- with .Values.workflow.eventSource.affinity }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
 {{- end }}

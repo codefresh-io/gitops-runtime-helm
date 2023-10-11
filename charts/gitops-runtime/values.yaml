@@ -184,9 +184,14 @@ event-reporters:
       replicas: 1
       resources: {}
       tolerations: []
+      nodeSelector: {}
+      affinity: {}
     sensor:
       replicas: 1
       resources: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
   rollout:
     serviceAccount:
       create: true
@@ -194,9 +199,14 @@ event-reporters:
       replicas: 1
       resources: {}
       tolerations: []
+      nodeSelector: {}
+      affinity: {}
     sensor:
       replicas: 1
       resources: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
   workflow:
     serviceAccount:
       create: true
@@ -204,9 +214,14 @@ event-reporters:
       replicas: 1
       resources: {}
       tolerations: []
+      nodeSelector: {}
+      affinity: {}
     sensor:
       replicas: 1
       resources: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Internal router

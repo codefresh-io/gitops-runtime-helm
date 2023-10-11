@@ -146,20 +146,38 @@ sealed-secrets:
 | argo-workflows.fullnameOverride | string | `"argo"` |  |
 | event-reporters.events.argoCDServerServiceName | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service name. |
 | event-reporters.events.argoCDServerServicePort | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service port. |
+| event-reporters.events.eventSource.affinity | object | `{}` |  |
+| event-reporters.events.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.events.eventSource.replicas | int | `1` |  |
 | event-reporters.events.eventSource.resources | object | `{}` |  |
+| event-reporters.events.eventSource.tolerations | list | `[]` |  |
+| event-reporters.events.sensor.affinity | object | `{}` |  |
+| event-reporters.events.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.events.sensor.replicas | int | `1` |  |
 | event-reporters.events.sensor.resources | object | `{}` |  |
+| event-reporters.events.sensor.tolerations | list | `[]` |  |
 | event-reporters.events.serviceAccount.create | bool | `true` |  |
+| event-reporters.rollout.eventSource.affinity | object | `{}` |  |
+| event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.eventSource.replicas | int | `1` |  |
 | event-reporters.rollout.eventSource.resources | object | `{}` |  |
+| event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
+| event-reporters.rollout.sensor.affinity | object | `{}` |  |
+| event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.sensor.replicas | int | `1` |  |
 | event-reporters.rollout.sensor.resources | object | `{}` |  |
+| event-reporters.rollout.sensor.tolerations | list | `[]` |  |
 | event-reporters.rollout.serviceAccount.create | bool | `true` |  |
+| event-reporters.workflow.eventSource.affinity | object | `{}` |  |
+| event-reporters.workflow.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.workflow.eventSource.replicas | int | `1` |  |
 | event-reporters.workflow.eventSource.resources | object | `{}` |  |
+| event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
+| event-reporters.workflow.sensor.affinity | object | `{}` |  |
+| event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.workflow.sensor.replicas | int | `1` |  |
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
+| event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
 | global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","tls":{"caCerts":{"secret":{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"},"secretKeyRef":{}},"workflowPipelinesGitWebhooks":{"annotatins":{},"certificates":{}}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |
