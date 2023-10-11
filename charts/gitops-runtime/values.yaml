@@ -183,27 +183,45 @@ event-reporters:
     eventSource:
       replicas: 1
       resources: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
     sensor:
       replicas: 1
       resources: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
   rollout:
     serviceAccount:
       create: true
     eventSource:
       replicas: 1
       resources: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
     sensor:
       replicas: 1
       resources: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
   workflow:
     serviceAccount:
       create: true
     eventSource:
       replicas: 1
       resources: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
     sensor:
       replicas: 1
       resources: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Internal router
@@ -335,7 +353,7 @@ app-proxy:
           tag: 1.1.10-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.2411.2
+    tag: 1.2472.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -343,7 +361,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.2411.2
+      tag: 1.2472.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh

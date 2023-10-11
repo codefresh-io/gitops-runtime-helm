@@ -19,6 +19,18 @@ spec:
       {{- with .Values.events.sensor.resources  }}
         {{- . | toYaml | nindent 8 }}
       {{- end }}
+    tolerations:
+    {{- with .Values.events.sensor.tolerations }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    nodeSelector:
+    {{- with .Values.events.sensor.nodeSelector }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    affinity:
+    {{- with .Values.events.sensor.affinity }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
   triggers:
     {{- include "event-reporters.http.trigger" (dict "name" "events" "Values" .Values "payloadDest" "data") | nindent 4 }}
 {{- end }}

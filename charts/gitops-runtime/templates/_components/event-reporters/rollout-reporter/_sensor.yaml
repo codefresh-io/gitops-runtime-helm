@@ -26,6 +26,18 @@ spec:
       {{- with .Values.rollout.eventSource.resources  }}
         {{- . | toYaml | nindent 8 }}
       {{- end }}
+    tolerations:
+    {{- with .Values.rollout.eventSource.tolerations }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    nodeSelector:
+    {{- with .Values.rollout.eventSource.nodeSelector }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    affinity:
+    {{- with .Values.rollout.eventSource.affinity }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
   triggers:
   {{- include "event-reporters.http.trigger" (dict "name" "rollouts" "Values" .Values "payloadDest" "data.object") | nindent 4 }}
   {{- include "event-reporters.http.trigger" (dict "name" "replicasets" "Values" .Values "payloadDest" "data.object") | nindent 4 }}
