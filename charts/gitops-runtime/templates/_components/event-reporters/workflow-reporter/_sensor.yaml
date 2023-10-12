@@ -20,6 +20,18 @@ spec:
       {{- with .Values.workflow.sensor.resources  }}
         {{- . | toYaml | nindent 8 }}
       {{- end }}
+    tolerations:
+    {{- with .Values.workflow.sensor.tolerations }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    nodeSelector:
+    {{- with .Values.workflow.sensor.nodeSelector }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    affinity:
+    {{- with .Values.workflow.sensor.affinity }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
   triggers:
   {{- include "event-reporters.http.trigger" (dict "name" "workflows" "Values" .Values "payloadDest" "data.object") | nindent 4 }}
 {{- end }}

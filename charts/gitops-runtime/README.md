@@ -88,14 +88,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2468.0"` |  |
+| app-proxy.image.tag | string | `"1.2472.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2468.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2472.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -148,20 +148,38 @@ sealed-secrets:
 | argo-workflows.fullnameOverride | string | `"argo"` |  |
 | event-reporters.events.argoCDServerServiceName | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service name. |
 | event-reporters.events.argoCDServerServicePort | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service port. |
+| event-reporters.events.eventSource.affinity | object | `{}` |  |
+| event-reporters.events.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.events.eventSource.replicas | int | `1` |  |
 | event-reporters.events.eventSource.resources | object | `{}` |  |
+| event-reporters.events.eventSource.tolerations | list | `[]` |  |
+| event-reporters.events.sensor.affinity | object | `{}` |  |
+| event-reporters.events.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.events.sensor.replicas | int | `1` |  |
 | event-reporters.events.sensor.resources | object | `{}` |  |
+| event-reporters.events.sensor.tolerations | list | `[]` |  |
 | event-reporters.events.serviceAccount.create | bool | `true` |  |
+| event-reporters.rollout.eventSource.affinity | object | `{}` |  |
+| event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.eventSource.replicas | int | `1` |  |
 | event-reporters.rollout.eventSource.resources | object | `{}` |  |
+| event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
+| event-reporters.rollout.sensor.affinity | object | `{}` |  |
+| event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.sensor.replicas | int | `1` |  |
 | event-reporters.rollout.sensor.resources | object | `{}` |  |
+| event-reporters.rollout.sensor.tolerations | list | `[]` |  |
 | event-reporters.rollout.serviceAccount.create | bool | `true` |  |
+| event-reporters.workflow.eventSource.affinity | object | `{}` |  |
+| event-reporters.workflow.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.workflow.eventSource.replicas | int | `1` |  |
 | event-reporters.workflow.eventSource.resources | object | `{}` |  |
+| event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
+| event-reporters.workflow.sensor.affinity | object | `{}` |  |
+| event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.workflow.sensor.replicas | int | `1` |  |
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
+| event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
 | gitops-operator.affinity | object | `{}` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
