@@ -14,10 +14,10 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
-    - kind: fixed
-      description: Fix argoCDServerServiceName and argoCDServerServicePort overrides
+    - kind: added
+      description: Add codefresh-gitops-operator
     - kind: changed
-      description: Update app-proxy for ARM support
+      description: Update app-proxy
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm

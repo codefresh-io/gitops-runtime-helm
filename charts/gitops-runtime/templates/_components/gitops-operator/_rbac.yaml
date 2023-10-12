@@ -1,0 +1,63 @@
+
+{{- define "gitops-operator.resources.rbac" }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
+  name: controller-manager
+rules:
+- apiGroups:
+  - argoproj.io
+  resources:
+  - applications
+  - appprojects
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - csdp.codefresh.io
+  resources:
+  - restrictedgitsources
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - csdp.codefresh.io
+  resources:
+  - restrictedgitsources/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - csdp.codefresh.io
+  resources:
+  - restrictedgitsources/status
+  verbs:
+  - get
+  - patch
+  - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
+  name: controller-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: controller-manager
+subjects:
+- kind: ServiceAccount
+  name: {{ include "gitops-operator.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}

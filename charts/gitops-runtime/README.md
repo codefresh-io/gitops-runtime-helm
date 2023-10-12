@@ -88,14 +88,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2472.0"` |  |
+| app-proxy.image.tag | string | `"1.2471.1"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2472.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2471.1"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -130,7 +130,9 @@ sealed-secrets:
 | app-proxy.serviceAccount.name | string | `"cap-app-proxy"` |  |
 | app-proxy.tolerations | list | `[]` |  |
 | argo-cd.configs.cm."accounts.admin" | string | `"apiKey,login"` |  |
+| argo-cd.configs.cm."application.resourceTrackingMethod" | string | `"annotation+label"` |  |
 | argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
+| argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
 | argo-cd.crds.install | bool | `true` |  |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
@@ -179,6 +181,47 @@ sealed-secrets:
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
 | event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
+| gitops-operator.affinity | object | `{}` |  |
+| gitops-operator.fullnameOverride | string | `""` |  |
+| gitops-operator.image.pullPolicy | string | `"IfNotPresent"` |  |
+| gitops-operator.image.repository | string | `"quay.io/codefresh/codefresh-gitops-operator"` |  |
+| gitops-operator.image.tag | string | `"v0.1.0-alpha.1"` |  |
+| gitops-operator.imagePullSecrets | list | `[]` |  |
+| gitops-operator.kube-rbac-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
+| gitops-operator.kube-rbac-proxy.image.repository | string | `"gcr.io/kubebuilder/kube-rbac-proxy"` |  |
+| gitops-operator.kube-rbac-proxy.image.tag | string | `"v0.14.1"` |  |
+| gitops-operator.kube-rbac-proxy.resources.limits.cpu | string | `"500m"` |  |
+| gitops-operator.kube-rbac-proxy.resources.limits.memory | string | `"128Mi"` |  |
+| gitops-operator.kube-rbac-proxy.resources.requests.cpu | string | `"100m"` |  |
+| gitops-operator.kube-rbac-proxy.resources.requests.memory | string | `"64Mi"` |  |
+| gitops-operator.kube-rbac-proxy.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| gitops-operator.kube-rbac-proxy.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| gitops-operator.livenessProbe.failureThreshold | int | `10` |  |
+| gitops-operator.livenessProbe.initialDelaySeconds | int | `10` |  |
+| gitops-operator.livenessProbe.periodSeconds | int | `10` |  |
+| gitops-operator.livenessProbe.successThreshold | int | `1` |  |
+| gitops-operator.livenessProbe.timeoutSeconds | int | `10` |  |
+| gitops-operator.nameOverride | string | `""` |  |
+| gitops-operator.nodeSelector | object | `{}` |  |
+| gitops-operator.podAnnotations | object | `{}` |  |
+| gitops-operator.podLabels | object | `{}` |  |
+| gitops-operator.podSecurityContext.runAsNonRoot | bool | `true` |  |
+| gitops-operator.readinessProbe.failureThreshold | int | `3` |  |
+| gitops-operator.readinessProbe.initialDelaySeconds | int | `10` |  |
+| gitops-operator.readinessProbe.periodSeconds | int | `10` |  |
+| gitops-operator.readinessProbe.successThreshold | int | `1` |  |
+| gitops-operator.readinessProbe.timeoutSeconds | int | `10` |  |
+| gitops-operator.replicaCount | int | `1` |  |
+| gitops-operator.resources.limits.cpu | string | `"500m"` |  |
+| gitops-operator.resources.limits.memory | string | `"128Mi"` |  |
+| gitops-operator.resources.requests.cpu | string | `"100m"` |  |
+| gitops-operator.resources.requests.memory | string | `"64Mi"` |  |
+| gitops-operator.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| gitops-operator.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| gitops-operator.serviceAccount.annotations | object | `{}` |  |
+| gitops-operator.serviceAccount.create | bool | `true` |  |
+| gitops-operator.serviceAccount.name | string | `"controller-manager"` |  |
+| gitops-operator.tolerations | list | `[]` |  |
 | global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","tls":{"caCerts":{"secret":{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"},"secretKeyRef":{}},"workflowPipelinesGitWebhooks":{"annotatins":{},"certificates":{}}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |
 | global.codefresh.apiEventsPath | string | `"/2.0/api/events"` | Events API endpoint URL suffix. |
