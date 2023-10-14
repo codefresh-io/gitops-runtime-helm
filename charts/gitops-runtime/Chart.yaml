@@ -18,6 +18,8 @@ annotations:
       description: Add codefresh-gitops-operator
     - kind: changed
       description: Update app-proxy
+    - kind: changed
+      description: Update argo-workflowschart. Fix podGC label selector
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -27,7 +29,7 @@ dependencies:
   version: 2.0.9-1-cap-CR-19893
 - name: argo-workflows
   repository: https://codefresh-io.github.io/argo-helm
-  version: 0.22.9-1-CR-17426
+  version: 0.22.10-1-CR-17426
   condition: argo-workflows.enabled
 - name: argo-rollouts
   repository: https://codefresh-io.github.io/argo-helm
