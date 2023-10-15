@@ -478,6 +478,24 @@ gitops-operator:
     # -- Additional labels for gitops operator CRDs
     additionalLabels: {}
 
+  env: {}
+  #  NAMESPACE:
+  #    valueFrom:
+  #     fieldRef:
+  #       fieldPath: metadata.namespace
+  #  VAR_NAME:
+  #    valueFrom:
+  #      secretKeyRef:
+  #       name: my-secret
+  #       key: my-secret-key
+  #       optional: true
+  #  VAR_NAME:
+  #   valueFrom:
+  #     configMapKeyRef:
+  #       name: my-config-map
+  #       key: my-config-map-key
+  #       optional: true
+  #  VAR_NANE: string-value
   image:
     repository: quay.io/codefresh/codefresh-gitops-operator
     tag: v0.1.0-alpha.3

@@ -5,7 +5,7 @@ kind: ClusterRole
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: proxy
+  name: codefresh-gitops-operator-proxy
 rules:
 - apiGroups:
   - authentication.k8s.io
@@ -25,11 +25,11 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: proxy
+  name: codefresh-gitops-operator-proxy
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: proxy
+  name: codefresh-gitops-operator-proxy
 subjects:
 - kind: ServiceAccount
   name: {{ include "gitops-operator.serviceAccountName" . }}

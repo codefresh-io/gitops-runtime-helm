@@ -50,6 +50,7 @@ spec:
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" .Values.env | nindent 8 }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         command:
           - /manager

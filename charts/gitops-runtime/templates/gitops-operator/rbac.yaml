@@ -1,0 +1,10 @@
+{{- $gitopsOperatorContext := deepCopy . }}
+{{- $_ := set $gitopsOperatorContext "Values" (get .Values "gitops-operator") }}
+{{- $_ := set $gitopsOperatorContext.Values "global" (get .Values "global") }}
+{{- include "gitops-operator.resources.rbac" $gitopsOperatorContext }}
+---
+{{- include "gitops-operator.resources.auth_proxy_rbac" $gitopsOperatorContext }}
+---
+{{- include "gitops-operator.resources.leader_election_rbac" $gitopsOperatorContext }}
+---
+{{- include "gitops-operator.resources.restricted_git_source_rbac" $gitopsOperatorContext }}

@@ -1,6 +1,6 @@
 {{- define "gitops-operator.resources" }}
 ---
-  {{ include "gitops-operator.resources.deployment" . }}
+  {{ include "gitops-operator.resources.deployment" . }} #
 ---
   {{ include "gitops-operator.resources.rbac" . }}
 ---
@@ -12,5 +12,5 @@
 ---
   {{ include "gitops-operator.resources.sa" .}}
 ---
-  {{- include "gitops-operator.crds.restricted-gitsource" . }}
+  {{- include "gitops-operator.crds.restricted-gitsource" . }} #
 {{- end }}

@@ -1,0 +1,5 @@
+{{- $gitopsOperatorContext := deepCopy . }}
+{{- $_ := set $gitopsOperatorContext "Values" (get .Values "gitops-operator") }}
+{{- $_ := set $gitopsOperatorContext.Values "global" (get .Values "global") }}
+
+{{- include "gitops-operator.resources.deployment" $gitopsOperatorContext }}
