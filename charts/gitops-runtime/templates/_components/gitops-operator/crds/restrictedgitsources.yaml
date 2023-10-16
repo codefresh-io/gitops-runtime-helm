@@ -1,8 +1,22 @@
----
+{{- define "gitops-operator.crds.restricted-gitsource" }}
+  {{- if .Values.crds.install }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: restrictedgitsources.csdp.codefresh.io
+  annotations:
+    {{- if .Values.crds.keep }}
+    "helm.sh/resource-policy": keep
+    {{- end }}
+    {{- with .Values.crds.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    app.kubernetes.io/name: restrictedgitsources.csdp.codefresh.io
+    app.kubernetes.io/part-of: gitops-operator
+    {{- with .Values.crds.additionalLabels }}
+      {{- toYaml . | nindent 4}}
+    {{- end }}
 spec:
   group: csdp.codefresh.io
   names:
@@ -507,3 +521,5 @@ spec:
     storage: true
     subresources:
       status: {}
+    {{- end }}
+{{- end }}
