@@ -145,8 +145,8 @@ sealed-secrets:
 | argo-rollouts.installCRDs | bool | `true` |  |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
-| argo-workflows.extraArgs | list | `["--auth-mode=client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.fullnameOverride | string | `"argo"` |  |
+| argo-workflows.server.extraArgs | list | `["--auth-mode=client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | event-reporters.events.argoCDServerServiceName | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service name. |
 | event-reporters.events.argoCDServerServicePort | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service port. |
 | event-reporters.events.eventSource.affinity | object | `{}` |  |
