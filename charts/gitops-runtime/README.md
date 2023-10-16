@@ -182,6 +182,12 @@ sealed-secrets:
 | event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
 | gitops-operator.affinity | object | `{}` |  |
+| gitops-operator.crds | object | `{"additionalLabels":{},"annotations":{},"install":true,"keep":false}` | Codefresh gitops operator crds |
+| gitops-operator.crds.additionalLabels | object | `{}` | Additional labels for gitops operator CRDs |
+| gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
+| gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
+| gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
+| gitops-operator.env | object | `{}` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | gitops-operator.image.repository | string | `"quay.io/codefresh/codefresh-gitops-operator"` |  |
@@ -220,7 +226,7 @@ sealed-secrets:
 | gitops-operator.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitops-operator.serviceAccount.annotations | object | `{}` |  |
 | gitops-operator.serviceAccount.create | bool | `true` |  |
-| gitops-operator.serviceAccount.name | string | `"controller-manager"` |  |
+| gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
 | gitops-operator.tolerations | list | `[]` |  |
 | global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","tls":{"caCerts":{"secret":{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"},"secretKeyRef":{}},"workflowPipelinesGitWebhooks":{"annotatins":{},"certificates":{}}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |
