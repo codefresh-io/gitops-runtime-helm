@@ -20,6 +20,8 @@ annotations:
       description: Update app-proxy
     - kind: changed
       description: Update argo-workflowschart. Fix podGC label selector
+    - kind: fixed
+      description: Set default auth to client on workflows to be able to see workflow logs in UI
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm

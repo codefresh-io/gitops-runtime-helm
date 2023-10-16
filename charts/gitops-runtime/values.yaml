@@ -159,6 +159,9 @@ argo-events:
 argo-workflows:
   fullnameOverride: argo
   enabled: true
+  # -- auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI
+  extraArgs:
+  - --auth-mode=client
   crds:
     # -- Install and upgrade CRDs
     install: true
