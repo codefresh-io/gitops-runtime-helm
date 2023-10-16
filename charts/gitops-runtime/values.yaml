@@ -139,8 +139,10 @@ argo-cd:
     cm:
       timeout.reconciliation: 20s
       accounts.admin: apiKey,login
+      application.resourceTrackingMethod: annotation+label
     params:
       server.insecure: true
+      application.namespaces: 'cf-*'
   notifications:
     bots:
       slack:
@@ -157,6 +159,10 @@ argo-events:
 argo-workflows:
   fullnameOverride: argo
   enabled: true
+  server:
+    # -- auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI
+    extraArgs:
+    - --auth-mode=client
   crds:
     # -- Install and upgrade CRDs
     install: true
@@ -458,3 +464,109 @@ app-proxy:
   # -- extra volumes
   extraVolumes: []
 ########################################################################################################################
+
+#-----------------------------------------------------------------------------------------------------------------------
+# gitops-operator
+#-----------------------------------------------------------------------------------------------------------------------
+gitops-operator:
+  replicaCount: 1
+
+  # -- Codefresh gitops operator crds
+  crds:
+    # -- Whether or not to install CRDs
+    install: true
+    # -- Keep CRDs if gitops runtime release is uninstalled
+    keep: false
+    # -- Annotations on gitops operator CRDs
+    annotations: {}
+    # -- Additional labels for gitops operator CRDs
+    additionalLabels: {}
+
+  env: {}
+  #  NAMESPACE:
+  #    valueFrom:
+  #     fieldRef:
+  #       fieldPath: metadata.namespace
+  #  VAR_NAME:
+  #    valueFrom:
+  #      secretKeyRef:
+  #       name: my-secret
+  #       key: my-secret-key
+  #       optional: true
+  #  VAR_NAME:
+  #   valueFrom:
+  #     configMapKeyRef:
+  #       name: my-config-map
+  #       key: my-config-map-key
+  #       optional: true
+  #  VAR_NANE: string-value
+  image:
+    repository: quay.io/codefresh/codefresh-gitops-operator
+    tag: v0.1.0-alpha.3
+    pullPolicy: IfNotPresent
+
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: "gitops-operator-controller-manager"
+
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+
+  livenessProbe:
+    failureThreshold: 10
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext:
+    runAsNonRoot: true
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - "ALL"
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+  kube-rbac-proxy:
+    image:
+      repository: gcr.io/kubebuilder/kube-rbac-proxy
+      tag: v0.14.1
+      pullPolicy: IfNotPresent
+
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
+
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi

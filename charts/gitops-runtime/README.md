@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.2.21](https://img.shields.io/badge/Version-0.2.21-informational?style=flat-square) ![AppVersion: 0.1.35](https://img.shields.io/badge/AppVersion-0.1.35-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![AppVersion: 0.1.36](https://img.shields.io/badge/AppVersion-0.1.36-informational?style=flat-square)
 
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
@@ -15,7 +15,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.2.21 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.3.0 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -130,7 +130,9 @@ sealed-secrets:
 | app-proxy.serviceAccount.name | string | `"cap-app-proxy"` |  |
 | app-proxy.tolerations | list | `[]` |  |
 | argo-cd.configs.cm."accounts.admin" | string | `"apiKey,login"` |  |
+| argo-cd.configs.cm."application.resourceTrackingMethod" | string | `"annotation+label"` |  |
 | argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
+| argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
 | argo-cd.crds.install | bool | `true` |  |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
@@ -144,6 +146,7 @@ sealed-secrets:
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.fullnameOverride | string | `"argo"` |  |
+| argo-workflows.server.extraArgs | list | `["--auth-mode=client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | event-reporters.events.argoCDServerServiceName | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service name. |
 | event-reporters.events.argoCDServerServicePort | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service port. |
 | event-reporters.events.eventSource.affinity | object | `{}` |  |
@@ -179,6 +182,53 @@ sealed-secrets:
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
 | event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
+| gitops-operator.affinity | object | `{}` |  |
+| gitops-operator.crds | object | `{"additionalLabels":{},"annotations":{},"install":true,"keep":false}` | Codefresh gitops operator crds |
+| gitops-operator.crds.additionalLabels | object | `{}` | Additional labels for gitops operator CRDs |
+| gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
+| gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
+| gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
+| gitops-operator.env | object | `{}` |  |
+| gitops-operator.fullnameOverride | string | `""` |  |
+| gitops-operator.image.pullPolicy | string | `"IfNotPresent"` |  |
+| gitops-operator.image.repository | string | `"quay.io/codefresh/codefresh-gitops-operator"` |  |
+| gitops-operator.image.tag | string | `"v0.1.0-alpha.3"` |  |
+| gitops-operator.imagePullSecrets | list | `[]` |  |
+| gitops-operator.kube-rbac-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
+| gitops-operator.kube-rbac-proxy.image.repository | string | `"gcr.io/kubebuilder/kube-rbac-proxy"` |  |
+| gitops-operator.kube-rbac-proxy.image.tag | string | `"v0.14.1"` |  |
+| gitops-operator.kube-rbac-proxy.resources.limits.cpu | string | `"500m"` |  |
+| gitops-operator.kube-rbac-proxy.resources.limits.memory | string | `"128Mi"` |  |
+| gitops-operator.kube-rbac-proxy.resources.requests.cpu | string | `"100m"` |  |
+| gitops-operator.kube-rbac-proxy.resources.requests.memory | string | `"64Mi"` |  |
+| gitops-operator.kube-rbac-proxy.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| gitops-operator.kube-rbac-proxy.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| gitops-operator.livenessProbe.failureThreshold | int | `10` |  |
+| gitops-operator.livenessProbe.initialDelaySeconds | int | `10` |  |
+| gitops-operator.livenessProbe.periodSeconds | int | `10` |  |
+| gitops-operator.livenessProbe.successThreshold | int | `1` |  |
+| gitops-operator.livenessProbe.timeoutSeconds | int | `10` |  |
+| gitops-operator.nameOverride | string | `""` |  |
+| gitops-operator.nodeSelector | object | `{}` |  |
+| gitops-operator.podAnnotations | object | `{}` |  |
+| gitops-operator.podLabels | object | `{}` |  |
+| gitops-operator.podSecurityContext.runAsNonRoot | bool | `true` |  |
+| gitops-operator.readinessProbe.failureThreshold | int | `3` |  |
+| gitops-operator.readinessProbe.initialDelaySeconds | int | `10` |  |
+| gitops-operator.readinessProbe.periodSeconds | int | `10` |  |
+| gitops-operator.readinessProbe.successThreshold | int | `1` |  |
+| gitops-operator.readinessProbe.timeoutSeconds | int | `10` |  |
+| gitops-operator.replicaCount | int | `1` |  |
+| gitops-operator.resources.limits.cpu | string | `"500m"` |  |
+| gitops-operator.resources.limits.memory | string | `"128Mi"` |  |
+| gitops-operator.resources.requests.cpu | string | `"100m"` |  |
+| gitops-operator.resources.requests.memory | string | `"64Mi"` |  |
+| gitops-operator.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| gitops-operator.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| gitops-operator.serviceAccount.annotations | object | `{}` |  |
+| gitops-operator.serviceAccount.create | bool | `true` |  |
+| gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
+| gitops-operator.tolerations | list | `[]` |  |
 | global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","tls":{"caCerts":{"secret":{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"},"secretKeyRef":{}},"workflowPipelinesGitWebhooks":{"annotatins":{},"certificates":{}}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |
 | global.codefresh.apiEventsPath | string | `"/2.0/api/events"` | Events API endpoint URL suffix. |
