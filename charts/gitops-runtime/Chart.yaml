@@ -37,7 +37,9 @@ dependencies:
   repository: https://bitnami-labs.github.io/sealed-secrets/
   version: 2.7.3
 - name: codefresh-tunnel-client
-  repository: oci://quay.io/codefresh/charts
-  version: "0.1.16"
+  repository: oci://quay.io/codefresh/charts/dev
+  version: 0.0.0-feat-cr-20251-oci-66f0432
+  #repository: https://chartmuseum.codefresh.io/codefresh-tunnel-client
+  #version: "0.1.12"
   alias: tunnel-client
   condition: tunnel-client.enabled
