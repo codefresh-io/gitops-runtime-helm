@@ -304,6 +304,8 @@ tunnel-client:
   tunnelServer:
     host: "register-tunnels.cf-cd.com"
     subdomainHost: "tunnels.cf-cd.com"
+  tunnel:
+    subdomainPrefix: ""
 
 #-----------------------------------------------------------------------------------------------------------------------
 # app-proxy
