@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![AppVersion: 0.1.36](https://img.shields.io/badge/AppVersion-0.1.36-informational?style=flat-square)
+![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![AppVersion: 0.1.36](https://img.shields.io/badge/AppVersion-0.1.36-informational?style=flat-square)
 
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
@@ -15,7 +15,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.3.0 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.3.1 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -192,7 +192,7 @@ sealed-secrets:
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | gitops-operator.image.repository | string | `"quay.io/codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"v0.1.0-alpha.3"` |  |
+| gitops-operator.image.tag | string | `"v0.1.0-alpha.4"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.kube-rbac-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | gitops-operator.kube-rbac-proxy.image.repository | string | `"gcr.io/kubebuilder/kube-rbac-proxy"` |  |

@@ -502,7 +502,7 @@ gitops-operator:
   #  VAR_NANE: string-value
   image:
     repository: quay.io/codefresh/codefresh-gitops-operator
-    tag: v0.1.0-alpha.3
+    tag: v0.1.0-alpha.4
     pullPolicy: IfNotPresent
 
   serviceAccount:
