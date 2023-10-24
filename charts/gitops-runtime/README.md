@@ -100,14 +100,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2472.0"` |  |
+| app-proxy.image.tag | string | `"1.2495.1"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2472.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2495.1"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -158,6 +158,7 @@ sealed-secrets:
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.fullnameOverride | string | `"argo"` |  |
+| argo-workflows.server.extraArgs | list | `["--auth-mode=client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | event-reporters.events.argoCDServerServiceName | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service name. |
 | event-reporters.events.argoCDServerServicePort | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service port. |
 | event-reporters.events.eventSource.affinity | object | `{}` |  |
@@ -194,10 +195,16 @@ sealed-secrets:
 | event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
 | gitops-operator.affinity | object | `{}` |  |
+| gitops-operator.crds | object | `{"additionalLabels":{},"annotations":{},"install":true,"keep":false}` | Codefresh gitops operator crds |
+| gitops-operator.crds.additionalLabels | object | `{}` | Additional labels for gitops operator CRDs |
+| gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
+| gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
+| gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
+| gitops-operator.env | object | `{}` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | gitops-operator.image.repository | string | `"quay.io/codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"v0.1.0-alpha.3"` |  |
+| gitops-operator.image.tag | string | `"v0.1.0-alpha.4"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.kube-rbac-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | gitops-operator.kube-rbac-proxy.image.repository | string | `"gcr.io/kubebuilder/kube-rbac-proxy"` |  |
@@ -232,7 +239,7 @@ sealed-secrets:
 | gitops-operator.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitops-operator.serviceAccount.annotations | object | `{}` |  |
 | gitops-operator.serviceAccount.create | bool | `true` |  |
-| gitops-operator.serviceAccount.name | string | `"controller-manager"` |  |
+| gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
 | gitops-operator.tolerations | list | `[]` |  |
 | global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","tls":{"caCerts":{"secret":{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"},"secretKeyRef":{}},"workflowPipelinesGitWebhooks":{"annotatins":{},"certificates":{}}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |

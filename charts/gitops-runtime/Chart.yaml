@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.36
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.3.1
+version: 0.3.2
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -27,7 +27,7 @@ dependencies:
   version: 2.0.9-1-cap-CR-19893
 - name: argo-workflows
   repository: https://codefresh-io.github.io/argo-helm
-  version: 0.22.9-1-CR-17426
+  version: 0.22.10-1-CR-17426
   condition: argo-workflows.enabled
 - name: argo-rollouts
   repository: https://codefresh-io.github.io/argo-helm

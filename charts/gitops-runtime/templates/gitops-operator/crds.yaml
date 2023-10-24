@@ -2,4 +2,4 @@
 {{- $_ := set $gitopsOperatorContext "Values" (get .Values "gitops-operator") }}
 {{- $_ := set $gitopsOperatorContext.Values "global" (get .Values "global") }}
 
-{{- include "gitops-operator.resources" $gitopsOperatorContext }}
+{{- include "gitops-operator.crds.restricted-gitsource" $gitopsOperatorContext }}

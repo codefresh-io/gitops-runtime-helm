@@ -5,7 +5,7 @@ kind: ClusterRole
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: controller-manager
+  name: codefresh-gitops-operator
 rules:
 - apiGroups:
   - argoproj.io
@@ -51,11 +51,11 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: controller-manager
+  name: codefresh-gitops-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: controller-manager
+  name: codefresh-gitops-operator
 subjects:
 - kind: ServiceAccount
   name: {{ include "gitops-operator.serviceAccountName" . }}

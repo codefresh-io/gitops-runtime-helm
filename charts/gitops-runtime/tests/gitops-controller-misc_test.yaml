@@ -1,0 +1,238 @@
+suite: misc tests on gitops-operator templates generation
+templates:
+  - gitops-operator/deployment.yaml
+  - gitops-operator/sa.yaml
+  - gitops-operator/rbac.yaml
+tests:
+- it: override both images works
+  template: 'gitops-operator/deployment.yaml'
+  set:
+    gitops-operator:
+      image:
+        repository: example.com/repo
+        tag: 0.0.1
+      kube-rbac-proxy:
+        image:
+          repository: example.com/repo
+          tag: 0.0.1
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[0].image
+      value: example.com/repo:0.0.1
+  - equal:
+      path: spec.template.spec.containers[1].image
+      value: example.com/repo:0.0.1
+
+- it: override service account name - sa object
+  template: 'gitops-operator/sa.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    gitops-operator.serviceAccount.name: sa-name
+  asserts:
+  - equal:
+      path: metadata.name
+      value: sa-name
+
+- it: override service account name - deployment
+  template: 'gitops-operator/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    gitops-operator.serviceAccount.name: sa-name
+  asserts:
+  - equal:
+      path: spec.template.spec.serviceAccountName
+      value: sa-name
+
+- it: overriding of environment variables on main container
+  template: 'gitops-operator/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    gitops-operator.env.PORT: '8787'
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[1].env
+      content:
+        name: PORT
+        value: "8787"
+- it: adding environment variables on main container
+  template: 'gitops-operator/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    gitops-operator.env.SOME_ENV: 'test'
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[1].env
+      content:
+        name: SOME_ENV
+        value: test
+- it: setting security context on main container
+  template: 'gitops-operator/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    gitops-operator.securityContext.runAsUser: 1000
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[1].securityContext.runAsUser
+      value: 1000
+- it: override readiness and liveness probes values
+  template: 'gitops-operator/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    gitops-operator.readinessProbe.initialDelaySeconds: 1
+    gitops-operator.readinessProbe.periodSeconds: 1
+    gitops-operator.readinessProbe.timeoutSeconds: 1
+    gitops-operator.readinessProbe.successThreshold: 1
+    gitops-operator.readinessProbe.failureThreshold: 1
+    gitops-operator.livenessProbe.initialDelaySeconds: 1
+    gitops-operator.livenessProbe.periodSeconds: 1
+    gitops-operator.livenessProbe.timeoutSeconds: 1
+    gitops-operator.livenessProbe.successThreshold: 1
+    gitops-operator.livenessProbe.failureThreshold: 1
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[1].readinessProbe.initialDelaySeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[1].readinessProbe.periodSeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[1].readinessProbe.timeoutSeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[1].readinessProbe.successThreshold
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[1].readinessProbe.failureThreshold
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[1].livenessProbe.initialDelaySeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[1].livenessProbe.periodSeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[1].livenessProbe.timeoutSeconds
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[1].livenessProbe.successThreshold
+      value: 1
+  - equal:
+      path: spec.template.spec.containers[1].livenessProbe.failureThreshold
+      value: 1
+- it: setting node selector
+  template: 'gitops-operator/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    gitops-operator.nodeSelector:
+      test.io/node: "test"
+  asserts:
+  - equal:
+      path: spec.template.spec.nodeSelector
+      value:
+        test.io/node: "test"
+
+- it: setting tolerations
+  template: 'gitops-operator/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    gitops-operator.tolerations:
+      - key: "arch"
+        operator: "Equal"
+        value: "arm64"
+        effect: "NoSchedule"
+  asserts:
+  - contains:
+      path: spec.template.spec.tolerations
+      content:
+        key: "arch"
+        operator: "Equal"
+        value: "arm64"
+        effect: "NoSchedule"
+
+- it: setting affinity
+  template: 'gitops-operator/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    gitops-operator.affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: topology.kubernetes.io/zone
+              operator: In
+              values:
+              - antarctica-east1
+              - antarctica-west1
+  asserts:
+  - equal:
+      path: spec.template.spec.affinity
+      value:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - antarctica-east1
+                - antarctica-west1
+
+- it: contains all expected roles and role bindings
+  template: gitops-operator/rbac.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  asserts:
+    - containsDocument:
+        kind: ClusterRole
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: codefresh-gitops-operator-proxy
+    - containsDocument:
+        kind: ClusterRoleBinding
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: codefresh-gitops-operator-proxy
+    - containsDocument:
+        kind: ClusterRoleBinding
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: restrictedgitsource-editor
+    - containsDocument:
+        kind: ClusterRole
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: restrictedgitsource-editor
+    - containsDocument:
+        kind: ClusterRole
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: restrictedgitsource-viewer
+    - containsDocument:
+        kind: ClusterRole
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: codefresh-gitops-operator
+    - containsDocument:
+        kind: ClusterRoleBinding
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: codefresh-gitops-operator
+    - containsDocument:
+        kind: ClusterRoleBinding
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: restrictedgitsource-viewer
+    - containsDocument:
+        kind: Role
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: leader-election
+    - containsDocument:
+        kind: Role
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: leader-election
+    - containsDocument:
+        kind: RoleBinding
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: leader-election
+    
