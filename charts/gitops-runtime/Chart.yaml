@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.36
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.3.0
+version: 0.3.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -14,14 +14,13 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
-    - kind: added
-      description: Add codefresh-gitops-operator
     - kind: changed
       description: Update app-proxy
     - kind: changed
-      description: Update argo-workflowschart. Fix podGC label selector
-    - kind: fixed
-      description: Set default auth to client on workflows to be able to see workflow logs in UI
+      description: Update codefresh-gitops-operator.
+      links:
+        - name: GitHub Release
+          url: https://github.com/codefresh-io/codefresh-gitops-operator/releases/tag/v0.1.0-alpha.4
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm

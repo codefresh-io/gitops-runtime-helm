@@ -47,6 +47,40 @@ spec:
           spec:
             description: RestrictedGitSourceSpec defines the desired state of RestrictedGitSource
             properties:
+              clusterResourceBlacklist:
+                description: ClusterResourceBlacklist contains list of blacklisted
+                  cluster level resources
+                items:
+                  description: GroupKind specifies a Group and a Kind, but does not
+                    force a version.  This is useful for identifying concepts during
+                    lookup stages without having partially valid types
+                  properties:
+                    group:
+                      type: string
+                    kind:
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  type: object
+                type: array
+              clusterResourceWhitelist:
+                description: ClusterResourceWhitelist contains list of whitelisted
+                  cluster level resources
+                items:
+                  description: GroupKind specifies a Group and a Kind, but does not
+                    force a version.  This is useful for identifying concepts during
+                    lookup stages without having partially valid types
+                  properties:
+                    group:
+                      type: string
+                    kind:
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  type: object
+                type: array
               destinations:
                 description: Destinations contains list of destinations available
                   for deployment
@@ -69,6 +103,40 @@ spec:
                       type: string
                   type: object
                 minItems: 1
+                type: array
+              namespaceResourceBlacklist:
+                description: NamespaceResourceBlacklist contains list of blacklisted
+                  namespace level resources
+                items:
+                  description: GroupKind specifies a Group and a Kind, but does not
+                    force a version.  This is useful for identifying concepts during
+                    lookup stages without having partially valid types
+                  properties:
+                    group:
+                      type: string
+                    kind:
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  type: object
+                type: array
+              namespaceResourceWhitelist:
+                description: NamespaceResourceWhitelist contains list of whitelisted
+                  namespace level resources
+                items:
+                  description: GroupKind specifies a Group and a Kind, but does not
+                    force a version.  This is useful for identifying concepts during
+                    lookup stages without having partially valid types
+                  properties:
+                    group:
+                      type: string
+                    kind:
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  type: object
                 type: array
               source:
                 description: Source is the application source
