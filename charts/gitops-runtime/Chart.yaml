@@ -18,6 +18,8 @@ annotations:
       description: Push chart to OCI registry
     - kind: changed
       description: Update codefresh-tunnel-client
+    - kind: changed
+      description: Update internal-router nginx to 1.25
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
