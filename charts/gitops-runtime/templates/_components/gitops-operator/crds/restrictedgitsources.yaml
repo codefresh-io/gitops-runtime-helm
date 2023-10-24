@@ -64,7 +64,7 @@ spec:
                   - kind
                   type: object
                 type: array
-              clusterResourceWhilelist:
+              clusterResourceWhitelist:
                 description: ClusterResourceWhitelist contains list of whitelisted
                   cluster level resources
                 items:
@@ -121,7 +121,7 @@ spec:
                   - kind
                   type: object
                 type: array
-              namespaceResourceWhilelist:
+              namespaceResourceWhitelist:
                 description: NamespaceResourceWhitelist contains list of whitelisted
                   namespace level resources
                 items:
