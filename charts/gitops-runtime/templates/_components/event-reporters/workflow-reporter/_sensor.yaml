@@ -16,6 +16,7 @@ spec:
     serviceAccountName: {{ include "event-reporters.workflow-reporter.serviceAccountName" .}}
     container:
       name: ""
+      {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" .Values.workflow.sensor.env  | nindent 6 }}
       resources:
       {{- with .Values.workflow.sensor.resources  }}
         {{- . | toYaml | nindent 8 }}

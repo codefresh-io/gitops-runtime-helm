@@ -195,10 +195,12 @@ event-reporters:
     sensor:
       # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
       logging:
-        enabled: true
+        enabled: false
         intervalSeconds: 0
       replicas: 1
       resources: {}
+      # -- Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs
+      env: {}
       tolerations: []
       nodeSelector: {}
       affinity: {}
@@ -218,6 +220,8 @@ event-reporters:
         intervalSeconds: 0
       replicas: 1
       resources: {}
+      # -- Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs
+      env: {}
       tolerations: []
       nodeSelector: {}
       affinity: {}
@@ -237,6 +241,8 @@ event-reporters:
         intervalSeconds: 0
       replicas: 1
       resources: {}
+      # -- Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs
+      env: {}
       tolerations: []
       nodeSelector: {}
       affinity: {}

@@ -15,6 +15,7 @@ spec:
   template:
     serviceAccountName: {{ include "event-reporters.events-reporter.serviceAccountName" .}}
     container:
+      {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" .Values.events.sensor.env  | nindent 6 }}
       resources:
       {{- with .Values.events.sensor.resources  }}
         {{- . | toYaml | nindent 8 }}

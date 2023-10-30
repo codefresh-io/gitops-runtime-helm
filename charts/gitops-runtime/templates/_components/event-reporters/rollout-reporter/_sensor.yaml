@@ -22,6 +22,7 @@ spec:
     serviceAccountName: {{ include "event-reporters.rollout-reporter.serviceAccountName" .}}
     container:
       name: ""
+      {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" .Values.rollout.sensor.env  | nindent 6 }}
       resources:
       {{- with .Values.rollout.eventSource.resources  }}
         {{- . | toYaml | nindent 8 }}
