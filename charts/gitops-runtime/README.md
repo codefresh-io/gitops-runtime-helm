@@ -155,6 +155,8 @@ sealed-secrets:
 | event-reporters.events.eventSource.resources | object | `{}` |  |
 | event-reporters.events.eventSource.tolerations | list | `[]` |  |
 | event-reporters.events.sensor.affinity | object | `{}` |  |
+| event-reporters.events.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
+| event-reporters.events.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
 | event-reporters.events.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.events.sensor.replicas | int | `1` |  |
 | event-reporters.events.sensor.resources | object | `{}` |  |
@@ -166,6 +168,8 @@ sealed-secrets:
 | event-reporters.rollout.eventSource.resources | object | `{}` |  |
 | event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
 | event-reporters.rollout.sensor.affinity | object | `{}` |  |
+| event-reporters.rollout.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
+| event-reporters.rollout.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
 | event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.sensor.replicas | int | `1` |  |
 | event-reporters.rollout.sensor.resources | object | `{}` |  |
@@ -177,6 +181,8 @@ sealed-secrets:
 | event-reporters.workflow.eventSource.resources | object | `{}` |  |
 | event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
 | event-reporters.workflow.sensor.affinity | object | `{}` |  |
+| event-reporters.workflow.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
+| event-reporters.workflow.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
 | event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.workflow.sensor.replicas | int | `1` |  |
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
