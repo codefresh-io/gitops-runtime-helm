@@ -178,3 +178,17 @@ assumes the name, condition and payload.dependencyName are identical
           dataKey: body
           dependencyName: {{ .name }}
 {{- end -}}
+
+{{/* Logging trigger for the sensor - gets sensor.logging dict */}}
+{{- define "event-reporters.log.trigger" -}}
+  {{- if .enabled }}
+- template:
+    name: log-trigger
+    {{- if gt (int .intervalSeconds) 0 }}
+    log:
+      intervalSeconds: .intervalSeconds
+    {{- else }}
+    log: {}
+    {{- end }}
+  {{- end }}
+{{- end }}

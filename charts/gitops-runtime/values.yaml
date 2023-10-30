@@ -193,6 +193,10 @@ event-reporters:
       nodeSelector: {}
       affinity: {}
     sensor:
+      # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
+      logging:
+        enabled: true
+        intervalSeconds: 0
       replicas: 1
       resources: {}
       tolerations: []
@@ -208,6 +212,10 @@ event-reporters:
       nodeSelector: {}
       affinity: {}
     sensor:
+      # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
+      logging:
+        enabled: false
+        intervalSeconds: 0
       replicas: 1
       resources: {}
       tolerations: []
@@ -223,6 +231,10 @@ event-reporters:
       nodeSelector: {}
       affinity: {}
     sensor:
+      # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
+      logging:
+        enabled: false
+        intervalSeconds: 0
       replicas: 1
       resources: {}
       tolerations: []

@@ -34,4 +34,5 @@ spec:
     {{- end }}
   triggers:
   {{- include "event-reporters.http.trigger" (dict "name" "workflows" "Values" .Values "payloadDest" "data.object") | nindent 4 }}
+  {{- include "event-reporters.log.trigger" (.Values.workflow.sensor.logging) | nindent 4 }}
 {{- end }}

@@ -42,4 +42,5 @@ spec:
   {{- include "event-reporters.http.trigger" (dict "name" "rollouts" "Values" .Values "payloadDest" "data.object") | nindent 4 }}
   {{- include "event-reporters.http.trigger" (dict "name" "replicasets" "Values" .Values "payloadDest" "data.object") | nindent 4 }}
   {{- include "event-reporters.http.trigger" (dict "name" "analysisruns" "Values" .Values "payloadDest" "data.object") | nindent 4 }}
+  {{- include "event-reporters.log.trigger" (.Values.rollout.sensor.logging) | nindent 4 }}
 {{- end }}
