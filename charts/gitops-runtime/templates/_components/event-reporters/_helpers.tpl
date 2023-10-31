@@ -177,4 +177,22 @@ assumes the name, condition and payload.dependencyName are identical
         src:
           dataKey: body
           dependencyName: {{ .name }}
+  {{- if .retryStrategy }}
+  retryStrategy:
+  {{- .retryStrategy | toYaml | nindent 4 }}
+  {{- end }}
 {{- end -}}
+
+{{/* Logging trigger for the sensor - gets sensor.logging dict */}}
+{{- define "event-reporters.log.trigger" -}}
+  {{- if .enabled }}
+- template:
+    name: log-trigger
+    {{- if gt (int .intervalSeconds) 0 }}
+    log:
+      intervalSeconds: {{ .intervalSeconds }}
+    {{- else }}
+    log: {}
+    {{- end }}
+  {{- end }}
+{{- end }}

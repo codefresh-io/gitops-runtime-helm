@@ -15,6 +15,7 @@ spec:
   template:
     serviceAccountName: {{ include "event-reporters.events-reporter.serviceAccountName" .}}
     container:
+      {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" .Values.events.sensor.env  | nindent 6 }}
       resources:
       {{- with .Values.events.sensor.resources  }}
         {{- . | toYaml | nindent 8 }}
@@ -32,5 +33,6 @@ spec:
       {{- . | toYaml | nindent 6 }}
     {{- end }}
   triggers:
-    {{- include "event-reporters.http.trigger" (dict "name" "events" "Values" .Values "payloadDest" "data") | nindent 4 }}
+    {{- include "event-reporters.http.trigger" (dict "name" "events" "Values" .Values "payloadDest" "data" "retryStrategy" .Values.events.sensor.retryStrategy) | nindent 4 }}
+    {{- include "event-reporters.log.trigger" (.Values.events.sensor.logging) | nindent 4 }}
 {{- end }}
