@@ -14,6 +14,13 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
+    - kind: changed
+      description: Update app-proxy
+    - kind: changed
+      description: Update codefresh-gitops-operator.
+      links:
+        - name: GitHub Release
+          url: https://github.com/codefresh-io/codefresh-gitops-operator/releases/tag/v0.1.0-alpha.5
     - kind: added
       description: Added possibility to enable logging on event reporter sensors
     - kind: added
