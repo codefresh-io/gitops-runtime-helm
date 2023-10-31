@@ -33,6 +33,6 @@ spec:
       {{- . | toYaml | nindent 6 }}
     {{- end }}
   triggers:
-    {{- include "event-reporters.http.trigger" (dict "name" "events" "Values" .Values "payloadDest" "data") | nindent 4 }}
+    {{- include "event-reporters.http.trigger" (dict "name" "events" "Values" .Values "payloadDest" "data" "retryStrategy" .Values.events.sensor.retryStrategy) | nindent 4 }}
     {{- include "event-reporters.log.trigger" (.Values.events.sensor.logging) | nindent 4 }}
 {{- end }}

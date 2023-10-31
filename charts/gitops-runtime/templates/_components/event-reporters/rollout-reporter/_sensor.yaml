@@ -24,24 +24,24 @@ spec:
       name: ""
       {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" .Values.rollout.sensor.env  | nindent 6 }}
       resources:
-      {{- with .Values.rollout.eventSource.resources  }}
+      {{- with .Values.rollout.sensor.resources  }}
         {{- . | toYaml | nindent 8 }}
       {{- end }}
     tolerations:
-    {{- with .Values.rollout.eventSource.tolerations }}
+    {{- with .Values.rollout.sensor.tolerations }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
     nodeSelector:
-    {{- with .Values.rollout.eventSource.nodeSelector }}
+    {{- with .Values.rollout.sensor.nodeSelector }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
     affinity:
-    {{- with .Values.rollout.eventSource.affinity }}
+    {{- with .Values.rollout.sensor.affinity }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
   triggers:
-  {{- include "event-reporters.http.trigger" (dict "name" "rollouts" "Values" .Values "payloadDest" "data.object") | nindent 4 }}
-  {{- include "event-reporters.http.trigger" (dict "name" "replicasets" "Values" .Values "payloadDest" "data.object") | nindent 4 }}
-  {{- include "event-reporters.http.trigger" (dict "name" "analysisruns" "Values" .Values "payloadDest" "data.object") | nindent 4 }}
+  {{- include "event-reporters.http.trigger" (dict "name" "rollouts" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.rollout.sensor.retryStrategy) | nindent 4 }}
+  {{- include "event-reporters.http.trigger" (dict "name" "replicasets" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.rollout.sensor.retryStrategy) | nindent 4 }}
+  {{- include "event-reporters.http.trigger" (dict "name" "analysisruns" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.rollout.sensor.retryStrategy) | nindent 4 }}
   {{- include "event-reporters.log.trigger" (.Values.rollout.sensor.logging) | nindent 4 }}
 {{- end }}
