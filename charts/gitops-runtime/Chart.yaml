@@ -15,8 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: added
-      description: Possibility to enable logging on event reporter sensors
-    
+      description: Added possibility to enable logging on event reporter sensors
+    - kind: added
+      description: Added retries on event reporters sensors
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
