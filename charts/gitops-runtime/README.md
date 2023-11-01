@@ -301,7 +301,7 @@ sealed-secrets:
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
 | internal-router.image.repository | string | `"nginxinc/nginx-unprivileged"` |  |
-| internal-router.image.tag | string | `"1.25-alpine"` |  |
+| internal-router.image.tag | string | `"1.23-alpine"` |  |
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.nameOverride | string | `""` |  |
 | internal-router.nodeSelector | object | `{}` |  |
