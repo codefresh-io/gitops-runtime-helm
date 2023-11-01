@@ -100,14 +100,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2495.1"` |  |
+| app-proxy.image.tag | string | `"1.2508.3"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2495.1"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2508.3"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -167,9 +167,16 @@ sealed-secrets:
 | event-reporters.events.eventSource.resources | object | `{}` |  |
 | event-reporters.events.eventSource.tolerations | list | `[]` |  |
 | event-reporters.events.sensor.affinity | object | `{}` |  |
+| event-reporters.events.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
+| event-reporters.events.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
 | event-reporters.events.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.events.sensor.replicas | int | `1` |  |
 | event-reporters.events.sensor.resources | object | `{}` |  |
+| event-reporters.events.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
+| event-reporters.events.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
+| event-reporters.events.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
+| event-reporters.events.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
+| event-reporters.events.sensor.retryStrategy.steps | int | `3` | Number of retries |
 | event-reporters.events.sensor.tolerations | list | `[]` |  |
 | event-reporters.events.serviceAccount.create | bool | `true` |  |
 | event-reporters.rollout.eventSource.affinity | object | `{}` |  |
@@ -178,9 +185,16 @@ sealed-secrets:
 | event-reporters.rollout.eventSource.resources | object | `{}` |  |
 | event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
 | event-reporters.rollout.sensor.affinity | object | `{}` |  |
+| event-reporters.rollout.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
+| event-reporters.rollout.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
 | event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.sensor.replicas | int | `1` |  |
 | event-reporters.rollout.sensor.resources | object | `{}` |  |
+| event-reporters.rollout.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
+| event-reporters.rollout.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
+| event-reporters.rollout.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
+| event-reporters.rollout.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
+| event-reporters.rollout.sensor.retryStrategy.steps | int | `3` | Number of retries |
 | event-reporters.rollout.sensor.tolerations | list | `[]` |  |
 | event-reporters.rollout.serviceAccount.create | bool | `true` |  |
 | event-reporters.workflow.eventSource.affinity | object | `{}` |  |
@@ -189,9 +203,16 @@ sealed-secrets:
 | event-reporters.workflow.eventSource.resources | object | `{}` |  |
 | event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
 | event-reporters.workflow.sensor.affinity | object | `{}` |  |
+| event-reporters.workflow.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
+| event-reporters.workflow.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
 | event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
 | event-reporters.workflow.sensor.replicas | int | `1` |  |
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
+| event-reporters.workflow.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
+| event-reporters.workflow.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
+| event-reporters.workflow.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
+| event-reporters.workflow.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
+| event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
 | event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
 | gitops-operator.affinity | object | `{}` |  |
@@ -204,7 +225,7 @@ sealed-secrets:
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | gitops-operator.image.repository | string | `"quay.io/codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"v0.1.0-alpha.4"` |  |
+| gitops-operator.image.tag | string | `"v0.1.0-alpha.5"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.kube-rbac-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | gitops-operator.kube-rbac-proxy.image.repository | string | `"gcr.io/kubebuilder/kube-rbac-proxy"` |  |

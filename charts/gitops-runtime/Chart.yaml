@@ -20,6 +20,15 @@ annotations:
       description: Update codefresh-tunnel-client
     - kind: changed
       description: Update internal-router nginx to 1.25
+    - kind: changed
+      description: Update codefresh-gitops-operator.
+      links:
+        - name: GitHub Release
+          url: https://github.com/codefresh-io/codefresh-gitops-operator/releases/tag/v0.1.0-alpha.5
+    - kind: added
+      description: Added possibility to enable logging on event reporter sensors
+    - kind: added
+      description: Added retries on event reporters sensors
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm

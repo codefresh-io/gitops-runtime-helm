@@ -16,6 +16,7 @@ spec:
     serviceAccountName: {{ include "event-reporters.workflow-reporter.serviceAccountName" .}}
     container:
       name: ""
+      {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" .Values.workflow.sensor.env  | nindent 6 }}
       resources:
       {{- with .Values.workflow.sensor.resources  }}
         {{- . | toYaml | nindent 8 }}
@@ -33,5 +34,6 @@ spec:
       {{- . | toYaml | nindent 6 }}
     {{- end }}
   triggers:
-  {{- include "event-reporters.http.trigger" (dict "name" "workflows" "Values" .Values "payloadDest" "data.object") | nindent 4 }}
+  {{- include "event-reporters.http.trigger" (dict "name" "workflows" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.workflow.sensor.retryStrategy) | nindent 4 }}
+  {{- include "event-reporters.log.trigger" (.Values.workflow.sensor.logging) | nindent 4 }}
 {{- end }}
