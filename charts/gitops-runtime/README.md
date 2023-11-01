@@ -1,6 +1,18 @@
 ## Codefresh gitops runtime
 ![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![AppVersion: 0.1.36](https://img.shields.io/badge/AppVersion-0.1.36-informational?style=flat-square)
 
+## Prerequisites
+
+- Kubernetes **1.23+**
+- Helm **3.8.0+**
+
+## Get Chart Info
+
+```console
+helm show all oci://quay.io/codefresh/gitops-runtime
+```
+See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
+
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 

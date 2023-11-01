@@ -15,7 +15,11 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Update app-proxy
+      description: Push chart to OCI registry
+    - kind: changed
+      description: Update codefresh-tunnel-client
+    - kind: changed
+      description: Update internal-router nginx to 1.25
     - kind: changed
       description: Update codefresh-gitops-operator.
       links:
@@ -44,7 +48,7 @@ dependencies:
   repository: https://bitnami-labs.github.io/sealed-secrets/
   version: 2.7.3
 - name: codefresh-tunnel-client
-  repository: https://chartmuseum.codefresh.io/codefresh-tunnel-client
-  version: "0.1.12"
+  repository: oci://quay.io/codefresh/charts
+  version: 0.1.15
   alias: tunnel-client
   condition: tunnel-client.enabled
