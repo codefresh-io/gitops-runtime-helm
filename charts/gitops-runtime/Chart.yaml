@@ -19,8 +19,6 @@ annotations:
     - kind: changed
       description: Update codefresh-tunnel-client
     - kind: changed
-      description: Update internal-router nginx to 1.25
-    - kind: changed
       description: Update codefresh-gitops-operator.
       links:
         - name: GitHub Release
