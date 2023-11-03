@@ -1,7 +1,7 @@
-{{/* 
+{{/*
 Tunnel based (ingressless) runtime support. We use libraries to generate the resources so we can use Helm templating
 to intruduce the subdomainPrefix to the tunnel.
-Since the prefix is comprised of <accoundId>-<runtime name>, we can tempalate it and thus 
+Since the prefix is comprised of <accoundId>-<runtime name>, we can tempalate it and thus
 reduce complexity of installation and number or mandatory values to provide for the installation to work.
  */}}
 {{- if and ( not .Values.global.runtime.ingress.enabled) (index .Values "tunnel-client" "enabled") }}

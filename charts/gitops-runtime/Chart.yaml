@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.36
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.3.1
+version: 0.3.2
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,16 +15,26 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
+      description: Push chart to OCI registry
+    - kind: changed
+      description: Update codefresh-tunnel-client
+    - kind: changed
       description: Update app-proxy
+    - kind: changed
+      description: Update ArgoCD
     - kind: changed
       description: Update codefresh-gitops-operator.
       links:
         - name: GitHub Release
-          url: https://github.com/codefresh-io/codefresh-gitops-operator/releases/tag/v0.1.0-alpha.4
+          url: https://github.com/codefresh-io/codefresh-gitops-operator/releases/tag/v0.1.0-alpha.5
+    - kind: added
+      description: Added possibility to enable logging on event reporter sensors
+    - kind: added
+      description: Added retries on event reporters sensors
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.46.2-3-cap-CR-not-setup-kustomize-ns
+  version: 5.46.2-4-cap-CR-20837
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
@@ -40,7 +50,7 @@ dependencies:
   repository: https://bitnami-labs.github.io/sealed-secrets/
   version: 2.7.3
 - name: codefresh-tunnel-client
-  repository: https://chartmuseum.codefresh.io/codefresh-tunnel-client
-  version: "0.1.12"
+  repository: oci://quay.io/codefresh/charts
+  version: 0.1.15
   alias: tunnel-client
   condition: tunnel-client.enabled
