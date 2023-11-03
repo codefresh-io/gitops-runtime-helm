@@ -19,6 +19,10 @@ annotations:
     - kind: changed
       description: Update codefresh-tunnel-client
     - kind: changed
+      description: Update app-proxy
+    - kind: changed
+      description: Update ArgoCD
+    - kind: changed
       description: Update codefresh-gitops-operator.
       links:
         - name: GitHub Release
@@ -30,7 +34,7 @@ annotations:
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.46.2-3-cap-CR-not-setup-kustomize-ns
+  version: 5.46.2-4-cap-CR-20837
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
