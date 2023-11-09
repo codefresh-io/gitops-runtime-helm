@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.36
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.3.2
+version: 0.3.3
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,22 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Push chart to OCI registry
-    - kind: changed
-      description: Update codefresh-tunnel-client
-    - kind: changed
-      description: Update app-proxy
-    - kind: changed
-      description: Update ArgoCD
-    - kind: changed
-      description: Update codefresh-gitops-operator.
-      links:
-        - name: GitHub Release
-          url: https://github.com/codefresh-io/codefresh-gitops-operator/releases/tag/v0.1.0-alpha.5
-    - kind: added
-      description: Added possibility to enable logging on event reporter sensors
-    - kind: added
-      description: Added retries on event reporters sensors
+      description: Update nginx to 1.25
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
