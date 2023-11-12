@@ -97,26 +97,12 @@ spec:
               priority:
                 type: integer
               promotion:
+                additionalProperties:
+                  items:
+                    type: string
+                  type: array
                 description: Promotion is the definition on how to promote this application
-                items:
-                  description: FileMultiSource defines multiple sources inside a yaml
-                    or json file
-                  properties:
-                    file:
-                      description: File is the file name of the source
-                      type: string
-                    jsonPaths:
-                      description: JsonPaths is an array of json paths inside the
-                        file, that will be used to promote the application
-                      items:
-                        type: string
-                      minItems: 1
-                      type: array
-                  required:
-                  - file
-                  - jsonPaths
-                  type: object
-                type: array
+                type: object
               versionSource:
                 description: VersionSource is the source of the application version
                 properties:
