@@ -98,9 +98,16 @@ spec:
                 type: integer
               promotion:
                 additionalProperties:
-                  items:
-                    type: string
-                  type: array
+                  properties:
+                    jsonPaths:
+                      description: JsonPaths is an array of json paths inside the
+                        file,
+                      items:
+                        type: string
+                      type: array
+                  required:
+                  - jsonPaths
+                  type: object
                 description: Promotion is the definition on how to promote this application
                 type: object
               versionSource:
