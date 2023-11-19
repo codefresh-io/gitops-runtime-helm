@@ -15,6 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
+<<<<<<< HEAD
       description: Update app version to 0.1.37
     - kind: changed
       description: Added hosted runtimes registration procedure
@@ -22,6 +23,13 @@ dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
   version: 5.50.1-2-cap-CR-create-apps-with-err
+=======
+      description: Update ArgoCD templates from upstream 5.50.1 - also switching Redis repository from quay.io/codefresh to the upstream public ecr
+dependencies:
+- name: argo-cd
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 5.50.1-0-cap-CR-20837
+>>>>>>> b58ead4 (Update argocd templates from upstream (#100))
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
