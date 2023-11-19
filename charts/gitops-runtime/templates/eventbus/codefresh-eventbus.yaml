@@ -8,6 +8,9 @@
 {{- if hasKey $eventBusSpec "pdb" }}
 {{- $eventBusSpec = unset $eventBusSpec "pdb" }}
 {{- end }}
+{{- if hasKey $eventBusSpec "annotations" }}
+{{- $eventBusSpec = unset $eventBusSpec "annotations" }}
+{{- end }}
 apiVersion: argoproj.io/v1alpha1
 kind: EventBus
 metadata:
