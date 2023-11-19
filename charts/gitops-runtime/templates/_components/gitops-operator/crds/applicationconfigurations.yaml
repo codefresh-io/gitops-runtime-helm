@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 {{- define "gitops-operator.crds.application-configuration" }}
+=======
+{{- define "gitops-operator.crds.restricted-gitsource" }}
+>>>>>>> 077832f (added applicationconfigurations crd (#99))
   {{- if .Values.crds.install }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
