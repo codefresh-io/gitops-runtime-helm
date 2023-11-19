@@ -3,4 +3,5 @@
 {{- $_ := set $gitopsOperatorContext.Values "global" (get .Values "global") }}
 
 {{- include "gitops-operator.crds.application-configuration" $gitopsOperatorContext }}
+---
 {{- include "gitops-operator.crds.restricted-gitsource" $gitopsOperatorContext }}
