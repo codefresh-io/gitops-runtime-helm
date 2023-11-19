@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Update nginx to 1.25
+      description: Remove sync wave from EventBus - fix cold start from ArgoCD
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm

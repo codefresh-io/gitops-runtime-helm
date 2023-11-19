@@ -84,6 +84,7 @@ global:
         enabled: true
         # -- Minimum number of available eventbus pods. For eventbus to stay functional the majority of its replicas should always be available.
         minAvailable: 2
+      annotations: {}
       nats:
         native:
           replicas: 3
