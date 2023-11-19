@@ -277,6 +277,7 @@ sealed-secrets:
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
 | global.runtime | object | `{"cluster":"https://kubernetes.default.svc","eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","tls":[]},"ingressUrl":"","name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
+| global.runtime.eventBus.annotations | object | `{}` | Annotations on EventBus resource |
 | global.runtime.eventBus.name | string | `"codefresh-eventbus"` | Eventbus name |
 | global.runtime.eventBus.pdb | object | `{"enabled":true,"minAvailable":2}` | Pod disruption budget for the eventbus |
 | global.runtime.eventBus.pdb.minAvailable | int | `2` | Minimum number of available eventbus pods. For eventbus to stay functional the majority of its replicas should always be available. |
