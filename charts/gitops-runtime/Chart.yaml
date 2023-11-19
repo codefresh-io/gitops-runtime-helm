@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Update ArgoCD templates from upstream 5.50.1 - also switching Redis repository from quay.io/quay to the upstream public ecr.
+      description: Update ArgoCD templates from upstream 5.50.1 - also switching Redis repository from quay.io/codefresh to the upstream public ecr
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
