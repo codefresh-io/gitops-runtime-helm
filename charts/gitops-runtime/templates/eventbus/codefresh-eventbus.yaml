@@ -8,12 +8,15 @@
 {{- if hasKey $eventBusSpec "pdb" }}
 {{- $eventBusSpec = unset $eventBusSpec "pdb" }}
 {{- end }}
+{{- if hasKey $eventBusSpec "annotations" }}
+{{- $eventBusSpec = unset $eventBusSpec "annotations" }}
+{{- end }}
 apiVersion: argoproj.io/v1alpha1
 kind: EventBus
 metadata:
   name: {{ $eventBusName }}
   annotations:
-    argocd.argoproj.io/sync-wave: "2"
+    {{- .Values.global.runtime.eventBus.annotations | toYaml | nindent 4}}
   labels:
     app.kubernetes.io/part-of: argo-events
     codefresh.io/internal: "true"
