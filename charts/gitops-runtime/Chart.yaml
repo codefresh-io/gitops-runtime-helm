@@ -20,6 +20,8 @@ annotations:
       description: Added applicationconfigurations CRD
     - kind: changed
       description: Update ArgoCD templates from upstream 5.50.1 - also switching Redis repository from quay.io/codefresh to the upstream public ecr
+    - kind: changed
+      description: Support hosted runtime registration flow
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm

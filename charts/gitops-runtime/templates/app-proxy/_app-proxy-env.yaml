@@ -13,4 +13,8 @@ GIT_PASSWORD:
   {{- include "codefresh-gitops-runtime.runtime-gitcreds.password.env-var-value" . | nindent 2 }}
   {{- end }}
 WORKFLOW_PIPELINES_WEBHOOKS_TLS_SECRET: codefresh-workflow-pipelines-tls
+{{- /* Target account id, used for hosted runtimes registration. Not used in hybrid */}}
+  {{- if .Values.global.codefresh.accountId }}
+TARGET_RUNTIME_ACCOUNT_ID: {{ .Values.global.codefresh.accountId }}
+  {{- end }}
 {{- end }}

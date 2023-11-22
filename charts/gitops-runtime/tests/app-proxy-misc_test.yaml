@@ -219,3 +219,16 @@ tests:
       content:
         name: my-secret
         mountPath: /my-secret
+
+- it: accountId appears in app-proxy env if provided - used in hosted
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.accountId: "asd123"
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: TARGET_RUNTIME_ACCOUNT_ID
+        value: "asd123"
