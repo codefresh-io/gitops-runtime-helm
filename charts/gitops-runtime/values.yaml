@@ -50,6 +50,8 @@ global:
     name:
     # -- Runtime cluster. Should not be changed.
     cluster: https://kubernetes.default.svc
+    # -- Defines whether this is a Codefresh hosted runtime. Should not be changed.
+    codefreshHosted: false
     # -- Ingress settings
     ingress:
       # -- The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https.
