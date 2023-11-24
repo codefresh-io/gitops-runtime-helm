@@ -18,8 +18,8 @@ annotations:
       description: Update nginx to 1.25
 dependencies:
 - name: argo-cd
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 5.46.2-4-cap-CR-20837
+  repository: https://quay.io/codefresh/charts/dev/argo-cd
+  version: 5.50.1-1-cap-CR-21441
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
