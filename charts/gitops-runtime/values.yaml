@@ -79,6 +79,8 @@ global:
     eventBus:
        # -- Eventbus name
       name: 'codefresh-eventbus'
+      # -- Annotations on EventBus resource
+      annotations: {}
       # -- Pod disruption budget for the eventbus
       pdb:
         enabled: true
