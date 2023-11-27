@@ -22,7 +22,7 @@ annotations:
       description: Update ArgoCD templates from upstream 5.50.1 - also switching Redis repository from quay.io/codefresh to the upstream public ecr
 dependencies:
 - name: argo-cd
-  repository: https://quay.io/codefresh/charts/dev/argo-cd
+  repository: oci://quay.io/codefresh/charts/dev
   version: 5.50.1-1-cap-CR-21441
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
