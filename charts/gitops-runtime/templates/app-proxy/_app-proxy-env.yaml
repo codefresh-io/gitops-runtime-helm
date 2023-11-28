@@ -16,6 +16,8 @@ WORKFLOW_PIPELINES_WEBHOOKS_TLS_SECRET: codefresh-workflow-pipelines-tls
 {{- /* Target account id, used for hosted runtimes registration. Not used in hybrid */}}
   {{- if .Values.global.runtime.codefreshHosted }}
 INSTALLATION_TYPE: HELM_HOSTED
+CODEFRESH_ADMIN_TOKEN:
+  {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 2 }}
     {{- if .Values.global.codefresh.accountId }}
 TARGET_RUNTIME_ACCOUNT_ID: {{ .Values.global.codefresh.accountId }}
     {{- else }}
