@@ -147,6 +147,8 @@ sealed-secrets:
 | argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
 | argo-cd.crds.install | bool | `true` |  |
+| argo-cd.eventReporter.enabled | bool | `false` | Installs new event reporter component to cluster |
+| argo-cd.eventReporter.version | string | `"v1"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
 | argo-cd.notifications.bots.slack | string | `nil` |  |
 | argo-events.crds.install | bool | `false` |  |
