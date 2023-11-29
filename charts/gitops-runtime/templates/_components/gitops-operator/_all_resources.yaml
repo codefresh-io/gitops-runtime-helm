@@ -12,5 +12,7 @@
 ---
   {{ include "gitops-operator.resources.sa" .}}
 ---
+  {{- include "gitops-operator.crds.application-configuration" . }}
+---
   {{- include "gitops-operator.crds.restricted-gitsource" . }} #
 {{- end }}
