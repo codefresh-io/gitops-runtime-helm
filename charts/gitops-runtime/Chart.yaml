@@ -20,9 +20,13 @@ annotations:
       description: Added applicationconfigurations CRD
     - kind: changed
       description: Update ArgoCD templates from upstream 5.50.1 - also switching Redis repository from quay.io/codefresh to the upstream public ecr
+    - kind: changed
+      description: Update ArgoCD chart to version 5.50.1-1-cap-CR-21429
+    - kind: added  
+      description: Added new event-reporter component and ability to switch between old and new
 dependencies:
 - name: argo-cd
-  repository: oci://quay.io/codefresh/charts/dev
+  repository: https://codefresh-io.github.io/argo-helm
   version: 5.50.1-1-cap-CR-21429
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
