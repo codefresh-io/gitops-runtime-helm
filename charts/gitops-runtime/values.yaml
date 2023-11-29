@@ -145,6 +145,13 @@ argo-cd:
     params:
       server.insecure: true
       application.namespaces: 'cf-*'
+  eventReporter:
+    # -- Installs new event reporter component to cluster
+    enabled: false
+    # -- Switches between old and new reporter version.
+    # Possible values: v1, v2.
+    # For v2 `argo-cd.eventReporter.enabled=true` is required
+    version: v1
   notifications:
     bots:
       slack:
