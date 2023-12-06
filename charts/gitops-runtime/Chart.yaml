@@ -18,8 +18,8 @@ annotations:
       description: Update app version to 0.1.37
 dependencies:
 - name: argo-cd
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 5.50.1-2-cap-CR-create-apps-with-err
+  repository: oci://quay.io/codefresh/charts/dev
+  version: 5.51.6-1-cap-2.9-2023.12.06-e6258156d
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
