@@ -231,3 +231,14 @@ tests:
   - failedTemplate:
       errorMessage: 'global.runtime.name is required'
 
+- it: Runtime name propagated to app-proxy cm
+  template: 'app-proxy/config.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.runtime.name: test1
+  asserts:
+  - equal:
+      path: data.runtimeName
+      value: "test1"
+
