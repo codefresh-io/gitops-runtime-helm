@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) ![AppVersion: 0.1.37](https://img.shields.io/badge/AppVersion-0.1.37-informational?style=flat-square)
+![Version: 0.3.6](https://img.shields.io/badge/Version-0.3.6-informational?style=flat-square) ![AppVersion: 0.1.37](https://img.shields.io/badge/AppVersion-0.1.37-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.3.4 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.3.6 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -277,8 +277,9 @@ sealed-secrets:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","tls":[]},"ingressUrl":"","name":null}` | Runtime level settings |
+| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","tls":[]},"ingressUrl":"","name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
+| global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
 | global.runtime.eventBus.annotations | object | `{}` | Annotations on EventBus resource |
 | global.runtime.eventBus.name | string | `"codefresh-eventbus"` | Eventbus name |
 | global.runtime.eventBus.pdb | object | `{"enabled":true,"minAvailable":2}` | Pod disruption budget for the eventbus |

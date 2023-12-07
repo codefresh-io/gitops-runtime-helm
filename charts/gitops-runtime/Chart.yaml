@@ -15,13 +15,11 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Remove sync wave from EventBus - fix cold start from ArgoCD and allow EventBus annotations from values
-    - kind: changed
-      description: Added applicationconfigurations CRD
-    - kind: changed
-      description: Update ArgoCD templates from upstream 5.50.1 - also switching Redis repository from quay.io/codefresh to the upstream public ecr
-    - kind: changed
-      description: Support hosted runtime registration flow
+      description: Update app version to 0.1.37
+    - kind: added
+      description: Support Codefresh hosted runtimes registration flow
+    - kind: fixed
+      description: Eventbus bootstrap when deployed through ArgoCD without running Helm install first
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
