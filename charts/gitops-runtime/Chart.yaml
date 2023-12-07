@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Update app version to 0.1.37
+    - kind: fixed
+      description: fail templating when runtime.name is not provided and ingress is enabled
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
