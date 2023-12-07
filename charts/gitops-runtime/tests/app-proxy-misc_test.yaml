@@ -219,3 +219,15 @@ tests:
       content:
         name: my-secret
         mountPath: /my-secret
+
+- it: Fail template if runtime name not provided
+  template: 'app-proxy/config.yaml'
+  set:
+    global.codefresh.userToken.token: dummy
+    global.codefresh.accountId: asddd
+    global.runtime.ingress.enabled: true 
+    global.runtime.ingress.hosts[0]: asddd
+  asserts:
+  - failedTemplate:
+      errorMessage: 'global.runtime.name is required'
+
