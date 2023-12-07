@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Update app version to 0.1.37
+    - kind: fixed
+      description: fail templating when runtime.name is not provided and ingress is enabled
     - kind: changed
       description: Update Argo-CD to 5.51.6-1-cap-2.9-2023.12.06-e6258156d (2.9.3)
     - kind: changed
