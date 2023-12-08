@@ -24,7 +24,7 @@ annotations:
       description: Update Argo-Rollouts to 2.32.5-2-cap-init (1.6.1)
 dependencies:
 - name: argo-cd
-  repository: oci://quay.io/codefresh/charts/dev
+  repository: https://codefresh-io.github.io/argo-helm
   version: 5.51.6-1-cap-2.9-2023.12.06-e6258156d
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
