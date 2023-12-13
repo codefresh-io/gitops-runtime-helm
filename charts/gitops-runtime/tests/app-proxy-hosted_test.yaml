@@ -1,0 +1,69 @@
+suite: Test hosted runtime flow in app-proxy
+templates:
+  - app-proxy/deployment.yaml
+  - app-proxy/config.yaml
+tests:
+- it: accountId appears in app-proxy env if provided - used in hosted
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.runtime.codefreshHosted: true
+    global.codefresh.accountId: "asd123"
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: TARGET_RUNTIME_ACCOUNT_ID
+        value: "asd123"
+
+- it: Fail template accountId missing for hosted runtime
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.runtime.codefreshHosted: true
+    global.codefresh.accountId: ""
+  asserts:
+  - failedTemplate:
+      errorMessage: 'global.codefresh.accountId must be provided for hosted runtimes'
+
+- it: accountId appears in app-proxy env and runtime type is HELM_HOSTED
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.runtime.codefreshHosted: true
+    global.codefresh.accountId: "asd123"
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: TARGET_RUNTIME_ACCOUNT_ID
+        value: "asd123"
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: INSTALLATION_TYPE
+        value: "HELM_HOSTED"
+  - notContains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: INSTALLATION_TYPE
+        value: "HELM"
+
+- it: Installation type shpuld be Helm by default
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: INSTALLATION_TYPE
+        value: "HELM"
+  - notContains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: INSTALLATION_TYPE
+        value: "HELM_HOSTED"

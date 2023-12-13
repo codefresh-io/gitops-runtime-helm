@@ -15,7 +15,11 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
+      description: Update app-proxy
+    - kind: changed
       description: Update app version to 0.1.37
+    - kind: added
+      description: Support Codefresh hosted runtimes registration flow
     - kind: fixed
       description: fail templating when runtime.name is not provided and ingress is enabled
     - kind: changed
