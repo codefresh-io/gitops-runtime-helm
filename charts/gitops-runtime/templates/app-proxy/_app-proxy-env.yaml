@@ -1,4 +1,4 @@
-{{/* 
+{{/*
 Some app-proxy environment variables are determined by values provided in other components,
 to keep the separation of components as pseudo library charts, they are defined here to be merged when
 app-proxy components are generated.
@@ -9,7 +9,7 @@ USER_TOKEN:
   {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 2 }}
   {{- if or .Values.global.runtime.gitCredentials.password.value .Values.global.runtime.gitCredentials.password.secretKeyRef }}
 GIT_USERNAME: {{ .Values.global.runtime.gitCredentials.username }}
-GIT_PASSWORD: 
+GIT_PASSWORD:
   {{- include "codefresh-gitops-runtime.runtime-gitcreds.password.env-var-value" . | nindent 2 }}
   {{- end }}
 WORKFLOW_PIPELINES_WEBHOOKS_TLS_SECRET: codefresh-workflow-pipelines-tls
@@ -24,4 +24,14 @@ TARGET_RUNTIME_ACCOUNT_ID: {{ .Values.global.codefresh.accountId }}
       {{- fail "global.codefresh.accountId must be provided for hosted runtimes"}}
     {{- end }}
   {{- end }}
+{{/*
+This will promote argo-rollouts dependency version to app-proxy.
+This will be used when installing argo-rollouts using button.
+*/}}
+{{- range $d := .Chart.Dependencies }}
+{{- if eq $d.Name "argo-rollouts" }}
+ROLLOUTS_HELM_REPOSITORY: {{ $d.Repository | quote }}
+ROLLOUTS_HELM_VERSION: {{ $d.Version | quote }}
+{{- end }}
+{{- end }}
 {{- end }}

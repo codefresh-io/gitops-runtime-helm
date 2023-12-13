@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.37
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.3.6
+version: 0.4.0
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -20,10 +20,16 @@ annotations:
       description: Update app version to 0.1.37
     - kind: added
       description: Support Codefresh hosted runtimes registration flow
+    - kind: fixed
+      description: fail templating when runtime.name is not provided and ingress is enabled
+    - kind: changed
+      description: Update Argo-CD to 5.51.6-1-cap-2.9-2023.12.06-e6258156d (2.9.3)
+    - kind: changed
+      description: Update Argo-Rollouts to 2.32.5-2-cap-init (1.6.1)
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.50.1-2-cap-CR-create-apps-with-err
+  version: 5.51.6-1-cap-2.9-2023.12.06-e6258156d
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
@@ -33,7 +39,7 @@ dependencies:
   condition: argo-workflows.enabled
 - name: argo-rollouts
   repository: https://codefresh-io.github.io/argo-helm
-  version: 2.31.6-1-cf-init
+  version: 2.32.5-2-cap-init
   condition: argo-rollouts.enabled
 - name: sealed-secrets
   repository: https://bitnami-labs.github.io/sealed-secrets/
