@@ -37,3 +37,39 @@ tests:
           secretKeyRef:
             name: mysecret
             key: mykey
+# Hosted admin token
+- it: app proxy - hosted plain string value
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values-no-token.yaml
+  set:
+    global.runtime.codefreshHosted: true
+    global.codefresh.userToken.token: dummy
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: CODEFRESH_ADMIN_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: codefresh-user-token
+            key: token
+            optional: true
+
+- it: app proxy - hosted secretkeyref
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values-no-token.yaml
+  set:
+    global.runtime.codefreshHosted: true
+    global.codefresh.userToken.secretKeyRef.name: mysecret
+    global.codefresh.userToken.secretKeyRef.key: mykey
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: CODEFRESH_ADMIN_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: mysecret
+            key: mykey
