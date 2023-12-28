@@ -1,3 +1,10 @@
+{{/* Validation for secretKeyRef to avoid conflicting secret names with secrets created by controllers */}}
+{{- define "codefresh-gitops-runtime.secret-name-validation"}}
+  {{- $reservedSecretNames := list "codefresh-token" }}
+  {{- if has .name $reservedSecretNames }}
+    {{- fail (printf "%s is a reserved name and is not allowed. Please use a different secret name" .name) }}
+  {{- end }}
+{{- end }}
 {{/*
 Expand the name of the chart.
 */}}
@@ -161,9 +168,7 @@ valueFrom:
     key: token
     optional: true
   {{- else if .Values.global.codefresh.userToken.secretKeyRef  }}
-    {{- if eq .Values.global.codefresh.userToken.secretKeyRef.name "codefresh-token" }}
-      {{- fail "codefresh-token is a reserved name and is not allowed. Please use a different secret name"}}
-    {{- end }}
+    {{- include "codefresh-gitops-runtime.secret-name-validation" .Values.global.codefresh.userToken.secretKeyRef }}
 valueFrom:
   secretKeyRef:
   {{- .Values.global.codefresh.userToken.secretKeyRef | toYaml | nindent 4 }}
@@ -247,6 +252,7 @@ Output comma separated list of installed runtime components
   {{- include "codefresh-gitops-runtime.runtime-gitcreds.password.default-secret-name" . }}
   {{- else if .Values.global.runtime.gitCredentials.password.secretKeyRef }}
     {{- if hasKey .Values.global.runtime.gitCredentials.password.secretKeyRef "name" }}
+      {{- include "codefresh-gitops-runtime.secret-name-validation" .Values.global.runtime.gitCredentials.password.secretKeyRef }}
       {{- print .Values.global.runtime.gitCredentials.password.secretKeyRef.name }}
     {{- else }}
     {{ fail "secretKeyRef for global.runtime.gitCredentials.password illegal - must have name field"}}
