@@ -107,7 +107,7 @@ sealed-secrets:
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2566.1"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2585.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
