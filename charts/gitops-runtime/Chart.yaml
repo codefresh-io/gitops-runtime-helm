@@ -22,6 +22,8 @@ annotations:
       description: Update argo-cd to 2.9-2023.12.28-a52e719a5
     - kind: changed
       description: Update argo-workflows to 0.22.10-2-CR-20826
+    - kind: fixed
+      description: fail template if secretKeyRef uses reserved secret name codefresh-token
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm

@@ -73,3 +73,14 @@ tests:
           secretKeyRef:
             name: mysecret
             key: mykey
+
+- it: codefresh-token is not allowed
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values-no-token.yaml
+  set:
+    global.codefresh.userToken.secretKeyRef.name: codefresh-token
+    global.codefresh.userToken.secretKeyRef.key: token
+  asserts:
+  - failedTemplate:
+      errorMessage: 'codefresh-token is a reserved name and is not allowed. Please use a different secret name'
