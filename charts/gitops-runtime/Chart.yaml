@@ -20,6 +20,8 @@ annotations:
       description: Update app-proxy to 1.2585.0
     - kind: changed
       description: Update argo-cd to 2.9-2023.12.28-a52e719a5
+    - kind: changed
+      description: Update argo-workflows to 0.22.10-2-CR-20826
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -29,7 +31,7 @@ dependencies:
   version: 2.0.9-1-cap-CR-19893
 - name: argo-workflows
   repository: https://codefresh-io.github.io/argo-helm
-  version: 0.22.10-1-CR-17426
+  version: 0.22.10-2-CR-20826
   condition: argo-workflows.enabled
 - name: argo-rollouts
   repository: https://codefresh-io.github.io/argo-helm
