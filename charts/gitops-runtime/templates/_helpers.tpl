@@ -161,6 +161,9 @@ valueFrom:
     key: token
     optional: true
   {{- else if .Values.global.codefresh.userToken.secretKeyRef  }}
+    {{- if eq .Values.global.codefresh.userToken.secretKeyRef.name "codefresh-token" }}
+      {{- fail "codefresh-token is a reserved name and is not allowed. Please use a different secret name"}}
+    {{- end }}
 valueFrom:
   secretKeyRef:
   {{- .Values.global.codefresh.userToken.secretKeyRef | toYaml | nindent 4 }}

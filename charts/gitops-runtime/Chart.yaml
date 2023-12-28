@@ -18,6 +18,8 @@ annotations:
       description: Update app version to 0.1.38
     - kind: changed
       description: Update app-proxy to 1.2566.1
+    - kind: fixed
+      description: fail template if userToken is named codefresh-token to avoid conflicts with runtime token
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
