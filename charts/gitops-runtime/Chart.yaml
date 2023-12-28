@@ -17,7 +17,7 @@ annotations:
     - kind: changed
       description: Update app version to 0.1.38
     - kind: changed
-      description: Update app-proxy to 1.2566.1
+      description: Update app-proxy to 1.2585.0
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
