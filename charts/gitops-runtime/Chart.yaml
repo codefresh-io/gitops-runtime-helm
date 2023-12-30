@@ -19,17 +19,19 @@ annotations:
     - kind: changed
       description: Update app-proxy to 1.2585.0
     - kind: changed
-      description: Update argo-cd to 2.9-2023.12.22-f5398c630
+      description: Update argo-workflows to 0.22.10-2-CR-20826
+    - kind: fixed
+      description: fail template if secretKeyRef uses reserved secret name codefresh-token
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.51.6-2-cap-2.9-2023.12.22-f5398c630
+  version: 5.51.6-1-cap-2.9-2023.12.06-e6258156d
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
 - name: argo-workflows
   repository: https://codefresh-io.github.io/argo-helm
-  version: 0.22.10-1-CR-17426
+  version: 0.22.10-2-CR-20826
   condition: argo-workflows.enabled
 - name: argo-rollouts
   repository: https://codefresh-io.github.io/argo-helm
