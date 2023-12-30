@@ -426,7 +426,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.2566.1
+      tag: 1.2585.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
