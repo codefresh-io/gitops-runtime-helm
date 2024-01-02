@@ -17,6 +17,8 @@ annotations:
     - kind: changed
       description: Update app version to 0.1.38
     - kind: changed
+      description: Update argo-cd to 2.9-2023.12.28-a52e719a5
+    - kind: changed
       description: Update app-proxy to 1.2585.0
     - kind: changed
       description: Update argo-workflows to 0.22.10-2-CR-20826
@@ -25,7 +27,7 @@ annotations:
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.51.6-1-cap-2.9-2023.12.06-e6258156d
+  version: 5.51.6-3-cap-2.9-2023.12.28-a52e719a5
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
