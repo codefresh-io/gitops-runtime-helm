@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Update argo-cd chart to 5.51.6-4-cap-2.9-2023.12.28-a52e719a5
+    - kind: changed
+      description: Update app-proxy to 1.2593.0
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
