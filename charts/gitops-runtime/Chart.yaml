@@ -17,7 +17,7 @@ annotations:
     - kind: changed
       description: Update app version to 0.1.39
     - kind: changed
-      description: Update argo-cd chart to 5.51.6-4-cap-2.9-2023.12.28-a52e719a5
+      description: Update argo-cd chart to 5.51.6-5-cap-2.9-2024.1.17-0d221227f
     - kind: changed
       description: Update app-proxy to 1.2608.0
     - kind: fixed
@@ -25,7 +25,7 @@ annotations:
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.51.6-4-cap-2.9-2023.12.28-a52e719a5
+  version: 5.51.6-5-cap-2.9-2024.1.17-0d221227f
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
