@@ -19,8 +19,6 @@ annotations:
     - kind: changed
       description: Update argo-cd chart to 5.51.6-5-cap-2.9-2024.1.17-0d221227f
     - kind: changed
-      description: Update app-proxy to 1.2606.1
-    - kind: changed
       description: Update sealed-secrets chart to 2.14.1
     - kind: changed
       description: Update sealed-secrets image to v0.24.5
