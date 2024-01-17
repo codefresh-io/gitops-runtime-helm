@@ -29,7 +29,7 @@ annotations:
     - kind: fixed
       description: Fix runtime components log
     - kind: fixed
-      description: critical security vulnerability
+      description: fix critical security vulnerability
     
 
 dependencies:
