@@ -30,8 +30,6 @@ annotations:
       description: Fix runtime components log
     - kind: fixed
       description: fix critical security vulnerability
-    
-
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
