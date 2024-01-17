@@ -123,7 +123,7 @@ sealed-secrets:
   image:
     registry: 'quay.io'
     repository: 'codefresh/sealed-secrets-controller'
-    tag: 'v0.19.4'
+    tag: 'v0.24.5'
   resources:
     limits:
       cpu: 500m
