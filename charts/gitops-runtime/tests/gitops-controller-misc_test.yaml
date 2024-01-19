@@ -1,11 +1,11 @@
 suite: misc tests on gitops-operator templates generation
 templates:
-  - gitops-operator/deployment.yaml
-  - gitops-operator/sa.yaml
-  - gitops-operator/rbac.yaml
+  - gitops-operator/templates/deployment.yaml
+  - gitops-operator/templates/sa.yaml
+  - gitops-operator/templates/rbac.yaml
 tests:
 - it: override both images works
-  template: 'gitops-operator/deployment.yaml'
+  template: 'gitops-operator/templates/deployment.yaml'
   set:
     gitops-operator:
       image:
@@ -24,7 +24,7 @@ tests:
       value: example.com/repo:0.0.1
 
 - it: override service account name - sa object
-  template: 'gitops-operator/sa.yaml'
+  template: 'gitops-operator/templates/sa.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -35,7 +35,7 @@ tests:
       value: sa-name
 
 - it: override service account name - deployment
-  template: 'gitops-operator/deployment.yaml'
+  template: 'gitops-operator/templates/deployment.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -46,7 +46,7 @@ tests:
       value: sa-name
 
 - it: overriding of environment variables on main container
-  template: 'gitops-operator/deployment.yaml'
+  template: 'gitops-operator/templates/deployment.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -58,7 +58,7 @@ tests:
         name: PORT
         value: "8787"
 - it: adding environment variables on main container
-  template: 'gitops-operator/deployment.yaml'
+  template: 'gitops-operator/templates/deployment.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -70,7 +70,7 @@ tests:
         name: SOME_ENV
         value: test
 - it: setting security context on main container
-  template: 'gitops-operator/deployment.yaml'
+  template: 'gitops-operator/templates/deployment.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -80,7 +80,7 @@ tests:
       path: spec.template.spec.containers[1].securityContext.runAsUser
       value: 1000
 - it: override readiness and liveness probes values
-  template: 'gitops-operator/deployment.yaml'
+  template: 'gitops-operator/templates/deployment.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -126,7 +126,7 @@ tests:
       path: spec.template.spec.containers[1].livenessProbe.failureThreshold
       value: 1
 - it: setting node selector
-  template: 'gitops-operator/deployment.yaml'
+  template: 'gitops-operator/templates/deployment.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -139,7 +139,7 @@ tests:
         test.io/node: "test"
 
 - it: setting tolerations
-  template: 'gitops-operator/deployment.yaml'
+  template: 'gitops-operator/templates/deployment.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -158,7 +158,7 @@ tests:
         effect: "NoSchedule"
 
 - it: setting affinity
-  template: 'gitops-operator/deployment.yaml'
+  template: 'gitops-operator/templates/deployment.yaml'
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -187,7 +187,7 @@ tests:
                 - antarctica-west1
 
 - it: contains all expected roles and role bindings
-  template: gitops-operator/rbac.yaml
+  template: gitops-operator/templates/rbac.yaml
   values:
   - ./values/mandatory-values.yaml
   asserts:
@@ -235,4 +235,3 @@ tests:
         kind: RoleBinding
         apiVersion: rbac.authorization.k8s.io/v1
         name: leader-election
-    
