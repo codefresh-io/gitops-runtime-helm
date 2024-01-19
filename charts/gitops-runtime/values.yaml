@@ -528,6 +528,7 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
+  enabled: true
   replicaCount: 1
 
   # -- Codefresh gitops operator crds
@@ -542,46 +543,15 @@ gitops-operator:
     additionalLabels: {}
 
   env: {}
-  #  NAMESPACE:
-  #    valueFrom:
-  #     fieldRef:
-  #       fieldPath: metadata.namespace
-  #  VAR_NAME:
-  #    valueFrom:
-  #      secretKeyRef:
-  #       name: my-secret
-  #       key: my-secret-key
-  #       optional: true
-  #  VAR_NAME:
-  #   valueFrom:
-  #     configMapKeyRef:
-  #       name: my-config-map
-  #       key: my-config-map-key
-  #       optional: true
-  #  VAR_NANE: string-value
-  image:
-    repository: quay.io/codefresh/codefresh-gitops-operator
-    tag: v0.1.0-alpha.5
-    pullPolicy: IfNotPresent
+  image: {}
+    # -- defaults
+    # repository: quay.io/codefresh/codefresh-gitops-operator
+    # tag: 'v{{ .Chart.AppVersion }}'
 
   serviceAccount:
     create: true
     annotations: {}
     name: "gitops-operator-controller-manager"
-
-  readinessProbe:
-    failureThreshold: 3
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 10
-
-  livenessProbe:
-    failureThreshold: 10
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 10
 
   imagePullSecrets: []
   nameOverride: ""
@@ -589,14 +559,6 @@ gitops-operator:
 
   podAnnotations: {}
   podLabels: {}
-
-  podSecurityContext:
-    runAsNonRoot: true
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-        - "ALL"
 
   nodeSelector: {}
   tolerations: []
@@ -611,10 +573,10 @@ gitops-operator:
       memory: 64Mi
 
   kube-rbac-proxy:
-    image:
-      repository: gcr.io/kubebuilder/kube-rbac-proxy
-      tag: v0.14.1
-      pullPolicy: IfNotPresent
+    image: {}
+      # -- defaults
+      # repository: gcr.io/kubebuilder/kube-rbac-proxy
+      # tag: v0.14.1
 
     securityContext:
       allowPrivilegeEscalation: false

@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.39
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.4.2
+version: 0.4.3
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,19 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Update app version to 0.1.39
-    - kind: changed
-      description: Update argo-cd chart to 5.51.6-5-cap-2.9-2024.1.17-0d221227f
-    - kind: changed
-      description: Update sealed-secrets chart to 2.14.1
-    - kind: changed
-      description: Update sealed-secrets image to v0.24.5
-    - kind: changed
-      description: Update app-proxy to 1.2608.0
-    - kind: fixed
-      description: Fix runtime components log
-    - kind: fixed
-      description: fix critical security vulnerability
+      description: Add codefresh-gitops-operator as separate chart
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -51,3 +39,8 @@ dependencies:
   version: 0.1.15
   alias: tunnel-client
   condition: tunnel-client.enabled
+- name: codefresh-gitops-operator
+  repository: oci://quay.io/codefresh/charts
+  version: 1.0.1
+  alias: gitops-operator
+  condition: gitops-operator.enabled

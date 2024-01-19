@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![AppVersion: 0.1.39](https://img.shields.io/badge/AppVersion-0.1.39-informational?style=flat-square)
+![Version: 0.4.3](https://img.shields.io/badge/Version-0.4.3-informational?style=flat-square) ![AppVersion: 0.1.39](https://img.shields.io/badge/AppVersion-0.1.39-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.4.2 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.4.3 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -223,14 +223,16 @@ sealed-secrets:
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
+| gitops-operator.enabled | bool | `true` |  |
 | gitops-operator.env | object | `{}` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.pullPolicy | string | `"IfNotPresent"` |  |
-| gitops-operator.image.repository | string | `"quay.io/codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"v0.1.0-alpha.5"` |  |
+| gitops-operator.image.registry | string | `"quay.io"` |  |
+| gitops-operator.image.repository | string | `"codefresh/codefresh-gitops-operator"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.kube-rbac-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
-| gitops-operator.kube-rbac-proxy.image.repository | string | `"gcr.io/kubebuilder/kube-rbac-proxy"` |  |
+| gitops-operator.kube-rbac-proxy.image.registry | string | `"gcr.io"` |  |
+| gitops-operator.kube-rbac-proxy.image.repository | string | `"kubebuilder/kube-rbac-proxy"` |  |
 | gitops-operator.kube-rbac-proxy.image.tag | string | `"v0.14.1"` |  |
 | gitops-operator.kube-rbac-proxy.resources.limits.cpu | string | `"500m"` |  |
 | gitops-operator.kube-rbac-proxy.resources.limits.memory | string | `"128Mi"` |  |
@@ -238,28 +240,15 @@ sealed-secrets:
 | gitops-operator.kube-rbac-proxy.resources.requests.memory | string | `"64Mi"` |  |
 | gitops-operator.kube-rbac-proxy.securityContext.allowPrivilegeEscalation | bool | `false` |  |
 | gitops-operator.kube-rbac-proxy.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
-| gitops-operator.livenessProbe.failureThreshold | int | `10` |  |
-| gitops-operator.livenessProbe.initialDelaySeconds | int | `10` |  |
-| gitops-operator.livenessProbe.periodSeconds | int | `10` |  |
-| gitops-operator.livenessProbe.successThreshold | int | `1` |  |
-| gitops-operator.livenessProbe.timeoutSeconds | int | `10` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
 | gitops-operator.podAnnotations | object | `{}` |  |
 | gitops-operator.podLabels | object | `{}` |  |
-| gitops-operator.podSecurityContext.runAsNonRoot | bool | `true` |  |
-| gitops-operator.readinessProbe.failureThreshold | int | `3` |  |
-| gitops-operator.readinessProbe.initialDelaySeconds | int | `10` |  |
-| gitops-operator.readinessProbe.periodSeconds | int | `10` |  |
-| gitops-operator.readinessProbe.successThreshold | int | `1` |  |
-| gitops-operator.readinessProbe.timeoutSeconds | int | `10` |  |
 | gitops-operator.replicaCount | int | `1` |  |
 | gitops-operator.resources.limits.cpu | string | `"500m"` |  |
 | gitops-operator.resources.limits.memory | string | `"128Mi"` |  |
 | gitops-operator.resources.requests.cpu | string | `"100m"` |  |
 | gitops-operator.resources.requests.memory | string | `"64Mi"` |  |
-| gitops-operator.securityContext.allowPrivilegeEscalation | bool | `false` |  |
-| gitops-operator.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitops-operator.serviceAccount.annotations | object | `{}` |  |
 | gitops-operator.serviceAccount.create | bool | `true` |  |
 | gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
