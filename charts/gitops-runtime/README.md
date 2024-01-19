@@ -226,14 +226,9 @@ sealed-secrets:
 | gitops-operator.enabled | bool | `true` |  |
 | gitops-operator.env | object | `{}` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
-| gitops-operator.image.pullPolicy | string | `"IfNotPresent"` |  |
-| gitops-operator.image.registry | string | `"quay.io"` |  |
-| gitops-operator.image.repository | string | `"codefresh/codefresh-gitops-operator"` |  |
+| gitops-operator.image | object | `{}` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
-| gitops-operator.kube-rbac-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
-| gitops-operator.kube-rbac-proxy.image.registry | string | `"gcr.io"` |  |
-| gitops-operator.kube-rbac-proxy.image.repository | string | `"kubebuilder/kube-rbac-proxy"` |  |
-| gitops-operator.kube-rbac-proxy.image.tag | string | `"v0.14.1"` |  |
+| gitops-operator.kube-rbac-proxy.image | object | `{}` |  |
 | gitops-operator.kube-rbac-proxy.resources.limits.cpu | string | `"500m"` |  |
 | gitops-operator.kube-rbac-proxy.resources.limits.memory | string | `"128Mi"` |  |
 | gitops-operator.kube-rbac-proxy.resources.requests.cpu | string | `"100m"` |  |
