@@ -543,11 +543,10 @@ gitops-operator:
     additionalLabels: {}
 
   env: {}
-  image:
-    registry: quay.io
-    repository: codefresh/codefresh-gitops-operator
-    # tag: null # default to the appVersion of the codefresh-gitops-operator chart
-    pullPolicy: IfNotPresent
+  image: {}
+    # -- defaults
+    # repository: quay.io/codefresh/codefresh-gitops-operator
+    # tag: 'v{{ .Chart.AppVersion }}'
 
   serviceAccount:
     create: true
@@ -574,11 +573,10 @@ gitops-operator:
       memory: 64Mi
 
   kube-rbac-proxy:
-    image:
-      registry: gcr.io
-      repository: kubebuilder/kube-rbac-proxy
-      tag: v0.14.1
-      pullPolicy: IfNotPresent
+    image: {}
+      # -- defaults
+      # repository: gcr.io/kubebuilder/kube-rbac-proxy
+      # tag: v0.14.1
 
     securityContext:
       allowPrivilegeEscalation: false
