@@ -16,10 +16,12 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Add codefresh-gitops-operator as separate chart
+    - kind: changed
+      description: Update argo-cd chart to 5.51.6-7-cap-2.9-2024.1.22-375d827f3
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.51.6-5-cap-2.9-2024.1.17-0d221227f
+  version: 5.51.6-7-cap-2.9-2024.1.22-375d827f3
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
