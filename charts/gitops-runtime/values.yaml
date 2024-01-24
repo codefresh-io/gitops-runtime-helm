@@ -613,3 +613,9 @@ gitops-operator:
           secretKeyRef:
             key: encryptionIV
             name: codefresh-token
+
+      url:
+        valueFrom:
+          configMapKeyRef:
+            key: base-url
+            name: codefresh-cm
