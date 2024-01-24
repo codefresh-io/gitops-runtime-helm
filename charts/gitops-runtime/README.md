@@ -223,17 +223,12 @@ sealed-secrets:
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
-| gitops-operator.enabled | bool | `false` |  |
+| gitops-operator.enabled | bool | `true` |  |
 | gitops-operator.env | object | `{}` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
-| gitops-operator.global.codefresh.runtimeToken.valueFrom.secretKeyRef.key | string | `"encryptionIV"` |  |
-| gitops-operator.global.codefresh.runtimeToken.valueFrom.secretKeyRef.name | string | `"codefresh-token"` |  |
-| gitops-operator.global.runtime.name.valueFrom.configMapKeyRef.key | string | `"runtimeName"` |  |
-| gitops-operator.global.runtime.name.valueFrom.configMapKeyRef.name | string | `"cap-app-proxy-cm"` |  |
 | gitops-operator.image | object | `{}` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
-| gitops-operator.kube-rbac-proxy.image.pullPolicy | string | `"Always"` |  |
-| gitops-operator.kube-rbac-proxy.image.tag | string | `"cr-21890-promotionflow-crd"` | defaults repository: gcr.io/kubebuilder/kube-rbac-proxy tag: v0.14.1 TO BE REMOVED |
+| gitops-operator.kube-rbac-proxy.image | object | `{}` |  |
 | gitops-operator.kube-rbac-proxy.resources.limits.cpu | string | `"500m"` |  |
 | gitops-operator.kube-rbac-proxy.resources.limits.memory | string | `"128Mi"` |  |
 | gitops-operator.kube-rbac-proxy.resources.requests.cpu | string | `"100m"` |  |
