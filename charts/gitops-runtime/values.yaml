@@ -157,6 +157,7 @@ argo-cd:
   notifications:
     bots:
       slack:
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Events
 #-----------------------------------------------------------------------------------------------------------------------
@@ -164,6 +165,7 @@ argo-events:
   fullnameOverride: argo-events
   crds:
     install: false
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Workflows
 #-----------------------------------------------------------------------------------------------------------------------
@@ -177,6 +179,7 @@ argo-workflows:
   crds:
     # -- Install and upgrade CRDs
     install: true
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo rollouts
 #-----------------------------------------------------------------------------------------------------------------------
@@ -186,6 +189,7 @@ argo-rollouts:
   controller:
     replicas: 1
   installCRDs: true
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Event reporters
 #-----------------------------------------------------------------------------------------------------------------------
@@ -528,7 +532,7 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
-  enabled: true
+  enabled: false
   replicaCount: 1
 
   # -- Codefresh gitops operator crds
@@ -573,10 +577,13 @@ gitops-operator:
       memory: 64Mi
 
   kube-rbac-proxy:
-    image: {}
+    image: # {}
       # -- defaults
       # repository: gcr.io/kubebuilder/kube-rbac-proxy
       # tag: v0.14.1
+      # TO BE REMOVED
+      tag: cr-21890-promotionflow-crd
+      pullPolicy: Always  
 
     securityContext:
       allowPrivilegeEscalation: false
@@ -591,3 +598,18 @@ gitops-operator:
       requests:
         cpu: 100m
         memory: 64Mi
+
+  global:
+    runtime:
+      name:
+        valueFrom:
+          configMapKeyRef:
+            name: cap-app-proxy-cm
+            key: runtimeName
+
+    codefresh:
+      runtimeToken:
+        valueFrom:
+          secretKeyRef:
+            key: encryptionIV
+            name: codefresh-token
