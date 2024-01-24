@@ -577,13 +577,10 @@ gitops-operator:
       memory: 64Mi
 
   kube-rbac-proxy:
-    image: # {}
+    image: {}
       # -- defaults
       # repository: gcr.io/kubebuilder/kube-rbac-proxy
       # tag: v0.14.1
-      # TO BE REMOVED
-      tag: cr-21890-promotionflow-crd
-      pullPolicy: Always  
 
     securityContext:
       allowPrivilegeEscalation: false
