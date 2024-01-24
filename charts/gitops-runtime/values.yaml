@@ -44,13 +44,6 @@ global:
           #   ...
           #   -----END CERTIFICATE-----
 
-    # -- Runtime Token. Used by gitops-operator. should not be changed.
-    runtimeToken:
-      valueFrom:
-          secretKeyRef:
-            name: codefresh-token
-            key: token
-
   # -- Runtime level settings
   runtime:
     # -- Runtime name. Must be unique per platform account.
