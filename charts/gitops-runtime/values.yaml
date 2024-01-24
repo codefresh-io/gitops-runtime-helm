@@ -44,6 +44,13 @@ global:
           #   ...
           #   -----END CERTIFICATE-----
 
+    # -- Runtime Token. Used by gitops-operator. should not be changed.
+    runtimeToken:
+      valueFrom:
+          secretKeyRef:
+            name: codefresh-token
+            key: token
+
   # -- Runtime level settings
   runtime:
     # -- Runtime name. Must be unique per platform account.
@@ -532,7 +539,7 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
-  enabled: false
+  enabled: true
   replicaCount: 1
 
   # -- Codefresh gitops operator crds
@@ -598,24 +605,3 @@ gitops-operator:
       requests:
         cpu: 100m
         memory: 64Mi
-
-  global:
-    runtime:
-      name:
-        valueFrom:
-          configMapKeyRef:
-            name: cap-app-proxy-cm
-            key: runtimeName
-
-    codefresh:
-      runtimeToken:
-        valueFrom:
-          secretKeyRef:
-            key: encryptionIV
-            name: codefresh-token
-
-      url:
-        valueFrom:
-          configMapKeyRef:
-            key: base-url
-            name: codefresh-cm
