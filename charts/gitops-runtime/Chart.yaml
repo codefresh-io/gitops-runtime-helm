@@ -20,6 +20,8 @@ annotations:
       description: Update argo-cd chart to 5.51.6-8-cap-2.9-2024.1.24-ccd7124b3. Includes: window rate limiter for the event reporter; support of apps in non-contoller namespaces for non-GRPC reporting mode; critical vuln fixes for argocd;
     - kind: changed
       description: Update argo-rollouts chart to 2.32.5-3-analysis-fix
+    - kind: fixed
+      description: Fix workflows native UI access through internal-router
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm

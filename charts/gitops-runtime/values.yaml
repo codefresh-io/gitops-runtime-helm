@@ -176,6 +176,9 @@ argo-workflows:
     # -- auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI
     extraArgs:
     - --auth-mode=client
+    # -- Do not change. In the runtime workflows UI is accessed only through internal-router /workflows/ location. Changing this value will break it.
+    baseHref: /workflows/
+
   crds:
     # -- Install and upgrade CRDs
     install: true

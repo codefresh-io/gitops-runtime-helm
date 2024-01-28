@@ -1,7 +1,7 @@
 FROM --platform=$BUILDPLATFORM debian:bullseye-slim
 
-ARG CF_CLI_VERSION=v0.1.49
-ARG KUBECTL_VERSION=v1.27.2
+ARG CF_CLI_VERSION=v0.1.59
+ARG KUBECTL_VERSION=v1.29.1
 ARG TARGETARCH
 
 RUN apt-get update && apt-get install curl -y
