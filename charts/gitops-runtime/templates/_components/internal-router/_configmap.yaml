@@ -10,6 +10,7 @@ data:
       listen [::]:8080 default_server;
       access_log /dev/stdout main;
       error_log /dev/stdout;
+      port_in_redirect off;
 
       {{- if .Values.resolver }}
       resolver {{ .Values.resolver }} valid=10s;
