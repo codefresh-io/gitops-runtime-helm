@@ -146,7 +146,7 @@ Determine argo workflows server url. Must be called with chart root context
 {{- $protocol = "https" }}
 {{- end -}}
 {{/* For now use template from Argo workflows chart until better approach */}}
-{{- printf "%s://%s:2746/" $protocol (include "codefresh-gitops-runtime.argo-workflows.server.name" .) }}
+{{- printf "%s://%s:2746" $protocol (include "codefresh-gitops-runtime.argo-workflows.server.name" .) }}
 {{- end }}
 
 {{/*

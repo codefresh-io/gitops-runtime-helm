@@ -6,7 +6,7 @@ Set workflows routing
 */}}
 {{- if index (get .Values "argo-workflows") "enabled" }}
   {{- if not (index $internalRouterContext.Values "routing" "workflows") }}
-    {{ $_ := set $internalRouterContext.Values.routing "workflows" (dict "enabled" true "internalUrl" ( include "codefresh-gitops-runtime.argo-workflows.server.url" . )) }}
+    {{ $_ := set $internalRouterContext.Values.routing "workflows" (dict "enabled" true "internalUrl" (printf "%s/" ( include "codefresh-gitops-runtime.argo-workflows.server.url" . ))) }}
   {{- end }}
 {{- else }}
 {{ $_ := set $internalRouterContext.Values.routing "workflows" (dict "enabled" false)}}
