@@ -33,6 +33,7 @@ data:
         proxy_set_header Connection '';
         proxy_http_version 1.1;
         chunked_transfer_encoding off;
+        rewrite /workflows(/|$)(.*) /$2 break;
 
         proxy_pass {{ .Values.routing.workflows.internalUrl }};
       }
