@@ -26,10 +26,12 @@ annotations:
       description: fix routing to workflows native UI
     - kind: changed
       description: Update app-proxy to 1.2623.0
+    - kind: changed
+      description: Update argo-cd chart to 5.53.12-1-cap-2.9-2024.1.24-ccd7124b3
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.51.6-8-cap-2.9-2024.1.24-ccd7124b3
+  version: 5.53.12-1-cap-2.9-2024.1.24-ccd7124b3
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893

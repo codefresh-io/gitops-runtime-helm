@@ -150,7 +150,7 @@ sealed-secrets:
 | argo-cd.eventReporter.enabled | bool | `false` | Installs new event reporter component to cluster |
 | argo-cd.eventReporter.version | string | `"v1"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
-| argo-cd.notifications.bots.slack | string | `nil` |  |
+| argo-cd.notifications | object | `{}` |  |
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
 | argo-rollouts.controller.replicas | int | `1` |  |
