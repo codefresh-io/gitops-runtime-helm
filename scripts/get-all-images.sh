@@ -10,4 +10,5 @@ helm template release-name $CHARTDIR -f $VALUESFILE \
   | grep -E 'image:|Image:'  | grep -v "{}" \
   | awk -F ': ' '{print $2}' | awk NF \
   | tr -d '"' | tr -d ',' | cut -f1 -d"@" \
-  | sort -u
+  | sort -u \
+  > $OUTPUTFILE
