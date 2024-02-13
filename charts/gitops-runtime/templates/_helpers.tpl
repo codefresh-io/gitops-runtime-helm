@@ -237,6 +237,10 @@ Output comma separated list of installed runtime components
     {{- $tunnelClient := dict "name" "codefresh-tunnel-client" "version" (get .Subcharts "tunnel-client").Chart.AppVersion }}
     {{- $comptList = append $comptList $tunnelClient }}
   {{- end }}
+  {{- if index (get .Values "gitops-operator") "enabled" }}
+    {{- $gitopsOperator := dict "name" "gitops-operator" "version" (get .Subcharts "gitops-operator").Chart.AppVersion }}
+    {{- $comptList = append $comptList $gitopsOperator }}
+  {{- end }}
 {{- $comptList | toYaml }}
 {{- end }}
 

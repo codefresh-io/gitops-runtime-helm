@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![AppVersion: 0.1.39](https://img.shields.io/badge/AppVersion-0.1.39-informational?style=flat-square)
+![Version: 0.4.3](https://img.shields.io/badge/Version-0.4.3-informational?style=flat-square) ![AppVersion: 0.1.40](https://img.shields.io/badge/AppVersion-0.1.40-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.4.2 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.4.3 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -100,14 +100,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2608.0"` |  |
+| app-proxy.image.tag | string | `"1.2623.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2608.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2623.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -150,7 +150,7 @@ sealed-secrets:
 | argo-cd.eventReporter.enabled | bool | `false` | Installs new event reporter component to cluster |
 | argo-cd.eventReporter.version | string | `"v1"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
-| argo-cd.notifications.bots.slack | string | `nil` |  |
+| argo-cd.notifications | object | `{}` |  |
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
 | argo-rollouts.controller.replicas | int | `1` |  |
@@ -160,7 +160,8 @@ sealed-secrets:
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.fullnameOverride | string | `"argo"` |  |
-| argo-workflows.server.extraArgs | list | `["--auth-mode=client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
+| argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
+| argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
 | event-reporters.events.argoCDServerServiceName | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service name. |
 | event-reporters.events.argoCDServerServicePort | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service port. |
 | event-reporters.events.eventSource.affinity | object | `{}` |  |
@@ -223,43 +224,27 @@ sealed-secrets:
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
+| gitops-operator.enabled | bool | `true` |  |
 | gitops-operator.env | object | `{}` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
-| gitops-operator.image.pullPolicy | string | `"IfNotPresent"` |  |
-| gitops-operator.image.repository | string | `"quay.io/codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"v0.1.0-alpha.5"` |  |
+| gitops-operator.image | object | `{}` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
-| gitops-operator.kube-rbac-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
-| gitops-operator.kube-rbac-proxy.image.repository | string | `"gcr.io/kubebuilder/kube-rbac-proxy"` |  |
-| gitops-operator.kube-rbac-proxy.image.tag | string | `"v0.14.1"` |  |
+| gitops-operator.kube-rbac-proxy.image | object | `{}` |  |
 | gitops-operator.kube-rbac-proxy.resources.limits.cpu | string | `"500m"` |  |
 | gitops-operator.kube-rbac-proxy.resources.limits.memory | string | `"128Mi"` |  |
 | gitops-operator.kube-rbac-proxy.resources.requests.cpu | string | `"100m"` |  |
 | gitops-operator.kube-rbac-proxy.resources.requests.memory | string | `"64Mi"` |  |
 | gitops-operator.kube-rbac-proxy.securityContext.allowPrivilegeEscalation | bool | `false` |  |
 | gitops-operator.kube-rbac-proxy.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
-| gitops-operator.livenessProbe.failureThreshold | int | `10` |  |
-| gitops-operator.livenessProbe.initialDelaySeconds | int | `10` |  |
-| gitops-operator.livenessProbe.periodSeconds | int | `10` |  |
-| gitops-operator.livenessProbe.successThreshold | int | `1` |  |
-| gitops-operator.livenessProbe.timeoutSeconds | int | `10` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
 | gitops-operator.podAnnotations | object | `{}` |  |
 | gitops-operator.podLabels | object | `{}` |  |
-| gitops-operator.podSecurityContext.runAsNonRoot | bool | `true` |  |
-| gitops-operator.readinessProbe.failureThreshold | int | `3` |  |
-| gitops-operator.readinessProbe.initialDelaySeconds | int | `10` |  |
-| gitops-operator.readinessProbe.periodSeconds | int | `10` |  |
-| gitops-operator.readinessProbe.successThreshold | int | `1` |  |
-| gitops-operator.readinessProbe.timeoutSeconds | int | `10` |  |
 | gitops-operator.replicaCount | int | `1` |  |
 | gitops-operator.resources.limits.cpu | string | `"500m"` |  |
 | gitops-operator.resources.limits.memory | string | `"128Mi"` |  |
 | gitops-operator.resources.requests.cpu | string | `"100m"` |  |
 | gitops-operator.resources.requests.memory | string | `"64Mi"` |  |
-| gitops-operator.securityContext.allowPrivilegeEscalation | bool | `false` |  |
-| gitops-operator.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitops-operator.serviceAccount.annotations | object | `{}` |  |
 | gitops-operator.serviceAccount.create | bool | `true` |  |
 | gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
