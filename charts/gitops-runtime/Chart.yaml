@@ -29,11 +29,11 @@ annotations:
     - kind: changed
       description: Update argo-cd chart to 5.53.12-2-cap-2.9-2024.2.8-8ba4b03d4
       links:
-        - name: event-reporter v2: rate limiter
+        - name: event-reporter v2 rate limiter
           url: https://github.com/codefresh-io/argo-cd/blob/release-2.9/changelog/CHANGELOG-2.9-2024.1.17-b48801c0d.md
-        - name: event-reporter v2: bugfixes for cluster wide apps support;
+        - name: event-reporter v2 bugfixes for cluster wide apps support;
           url: https://github.com/codefresh-io/argo-cd/blob/release-2.9/changelog/CHANGELOG-2.9-2024.1.22-375d827f3.md
-        - name: event-reporter v1: app delete event bugfix
+        - name: event-reporter v1 app delete event bugfix
           url: https://github.com/codefresh-io/argo-cd/blob/release-2.9/changelog/CHANGELOG-2.9-2024.2.4-fc84c8a9c.md
     - kind: changed
       description: Update argo-rollouts chart to 2.32.5-4-additional-logs
