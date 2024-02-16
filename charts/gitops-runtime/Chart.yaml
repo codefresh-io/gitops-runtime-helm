@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.40
+appVersion: 0.1.41
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.4.3
+version: 0.4.4
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,35 +15,14 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Add codefresh-gitops-operator as separate chart
-    - kind: changed
-      description: Update argo-cd chart to 5.51.6-8-cap-2.9-2024.1.24-ccd7124b3. Includes: window rate limiter for the event reporter; support of apps in non-contoller namespaces for non-GRPC reporting mode; critical vuln fixes for argocd;
-    - kind: changed
-      description: Update argo-rollouts chart to 2.32.5-3-analysis-fix
-    - kind: changed
-      description: Update argo-workflows chart to 0.40.9-1-v3.5.4-cap-CR-22243
-    - kind: fixed
-      description: fix routing to workflows native UI
-    - kind: changed
-      description: Update app-proxy to 1.2623.0
-    - kind: changed
-      description: Update argo-cd chart to 5.53.12-2-cap-2.9-2024.2.8-8ba4b03d4
+      description: Update argo-cd chart to 5.53.12-3-cap-2.9-2024.2.15-cc783d89f
       links:
-        - name: event-reporter v2 rate limiter
-          url: https://github.com/codefresh-io/argo-cd/blob/release-2.9/changelog/CHANGELOG-2.9-2024.1.17-b48801c0d.md
-        - name: event-reporter v2 bugfixes for cluster wide apps support;
-          url: https://github.com/codefresh-io/argo-cd/blob/release-2.9/changelog/CHANGELOG-2.9-2024.1.22-375d827f3.md
-        - name: event-reporter v1 app delete event bugfix
-          url: https://github.com/codefresh-io/argo-cd/blob/release-2.9/changelog/CHANGELOG-2.9-2024.2.4-fc84c8a9c.md
-    - kind: changed
-      description: Update argo-rollouts chart to 2.32.5-4-additional-logs
-      links:
-        - name: GitHub Release
-          url: https://github.com/codefresh-io/argo-rollouts/releases/tag/1.6.1-additional-logs
+        - name: support application version custom path based on the Codefresh ApplicationConfiguration
+          url: https://github.com/codefresh-io/argo-cd/releases/tag/v2.9-2024.2.9-2fd6a5c2a
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.53.12-2-cap-2.9-2024.2.8-8ba4b03d4
+  version: 5.53.12-3-cap-2.9-2024.2.15-cc783d89f
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893

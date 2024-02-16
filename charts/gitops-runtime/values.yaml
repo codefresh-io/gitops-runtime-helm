@@ -154,6 +154,11 @@ argo-cd:
     # Possible values: v1, v2.
     # For v2 `argo-cd.eventReporter.enabled=true` is required
     version: v1
+  applicationVersioning:
+    # -- Enable application versioning
+    enabled: true
+    # -- Extract application version based on ApplicationConfiguration CRD
+    useApplicationConfiguration: true
   notifications: {}
 
 #-----------------------------------------------------------------------------------------------------------------------
