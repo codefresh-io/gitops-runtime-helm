@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.42
+appVersion: 0.1.43
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.4.5
+version: 0.4.6
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,10 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: Update argo-cd chart to 5.53.12-4-cap-2.9-2024.2.22-25d9fca69
-      links:
-        - name: revert support application version custom path based on the Codefresh ApplicationConfiguration
-          url: https://github.com/codefresh-io/argo-cd/releases/tag/v2.9-2024.2.22-25d9fca69
+      description: Update app-proxy to 1.2667.0.
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
