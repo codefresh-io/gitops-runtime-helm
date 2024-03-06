@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: "Update app-proxy to 1.2667.0. Includes: previous container logs support."
+      description: "Update app-proxy to 1.2680.1. fix: default git branch"
     - kind: changed
       description: "Update argo-cd. Includes: reporting of application versions."
 dependencies:
