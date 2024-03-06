@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.4.6](https://img.shields.io/badge/Version-0.4.6-informational?style=flat-square) ![AppVersion: 0.1.43](https://img.shields.io/badge/AppVersion-0.1.43-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![AppVersion: 0.1.43](https://img.shields.io/badge/AppVersion-0.1.43-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.4.6 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.5.0 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -149,8 +149,9 @@ sealed-secrets:
 | argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
 | argo-cd.crds.install | bool | `true` |  |
-| argo-cd.eventReporter.enabled | bool | `false` | Installs new event reporter component to cluster |
-| argo-cd.eventReporter.version | string | `"v1"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
+| argo-cd.eventReporter.enabled | bool | `true` | Installs new event reporter component to cluster |
+| argo-cd.eventReporter.replicas | int | `3` | Amount of shards to handle applications events |
+| argo-cd.eventReporter.version | string | `"v2"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
 | argo-cd.notifications | object | `{}` |  |
 | argo-events.crds.install | bool | `false` |  |
