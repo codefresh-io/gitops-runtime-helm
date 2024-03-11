@@ -15,8 +15,6 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: "Update app-proxy to 1.2667.0. Includes: previous container logs support."
-    - kind: changed
       description: "Update argoo-cd image to include rate limiter"
     - kind: changed
       description: "Update argoo-cd chart to enable event-reporter 2.0 by default"
