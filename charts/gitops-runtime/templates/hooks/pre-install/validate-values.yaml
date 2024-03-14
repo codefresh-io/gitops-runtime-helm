@@ -25,8 +25,8 @@ spec:
         - name: VERSION
           value: {{ .Chart.Version }}
         command: ["sh", "-c"]
-        args: 
+        args:
         - |
-          echo {{ .Values | toYaml | quote }} > values.yaml
+          echo {{ .Values | toYaml }} > values.yaml
           cf helm validate --values values.yaml --namespace ${NAMESPACE} --version ${VERSION} --hook --log-level debug
 {{- end }}
