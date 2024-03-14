@@ -18,9 +18,7 @@ Set app-proxy routing
   {{ $_ := set $internalRouterContext.Values.routing "app-proxy" (dict "enabled" true "internalUrl" ( include "codefresh-gitops-runtime.app-proxy.url" . )) }}
 {{- end }}
 
-{{- if .Values.prometheus.enabled }}
-  {{- $_ := set $internalRouterContext.Values "prometheus" (get .Values "prometheus") }}
-  {{- $_ := set $internalRouterContext.Subcharts "prometheus" (get .Subcharts "prometheus") }}
-{{- end }}
+{{- $_ := set $internalRouterContext.Values "prometheus" (get .Values "prometheus") }}
+{{- $_ := set $internalRouterContext.Subcharts "prometheus" (get .Subcharts "prometheus") }}
 
 {{- include "internal-router.resources.configmap" $internalRouterContext }}
