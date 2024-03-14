@@ -137,6 +137,10 @@ sealed-secrets:
 # ArgoCD
 #-----------------------------------------------------------------------------------------------------------------------
 argo-cd:
+  global:
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/path: "/metrics"
   fullnameOverride: argo-cd
   crds:
     install: true
@@ -149,6 +153,10 @@ argo-cd:
       server.insecure: true
       application.namespaces: 'cf-*'
   eventReporter:
+    metrics:
+      enabled: true
+    podAnnotations:
+      prometheus.io/port: "8087"
     # -- Installs new event reporter component to cluster
     enabled: true
     # -- Amount of shards to handle applications events
@@ -163,6 +171,44 @@ argo-cd:
     # -- Extract application version based on ApplicationConfiguration CRD
     useApplicationConfiguration: true
   notifications: {}
+
+  controller:
+    metrics:
+      enabled: true
+    podAnnotations:
+      prometheus.io/port: "8082"
+
+  applicationSet:
+    metrics:
+      enabled: true
+    podAnnotations:
+      prometheus.io/port: "8080"
+
+  dex:
+    metrics:
+      enabled: true
+    podAnnotations:
+      prometheus.io/port: "5558"
+
+  server:
+    metrics:
+      enabled: true
+    podAnnotations:
+      prometheus.io/port: "8083"
+
+  repoServer:
+    metrics:
+      enabled: true
+    podAnnotations:
+      prometheus.io/port: "8084"
+
+  redis:
+    exporter:
+      enabled: true
+    metrics:
+      enabled: true
+    podAnnotations:
+      prometheus.io/port: "9121"
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Events
@@ -196,6 +242,10 @@ argo-rollouts:
   fullnameOverride: argo-rollouts
   controller:
     replicas: 1
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/path: "/metrics"
+      prometheus.io/port: "8090"
   installCRDs: true
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -246,6 +296,10 @@ event-reporters:
       tolerations: []
       nodeSelector: {}
       affinity: {}
+      podAnnotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "7777"
     sensor:
       # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
       logging:
@@ -268,6 +322,10 @@ event-reporters:
       tolerations: []
       nodeSelector: {}
       affinity: {}
+      podAnnotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "7777"
   workflow:
     serviceAccount:
       create: true
@@ -603,3 +661,47 @@ gitops-operator:
       requests:
         cpu: 100m
         memory: 64Mi
+
+# -- Prometheus
+prometheus:
+  enabled: false
+  fullnameOverride: prometheus
+  server:
+    service:
+      type: ClusterIP
+
+    persistence:
+      enabled: true
+
+    extraScrapeConfigs:
+      - job_name: gitops-runtime-pods
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - "{{ .Release.Namespace }}"
+        metrics_path: /metrics
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+          action: replace
+          target_label: __metrics_path__
+          regex: (.+)
+        - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+          action: replace
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          replacement: $1:$2
+          target_label: __address__
+        - action: labelmap
+          regex: __meta_kubernetes_pod_label_(.+)
+        - source_labels: [__meta_kubernetes_namespace]
+          action: replace
+          target_label: kubernetes_namespace
+        - source_labels: [__meta_kubernetes_pod_name]
+          action: replace
+          target_label: kubernetes_pod_name
+
+  alertmanager:
+    enabled: false

@@ -44,3 +44,7 @@ dependencies:
   version: 1.0.4
   alias: gitops-operator
   condition: gitops-operator.enabled
+- name: prometheus
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 0.12.1
+  condition: prometheus.enabled

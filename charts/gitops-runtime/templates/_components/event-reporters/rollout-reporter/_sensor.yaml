@@ -19,6 +19,11 @@ spec:
     eventName: analysisruns
   eventBusName: {{ default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
   template:
+    metadata:
+      annotations:
+      {{- with .Values.rollout.sensor.podAnnotations }}
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
     serviceAccountName: {{ include "event-reporters.rollout-reporter.serviceAccountName" .}}
     container:
       name: ""
