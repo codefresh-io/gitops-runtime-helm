@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: "jsonPath to application versions uses format with $ sign for root element"
+    - kind: added
+      description: "Add optional Prometheus subchart"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
