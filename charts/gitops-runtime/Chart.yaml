@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.43
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.5.0
+version: 0.5.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -16,10 +16,14 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: "update app-proxy image to 1.2706.0"
+    - kind: changed
+      description: "jsonPath to application versions uses format with $ sign for root element"
+    - kind: fixed
+      description: "fix default version config"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.53.12-6-cap-2.9-2024.3.5-80c3e7225
+  version: 5.53.12-8-cap-2.9-2024.3.14-6cca9ccf8
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
