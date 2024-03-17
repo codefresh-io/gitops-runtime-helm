@@ -20,10 +20,12 @@ annotations:
       description: "jsonPath to application versions uses format with $ sign for root element"
     - kind: fixed
       description: "fix default version config"
+    - kind: fixed
+      description: "support better concurrency in argocd session manager"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.53.12-8-cap-2.9-2024.3.14-6cca9ccf8
+  version: 5.53.12-9-cap-2.9-2024.3.17-6fd9979e1
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
