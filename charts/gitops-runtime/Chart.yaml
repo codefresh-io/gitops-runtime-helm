@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.43
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.5.0
+version: 0.5.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,15 +15,17 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: "Update argoo-cd image to include rate limiter"
+      description: "update app-proxy image to 1.2696.0"
     - kind: changed
-      description: "Update argoo-cd chart to enable event-reporter 2.0 by default"
-    - kind: changed
-      description: "Enable event-reporter 2.0 by default runtime chart"
+      description: "jsonPath to application versions uses format with $ sign for root element"
+    - kind: fixed
+      description: "fix default version config"
+    - kind: fixed
+      description: "support better concurrency in argocd session manager"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 5.53.12-6-cap-2.9-2024.3.5-80c3e7225
+  version: 5.53.12-9-cap-2.9-2024.3.17-6fd9979e1
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
