@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: "update app-proxy image to 1.2696.0"
+      description: "update app-proxy image to 1.2706.0"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
