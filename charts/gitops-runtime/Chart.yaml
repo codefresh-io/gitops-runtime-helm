@@ -14,6 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
+    - kind: changed
+      description: "update codefresh-gitops-operator chart to 1.0.7 to handle promotions"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -39,6 +41,6 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 1.0.4
+  version: 1.0.7
   alias: gitops-operator
   condition: gitops-operator.enabled
