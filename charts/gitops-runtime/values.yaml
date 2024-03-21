@@ -484,7 +484,7 @@ app-proxy:
   image:
     repository: quay.io/codefresh/cap-app-proxy
     tag: CR-22880-expose-git-log # temporary, will be replaced soon with final version
-    pullPolicy: IfNotPresent
+    pullPolicy: Always           # temporary, will be replaced soon with final version (should be IfNotPresent)
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
 
@@ -609,6 +609,7 @@ gitops-operator:
   env: {}
   image:
     tag: cr-22880-handle-multi-commits # temporary, will be replaced soon with final version
+    pullPolicy: Always
     # -- defaults
     # repository: quay.io/codefresh/codefresh-gitops-operator
     # tag: 'v{{ .Chart.AppVersion }}'

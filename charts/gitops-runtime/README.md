@@ -98,7 +98,7 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.annotations | string | `nil` | Annotations on the service account |
 | app-proxy.image-enrichment.serviceAccount.create | bool | `true` | Whether to create the service account or use an existing one |
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
-| app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
+| app-proxy.image.pullPolicy | string | `"Always"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
 | app-proxy.image.tag | string | `"CR-22880-expose-git-log"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
@@ -160,7 +160,7 @@ sealed-secrets:
 | argo-cd.notifications.subscriptions[0].triggers[0] | string | `"on-deployed-trigger"` |  |
 | argo-cd.notifications.subscriptions[1].recipients[0] | string | `"app-revision-changed-notifier"` |  |
 | argo-cd.notifications.subscriptions[1].triggers[0] | string | `"on-out-of-sync-trigger"` |  |
-| argo-cd.notifications.templates."template.app-revision-changed-template" | string | `"webhook:\n  app-revision-changed-notifier:\n    method: POST\n    body: |\n      {\n        \"APP_NAMESPACE\": {{ .app.metadata.namespace | quote }},\n        \"APP_NAME\": {{ .app.metadata.name | quote }},\n        \"REPO_URL\": {{ call .repo.RepoURLToHTTPS .app.spec.source.repoURL | quote }},\n        \"BRANCH\": {{ .app.spec.source.targetRevision | quote }},\n        \"COMMIT_SHA\": {{ .app.status.operationState.syncResult.revision | quote }},\n        \"COMMIT_MESSAGE\": {{ (call .repo.GetCommitMetadata .app.status.operationState.syncResult.revision).Message | quote }},\n        \"COMMIT_AUTHOR\": {{ (call .repo.GetCommitMetadata .app.status.operationState.syncResult.revision).Author | quote }},\n        \"COMMIT_DATE\": {{ (call .repo.GetCommitMetadata .app.status.operationState.syncResult.revision).Date.Local.Format \"2006-01-02T15:04:05Z07:00\" | quote }},\n        \"COMMIT_TAGS\": {{ (call .repo.GetCommitMetadata .app.status.operationState.syncResult.revision).Tags }}\n      }\n"` |  |
+| argo-cd.notifications.templates."template.app-revision-changed-template" | string | `"webhook:\n  app-revision-changed-notifier:\n    method: POST\n    body: |\n      {\n        \"APP_NAMESPACE\": {{ .app.metadata.namespace | quote }},\n        \"APP_NAME\": {{ .app.metadata.name | quote }},\n        \"REPO_URL\": {{ call .repo.RepoURLToHTTPS .app.spec.source.repoURL | quote }},\n        \"BRANCH\": {{ .app.spec.source.targetRevision | quote }},\n        \"PATH\": {{ .app.spec.source.path | quote }},\n        \"PREV_COMMIT_SHA\": {{ (index .app.status.history (sub (len .app.status.history) 2)).revision | quote }},\n        \"CURRENT_COMMIT_SHA\": {{ .app.status.operationState.syncResult.revision | quote }}\n      }\n"` |  |
 | argo-cd.notifications.triggers."trigger.on-deployed-trigger" | string | `"- description: Application is synced and healthy. Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") != nil && app.status.sync.status == \"Synced\" && app.status.health.status == \"Healthy\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - app-revision-changed-template\n"` |  |
 | argo-cd.notifications.triggers."trigger.on-out-of-sync-trigger" | string | `"- description: Application is out of sync (when autoHeal is off). Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") == nil && app.status.sync.status == \"OutOfSync\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - app-revision-changed-template\n"` |  |
 | argo-events.crds.install | bool | `false` |  |
@@ -239,6 +239,7 @@ sealed-secrets:
 | gitops-operator.enabled | bool | `true` |  |
 | gitops-operator.env | object | `{}` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
+| gitops-operator.image.pullPolicy | string | `"Always"` |  |
 | gitops-operator.image.tag | string | `"cr-22880-handle-multi-commits"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.kube-rbac-proxy.image | object | `{}` |  |
