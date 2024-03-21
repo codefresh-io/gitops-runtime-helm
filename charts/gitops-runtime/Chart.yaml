@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.43
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.5.1
+version: 0.5.2
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -14,14 +14,6 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
-    - kind: changed
-      description: "update app-proxy image to 1.2696.0"
-    - kind: changed
-      description: "jsonPath to application versions uses format with $ sign for root element"
-    - kind: fixed
-      description: "fix default version config"
-    - kind: fixed
-      description: "support better concurrency in argocd session manager"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
