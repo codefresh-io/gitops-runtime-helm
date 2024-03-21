@@ -44,7 +44,6 @@ global:
           #   ...
           #   -----END CERTIFICATE-----
 
-
   # -- Runtime level settings
   runtime:
     # -- Runtime name. Must be unique per platform account.
@@ -104,6 +103,7 @@ global:
                 cpu: 200m
                 memory: 1Gi
                 ephemeral-storage: 2Gi
+
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
@@ -115,6 +115,7 @@ installer:
     repository: quay.io/codefresh/gitops-runtime-installer
     tag: ""
     pullPolicy: IfNotPresent
+
 # -----------------------------------------------------------------------------------------------------------------------
 # Sealed secrets
 # -----------------------------------------------------------------------------------------------------------------------
@@ -162,7 +163,61 @@ argo-cd:
     enabled: true
     # -- Extract application version based on ApplicationConfiguration CRD
     useApplicationConfiguration: true
-  notifications: {}
+  notifications:
+    enabled: true
+
+    bots:
+      slack: {}
+
+    notifiers:
+      service.webhook.app-revision-changed-notifier: |
+        url: http://gitops-operator:8082/app-revision-changed
+        headers:
+        - name: Content-Type
+          value: application/json
+
+    subscriptions:
+      - triggers:
+          - on-deployed-trigger
+        recipients:
+          - app-revision-changed-notifier
+      - triggers:
+          - on-out-of-sync-trigger
+        recipients:
+          - app-revision-changed-notifier
+
+    templates:
+      template.app-revision-changed-template: |
+        webhook:
+          app-revision-changed-notifier:
+            method: POST
+            body: |
+              {
+                "APP_NAMESPACE": {{ .app.metadata.namespace | quote }},
+                "APP_NAME": {{ .app.metadata.name | quote }},
+                "REPO_URL": {{ call .repo.RepoURLToHTTPS .app.spec.source.repoURL | quote }},
+                "BRANCH": {{ .app.spec.source.targetRevision | quote }},
+                "COMMIT_SHA": {{ .app.status.operationState.syncResult.revision | quote }},
+                "COMMIT_MESSAGE": {{ (call .repo.GetCommitMetadata .app.status.operationState.syncResult.revision).Message | quote }},
+                "COMMIT_AUTHOR": {{ (call .repo.GetCommitMetadata .app.status.operationState.syncResult.revision).Author | quote }},
+                "COMMIT_DATE": {{ (call .repo.GetCommitMetadata .app.status.operationState.syncResult.revision).Date.Local.Format "2006-01-02T15:04:05Z07:00" | quote }},
+                "COMMIT_TAGS": {{ (call .repo.GetCommitMetadata .app.status.operationState.syncResult.revision).Tags }}
+              }
+
+    triggers:
+      trigger.on-deployed-trigger: |
+        - description: Application is synced and healthy. Triggered once per commit.
+          when: get(app.spec.syncPolicy, "automated") != nil && app.status.sync.status == "Synced" && app.status.health.status == "Healthy" && app.status.operationState.syncResult.revision != nil
+          oncePer: app.status.operationState.syncResult.revision
+          send:
+          - app-revision-changed-template
+      trigger.on-out-of-sync-trigger: |
+        - description: Application is out of sync (when autoHeal is off). Triggered once per commit.
+          when: get(app.spec.syncPolicy, "automated") == nil && app.status.sync.status == "OutOfSync" && app.status.operationState.syncResult.revision != nil
+          oncePer: app.status.operationState.syncResult.revision
+          send:
+          - app-revision-changed-template
+
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Events
@@ -430,7 +485,7 @@ app-proxy:
           tag: 1.1.10-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.2696.0
+    tag: 1.2701.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -438,7 +493,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.2696.0
+      tag: 1.2701.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -534,7 +589,6 @@ app-proxy:
   affinity: {}
   # -- extra volumes
   extraVolumes: []
-########################################################################################################################
 
 #-----------------------------------------------------------------------------------------------------------------------
 # gitops-operator
