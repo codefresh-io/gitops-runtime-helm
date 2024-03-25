@@ -239,8 +239,7 @@ sealed-secrets:
 | gitops-operator.enabled | bool | `true` |  |
 | gitops-operator.env | object | `{}` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
-| gitops-operator.image.pullPolicy | string | `"Always"` |  |
-| gitops-operator.image.tag | string | `"cr-22880-handle-multi-commits"` |  |
+| gitops-operator.image | string | `nil` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.kube-rbac-proxy.image | object | `{}` |  |
 | gitops-operator.kube-rbac-proxy.resources.limits.cpu | string | `"500m"` |  |
@@ -258,9 +257,7 @@ sealed-secrets:
 | gitops-operator.resources.limits.memory | string | `"128Mi"` |  |
 | gitops-operator.resources.requests.cpu | string | `"100m"` |  |
 | gitops-operator.resources.requests.memory | string | `"64Mi"` |  |
-| gitops-operator.serviceAccount.annotations | object | `{}` |  |
-| gitops-operator.serviceAccount.create | bool | `true` |  |
-| gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
+| gitops-operator.serviceAccount | object | `{"annotations":{},"create":true,"name":"gitops-operator-controller-manager"}` | defaults repository: quay.io/codefresh/codefresh-gitops-operator tag: 'v{{ .Chart.AppVersion }}' |
 | gitops-operator.tolerations | list | `[]` |  |
 | global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","tls":{"caCerts":{"secret":{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"},"secretKeyRef":{}},"workflowPipelinesGitWebhooks":{"annotatins":{},"certificates":{}}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |
