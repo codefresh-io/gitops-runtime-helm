@@ -15,17 +15,11 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: "update app-proxy image to 1.2696.0"
-    - kind: changed
-      description: "jsonPath to application versions uses format with $ sign for root element"
-    - kind: fixed
-      description: "fix default version config"
-    - kind: fixed
-      description: "support better concurrency in argocd session manager"
+      description: "update argo0-cd 5.55.0-1-cap-2.10-2024.3.26-681ab3018"
 dependencies:
 - name: argo-cd
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 5.53.12-9-cap-2.9-2024.3.17-6fd9979e1
+  repository: oci://quay.io/codefresh/charts/dev
+  version: 5.55.0-1-cap-2.10-2024.3.26-681ab3018
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
