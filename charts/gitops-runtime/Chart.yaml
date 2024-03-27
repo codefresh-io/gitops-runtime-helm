@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.43
+appVersion: 0.1.44
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.5.1
+version: 0.5.2
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,13 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: "update app-proxy image to 1.2696.0"
+      description: "update codefresh-gitops-operator chart to 1.0.9 to handle promotions"
     - kind: changed
-      description: "jsonPath to application versions uses format with $ sign for root element"
-    - kind: fixed
-      description: "fix default version config"
-    - kind: fixed
-      description: "support better concurrency in argocd session manager"
+      description: "update cap-app-proxy to 1.2727.0 (exopse gitLog endpoint)"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -47,6 +43,6 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 1.0.4
+  version: 1.0.9
   alias: gitops-operator
   condition: gitops-operator.enabled
