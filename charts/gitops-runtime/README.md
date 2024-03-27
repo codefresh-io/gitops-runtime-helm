@@ -98,16 +98,16 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.annotations | string | `nil` | Annotations on the service account |
 | app-proxy.image-enrichment.serviceAccount.create | bool | `true` | Whether to create the service account or use an existing one |
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
-| app-proxy.image.pullPolicy | string | `"Always"` |  |
+| app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"CR-22880-expose-git-log"` |  |
+| app-proxy.image.tag | string | `"1.2727.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2701.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2727.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -239,7 +239,7 @@ sealed-secrets:
 | gitops-operator.enabled | bool | `true` |  |
 | gitops-operator.env | object | `{}` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
-| gitops-operator.image | string | `nil` |  |
+| gitops-operator.image | object | `{}` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.kube-rbac-proxy.image | object | `{}` |  |
 | gitops-operator.kube-rbac-proxy.resources.limits.cpu | string | `"500m"` |  |
@@ -257,7 +257,9 @@ sealed-secrets:
 | gitops-operator.resources.limits.memory | string | `"128Mi"` |  |
 | gitops-operator.resources.requests.cpu | string | `"100m"` |  |
 | gitops-operator.resources.requests.memory | string | `"64Mi"` |  |
-| gitops-operator.serviceAccount | object | `{"annotations":{},"create":true,"name":"gitops-operator-controller-manager"}` | defaults repository: quay.io/codefresh/codefresh-gitops-operator tag: 'v{{ .Chart.AppVersion }}' |
+| gitops-operator.serviceAccount.annotations | object | `{}` |  |
+| gitops-operator.serviceAccount.create | bool | `true` |  |
+| gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
 | gitops-operator.tolerations | list | `[]` |  |
 | global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","tls":{"caCerts":{"secret":{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"},"secretKeyRef":{}},"workflowPipelinesGitWebhooks":{"annotatins":{},"certificates":{}}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |

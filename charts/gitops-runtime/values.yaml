@@ -483,15 +483,15 @@ app-proxy:
           tag: 1.1.10-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: CR-22880-expose-git-log # temporary, will be replaced soon with final version
-    pullPolicy: Always           # temporary, will be replaced soon with final version (should be IfNotPresent)
+    tag: 1.2727.0
+    pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
 
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.2701.0
+      tag: 1.2727.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
