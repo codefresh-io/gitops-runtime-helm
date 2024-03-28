@@ -42,7 +42,7 @@ data:
 
       {{- if .Values.prometheus.enabled }}
       location /prometheus/ {
-      proxy_pass http://{{ include "prometheus.server.fullname" .Subcharts.prometheus }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.prometheus.server.service.ports.http }}/;
+        proxy_pass http://{{ include "prometheus.server.fullname" .Subcharts.prometheus }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.prometheus.server.service.ports.http }}/;
       }
       {{- end }}
 
