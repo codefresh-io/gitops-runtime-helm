@@ -420,6 +420,16 @@ internal-router:
   dnsService: kube-dns
   dnsNamespace: kube-system
   clusterDomain: cluster.local
+
+  ## Internal-Router Pod Disruption Budget
+  pdb:
+    # -- Enable PDB
+    enabled: false
+    # -- Set number of pods that are available after eviction as number or percentage
+    minAvailable: 1
+    # -- Set number of pods that are unavailable after eviction as number or percentage
+    maxUnavailable: ""
+
 #-----------------------------------------------------------------------------------------------------------------------
 # tunnel client
 #-----------------------------------------------------------------------------------------------------------------------
@@ -587,6 +597,15 @@ app-proxy:
   affinity: {}
   # -- extra volumes
   extraVolumes: []
+
+  ## App-Proxy Pod Disruption Budget
+  pdb:
+    # -- Enable PDB
+    enabled: false
+    # -- Set number of pods that are available after eviction as number or percentage
+    minAvailable: 1
+    # -- Set number of pods that are unavailable after eviction as number or percentage
+    maxUnavailable: ""
 
 #-----------------------------------------------------------------------------------------------------------------------
 # gitops-operator

@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.44
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.5.2
+version: 0.6.0
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -14,10 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
-    - kind: changed
-      description: "update codefresh-gitops-operator chart to 1.0.9 to handle promotions"
-    - kind: changed
-      description: "update cap-app-proxy to 1.2727.0 (exopse gitLog endpoint)"
+    - kind: added
+      description: "Add PDB templates for internal-router and app-proxy"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
