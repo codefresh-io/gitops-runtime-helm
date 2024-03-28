@@ -17,5 +17,5 @@ spec:
   {{- fail (printf "ERROR: pdb.minAvailable or pdb.maxUnavailable is required!" ) }}
 {{- end }}
   selector:
-    {{- include "internal-router.selectorLabels" . | nindent 4 }}
+    matchLabels: {{- include "internal-router.selectorLabels" . | nindent 6 }}
 {{- end }}

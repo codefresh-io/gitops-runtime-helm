@@ -17,5 +17,5 @@ spec:
   {{- fail (printf "ERROR: pdb.minAvailable or pdb.maxUnavailable is required!" ) }}
 {{- end }}
   selector:
-    {{- include "cap-app-proxy.selectorLabels" . | nindent 4 }}
+    matchLabels: {{- include "cap-app-proxy.selectorLabels" . | nindent 6 }}
 {{- end }}
