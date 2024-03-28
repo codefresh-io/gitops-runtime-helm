@@ -425,9 +425,9 @@ internal-router:
   pdb:
     # -- Enable PDB
     enabled: false
-    # -- Set number of pods that are available after eviction as number of percentage
-    minAvailable: ""
-    # -- Set number of pods that are unavailable after eviction as number of percentage
+    # -- Set number of pods that are available after eviction as number or percentage
+    minAvailable: 1
+    # -- Set number of pods that are unavailable after eviction as number or percentage
     maxUnavailable: ""
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -602,9 +602,9 @@ app-proxy:
   pdb:
     # -- Enable PDB
     enabled: false
-    # -- Set number of pods that are available after eviction as number of percentage
-    minAvailable: ""
-    # -- Set number of pods that are unavailable after eviction as number of percentage
+    # -- Set number of pods that are available after eviction as number or percentage
+    minAvailable: 1
+    # -- Set number of pods that are unavailable after eviction as number or percentage
     maxUnavailable: ""
 
 #-----------------------------------------------------------------------------------------------------------------------
