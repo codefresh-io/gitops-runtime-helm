@@ -141,6 +141,8 @@ sealed-secrets:
 | app-proxy.serviceAccount.create | bool | `true` |  |
 | app-proxy.serviceAccount.name | string | `"cap-app-proxy"` |  |
 | app-proxy.tolerations | list | `[]` |  |
+| argo-cd.applicationSet.metrics.enabled | bool | `true` |  |
+| argo-cd.applicationSet.podAnnotations."prometheus.io/port" | string | `"8080"` |  |
 | argo-cd.applicationVersioning.enabled | bool | `true` | Enable application versioning |
 | argo-cd.applicationVersioning.useApplicationConfiguration | bool | `true` | Extract application version based on ApplicationConfiguration CRD |
 | argo-cd.configs.cm."accounts.admin" | string | `"apiKey,login"` |  |
@@ -148,14 +150,32 @@ sealed-secrets:
 | argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
 | argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
+| argo-cd.controller.metrics.enabled | bool | `true` |  |
+| argo-cd.controller.podAnnotations."prometheus.io/port" | string | `"8082"` |  |
 | argo-cd.crds.install | bool | `true` |  |
+| argo-cd.dex.metrics.enabled | bool | `true` |  |
+| argo-cd.dex.podAnnotations."prometheus.io/port" | string | `"5558"` |  |
 | argo-cd.eventReporter.enabled | bool | `true` | Installs new event reporter component to cluster |
+| argo-cd.eventReporter.metrics.enabled | bool | `true` |  |
+| argo-cd.eventReporter.podAnnotations."prometheus.io/port" | string | `"8087"` |  |
 | argo-cd.eventReporter.replicas | int | `3` | Amount of shards to handle applications events |
 | argo-cd.eventReporter.version | string | `"v2"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
+| argo-cd.global.podAnnotations."prometheus.io/path" | string | `"/metrics"` |  |
+| argo-cd.global.podAnnotations."prometheus.io/scrape" | string | `"true"` |  |
 | argo-cd.notifications | object | `{}` |  |
+| argo-cd.redis.exporter.enabled | bool | `true` |  |
+| argo-cd.redis.metrics.enabled | bool | `true` |  |
+| argo-cd.redis.podAnnotations."prometheus.io/port" | string | `"9121"` |  |
+| argo-cd.repoServer.metrics.enabled | bool | `true` |  |
+| argo-cd.repoServer.podAnnotations."prometheus.io/port" | string | `"8084"` |  |
+| argo-cd.server.metrics.enabled | bool | `true` |  |
+| argo-cd.server.podAnnotations."prometheus.io/port" | string | `"8083"` |  |
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
+| argo-rollouts.controller.podAnnotations."prometheus.io/path" | string | `"/metrics"` |  |
+| argo-rollouts.controller.podAnnotations."prometheus.io/port" | string | `"8090"` |  |
+| argo-rollouts.controller.podAnnotations."prometheus.io/scrape" | string | `"true"` |  |
 | argo-rollouts.controller.replicas | int | `1` |  |
 | argo-rollouts.enabled | bool | `true` |  |
 | argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
@@ -187,6 +207,9 @@ sealed-secrets:
 | event-reporters.events.serviceAccount.create | bool | `true` |  |
 | event-reporters.rollout.eventSource.affinity | object | `{}` |  |
 | event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
+| event-reporters.rollout.eventSource.podAnnotations."prometheus.io/path" | string | `"/metrics"` |  |
+| event-reporters.rollout.eventSource.podAnnotations."prometheus.io/port" | string | `"7777"` |  |
+| event-reporters.rollout.eventSource.podAnnotations."prometheus.io/scrape" | string | `"true"` |  |
 | event-reporters.rollout.eventSource.replicas | int | `1` |  |
 | event-reporters.rollout.eventSource.resources | object | `{}` |  |
 | event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
@@ -194,6 +217,9 @@ sealed-secrets:
 | event-reporters.rollout.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
 | event-reporters.rollout.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
 | event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
+| event-reporters.rollout.sensor.podAnnotations."prometheus.io/path" | string | `"/metrics"` |  |
+| event-reporters.rollout.sensor.podAnnotations."prometheus.io/port" | string | `"7777"` |  |
+| event-reporters.rollout.sensor.podAnnotations."prometheus.io/scrape" | string | `"true"` |  |
 | event-reporters.rollout.sensor.replicas | int | `1` |  |
 | event-reporters.rollout.sensor.resources | object | `{}` |  |
 | event-reporters.rollout.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
@@ -313,6 +339,7 @@ sealed-secrets:
 | internal-router.serviceAccount.create | bool | `true` |  |
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
+| prometheus | object | `{"alertmanager":{"enabled":false},"enabled":false,"fullnameOverride":"prometheus","server":{"extraScrapeConfigs":[{"job_name":"gitops-runtime-pods","kubernetes_sd_configs":[{"namespaces":{"names":["{{ .Release.Namespace }}"]},"role":"pod"}],"metrics_path":"/metrics","relabel_configs":[{"action":"keep","regex":true,"source_labels":["__meta_kubernetes_pod_annotation_prometheus_io_scrape"]},{"action":"replace","regex":"(.+)","source_labels":["__meta_kubernetes_pod_annotation_prometheus_io_path"],"target_label":"__metrics_path__"},{"action":"replace","regex":"([^:]+)(?::\\d+)?;(\\d+)","replacement":"$1:$2","source_labels":["__address__","__meta_kubernetes_pod_annotation_prometheus_io_port"],"target_label":"__address__"},{"action":"labelmap","regex":"__meta_kubernetes_pod_label_(.+)"},{"action":"replace","source_labels":["__meta_kubernetes_namespace"],"target_label":"kubernetes_namespace"},{"action":"replace","source_labels":["__meta_kubernetes_pod_name"],"target_label":"kubernetes_pod_name"}]}],"persistence":{"enabled":true},"service":{"type":"ClusterIP"}}}` | Prometheus |
 | sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"v0.24.5"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
 | tunnel-client | object | `{"enabled":true,"libraryMode":true,"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes. |
 | tunnel-client.enabled | bool | `true` | Will only be used if global.runtime.ingress.enabled = false |

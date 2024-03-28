@@ -40,6 +40,12 @@ data:
       }
       {{- end }}
 
+      {{- if .Values.prometheus.enabled }}
+      location /prometheus/ {
+        proxy_pass http://{{ include "prometheus.server.fullname" .Subcharts.prometheus }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.prometheus.server.service.ports.http }}/;
+      }
+      {{- end }}
+
       location ~ /webhooks/([^/]+)/([^/]+) {
         proxy_pass http://$2-eventsource-svc.$1.svc.cluster.local;
       }

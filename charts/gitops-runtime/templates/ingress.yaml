@@ -63,6 +63,15 @@ spec:
               port:
                 number: 80
           path: /app-proxy
-          pathType: Prefix  
+          pathType: Prefix
+      {{- if (index (get $.Values "prometheus") "enabled") }}
+        - backend:
+            service:
+              name: internal-router
+              port:
+                number: 80
+          path: /prometheus
+          pathType: Prefix
+        {{- end }}
     {{- end }}
 {{- end }}

@@ -40,6 +40,11 @@ spec:
       resource: rollouts
       version: v1alpha1
   template:
+    metadata:
+      annotations:
+      {{- with .Values.rollout.eventSource.podAnnotations }}
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
     container:
       name: ""
       resources:

@@ -22,6 +22,8 @@ annotations:
       description: "fix default version config"
     - kind: fixed
       description: "support better concurrency in argocd session manager"
+    - kind: added
+      description: "Add optional Prometheus subchart"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -50,3 +52,7 @@ dependencies:
   version: 1.0.4
   alias: gitops-operator
   condition: gitops-operator.enabled
+- name: prometheus
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 0.12.1
+  condition: prometheus.enabled
