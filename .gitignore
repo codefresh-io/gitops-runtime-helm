@@ -14,3 +14,4 @@ output
 # ignore local dev
 values-dev.yaml
 dry-run.yaml
+values-test.yaml

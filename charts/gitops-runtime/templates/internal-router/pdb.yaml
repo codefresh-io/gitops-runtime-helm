@@ -1,0 +1,7 @@
+{{- $internalRouterContext := deepCopy . }}
+{{- $_ := set $internalRouterContext "Values" (get .Values "internal-router") }}
+{{- $_ := set $internalRouterContext.Values "global" (get .Values "global") }}
+
+{{- if $internalRouterContext.pdb.enabled }}
+{{- include "internal-router.resources.pdb" $internalRouterContext }}
+{{- end }}
