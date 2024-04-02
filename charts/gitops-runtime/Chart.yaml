@@ -23,7 +23,7 @@ annotations:
 dependencies:
 - name: argo-cd
   repository: oci://quay.io/codefresh/charts/dev
-  version: 5.55.0-1-cap-2.10-2024.3.29-8acbc5d5f-t0
+  version: 5.55.0-1-cap-2.10-2024.3.29-8acbc5d5t
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
