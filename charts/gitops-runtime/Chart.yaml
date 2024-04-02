@@ -20,6 +20,8 @@ annotations:
       description: "update codefresh-gitops-operator chart to 1.0.9 to handle promotions"
     - kind: changed
       description: "update cap-app-proxy to 1.2727.0 (exopse gitLog endpoint)"
+    - kind: added
+      description: "Add PDB templates for internal-router and app-proxy"
 dependencies:
 - name: argo-cd
   repository: oci://quay.io/codefresh/charts/dev

@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.5.2](https://img.shields.io/badge/Version-0.5.2-informational?style=flat-square) ![AppVersion: 0.1.44](https://img.shields.io/badge/AppVersion-0.1.44-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![AppVersion: 0.1.44](https://img.shields.io/badge/AppVersion-0.1.44-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.5.2 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.6.0 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -119,6 +119,9 @@ sealed-secrets:
 | app-proxy.livenessProbe.timeoutSeconds | int | `10` | Number of seconds after which the [probe] times out. |
 | app-proxy.nameOverride | string | `""` |  |
 | app-proxy.nodeSelector | object | `{}` |  |
+| app-proxy.pdb.enabled | bool | `false` | Enable PDB |
+| app-proxy.pdb.maxUnavailable | string | `""` | Set number of pods that are unavailable after eviction as number or percentage |
+| app-proxy.pdb.minAvailable | int | `1` | Set number of pods that are available after eviction as number or percentage |
 | app-proxy.podAnnotations | object | `{}` |  |
 | app-proxy.podLabels | object | `{}` |  |
 | app-proxy.podSecurityContext | object | `{}` |  |
@@ -306,6 +309,9 @@ sealed-secrets:
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.nameOverride | string | `""` |  |
 | internal-router.nodeSelector | object | `{}` |  |
+| internal-router.pdb.enabled | bool | `false` | Enable PDB |
+| internal-router.pdb.maxUnavailable | string | `""` | Set number of pods that are unavailable after eviction as number or percentage |
+| internal-router.pdb.minAvailable | int | `1` | Set number of pods that are available after eviction as number or percentage |
 | internal-router.podAnnotations | object | `{}` |  |
 | internal-router.podLabels | object | `{}` |  |
 | internal-router.podSecurityContext | object | `{}` |  |
