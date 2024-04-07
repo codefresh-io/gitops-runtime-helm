@@ -170,7 +170,7 @@ argo-cd:
       slack: {}
 
     notifiers:
-      service.webhook.app-revision-changed-notifier: |
+      service.webhook.cf-promotion-app-revision-changed-notifier: |
         url: http://gitops-operator:8082/app-revision-changed
         headers:
         - name: Content-Type
@@ -178,18 +178,18 @@ argo-cd:
 
     subscriptions:
       - triggers:
-          - on-deployed-trigger
+          - cf-promotion-on-deployed-trigger
         recipients:
-          - app-revision-changed-notifier
+          - cf-promotion-app-revision-changed-notifier
       - triggers:
-          - on-out-of-sync-trigger
+          - cf-promotion-on-out-of-sync-trigger
         recipients:
-          - app-revision-changed-notifier
+          - cf-promotion-app-revision-changed-notifier
 
     templates:
-      template.app-revision-changed-template: |
+      template.cf-promotion-app-revision-changed-template: |
         webhook:
-          app-revision-changed-notifier:
+          cf-promotion-app-revision-changed-notifier:
             method: POST
             body: |
               {
@@ -203,18 +203,18 @@ argo-cd:
               }
 
     triggers:
-      trigger.on-deployed-trigger: |
+      trigger.cf-promotion-on-deployed-trigger: |
         - description: Application is synced and healthy. Triggered once per commit.
           when: get(app.spec.syncPolicy, "automated") != nil && app.status.sync.status == "Synced" && app.status.health.status == "Healthy" && app.status.operationState.syncResult.revision != nil
           oncePer: app.status.operationState.syncResult.revision
           send:
-          - app-revision-changed-template
-      trigger.on-out-of-sync-trigger: |
+          - cf-promotion-app-revision-changed-template
+      trigger.cf-promotion-on-out-of-sync-trigger: |
         - description: Application is out of sync (when autoHeal is off). Triggered once per commit.
           when: get(app.spec.syncPolicy, "automated") == nil && app.status.sync.status == "OutOfSync" && app.status.operationState.syncResult.revision != nil
           oncePer: app.status.operationState.syncResult.revision
           send:
-          - app-revision-changed-template
+          - cf-promotion-app-revision-changed-template
 
 
 #-----------------------------------------------------------------------------------------------------------------------
