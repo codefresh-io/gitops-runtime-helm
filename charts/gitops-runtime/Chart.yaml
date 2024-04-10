@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: fixed
-      description: "fix default version config"
+      description: "update argo-cd 5.53.12-10-cap-2.9-2024.4.10-dcc1723fd (fix default version config)"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
