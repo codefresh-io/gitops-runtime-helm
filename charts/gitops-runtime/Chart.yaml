@@ -15,17 +15,15 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: "update argo-cd 5.55.0-1-cap-2.10-2024.3.26-681ab3018"
+      description: "update argo-cd 5.55.0-1-cap-2.10-2024.3.29-1dcc54e29"
     - kind: changed
-      description: "update codefresh-gitops-operator chart to 1.0.9 to handle promotions"
-    - kind: changed
-      description: "update cap-app-proxy to 1.2727.0 (exopse gitLog endpoint)"
+      description: "update cap-app-proxy to 1.2749.0"
     - kind: added
       description: "Add PDB templates for internal-router and app-proxy"
 dependencies:
 - name: argo-cd
-  repository: oci://quay.io/codefresh/charts/dev
-  version: 5.55.0-1-cap-2.10-2024.3.29-8acbc5d5t
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 5.55.0-1-cap-2.10-2024.3.29-1dcc54e29
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
