@@ -420,6 +420,16 @@ internal-router:
   dnsService: kube-dns
   dnsNamespace: kube-system
   clusterDomain: cluster.local
+
+  ## Internal-Router Pod Disruption Budget
+  pdb:
+    # -- Enable PDB
+    enabled: false
+    # -- Set number of pods that are available after eviction as number or percentage
+    minAvailable: 1
+    # -- Set number of pods that are unavailable after eviction as number or percentage
+    maxUnavailable: ""
+
 #-----------------------------------------------------------------------------------------------------------------------
 # tunnel client
 #-----------------------------------------------------------------------------------------------------------------------
@@ -483,7 +493,7 @@ app-proxy:
           tag: 1.1.10-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.2727.0
+    tag: 1.2751.1
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -491,7 +501,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.2727.0
+      tag: 1.2751.1
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -587,6 +597,15 @@ app-proxy:
   affinity: {}
   # -- extra volumes
   extraVolumes: []
+
+  ## App-Proxy Pod Disruption Budget
+  pdb:
+    # -- Enable PDB
+    enabled: false
+    # -- Set number of pods that are available after eviction as number or percentage
+    minAvailable: 1
+    # -- Set number of pods that are unavailable after eviction as number or percentage
+    maxUnavailable: ""
 
 #-----------------------------------------------------------------------------------------------------------------------
 # gitops-operator

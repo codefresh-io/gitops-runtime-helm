@@ -1,0 +1,21 @@
+{{- define "cap-app-proxy.resources.pdb" }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "cap-app-proxy.fullname" . }}
+  labels:
+    {{- include "cap-app-proxy.labels" . | nindent 4 }}
+spec:
+{{- if or .Values.pdb.minAvailable .Values.pdb.maxUnavailable }}
+  {{- with .Values.pdb.minAvailable }}
+  minAvailable: {{ . }}
+  {{- end }}
+  {{- with .Values.pdb.maxUnavailable }}
+  maxUnavailable: {{ . }}
+  {{- end }}
+{{- else }}
+  {{- fail (printf "ERROR: pdb.minAvailable or pdb.maxUnavailable is required!" ) }}
+{{- end }}
+  selector:
+    matchLabels: {{- include "cap-app-proxy.selectorLabels" . | nindent 6 }}
+{{- end }}
