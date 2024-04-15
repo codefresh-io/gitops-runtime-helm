@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![AppVersion: 0.1.44](https://img.shields.io/badge/AppVersion-0.1.44-informational?style=flat-square)
+![Version: 0.5.3](https://img.shields.io/badge/Version-0.5.3-informational?style=flat-square) ![AppVersion: 0.1.45](https://img.shields.io/badge/AppVersion-0.1.45-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.6.0 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.5.3 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -158,14 +158,14 @@ sealed-secrets:
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
 | argo-cd.notifications.bots.slack | object | `{}` |  |
 | argo-cd.notifications.enabled | bool | `true` |  |
-| argo-cd.notifications.notifiers."service.webhook.app-revision-changed-notifier" | string | `"url: http://gitops-operator:8082/app-revision-changed\nheaders:\n- name: Content-Type\n  value: application/json\n"` |  |
-| argo-cd.notifications.subscriptions[0].recipients[0] | string | `"app-revision-changed-notifier"` |  |
-| argo-cd.notifications.subscriptions[0].triggers[0] | string | `"on-deployed-trigger"` |  |
-| argo-cd.notifications.subscriptions[1].recipients[0] | string | `"app-revision-changed-notifier"` |  |
-| argo-cd.notifications.subscriptions[1].triggers[0] | string | `"on-out-of-sync-trigger"` |  |
-| argo-cd.notifications.templates."template.app-revision-changed-template" | string | `"webhook:\n  app-revision-changed-notifier:\n    method: POST\n    body: |\n      {\n        \"APP_NAMESPACE\": {{ .app.metadata.namespace | quote }},\n        \"APP_NAME\": {{ .app.metadata.name | quote }},\n        \"REPO_URL\": {{ call .repo.RepoURLToHTTPS .app.spec.source.repoURL | quote }},\n        \"BRANCH\": {{ .app.spec.source.targetRevision | quote }},\n        \"PATH\": {{ .app.spec.source.path | quote }},\n        \"PREV_COMMIT_SHA\": {{ (index .app.status.history (sub (len .app.status.history) 2)).revision | quote }},\n        \"CURRENT_COMMIT_SHA\": {{ .app.status.operationState.syncResult.revision | quote }}\n      }\n"` |  |
-| argo-cd.notifications.triggers."trigger.on-deployed-trigger" | string | `"- description: Application is synced and healthy. Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") != nil && app.status.sync.status == \"Synced\" && app.status.health.status == \"Healthy\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - app-revision-changed-template\n"` |  |
-| argo-cd.notifications.triggers."trigger.on-out-of-sync-trigger" | string | `"- description: Application is out of sync (when autoHeal is off). Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") == nil && app.status.sync.status == \"OutOfSync\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - app-revision-changed-template\n"` |  |
+| argo-cd.notifications.notifiers."service.webhook.cf-promotion-app-revision-changed-notifier" | string | `"url: http://gitops-operator:8082/app-revision-changed\nheaders:\n- name: Content-Type\n  value: application/json\n"` |  |
+| argo-cd.notifications.subscriptions[0].recipients[0] | string | `"cf-promotion-app-revision-changed-notifier"` |  |
+| argo-cd.notifications.subscriptions[0].triggers[0] | string | `"cf-promotion-on-deployed-trigger"` |  |
+| argo-cd.notifications.subscriptions[1].recipients[0] | string | `"cf-promotion-app-revision-changed-notifier"` |  |
+| argo-cd.notifications.subscriptions[1].triggers[0] | string | `"cf-promotion-on-out-of-sync-trigger"` |  |
+| argo-cd.notifications.templates."template.cf-promotion-app-revision-changed-template" | string | `"webhook:\n  cf-promotion-app-revision-changed-notifier:\n    method: POST\n    body: |\n      {\n        \"APP_NAMESPACE\": {{ .app.metadata.namespace | quote }},\n        \"APP_NAME\": {{ .app.metadata.name | quote }},\n        \"REPO_URL\": {{ call .repo.RepoURLToHTTPS .app.spec.source.repoURL | quote }},\n        \"BRANCH\": {{ .app.spec.source.targetRevision | quote }},\n        \"PATH\": {{ .app.spec.source.path | quote }},\n        \"PREV_COMMIT_SHA\": {{ (index .app.status.history (sub (len .app.status.history) 2)).revision | quote }},\n        \"CURRENT_COMMIT_SHA\": {{ .app.status.operationState.syncResult.revision | quote }}\n      }\n"` |  |
+| argo-cd.notifications.triggers."trigger.cf-promotion-on-deployed-trigger" | string | `"- description: Application is synced and healthy. Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") != nil && app.status.sync.status == \"Synced\" && app.status.health.status == \"Healthy\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - cf-promotion-app-revision-changed-template\n"` |  |
+| argo-cd.notifications.triggers."trigger.cf-promotion-on-out-of-sync-trigger" | string | `"- description: Application is out of sync (when autoHeal is off). Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") == nil && app.status.sync.status == \"OutOfSync\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - cf-promotion-app-revision-changed-template\n"` |  |
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
 | argo-rollouts.controller.replicas | int | `1` |  |
