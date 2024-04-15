@@ -17,7 +17,7 @@ annotations:
     - kind: changed
       description: "update argo-cd 5.55.0-1-cap-2.10-2024.3.29-1dcc54e29"
     - kind: changed
-      description: "update cap-app-proxy to 1.2749.0"
+      description: "update cap-app-proxy to 1.2751.1 (fix gitLog to support multiple branches)"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
