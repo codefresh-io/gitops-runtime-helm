@@ -14,6 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
+    - kind: added
+      description: "runtime.isConfigurationRuntime field"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm

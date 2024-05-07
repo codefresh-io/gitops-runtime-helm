@@ -65,6 +65,8 @@ global:
       hosts: []
     # -- Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false)
     ingressUrl: ""
+    # -- is the runtime set as a "configuration runtime".
+    isConfigurationRuntime: false
     # -- Git credentials runtime. Runtime is not fully functional without those credentials.
     # If not provided through the installation, they must be provided through the Codefresh UI.
     gitCredentials:
@@ -215,7 +217,6 @@ argo-cd:
           oncePer: app.status.operationState.syncResult.revision
           send:
           - cf-promotion-app-revision-changed-template
-
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Events
