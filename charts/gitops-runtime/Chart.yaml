@@ -15,7 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: added
-      description: "runtime.isConfigurationRuntime field"
+      description: "added runtime.isConfigurationRuntime field"
+    - kind: changed
+      description: "update codefresh-gitops-operator to 0.1.0-alpha.12"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -41,6 +43,6 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 1.0.9
+  version: 1.0.12
   alias: gitops-operator
   condition: gitops-operator.enabled
