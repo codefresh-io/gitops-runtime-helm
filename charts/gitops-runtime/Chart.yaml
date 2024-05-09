@@ -19,7 +19,7 @@ annotations:
     - kind: changed
       description: "update codefresh-gitops-operator to 0.1.0-alpha.12"
     - kind: changed
-      description: "update cap-app-proxy to 1.2803.0"
+      description: "update cap-app-proxy to 1.2816.0"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
