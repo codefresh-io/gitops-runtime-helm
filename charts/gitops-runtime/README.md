@@ -146,6 +146,14 @@ sealed-secrets:
 | app-proxy.tolerations | list | `[]` |  |
 | argo-cd.applicationVersioning.enabled | bool | `true` | Enable application versioning |
 | argo-cd.applicationVersioning.useApplicationConfiguration | bool | `true` | Extract application version based on ApplicationConfiguration CRD |
+| argo-cd.codefresh.promotions.notifications.notifiers."service.webhook.cf-promotion-app-revision-changed-notifier" | string | `"url: http://gitops-operator:8082/app-revision-changed\nheaders:\n- name: Content-Type\n  value: application/json\n"` |  |
+| argo-cd.codefresh.promotions.notifications.subscriptions[0].recipients[0] | string | `"cf-promotion-app-revision-changed-notifier"` |  |
+| argo-cd.codefresh.promotions.notifications.subscriptions[0].triggers[0] | string | `"cf-promotion-on-deployed-trigger"` |  |
+| argo-cd.codefresh.promotions.notifications.subscriptions[1].recipients[0] | string | `"cf-promotion-app-revision-changed-notifier"` |  |
+| argo-cd.codefresh.promotions.notifications.subscriptions[1].triggers[0] | string | `"cf-promotion-on-out-of-sync-trigger"` |  |
+| argo-cd.codefresh.promotions.notifications.templates."template.cf-promotion-app-revision-changed-template" | string | `"webhook:\n  cf-promotion-app-revision-changed-notifier:\n    method: POST\n    body: |\n      {\n        \"APP_NAMESPACE\": {{ .app.metadata.namespace | quote }},\n        \"APP_NAME\": {{ .app.metadata.name | quote }},\n        \"REPO_URL\": {{ call .repo.RepoURLToHTTPS .app.spec.source.repoURL | quote }},\n        \"BRANCH\": {{ .app.spec.source.targetRevision | quote }},\n        \"PATH\": {{ .app.spec.source.path | quote }},\n        \"PREV_COMMIT_SHA\": {{ (index .app.status.history (sub (len .app.status.history) 2)).revision | quote }},\n        \"CURRENT_COMMIT_SHA\": {{ .app.status.operationState.syncResult.revision | quote }}\n      }\n"` |  |
+| argo-cd.codefresh.promotions.notifications.triggers."trigger.cf-promotion-on-deployed-trigger" | string | `"- description: Application is synced and healthy. Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") != nil && app.status.sync.status == \"Synced\" && app.status.health.status == \"Healthy\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - cf-promotion-app-revision-changed-template\n"` |  |
+| argo-cd.codefresh.promotions.notifications.triggers."trigger.cf-promotion-on-out-of-sync-trigger" | string | `"- description: Application is out of sync (when autoHeal is off). Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") == nil && app.status.sync.status == \"OutOfSync\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - cf-promotion-app-revision-changed-template\n"` |  |
 | argo-cd.configs.cm."accounts.admin" | string | `"apiKey,login"` |  |
 | argo-cd.configs.cm."application.resourceTrackingMethod" | string | `"annotation+label"` |  |
 | argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
@@ -156,16 +164,7 @@ sealed-secrets:
 | argo-cd.eventReporter.replicas | int | `3` | Amount of shards to handle applications events |
 | argo-cd.eventReporter.version | string | `"v2"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
-| argo-cd.notifications.bots.slack | object | `{}` |  |
 | argo-cd.notifications.enabled | bool | `true` |  |
-| argo-cd.notifications.notifiers."service.webhook.cf-promotion-app-revision-changed-notifier" | string | `"url: http://gitops-operator:8082/app-revision-changed\nheaders:\n- name: Content-Type\n  value: application/json\n"` |  |
-| argo-cd.notifications.subscriptions[0].recipients[0] | string | `"cf-promotion-app-revision-changed-notifier"` |  |
-| argo-cd.notifications.subscriptions[0].triggers[0] | string | `"cf-promotion-on-deployed-trigger"` |  |
-| argo-cd.notifications.subscriptions[1].recipients[0] | string | `"cf-promotion-app-revision-changed-notifier"` |  |
-| argo-cd.notifications.subscriptions[1].triggers[0] | string | `"cf-promotion-on-out-of-sync-trigger"` |  |
-| argo-cd.notifications.templates."template.cf-promotion-app-revision-changed-template" | string | `"webhook:\n  cf-promotion-app-revision-changed-notifier:\n    method: POST\n    body: |\n      {\n        \"APP_NAMESPACE\": {{ .app.metadata.namespace | quote }},\n        \"APP_NAME\": {{ .app.metadata.name | quote }},\n        \"REPO_URL\": {{ call .repo.RepoURLToHTTPS .app.spec.source.repoURL | quote }},\n        \"BRANCH\": {{ .app.spec.source.targetRevision | quote }},\n        \"PATH\": {{ .app.spec.source.path | quote }},\n        \"PREV_COMMIT_SHA\": {{ (index .app.status.history (sub (len .app.status.history) 2)).revision | quote }},\n        \"CURRENT_COMMIT_SHA\": {{ .app.status.operationState.syncResult.revision | quote }}\n      }\n"` |  |
-| argo-cd.notifications.triggers."trigger.cf-promotion-on-deployed-trigger" | string | `"- description: Application is synced and healthy. Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") != nil && app.status.sync.status == \"Synced\" && app.status.health.status == \"Healthy\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - cf-promotion-app-revision-changed-template\n"` |  |
-| argo-cd.notifications.triggers."trigger.cf-promotion-on-out-of-sync-trigger" | string | `"- description: Application is out of sync (when autoHeal is off). Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") == nil && app.status.sync.status == \"OutOfSync\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - cf-promotion-app-revision-changed-template\n"` |  |
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
 | argo-rollouts.controller.replicas | int | `1` |  |

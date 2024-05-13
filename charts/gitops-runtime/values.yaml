@@ -168,55 +168,55 @@ argo-cd:
   notifications:
     enabled: true
 
-    bots:
-      slack: {}
+  codefresh:
+    promotions:
+      notifications:
+        notifiers:
+          service.webhook.cf-promotion-app-revision-changed-notifier: |
+            url: http://gitops-operator:8082/app-revision-changed
+            headers:
+            - name: Content-Type
+              value: application/json
 
-    notifiers:
-      service.webhook.cf-promotion-app-revision-changed-notifier: |
-        url: http://gitops-operator:8082/app-revision-changed
-        headers:
-        - name: Content-Type
-          value: application/json
+        subscriptions:
+          - triggers:
+              - cf-promotion-on-deployed-trigger
+            recipients:
+              - cf-promotion-app-revision-changed-notifier
+          - triggers:
+              - cf-promotion-on-out-of-sync-trigger
+            recipients:
+              - cf-promotion-app-revision-changed-notifier
 
-    subscriptions:
-      - triggers:
-          - cf-promotion-on-deployed-trigger
-        recipients:
-          - cf-promotion-app-revision-changed-notifier
-      - triggers:
-          - cf-promotion-on-out-of-sync-trigger
-        recipients:
-          - cf-promotion-app-revision-changed-notifier
+        templates:
+          template.cf-promotion-app-revision-changed-template: |
+            webhook:
+              cf-promotion-app-revision-changed-notifier:
+                method: POST
+                body: |
+                  {
+                    "APP_NAMESPACE": {{ .app.metadata.namespace | quote }},
+                    "APP_NAME": {{ .app.metadata.name | quote }},
+                    "REPO_URL": {{ call .repo.RepoURLToHTTPS .app.spec.source.repoURL | quote }},
+                    "BRANCH": {{ .app.spec.source.targetRevision | quote }},
+                    "PATH": {{ .app.spec.source.path | quote }},
+                    "PREV_COMMIT_SHA": {{ (index .app.status.history (sub (len .app.status.history) 2)).revision | quote }},
+                    "CURRENT_COMMIT_SHA": {{ .app.status.operationState.syncResult.revision | quote }}
+                  }
 
-    templates:
-      template.cf-promotion-app-revision-changed-template: |
-        webhook:
-          cf-promotion-app-revision-changed-notifier:
-            method: POST
-            body: |
-              {
-                "APP_NAMESPACE": {{ .app.metadata.namespace | quote }},
-                "APP_NAME": {{ .app.metadata.name | quote }},
-                "REPO_URL": {{ call .repo.RepoURLToHTTPS .app.spec.source.repoURL | quote }},
-                "BRANCH": {{ .app.spec.source.targetRevision | quote }},
-                "PATH": {{ .app.spec.source.path | quote }},
-                "PREV_COMMIT_SHA": {{ (index .app.status.history (sub (len .app.status.history) 2)).revision | quote }},
-                "CURRENT_COMMIT_SHA": {{ .app.status.operationState.syncResult.revision | quote }}
-              }
-
-    triggers:
-      trigger.cf-promotion-on-deployed-trigger: |
-        - description: Application is synced and healthy. Triggered once per commit.
-          when: get(app.spec.syncPolicy, "automated") != nil && app.status.sync.status == "Synced" && app.status.health.status == "Healthy" && app.status.operationState.syncResult.revision != nil
-          oncePer: app.status.operationState.syncResult.revision
-          send:
-          - cf-promotion-app-revision-changed-template
-      trigger.cf-promotion-on-out-of-sync-trigger: |
-        - description: Application is out of sync (when autoHeal is off). Triggered once per commit.
-          when: get(app.spec.syncPolicy, "automated") == nil && app.status.sync.status == "OutOfSync" && app.status.operationState.syncResult.revision != nil
-          oncePer: app.status.operationState.syncResult.revision
-          send:
-          - cf-promotion-app-revision-changed-template
+        triggers:
+          trigger.cf-promotion-on-deployed-trigger: |
+            - description: Application is synced and healthy. Triggered once per commit.
+              when: get(app.spec.syncPolicy, "automated") != nil && app.status.sync.status == "Synced" && app.status.health.status == "Healthy" && app.status.operationState.syncResult.revision != nil
+              oncePer: app.status.operationState.syncResult.revision
+              send:
+              - cf-promotion-app-revision-changed-template
+          trigger.cf-promotion-on-out-of-sync-trigger: |
+            - description: Application is out of sync (when autoHeal is off). Triggered once per commit.
+              when: get(app.spec.syncPolicy, "automated") == nil && app.status.sync.status == "OutOfSync" && app.status.operationState.syncResult.revision != nil
+              oncePer: app.status.operationState.syncResult.revision
+              send:
+              - cf-promotion-app-revision-changed-template
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Events

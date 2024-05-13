@@ -20,10 +20,12 @@ annotations:
       description: "update codefresh-gitops-operator to 0.1.0-alpha.12"
     - kind: changed
       description: "update cap-app-proxy to 1.2816.0"
+    - kind: fixed
+      description: "update argo-cd helm chart to 6.7.18-1-cap-2.10-2024.3.29-1dcc54e29 (fix notification configuration overrides)"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 6.7.18-cap-2.10-2024.3.29-1dcc54e29
+  version: 6.7.18-1-cap-2.10-2024.3.29-1dcc54e29
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
