@@ -18,8 +18,10 @@ annotations:
       description: "update codefresh-gitops-operator to 0.1.0-alpha.13"
     - kind: added
       description: "added runtime.isConfigurationRuntime field"
+    - kind: fixed
+      description: "fix sealed secret shearing among clusters"
     - kind: changed
-      description: "update cap-app-proxy to 1.2816.0"
+      description: "update cap-app-proxy to 1.2825.1"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
