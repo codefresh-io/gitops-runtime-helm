@@ -17,7 +17,7 @@ annotations:
     - kind: security
       description: "Add redis authentication to ArgoCD"
     - kind: changed
-      description: "Updated ArgoCD templates - please note that this version of the ArgoCD templates contains a breaking change for ArgoCD server ingress value structure - runtime ingress is not affected. Only relevant if argo-cd.server.ingress.enabled is true. For the new ingress value structure please see: https://github.com/codefresh-io/argo-helm/blob/f98f2f4d4aca081e7b26cbb1a3fcec138bb3d4ac/charts/argo-cd/values.yaml#L2126-L2329"
+      description: "updated codefresh-gitops-operator chart to 1.0.14 (use argocd-notifications-controller in a sidecar)"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -43,6 +43,6 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 1.0.13
+  version: 1.0.14
   alias: gitops-operator
   condition: gitops-operator.enabled
