@@ -17,7 +17,7 @@ annotations:
     - kind: security
       description: "Add redis authentication to ArgoCD"
     - kind: changed
-      description: "updated codefresh-gitops-operator chart to 1.0.14 (use argocd-notifications-controller in a sidecar)"
+      description: "updated codefresh-gitops-operator chart to 1.0.15"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -43,6 +43,6 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 1.0.14
+  version: 1.0.15
   alias: gitops-operator
   condition: gitops-operator.enabled
