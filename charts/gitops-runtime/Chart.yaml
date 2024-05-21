@@ -18,6 +18,8 @@ annotations:
       description: "Add redis authentication to ArgoCD"
     - kind: changed
       description: "updated codefresh-gitops-operator chart to 1.0.15"
+    - kind: changed
+      description: "updated cap-app-proxy to 1.2835.0"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
