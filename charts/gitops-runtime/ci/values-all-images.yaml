@@ -36,3 +36,6 @@ argo-cd:
   redis:
     exporter:
       enabled: true
+
+garage-workflows-artifact-storage:
+  enabled: true

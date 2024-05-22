@@ -18,6 +18,9 @@ annotations:
       description: "updated codefresh-gitops-operator chart to 1.0.16"
     - kind: changed
       description: "updated cap-app-proxy to 1.2835.0"
+    - kind: added
+      description: garage as optional dependency for Argo workflows artifact and log storage
+
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -46,3 +49,8 @@ dependencies:
   version: 1.0.16
   alias: gitops-operator
   condition: gitops-operator.enabled
+- name: garage
+  repository: https://codefresh-io.github.io/garage
+  alias: garage-workflows-artifact-storage
+  version: 0.5.0-cf.1
+  condition: garage-workflows-artifact-storage.enabled && argo-workflows.enabled
