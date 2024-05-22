@@ -166,7 +166,7 @@ argo-cd:
     # -- Extract application version based on ApplicationConfiguration CRD
     useApplicationConfiguration: true
   notifications:
-    enabled: false
+    enabled: true
 
     bots:
       slack: {}
