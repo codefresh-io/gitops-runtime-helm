@@ -157,7 +157,7 @@ sealed-secrets:
 | argo-cd.eventReporter.version | string | `"v2"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
 | argo-cd.notifications.bots.slack | object | `{}` |  |
-| argo-cd.notifications.enabled | bool | `false` |  |
+| argo-cd.notifications.enabled | bool | `true` |  |
 | argo-cd.notifications.notifiers."service.webhook.cf-promotion-app-revision-changed-notifier" | string | `"url: http://gitops-operator:8082/app-revision-changed\nheaders:\n- name: Content-Type\n  value: application/json\n"` |  |
 | argo-cd.notifications.subscriptions[0].recipients[0] | string | `"cf-promotion-app-revision-changed-notifier"` |  |
 | argo-cd.notifications.subscriptions[0].triggers[0] | string | `"cf-promotion-on-deployed-trigger"` |  |
