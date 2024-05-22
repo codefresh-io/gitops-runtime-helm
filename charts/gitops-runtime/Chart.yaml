@@ -20,6 +20,8 @@ annotations:
       description: "updated cap-app-proxy to 1.2835.0"
     - kind: added
       description: garage as optional dependency for Argo workflows artifact and log storage
+    - kind: fixed
+      description: multiarch image for installer image used in hooks
 
 dependencies:
 - name: argo-cd

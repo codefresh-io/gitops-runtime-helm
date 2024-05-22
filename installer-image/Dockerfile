@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM debian:bullseye-slim
+FROM debian:bullseye-slim
 
 ARG CF_CLI_VERSION=v0.1.60
 ARG KUBECTL_VERSION=v1.27.2
