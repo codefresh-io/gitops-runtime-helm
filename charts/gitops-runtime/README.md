@@ -233,12 +233,13 @@ sealed-secrets:
 | event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
 | event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| garage-workflow-artifacts | object | `{"deployment":{"kind":"StatefulSet","replicaCount":3},"enabled":false,"fullnameOverride":"garage-s3","garage":{"replicationMode":3},"persistence":{"data":{"size":"100Mi","storageClass":""},"enabled":true,"meta":{"size":"100Mi","storageClass":""}},"resources":{}}` | Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC) |
-| garage-workflow-artifacts.deployment.kind | string | `"StatefulSet"` | Only statefulset is supported for Codefresh gitops runtime. Do not change this |
-| garage-workflow-artifacts.persistence.data | object | `{"size":"100Mi","storageClass":""}` | Volume that stores artifacts and logs for workflows |
-| garage-workflow-artifacts.persistence.data.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
-| garage-workflow-artifacts.persistence.meta | object | `{"size":"100Mi","storageClass":""}` | Volume that stores cluster metadata |
-| garage-workflow-artifacts.persistence.meta.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
+| garage-workflows-artifact-storage | object | `{"deployment":{"kind":"StatefulSet","replicaCount":3},"enabled":false,"fullnameOverride":"garage","garage":{"replicationMode":3},"persistence":{"data":{"size":"100Mi","storageClass":""},"enabled":true,"meta":{"size":"100Mi","storageClass":""}},"resources":{}}` | Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC) |
+| garage-workflows-artifact-storage.deployment.kind | string | `"StatefulSet"` | Only statefulset is supported for Codefresh gitops runtime. Do not change this |
+| garage-workflows-artifact-storage.persistence.data | object | `{"size":"100Mi","storageClass":""}` | Volume that stores artifacts and logs for workflows |
+| garage-workflows-artifact-storage.persistence.data.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
+| garage-workflows-artifact-storage.persistence.meta | object | `{"size":"100Mi","storageClass":""}` | Volume that stores cluster metadata |
+| garage-workflows-artifact-storage.persistence.meta.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
+| garage-workflows-artifact-storage.resources | object | `{}` | Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size. |
 | gitops-operator.affinity | object | `{}` |  |
 | gitops-operator.crds | object | `{"additionalLabels":{},"annotations":{},"install":true,"keep":false}` | Codefresh gitops operator crds |
 | gitops-operator.crds.additionalLabels | object | `{}` | Additional labels for gitops operator CRDs |

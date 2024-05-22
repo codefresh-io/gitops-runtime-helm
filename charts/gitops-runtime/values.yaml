@@ -676,8 +676,8 @@ gitops-operator:
         cpu: 100m
         memory: 64Mi
 # -- Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC)
-garage-workflow-artifacts:
-  fullnameOverride: garage-s3
+garage-workflows-artifact-storage:
+  fullnameOverride: garage
   enabled: false
   deployment:
     # -- Only statefulset is supported for Codefresh gitops runtime. Do not change this
@@ -698,11 +698,5 @@ garage-workflow-artifacts:
       # -- When empty value empty the default storage class for the cluster will be used
       storageClass: ""
       size: 100Mi
+  # -- Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size.
   resources: {}
-  # The following are indicative for a small-size deployement, double for larger deployments
-  # limits:
-  #   cpu: 100m
-  #   memory: 1024Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 512Mi

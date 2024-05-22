@@ -53,6 +53,6 @@ dependencies:
   condition: gitops-operator.enabled
 - name: garage
   repository: https://codefresh-io.github.io/garage
-  alias: garage-workflow-artifacts
+  alias: garage-workflows-artifact-storage
   version: 0.5.0-cf.1
-  condition: garage-workflow-artifacts.enabled && argo-workflows.enabled
+  condition: garage-workflows-artifact-storage.enabled && argo-workflows.enabled
