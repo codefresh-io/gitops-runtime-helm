@@ -14,8 +14,6 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
-    - kind: security
-      description: "Add redis authentication to ArgoCD"
     - kind: changed
       description: "updated codefresh-gitops-operator chart to 1.0.15"
     - kind: changed
