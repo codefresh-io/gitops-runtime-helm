@@ -443,6 +443,8 @@ tunnel-client:
   tunnelServer:
     host: "register-tunnels.cf-cd.com"
     subdomainHost: "tunnels.cf-cd.com"
+  image:
+    repository: quay.io/codefresh/codefresh-tunnel-client
 
 #-----------------------------------------------------------------------------------------------------------------------
 # app-proxy

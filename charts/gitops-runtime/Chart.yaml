@@ -22,7 +22,8 @@ annotations:
       description: garage as optional dependency for Argo workflows artifact and log storage
     - kind: fixed
       description: multiarch image for installer image used in hooks
-
+    - kind: fixed
+      description: multiarch frpc (codefresh-tunnel-client) image
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -43,7 +44,7 @@ dependencies:
   version: 2.14.1
 - name: codefresh-tunnel-client
   repository: oci://quay.io/codefresh/charts
-  version: 0.1.15
+  version: 0.1.16
   alias: tunnel-client
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
