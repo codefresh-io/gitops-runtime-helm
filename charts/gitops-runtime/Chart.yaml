@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.48
+appVersion: 0.1.49
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.7.0
+version: 0.7.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -14,10 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
-    - kind: security
-      description: "Add redis authentication to ArgoCD"
     - kind: changed
-      description: "Updated ArgoCD templates - please note that this version of the ArgoCD templates contains a breaking change for ArgoCD server ingress value structure - runtime ingress is not affected. Only relevant if argo-cd.server.ingress.enabled is true. For the new ingress value structure please see: https://github.com/codefresh-io/argo-helm/blob/f98f2f4d4aca081e7b26cbb1a3fcec138bb3d4ac/charts/argo-cd/values.yaml#L2126-L2329"
+      description: "update codefresh-gitops-operator chart to 1.0.17 to allow missing promotion flow label"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -43,6 +41,6 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 1.0.13
+  version: 1.0.17
   alias: gitops-operator
   condition: gitops-operator.enabled
