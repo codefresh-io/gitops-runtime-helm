@@ -24,6 +24,8 @@ annotations:
       description: multiarch image for installer image used in hooks
     - kind: fixed
       description: multiarch frpc (codefresh-tunnel-client) image
+    - kind: changed
+      description: "update codefresh-gitops-operator chart to 1.0.17 to allow missing promotion flow label"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -49,7 +51,7 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 1.0.16
+  version: 1.0.17
   alias: gitops-operator
   condition: gitops-operator.enabled
 - name: garage
