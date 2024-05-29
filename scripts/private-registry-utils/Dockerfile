@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM python:3.11.3-slim-bullseye
+FROM python:3.11.3-slim-bullseye
 ARG TARGETARCH
 RUN cd /tmp && python3 -c "from urllib.request import urlretrieve; urlretrieve('https://get.helm.sh/helm-v3.12.0-linux-${TARGETARCH}.tar.gz', 'helm-v3.12.0-linux-${TARGETARCH}.tar.gz')"  && tar -xvf helm-v3.12.0-linux-${TARGETARCH}.tar.gz && chmod +x linux-${TARGETARCH}/helm && mv linux-${TARGETARCH}/helm /usr/local/bin/helm && rm -rf /tmp/*
 COPY charts/gitops-runtime /chart
