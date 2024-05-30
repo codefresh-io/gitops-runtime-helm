@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.49
+appVersion: 0.1.50
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.7.1
+version: 0.7.2
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -17,7 +17,7 @@ annotations:
     - kind: changed
       description: "update codefresh-gitops-operator chart to 1.0.17 to allow missing promotion flow label"
     - kind: changed
-      description: "updated cap-app-proxy to 1.2835.0"
+      description: "updated cap-app-proxy to 1.2852.2, including skipping PAT scopes permissions validations for git providers: BitBucket, BitBucket Server and GitLab"
     - kind: added
       description: garage as optional dependency for Argo workflows artifact and log storage
     - kind: fixed
