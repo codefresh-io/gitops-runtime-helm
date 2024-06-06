@@ -46,7 +46,7 @@ tests:
     argo-workflows.enabled: false
   asserts:
   - notMatchRegex:
-      path: data.default\.conf\.template
+      path: data["default.conf.template"]
       pattern: .+/workflows.+
 
 - it: internal router config has workflows route when workflows enabled
@@ -57,7 +57,7 @@ tests:
     argo-workflows.enabled: true
   asserts:
   - matchRegex:
-      path: data.default\.conf\.template
+      path: data["default.conf.template"]
       pattern: .+/workflows.+
 
 - it: test app proxy empty argo workflows url when disabled

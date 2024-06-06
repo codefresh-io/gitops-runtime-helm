@@ -6,6 +6,8 @@ templates:
 tests:
 - it: override both images works
   template: 'charts/gitops-operator/templates/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
   set:
     gitops-operator:
       image:
@@ -195,43 +197,54 @@ tests:
         kind: ClusterRole
         apiVersion: rbac.authorization.k8s.io/v1
         name: codefresh-gitops-operator-proxy
+        any: true
     - containsDocument:
         kind: ClusterRoleBinding
         apiVersion: rbac.authorization.k8s.io/v1
         name: codefresh-gitops-operator-proxy
+        any: true
     - containsDocument:
         kind: ClusterRoleBinding
         apiVersion: rbac.authorization.k8s.io/v1
         name: restrictedgitsource-editor
+        any: true
     - containsDocument:
         kind: ClusterRole
         apiVersion: rbac.authorization.k8s.io/v1
         name: restrictedgitsource-editor
+        any: true
     - containsDocument:
         kind: ClusterRole
         apiVersion: rbac.authorization.k8s.io/v1
         name: restrictedgitsource-viewer
+        any: true
     - containsDocument:
         kind: ClusterRole
         apiVersion: rbac.authorization.k8s.io/v1
         name: codefresh-gitops-operator
+        any: true
     - containsDocument:
         kind: ClusterRoleBinding
         apiVersion: rbac.authorization.k8s.io/v1
         name: codefresh-gitops-operator
+        any: true
     - containsDocument:
         kind: ClusterRoleBinding
         apiVersion: rbac.authorization.k8s.io/v1
         name: restrictedgitsource-viewer
+        any: true
     - containsDocument:
         kind: Role
         apiVersion: rbac.authorization.k8s.io/v1
         name: leader-election
+        any: true
     - containsDocument:
         kind: Role
         apiVersion: rbac.authorization.k8s.io/v1
         name: leader-election
+        any: true
     - containsDocument:
         kind: RoleBinding
         apiVersion: rbac.authorization.k8s.io/v1
         name: leader-election
+        any: true

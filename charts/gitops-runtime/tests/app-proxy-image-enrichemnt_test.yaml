@@ -15,7 +15,7 @@ tests:
     app-proxy.image-enrichment.enabled: true
   asserts:
   - failedTemplate:
-      errorMessage: 'app-proxy.image-enrichment is enabled but argo-workflows is disabled. This is not suppurted. Either disable erichment or enable workflows'
+      errorMessage: 'ERROR: app-proxy.image-enrichment is enabled but argo-workflows is disabled. This is not suppurted. Either disable erichment or enable workflows'
 
 - it: Set correct values in app-proxy configmap
   template: 'app-proxy/config.yaml'
@@ -31,7 +31,7 @@ tests:
     app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds: 1
     app-proxy.image-enrichment.serviceAccount.name: test
     app-proxy.image-enrichment.config.images:
-      reportImage: 
+      reportImage:
         registry: registry.example
         repository: codefresh/report-image
         tag: 1-test-report
@@ -61,19 +61,19 @@ tests:
   - equal:
       path: data.enrichmentTtlActiveInSeconds
       value: "1"
-  - equal: 
+  - equal:
       path: data.enrichmentClientHeartbeatIntervalInSeconds
       value: "1"
-  - equal: 
+  - equal:
       path: data.enrichmentServiceAccountName
       value: test
-  - equal: 
+  - equal:
       path: data.enrichmentImageReportingImage
       value: registry.example/codefresh/report-image:1-test-report
-  - equal: 
+  - equal:
       path: data.enrichmentGitEnrichmentImage
       value: reg.ex/codefresh/git-enrich:1-test-git
-  - equal: 
+  - equal:
       path: data.enrichmentJiraEnrichmentImage
       value: my.reg/codefresh/jira-enrich:1-test-jira
 
@@ -147,7 +147,7 @@ tests:
             name: cap-app-proxy-cm
             key: enrichmentServiceAccountName
             optional: true
-  - contains: 
+  - contains:
       path: spec.template.spec.containers[0].env
       content:
         name: IRW_REPORT_IMAGE_TASK_IMAGE
@@ -156,7 +156,7 @@ tests:
             name: cap-app-proxy-cm
             key: enrichmentImageReportingImage
             optional: true
-  - contains: 
+  - contains:
       path: spec.template.spec.containers[0].env
       content:
         name: IRW_GIT_ENRICHMENT_TASK_IMAGE
@@ -165,7 +165,7 @@ tests:
             name: cap-app-proxy-cm
             key: enrichmentGitEnrichmentImage
             optional: true
-  - contains: 
+  - contains:
       path: spec.template.spec.containers[0].env
       content:
         name: IRW_JIRA_ENRICHMENT_TASK_IMAGE
@@ -202,8 +202,3 @@ tests:
   - equal:
       path: roleRef.name
       value: cap-app-proxy-enrichment
-        
-  
-
-
-  
