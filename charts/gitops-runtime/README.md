@@ -100,14 +100,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2852.2"` |  |
+| app-proxy.image.tag | string | `"1.2867.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2852.2"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2867.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -156,16 +156,6 @@ sealed-secrets:
 | argo-cd.eventReporter.replicas | int | `3` | Amount of shards to handle applications events |
 | argo-cd.eventReporter.version | string | `"v2"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
-| argo-cd.notifications.bots.slack | object | `{}` |  |
-| argo-cd.notifications.enabled | bool | `true` |  |
-| argo-cd.notifications.notifiers."service.webhook.cf-promotion-app-revision-changed-notifier" | string | `"url: http://gitops-operator:8082/app-revision-changed\nheaders:\n- name: Content-Type\n  value: application/json\n"` |  |
-| argo-cd.notifications.subscriptions[0].recipients[0] | string | `"cf-promotion-app-revision-changed-notifier"` |  |
-| argo-cd.notifications.subscriptions[0].triggers[0] | string | `"cf-promotion-on-deployed-trigger"` |  |
-| argo-cd.notifications.subscriptions[1].recipients[0] | string | `"cf-promotion-app-revision-changed-notifier"` |  |
-| argo-cd.notifications.subscriptions[1].triggers[0] | string | `"cf-promotion-on-out-of-sync-trigger"` |  |
-| argo-cd.notifications.templates."template.cf-promotion-app-revision-changed-template" | string | `"webhook:\n  cf-promotion-app-revision-changed-notifier:\n    method: POST\n    body: |\n      {\n        \"APP_NAMESPACE\": {{ .app.metadata.namespace | quote }},\n        \"APP_NAME\": {{ .app.metadata.name | quote }},\n        \"REPO_URL\": {{ call .repo.RepoURLToHTTPS .app.spec.source.repoURL | quote }},\n        \"BRANCH\": {{ .app.spec.source.targetRevision | quote }},\n        \"PATH\": {{ .app.spec.source.path | quote }},\n        \"PREV_COMMIT_SHA\": {{ (index .app.status.history (sub (len .app.status.history) 2)).revision | quote }},\n        \"CURRENT_COMMIT_SHA\": {{ .app.status.operationState.syncResult.revision | quote }}\n      }\n"` |  |
-| argo-cd.notifications.triggers."trigger.cf-promotion-on-deployed-trigger" | string | `"- description: Application is synced and healthy. Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") != nil && app.status.sync.status == \"Synced\" && app.status.health.status == \"Healthy\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - cf-promotion-app-revision-changed-template\n"` |  |
-| argo-cd.notifications.triggers."trigger.cf-promotion-on-out-of-sync-trigger" | string | `"- description: Application is out of sync (when autoHeal is off). Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") == nil && app.status.sync.status == \"OutOfSync\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - cf-promotion-app-revision-changed-template\n"` |  |
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
 | argo-rollouts.controller.replicas | int | `1` |  |
