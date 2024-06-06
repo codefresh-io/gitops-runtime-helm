@@ -15,11 +15,11 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: description: "updated cap-app-proxy to 1.2867.0, including skipping PAT scopes permissions validations for git providers: BitBucket, BitBucket Server and GitLab; new query promotablePropertiesPreview"
-    - kind: changed
       description: "removed promotion-related notifications from argocd-notifications-controller"
     - kind: changed
-      description: "switch gitops operator to library mode - set ArgoCD image for notifications controller to match other ArgoCD components and set correct workflows url from chart values"
+      description: "update gitops operator and switch gitops operator to library mode - set ArgoCD image for notifications controller to match other ArgoCD components and set correct workflows url from chart values"
+    - kind: changed
+      description: "updated cap-app-proxy to 1.2875.0, including skipping PAT scopes permissions validations for git providers: BitBucket, BitBucket Server and GitLab; new query promotablePropertiesPreview"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
