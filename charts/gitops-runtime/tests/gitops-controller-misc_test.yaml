@@ -309,3 +309,32 @@ tests:
       content:
         name: ARGO_WF_URL
         value: http://argo-test-server:2746
+
+- it: contains all resources for notifications controller
+  template: gitops-operator.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    gitops-operator.argoCdNotifications.cm.name: "test-notifications-cm"
+    gitops-operator.argoCdNotifications.secret.name: "test-notifications-secret"
+  asserts:
+    - containsDocument:
+        kind: ConfigMap
+        apiVersion: v1
+        name: test-notifications-cm
+        any: true
+    - containsDocument:
+        kind: Secret
+        apiVersion: v1
+        name: test-notifications-secret
+        any: true
+    - containsDocument:
+        kind: ClusterRole
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: codefresh-gitops-operator-notifications
+        any: true
+    - containsDocument:
+        kind: ClusterRoleBinding
+        apiVersion: rbac.authorization.k8s.io/v1
+        name: codefresh-gitops-operator-notifications
+        any: true
