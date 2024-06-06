@@ -1,16 +1,18 @@
-{{ $gitopsOperatorContext := (index .Subcharts "gitops-operator")}}
-{{/* Set ArgoCD image */}}
-{{- if not (get .Values "gitops-operator.argoCdNotifications.imageOverride") }}
-  {{- $ctx := set $gitopsOperatorContext.Values "argoCdNotifications.image.repository" (get .Values "argo-cd.global.image.repository") }}
-  {{- $ctx := set $gitopsOperatorContext.Values "argoCdNotifications.image.tag" (get .Values "argo-cd.global.image.tag") }}
-{{- end }}
-
-{{/* Set workflows url */}}
-{{- if index (get .Values "argo-workflows") "enabled" }}
-  {{- if not $gitopsOperatorContext.Values.env.ARGO_WF_URL }}
-    {{- $argoWorkflowsUrl := include "codefresh-gitops-runtime.argo-workflows.server.url" . }}
-    {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_WF_URL" $argoWorkflowsUrl }}
+{{- if index (get .Values "gitops-operator") "libraryMode" }}
+  {{- $gitopsOperatorContext := (index .Subcharts "gitops-operator")}}
+  {{/* Set ArgoCD image */}}
+  {{- if not (get .Values "gitops-operator.argoCdNotifications.imageOverride") }}
+    {{- $ctx := set $gitopsOperatorContext.Values "argoCdNotifications.image.repository" (get .Values "argo-cd.global.image.repository") }}
+    {{- $ctx := set $gitopsOperatorContext.Values "argoCdNotifications.image.tag" (get .Values "argo-cd.global.image.tag") }}
   {{- end }}
-{{- end}}
 
-{{- include "gitops-operator.resources" $gitopsOperatorContext}}
+  {{/* Set workflows url */}}
+  {{- if index (get .Values "argo-workflows") "enabled" }}
+    {{- if not $gitopsOperatorContext.Values.env.ARGO_WF_URL }}
+      {{- $argoWorkflowsUrl := include "codefresh-gitops-runtime.argo-workflows.server.url" . }}
+      {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_WF_URL" $argoWorkflowsUrl }}
+    {{- end }}
+  {{- end}}
+
+  {{- include "gitops-operator.resources" $gitopsOperatorContext}}
+{{- end }}

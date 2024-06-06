@@ -563,6 +563,8 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
+  # -- Do not change unless instructed otherwise by Codefresh support
+  libraryMode: true
   enabled: true
   replicaCount: 1
 
