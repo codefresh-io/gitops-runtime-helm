@@ -17,7 +17,7 @@ annotations:
     - kind: changed
       description: "update codefresh-gitops-operator chart to 1.0.19"
     - kind: changed
-      description: "updated cap-app-proxy to 1.2867.0, including skipping PAT scopes permissions validations for git providers: BitBucket, BitBucket Server and GitLab; new query promotablePropertiesPreview"
+      description: "updated cap-app-proxy to 1.2875.0, including skipping PAT scopes permissions validations for git providers: BitBucket, BitBucket Server and GitLab; new query promotablePropertiesPreview"
     - kind: added
       description: garage as optional dependency for Argo workflows artifact and log storage
     - kind: fixed
