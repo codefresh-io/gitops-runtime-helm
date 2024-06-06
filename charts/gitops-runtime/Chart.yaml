@@ -15,15 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: "update codefresh-gitops-operator chart to 1.0.17 to allow missing promotion flow label"
+      description: "removed promotion-related notifications from argocd-notifications-controller"
     - kind: changed
-      description: "updated cap-app-proxy to 1.2867.0, including skipping PAT scopes permissions validations for git providers: BitBucket, BitBucket Server and GitLab; new query promotablePropertiesPreview"
-    - kind: added
-      description: garage as optional dependency for Argo workflows artifact and log storage
-    - kind: fixed
-      description: multiarch image for installer image used in hooks
-    - kind: fixed
-      description: multiarch frpc (codefresh-tunnel-client) image
+      description: "switch gitops operator to library mode - set ArgoCD image for notifications controller to match other ArgoCD components and set correct workflows url from chart values"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
