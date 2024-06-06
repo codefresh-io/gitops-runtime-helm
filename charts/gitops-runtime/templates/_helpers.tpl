@@ -81,6 +81,22 @@ Determine argocd server service name. Must be called with chart root context
 {{- end }}
 
 {{/*
+Determine argocd repo server service name. Must be called with chart root context
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.reposerver.servicename" -}}
+{{/* For now use template from ArgoCD chart until better approach */}}
+{{- template "argo-cd.repoServer.fullname" (dict "Values" (get .Values "argo-cd")) }}
+{{- end }}
+
+{{/*
+Determine argocd argocd repo server port
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.reposerver.serviceport" -}}
+{{/* For now use template from ArgoCD chart until better approach */}}
+  {{- index .Values "argo-cd" "repoServer" "service" "port" }}
+{{- end }}
+
+{{/*
 Determine argocd servicename. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.appcontroller.serviceAccountName" -}}

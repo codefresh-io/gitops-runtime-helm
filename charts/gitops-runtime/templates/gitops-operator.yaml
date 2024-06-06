@@ -1,13 +1,24 @@
 {{- if index (get .Values "gitops-operator") "libraryMode" }}
   {{- $gitopsOperatorContext := (index .Subcharts "gitops-operator")}}
-  {{/* Set ArgoCD image */}}
-  {{- if not (get .Values "gitops-operator.argoCdNotifications.imageOverride") }}
-    {{- $ctx := set $gitopsOperatorContext.Values "argoCdNotifications.image.repository" (get .Values "argo-cd.global.image.repository") }}
-    {{- $ctx := set $gitopsOperatorContext.Values "argoCdNotifications.image.tag" (get .Values "argo-cd.global.image.tag") }}
+  {{- $argoCDImageDict := index .Subcharts "argo-cd" "Values" "global" "image" }}
+  {{- if not $argoCDImageDict.tag }}
+    {{- $_ := set $argoCDImageDict "tag" (get .Subcharts "argo-cd").Chart.AppVersion }}
   {{- end }}
 
+
+  {{/* Set ArgoCD image */}}
+  {{- if not (index .Values "gitops-operator" "argoCdNotifications.imageOverride") }}
+    {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "repository" $argoCDImageDict.repository }}
+    {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "tag" $argoCDImageDict.tag }}
+  {{- end }}
+
+  {{/* Set repo server service and port */}}
+  {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.argocd.repoServer "fullname" (include "codefresh-gitops-runtime.argocd.reposerver.servicename" . ) }}
+  {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.argocd.repoServer "port" (include "codefresh-gitops-runtime.argocd.reposerver.serviceport" . ) }}
+
+
   {{/* Set workflows url */}}
-  {{- if index (get .Values "argo-workflows") "enabled" }}
+  {{- if index .Values "argo-workflows" "enabled" }}
     {{- if not $gitopsOperatorContext.Values.env.ARGO_WF_URL }}
       {{- $argoWorkflowsUrl := include "codefresh-gitops-runtime.argo-workflows.server.url" . }}
       {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_WF_URL" $argoWorkflowsUrl }}
@@ -15,4 +26,5 @@
   {{- end}}
 
   {{- include "gitops-operator.resources" $gitopsOperatorContext}}
+
 {{- end }}

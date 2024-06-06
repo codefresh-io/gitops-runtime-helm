@@ -1,11 +1,13 @@
 suite: misc tests on gitops-operator templates generation
 templates:
-  - charts/gitops-operator/templates/deployment.yaml
-  - charts/gitops-operator/templates/sa.yaml
-  - charts/gitops-operator/templates/rbac.yaml
+  - "gitops-operator.yaml"
+  - charts/gitops-operator/*
 tests:
 - it: override both images works
-  template: 'charts/gitops-operator/templates/deployment.yaml'
+  template: gitops-operator.yaml
+  documentSelector:
+    path: kind
+    value: Deployment
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -26,20 +28,25 @@ tests:
       value: example.com/repo:0.0.1
 
 - it: override service account name - sa object
-  template: 'charts/gitops-operator/templates/sa.yaml'
+  template: gitops-operator.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
     gitops-operator.serviceAccount.name: sa-name
   asserts:
-  - equal:
-      path: metadata.name
-      value: sa-name
+  - containsDocument:
+      kind: ServiceAccount
+      apiVersion: v1
+      name: sa-name
+      any: true
 
 - it: override service account name - deployment
-  template: 'charts/gitops-operator/templates/deployment.yaml'
+  template: 'gitops-operator.yaml'
   values:
   - ./values/mandatory-values.yaml
+  documentSelector:
+    path: kind
+    value: Deployment
   set:
     gitops-operator.serviceAccount.name: sa-name
   asserts:
@@ -48,7 +55,10 @@ tests:
       value: sa-name
 
 - it: overriding of environment variables on main container
-  template: 'charts/gitops-operator/templates/deployment.yaml'
+  template: 'gitops-operator.yaml'
+  documentSelector:
+    path: kind
+    value: Deployment
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -59,8 +69,12 @@ tests:
       content:
         name: PORT
         value: "8787"
+
 - it: adding environment variables on main container
-  template: 'charts/gitops-operator/templates/deployment.yaml'
+  template: 'gitops-operator.yaml'
+  documentSelector:
+    path: kind
+    value: Deployment
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -71,8 +85,12 @@ tests:
       content:
         name: SOME_ENV
         value: test
+
 - it: setting security context on main container
-  template: 'charts/gitops-operator/templates/deployment.yaml'
+  template: 'gitops-operator.yaml'
+  documentSelector:
+    path: kind
+    value: Deployment
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -81,8 +99,12 @@ tests:
   - equal:
       path: spec.template.spec.containers[1].securityContext.runAsUser
       value: 1000
+
 - it: override readiness and liveness probes values
-  template: 'charts/gitops-operator/templates/deployment.yaml'
+  template: 'gitops-operator.yaml'
+  documentSelector:
+    path: kind
+    value: Deployment
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -127,8 +149,12 @@ tests:
   - equal:
       path: spec.template.spec.containers[1].livenessProbe.failureThreshold
       value: 1
+
 - it: setting node selector
-  template: 'charts/gitops-operator/templates/deployment.yaml'
+  template: 'gitops-operator.yaml'
+  documentSelector:
+    path: kind
+    value: Deployment
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -141,7 +167,10 @@ tests:
         test.io/node: "test"
 
 - it: setting tolerations
-  template: 'charts/gitops-operator/templates/deployment.yaml'
+  template: 'gitops-operator.yaml'
+  documentSelector:
+    path: kind
+    value: Deployment
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -160,7 +189,10 @@ tests:
         effect: "NoSchedule"
 
 - it: setting affinity
-  template: 'charts/gitops-operator/templates/deployment.yaml'
+  template: 'gitops-operator.yaml'
+  documentSelector:
+    path: kind
+    value: Deployment
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -189,7 +221,7 @@ tests:
                 - antarctica-west1
 
 - it: contains all expected roles and role bindings
-  template: charts/gitops-operator/templates/rbac.yaml
+  template: gitops-operator.yaml
   values:
   - ./values/mandatory-values.yaml
   asserts:
@@ -248,3 +280,32 @@ tests:
         apiVersion: rbac.authorization.k8s.io/v1
         name: leader-election
         any: true
+
+- it: argocd and workflows overrides for notifications controller
+  template: gitops-operator.yaml
+  documentSelector:
+    path: kind
+    value: Deployment
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-cd.global.image:
+      repository: "argocd/test"
+      tag: "test"
+    argo-cd.fullnameOverride: myargocd
+    argo-cd.repoServer.service.port: 9080
+    argo-workflows.enabled: true
+    argo-workflows.fullnameOverride: argo-test
+    argo-workflows.server.secure: false
+  asserts:
+  - equal:
+      path: spec.template.spec.containers[2].image
+      value: argocd/test:test
+  - contains:
+      path: spec.template.spec.containers[2].args
+      content: --argocd-repo-server=myargocd-repo-server:9080
+  - contains:
+      path: spec.template.spec.containers[1].env
+      content:
+        name: ARGO_WF_URL
+        value: http://argo-test-server:2746
