@@ -1,4 +1,4 @@
-# Test components that depend on templates from Argo projects. 
+# Test components that depend on templates from Argo projects.
 # This is extremely important since currently templates are used that may change between versions of Argo charts.
 suite: Test integration of outputs from Argo Project templates with components that use them in the runtime chart
 templates:
@@ -8,9 +8,9 @@ templates:
   - internal-router/config.yaml
   - event-reporters/events-reporter/eventsource.yaml
   - event-reporters/rollout-reporter/clusterrolebinding.yaml
-tests: 
+tests:
 # ------------------------------------------------------------------------
-# ArgoCD 
+# ArgoCD
 # Affected templates: app-proxy configmap and events-reporter eventsource
 # ------------------------------------------------------------------------
 - it: test app proxy argocd url - http
@@ -61,7 +61,7 @@ tests:
       path: spec.generic.events.url
       value: argo-cd-test-server:443
 # ------------------------------------------------------------------------------------------
-# Argo Workflows 
+# Argo Workflows
 # Affected templates: app-proxy ClusterRoleBinding to argo-server role, intenal-url config
 # ------------------------------------------------------------------------------------------
 - it: test app proxy ClusterRoleBinding to argo workflows role
@@ -87,7 +87,7 @@ tests:
     argo-workflows.server.secure: true
   asserts:
   - matchRegex:
-      path: data.default\.conf\.template
+      path: data["default.conf.template"]
       pattern: .proxy_pass https://argo-test-server:2746+
 
 - it: check worklfow route users argo-workflows server name and protocol http
@@ -101,7 +101,7 @@ tests:
     argo-workflows.server.secure: false
   asserts:
   - matchRegex:
-      path: data.default\.conf\.template
+      path: data["default.conf.template"]
       pattern: .proxy_pass http://argo-test-server:2746+
 
 - it: test app proxy argocd workflows url - http
@@ -130,7 +130,7 @@ tests:
       path: data.argoWorkflowsUrl
       value: https://argo-test-server:2746
 # ------------------------------------------------------------------------------------------
-# Argo rollouts 
+# Argo rollouts
 # Affected templates - rollouts reporter clusterrolebinding
 # ------------------------------------------------------------------------------------------
 - it: test rollout reporter ClusterRoleBinding to argo rollouts role

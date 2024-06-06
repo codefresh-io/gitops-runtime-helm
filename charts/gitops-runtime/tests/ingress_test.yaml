@@ -53,7 +53,7 @@ tests:
     tunnel-client.enabled: false
   asserts:
     - failedTemplate:
-        errorMessage: When global.runtime.ingress.enabled is false and tunnel-client.enabled is false -  global.runtime.ingressUrl must be provided
+        errorMessage: "ERROR: When global.runtime.ingress.enabled is false and tunnel-client.enabled is false -  global.runtime.ingressUrl must be provided"
 
 - it: fail on ingressUrl that is not http or https
   template: templates/codefresh-cm.yaml
@@ -65,7 +65,7 @@ tests:
     global.runtime.ingressUrl: test.test.fail
   asserts:
     - failedTemplate:
-        errorMessage: Only http and https are supported for global.runtime.ingressUrl
+        errorMessage: "ERROR: Only http and https are supported for global.runtime.ingressUrl"
 
 - it: codefresh-cm ingressHost is set correctly when ingress enabled
   template: templates/codefresh-cm.yaml
