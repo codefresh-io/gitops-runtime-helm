@@ -563,6 +563,8 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
+  # -- Do not change unless instructed otherwise by Codefresh support
+  libraryMode: true
   enabled: true
   replicaCount: 1
 
@@ -587,6 +589,15 @@ gitops-operator:
     create: true
     annotations: {}
     name: "gitops-operator-controller-manager"
+
+  # -- Builtin notifications controller used by gitops-operator for promotion related notifications
+  argoCdNotifications:
+    # -- If set to true allows to override notifications image used by the gitops operator. When set to false the version of ArgoCD will be set to the version used for all other ArgoCD components.
+    imageOverride: false
+    # -- Set image.repository and image.tag notifications image used by the gitops operator. Ignored unless imageOverride is set to true.
+    image: {}
+    # -- Resources for notifications controller used by gitops-operator.
+    resources: {}
 
   imagePullSecrets: []
   nameOverride: ""
@@ -626,7 +637,9 @@ gitops-operator:
       requests:
         cpu: 100m
         memory: 64Mi
-
+#-----------------------------------------------------------------------------------------------------------------------
+# Garage
+#-----------------------------------------------------------------------------------------------------------------------
 # -- Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC)
 garage-workflows-artifact-storage:
   fullnameOverride: garage

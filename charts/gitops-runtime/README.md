@@ -231,6 +231,10 @@ sealed-secrets:
 | garage-workflows-artifact-storage.persistence.meta.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
 | garage-workflows-artifact-storage.resources | object | `{}` | Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size. |
 | gitops-operator.affinity | object | `{}` |  |
+| gitops-operator.argoCdNotifications | object | `{"image":{},"imageOverride":false,"resources":{}}` | Builtin notifications controller used by gitops-operator for promotion related notifications |
+| gitops-operator.argoCdNotifications.image | object | `{}` | Set image.repository and image.tag notifications image used by the gitops operator. Ignored unless imageOverride is set to true. |
+| gitops-operator.argoCdNotifications.imageOverride | bool | `false` | If set to true allows to override notifications image used by the gitops operator. When set to false the version of ArgoCD will be set to the version used for all other ArgoCD components. |
+| gitops-operator.argoCdNotifications.resources | object | `{}` | Resources for notifications controller used by gitops-operator. |
 | gitops-operator.crds | object | `{"additionalLabels":{},"annotations":{},"install":true,"keep":false}` | Codefresh gitops operator crds |
 | gitops-operator.crds.additionalLabels | object | `{}` | Additional labels for gitops operator CRDs |
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
@@ -248,6 +252,7 @@ sealed-secrets:
 | gitops-operator.kube-rbac-proxy.resources.requests.memory | string | `"64Mi"` |  |
 | gitops-operator.kube-rbac-proxy.securityContext.allowPrivilegeEscalation | bool | `false` |  |
 | gitops-operator.kube-rbac-proxy.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| gitops-operator.libraryMode | bool | `true` | Do not change unless instructed otherwise by Codefresh support |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
 | gitops-operator.podAnnotations | object | `{}` |  |

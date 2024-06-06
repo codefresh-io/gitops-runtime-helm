@@ -379,7 +379,7 @@ tests:
   values:
   - ./values/mandatory-values.yaml
   asserts:
-  - isEmpty:
+  - notExists:
       path: spec.triggers[0].template.http.tls
 
 - it: rollout reporter sensor - no tls
@@ -387,7 +387,7 @@ tests:
   values:
   - ./values/mandatory-values.yaml
   asserts:
-  - isEmpty:
+  - notExists:
       path: spec.triggers[0].template.http.tls
 
 - it: workflow reporter sensor - no tls
@@ -395,9 +395,8 @@ tests:
   values:
   - ./values/mandatory-values.yaml
   asserts:
-  - isEmpty:
+  - notExists:
       path: spec.triggers[0].template.http.tls
-
 # --------------------------------------------------------
 # workflowPipelinesGitWebhooks
 # --------------------------------------------------------
