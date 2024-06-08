@@ -20,6 +20,8 @@ annotations:
       description: "update gitops operator and switch gitops operator to library mode - set ArgoCD image for notifications controller to match other ArgoCD components and set correct workflows url from chart values"
     - kind: changed
       description: "updated cap-app-proxy to 1.2875.0, including skipping PAT scopes permissions validations for git providers: BitBucket, BitBucket Server and GitLab; new query promotablePropertiesPreview"
+    - kind: security
+      description: "update tunnel client image to a new in-support alpine version"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
@@ -40,7 +42,7 @@ dependencies:
   version: 2.14.1
 - name: codefresh-tunnel-client
   repository: oci://quay.io/codefresh/charts
-  version: 0.1.16
+  version: 0.1.17
   alias: tunnel-client
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
