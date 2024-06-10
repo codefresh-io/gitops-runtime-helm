@@ -17,7 +17,7 @@ annotations:
     - kind: changed
       description: "removed promotion-related notifications from argocd-notifications-controller"
     - kind: changed
-      description: "update gitops operator and switch gitops operator to library mode - set ArgoCD image for notifications controller to match other ArgoCD components and set correct workflows url from chart values"
+      description: "update gitops operator and switch gitops operator to library mode - set ArgoCD image for notifications controller to match other ArgoCD components and set correct workflows url from chart values, and top suspend workflow wrappers in case of degraded apps"
     - kind: changed
       description: "updated cap-app-proxy to 1.2875.0, including skipping PAT scopes permissions validations for git providers: BitBucket, BitBucket Server and GitLab; new query promotablePropertiesPreview"
     - kind: security
