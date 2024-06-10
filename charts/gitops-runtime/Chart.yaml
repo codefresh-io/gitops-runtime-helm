@@ -17,7 +17,7 @@ annotations:
     - kind: changed
       description: "removed promotion-related notifications from argocd-notifications-controller"
     - kind: changed
-      description: "update gitops operator and switch gitops operator to library mode - set ArgoCD image for notifications controller to match other ArgoCD components and set correct workflows url from chart values"
+      description: "update gitops operator and switch gitops operator to library mode - set ArgoCD image for notifications controller to match other ArgoCD components and set correct workflows url from chart values, and top suspend workflow wrappers in case of degraded apps"
     - kind: changed
       description: "updated cap-app-proxy to 1.2875.0, including skipping PAT scopes permissions validations for git providers: BitBucket, BitBucket Server and GitLab; new query promotablePropertiesPreview"
     - kind: security
@@ -47,7 +47,7 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 1.0.21
+  version: 1.0.22
   alias: gitops-operator
   condition: gitops-operator.enabled
 - name: garage
