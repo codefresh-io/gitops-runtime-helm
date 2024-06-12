@@ -26,7 +26,7 @@ annotations:
       description: multiarch frpc (codefresh-tunnel-client) image
 dependencies:
 - name: argo-cd
-  repository: https://codefresh-io.github.io/argo-helm
+  repository: oci://quay.io/codefresh/charts/dev
   version: 6.7.18-3-cap-2.10-2024.5.14-9315e75e1
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
