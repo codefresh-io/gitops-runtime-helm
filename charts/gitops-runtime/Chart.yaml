@@ -22,10 +22,12 @@ annotations:
       description: "updated cap-app-proxy to 1.2875.0, including skipping PAT scopes permissions validations for git providers: BitBucket, BitBucket Server and GitLab; new query promotablePropertiesPreview"
     - kind: security
       description: "update tunnel client image to a new in-support alpine version"
+    - kind: changed
+      description: "update argo-cd to 6.7.18-4-cap-2.10-2024.6.17-77e06d0f6 with v2 event-reporter support of CA cert"
 dependencies:
 - name: argo-cd
-  repository: oci://quay.io/codefresh/charts/dev
-  version: 6.7.18-3-cap-2.10-2024.5.14-9315e75e1
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 6.7.18-4-cap-2.10-2024.6.17-77e06d0f6
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
