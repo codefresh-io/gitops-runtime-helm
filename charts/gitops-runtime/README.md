@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![AppVersion: 0.1.49](https://img.shields.io/badge/AppVersion-0.1.49-informational?style=flat-square)
+![Version: 0.7.2](https://img.shields.io/badge/Version-0.7.2-informational?style=flat-square) ![AppVersion: 0.1.50](https://img.shields.io/badge/AppVersion-0.1.50-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.7.1 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.7.2 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -100,14 +100,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2835.0"` |  |
+| app-proxy.image.tag | string | `"1.2875.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2835.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2875.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -156,16 +156,6 @@ sealed-secrets:
 | argo-cd.eventReporter.replicas | int | `3` | Amount of shards to handle applications events |
 | argo-cd.eventReporter.version | string | `"v2"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
-| argo-cd.notifications.bots.slack | object | `{}` |  |
-| argo-cd.notifications.enabled | bool | `true` |  |
-| argo-cd.notifications.notifiers."service.webhook.cf-promotion-app-revision-changed-notifier" | string | `"url: http://gitops-operator:8082/app-revision-changed\nheaders:\n- name: Content-Type\n  value: application/json\n"` |  |
-| argo-cd.notifications.subscriptions[0].recipients[0] | string | `"cf-promotion-app-revision-changed-notifier"` |  |
-| argo-cd.notifications.subscriptions[0].triggers[0] | string | `"cf-promotion-on-deployed-trigger"` |  |
-| argo-cd.notifications.subscriptions[1].recipients[0] | string | `"cf-promotion-app-revision-changed-notifier"` |  |
-| argo-cd.notifications.subscriptions[1].triggers[0] | string | `"cf-promotion-on-out-of-sync-trigger"` |  |
-| argo-cd.notifications.templates."template.cf-promotion-app-revision-changed-template" | string | `"webhook:\n  cf-promotion-app-revision-changed-notifier:\n    method: POST\n    body: |\n      {\n        \"APP_NAMESPACE\": {{ .app.metadata.namespace | quote }},\n        \"APP_NAME\": {{ .app.metadata.name | quote }},\n        \"REPO_URL\": {{ call .repo.RepoURLToHTTPS .app.spec.source.repoURL | quote }},\n        \"BRANCH\": {{ .app.spec.source.targetRevision | quote }},\n        \"PATH\": {{ .app.spec.source.path | quote }},\n        \"PREV_COMMIT_SHA\": {{ (index .app.status.history (sub (len .app.status.history) 2)).revision | quote }},\n        \"CURRENT_COMMIT_SHA\": {{ .app.status.operationState.syncResult.revision | quote }}\n      }\n"` |  |
-| argo-cd.notifications.triggers."trigger.cf-promotion-on-deployed-trigger" | string | `"- description: Application is synced and healthy. Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") != nil && app.status.sync.status == \"Synced\" && app.status.health.status == \"Healthy\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - cf-promotion-app-revision-changed-template\n"` |  |
-| argo-cd.notifications.triggers."trigger.cf-promotion-on-out-of-sync-trigger" | string | `"- description: Application is out of sync (when autoHeal is off). Triggered once per commit.\n  when: get(app.spec.syncPolicy, \"automated\") == nil && app.status.sync.status == \"OutOfSync\" && app.status.operationState.syncResult.revision != nil\n  oncePer: app.status.operationState.syncResult.revision\n  send:\n  - cf-promotion-app-revision-changed-template\n"` |  |
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
 | argo-rollouts.controller.replicas | int | `1` |  |
@@ -241,6 +231,10 @@ sealed-secrets:
 | garage-workflows-artifact-storage.persistence.meta.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
 | garage-workflows-artifact-storage.resources | object | `{}` | Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size. |
 | gitops-operator.affinity | object | `{}` |  |
+| gitops-operator.argoCdNotifications | object | `{"image":{},"imageOverride":false,"resources":{}}` | Builtin notifications controller used by gitops-operator for promotion related notifications |
+| gitops-operator.argoCdNotifications.image | object | `{}` | Set image.repository and image.tag notifications image used by the gitops operator. Ignored unless imageOverride is set to true. |
+| gitops-operator.argoCdNotifications.imageOverride | bool | `false` | If set to true allows to override notifications image used by the gitops operator. When set to false the version of ArgoCD will be set to the version used for all other ArgoCD components. |
+| gitops-operator.argoCdNotifications.resources | object | `{}` | Resources for notifications controller used by gitops-operator. |
 | gitops-operator.crds | object | `{"additionalLabels":{},"annotations":{},"install":true,"keep":false}` | Codefresh gitops operator crds |
 | gitops-operator.crds.additionalLabels | object | `{}` | Additional labels for gitops operator CRDs |
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
@@ -258,6 +252,7 @@ sealed-secrets:
 | gitops-operator.kube-rbac-proxy.resources.requests.memory | string | `"64Mi"` |  |
 | gitops-operator.kube-rbac-proxy.securityContext.allowPrivilegeEscalation | bool | `false` |  |
 | gitops-operator.kube-rbac-proxy.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| gitops-operator.libraryMode | bool | `true` | Do not change unless instructed otherwise by Codefresh support |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
 | gitops-operator.podAnnotations | object | `{}` |  |

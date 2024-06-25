@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.49
+appVersion: 0.1.50
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.7.1
+version: 0.7.2
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,19 +15,19 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: "update codefresh-gitops-operator chart to 1.0.17 to allow missing promotion flow label"
+      description: "removed promotion-related notifications from argocd-notifications-controller"
     - kind: changed
-      description: "updated cap-app-proxy to 1.2835.0"
-    - kind: added
-      description: garage as optional dependency for Argo workflows artifact and log storage
-    - kind: fixed
-      description: multiarch image for installer image used in hooks
-    - kind: fixed
-      description: multiarch frpc (codefresh-tunnel-client) image
+      description: "update gitops operator and switch gitops operator to library mode - set ArgoCD image for notifications controller to match other ArgoCD components and set correct workflows url from chart values, stop suspend workflow wrappers in case of degraded apps, and add omitted condition to wrapper workflow"
+    - kind: changed
+      description: "updated cap-app-proxy to 1.2875.0, including skipping PAT scopes permissions validations for git providers: BitBucket, BitBucket Server and GitLab; new query promotablePropertiesPreview"
+    - kind: security
+      description: "update tunnel client image to a new in-support alpine version"
+    - kind: changed
+      description: "update argo-cd to 6.7.18-4-cap-2.10-2024.6.17-77e06d0f6 with v2 event-reporter support of CA cert"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 6.7.18-3-cap-2.10-2024.5.14-9315e75e1
+  version: 6.7.18-4-cap-2.10-2024.6.17-77e06d0f6
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
@@ -44,12 +44,12 @@ dependencies:
   version: 2.14.1
 - name: codefresh-tunnel-client
   repository: oci://quay.io/codefresh/charts
-  version: 0.1.16
+  version: 0.1.17
   alias: tunnel-client
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 1.0.17
+  version: 1.0.24
   alias: gitops-operator
   condition: gitops-operator.enabled
 - name: garage
