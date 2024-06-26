@@ -18,7 +18,7 @@ annotations:
       description: "update argo-cd 2.11 on helm chart 6.11.1"
 dependencies:
 - name: argo-cd
-  repository: oci://quay.io/codefresh/charts/dev
+  repository: https://codefresh-io.github.io/argo-helm
   version: 6.11.1-0-cap-2.11-2024.6.18-a171b066e
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
