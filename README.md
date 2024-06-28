@@ -14,6 +14,8 @@ run
 ```shell
 kubectl logs jobs/validate-values -n ${NAMESPACE}
 ```
-(use your selected namespace)  
+(use your selected namespace)
 the output should help find the error in the values file.
 in order to install while skipping the values validation, install with `--set installer.skipValidation="true"` (or set it in values file)
+
+# Test feature flow
