@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.7.2](https://img.shields.io/badge/Version-0.7.2-informational?style=flat-square) ![AppVersion: 0.1.50](https://img.shields.io/badge/AppVersion-0.1.50-informational?style=flat-square)
+![Version: 0.7.3](https://img.shields.io/badge/Version-0.7.3-informational?style=flat-square) ![AppVersion: 0.1.51](https://img.shields.io/badge/AppVersion-0.1.51-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.7.2 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.7.3 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
