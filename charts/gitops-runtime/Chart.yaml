@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.51
+appVersion: 0.1.52
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.8.0
+version: 0.8.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -17,11 +17,11 @@ annotations:
     - kind: changed
       description: "update gitops operator: automated release helm chart and image, restart from failed step and publish error in resume/retry to codefresh platform"
     - kind: changed
-      description: "update argo-cd 2.11 on helm chart 6.11.1"
+      description: "update argo-cd to 6.11.1-1-cap-2.11-2024.6.26-5cebdff8d with fix for app metadata change event reporting"
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 6.11.1-0-cap-2.11-2024.6.18-a171b066e
+  version: 6.11.1-1-cap-2.11-2024.6.26-5cebdff8d
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
