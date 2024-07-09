@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |
     - kind: changed
-      description: "update gitops operator: automated release helm chart and image, restart from failed step and publish error in resume/retry to codefresh platform, security fixes"
+      description: "update gitops operator: automated release helm chart and image, restart from failed step and publish error in resume/retry to codefresh platform,  security fixes"
     - kind: changed
       description: "update argo-cd to 6.11.1-3-cap-2.11-2024.7.3-c0941bcb4 with fixes: 1) app metadata change event reporting; 2) report application event from queue instead of requesting live state"
 dependencies:
