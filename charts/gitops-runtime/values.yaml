@@ -317,6 +317,9 @@ internal-router:
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
+  # -- For ipv6 enabled clusters switch ipv6 enabled to true
+  ipv6:
+    enabled: false
   serviceAccount:
     create: true
     annotations: {}
