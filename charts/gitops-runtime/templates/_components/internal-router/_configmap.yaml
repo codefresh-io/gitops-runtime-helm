@@ -7,7 +7,9 @@ data:
   default.conf.template: |
     server {
       listen 8080;
+      {{- if .Values.ipv6.enabled }}
       listen [::]:8080 default_server;
+      {{- end }}
       access_log /dev/stdout main;
       error_log /dev/stdout;
       port_in_redirect off;
