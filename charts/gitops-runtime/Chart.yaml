@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - type: security
-      description: ArgoCD webhook processing
+      description: vulnerability fixes in ArgoCD webhook processing
     - type: security
       description: gitops-operator update with critical and high vulnerabilities fixes
     - type: fixed
