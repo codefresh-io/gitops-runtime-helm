@@ -13,7 +13,6 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
-  artifacthub.io/changes: ""
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
