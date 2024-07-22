@@ -17,7 +17,7 @@ annotations:
 dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
-  version: 6.11.1-4-cap-2.11-2024.7.3-c0941bcb4
+  version: 6.11.1-5-cap-2.11-2024.7.20-8eb51f7a6
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.0.9-1-cap-CR-19893
