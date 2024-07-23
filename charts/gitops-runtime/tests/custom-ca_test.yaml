@@ -8,6 +8,8 @@ templates:
   - event-reporters/events-reporter/sensor.yaml
   - event-reporters/rollout-reporter/sensor.yaml
   - hooks/pre-uninstall/delete-runtime-from-platform.yaml
+  - "gitops-operator.yaml"
+  - charts/gitops-operator/*
 tests:
 
 - it: test chart created secret contents - default secret key
@@ -441,3 +443,64 @@ tests:
             -----BEGIN CERTIFICATE-----
             override
             -----END CERTIFICATE-----
+
+- it: gitops operator chart created secret
+  template: gitops-operator.yaml
+  documentSelector:
+    path: kind
+    value: Deployment
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secret.annotations.test: 'test'
+    global.codefresh.tls.caCerts.secret.create: true
+    global.codefresh.tls.caCerts.secret.key: my-key
+    global.codefresh.tls.caCerts.secret.content: |
+      -----BEGIN CERTIFICATE-----
+      ... encoded certificate data here ...
+      -----END CERTIFICATE-----
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[1].env
+      content:
+        name: CF_CA_CERT
+        value: /app/config/codefresh-tls/my-key
+  - contains:
+      path: spec.template.spec.containers[1].volumeMounts
+      content:
+        name: codefresh-tls
+        mountPath: /app/config/codefresh-tls
+  - contains:
+      path: spec.template.spec.volumes
+      content:
+        name: codefresh-tls
+        secret:
+          secretName: codefresh-tls-certs
+
+- it: gitops operator existing secret
+  template: gitops-operator.yaml
+  documentSelector:
+    path: kind
+    value: Deployment
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.tls.caCerts.secretKeyRef.name: my-tls
+    global.codefresh.tls.caCerts.secretKeyRef.key: my-key
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[1].env
+      content:
+        name: CF_CA_CERT
+        value: /app/config/codefresh-tls/my-key
+  - contains:
+      path: spec.template.spec.containers[1].volumeMounts
+      content:
+        name: codefresh-tls
+        mountPath: /app/config/codefresh-tls
+  - contains:
+      path: spec.template.spec.volumes
+      content:
+        name: codefresh-tls
+        secret:
+          secretName: my-tls
