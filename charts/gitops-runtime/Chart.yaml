@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.53
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.9.1
+version: 0.9.0
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -22,8 +22,6 @@ annotations:
       description: ArgoCD event reporter servicemonitor selector lables
     - type: changed
       description: disable ipv6 by default in internal router
-    - type: changed
-      description: support self heal for monorepo in argocd
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
