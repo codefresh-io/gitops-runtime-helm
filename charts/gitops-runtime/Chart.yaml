@@ -22,10 +22,12 @@ annotations:
       description: ArgoCD event reporter servicemonitor selector lables
     - type: changed
       description: disable ipv6 by default in internal router
+    - type: changed
+      description: support self heal for monorepo in argocd
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
-    version: 6.11.1-5-cap-2.11-2024.7.20-8eb51f7a6
+    version: 6.11.1-5-cap-2.11-2024.7.30-a31bf96bb
   - name: argo-events
     repository: https://codefresh-io.github.io/argo-helm
     version: 2.0.9-1-cap-CR-19893
