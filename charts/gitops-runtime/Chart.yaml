@@ -22,7 +22,7 @@ dependencies:
   version: 2.4.7-1-cap-CR-24607
 - name: argo-workflows
   repository: https://codefresh-io.github.io/argo-helm
-  version: 0.41.11-v3.5.8-cap-CR-22608
+  version: 0.41.12-v3.5.9-cap-CR-24929
   condition: argo-workflows.enabled
 - name: argo-rollouts
   repository: https://codefresh-io.github.io/argo-helm
