@@ -15,6 +15,10 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: update app-proxy (#257)
+    - kind: changed
+      description: create release 0.10 draft
+    - kind: changed
       description: update app-proxy to `1.2963.0` (#263)
     - kind: changed
       description: update argo-workflows chart to `0.41.12-v3.5.9-cap-CR-24929` (#262)
@@ -30,6 +34,10 @@ annotations:
       description: 'patch: gitops operator - improve error handling and prevent changes to promotions notifications configuration (#251)'
     - kind: changed
       description: gitops operator custom tls injection (#250)
+    - kind: changed
+      description: update app-proxy to `1.2946.0` (#247)
+    - kind: changed
+      description: update argo-workflows chart to `0.41.11-v3.5.8-cap-CR-22608` (#246) (#249)
     - kind: changed
       description: Remove artifacthub changelog - will be added by prepare release script
     - kind: changed
