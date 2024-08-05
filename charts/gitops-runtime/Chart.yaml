@@ -15,6 +15,10 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: update init container version (#264)
+    - kind: changed
+      description: update release 0.10 draft
+    - kind: changed
       description: update app-proxy (#257)
     - kind: changed
       description: create release 0.10 draft
