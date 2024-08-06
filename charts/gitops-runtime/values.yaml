@@ -403,6 +403,7 @@ tunnel-client:
 #-----------------------------------------------------------------------------------------------------------------------
 app-proxy:
   replicaCount: 1
+  singleNamespace: false
   # -- Image enrichment process configuration
   image-enrichment:
     # -- Enable or disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.
@@ -582,6 +583,7 @@ gitops-operator:
     # -- Additional labels for gitops operator CRDs
     additionalLabels: {}
 
+  singleNamespace: false
   env: {}
   image: {}
     # -- defaults
