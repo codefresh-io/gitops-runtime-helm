@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.9.2](https://img.shields.io/badge/Version-0.9.2-informational?style=flat-square) ![AppVersion: 0.1.55](https://img.shields.io/badge/AppVersion-0.1.55-informational?style=flat-square)
+![Version: 0.9.2](https://img.shields.io/badge/Version-0.9.2-informational?style=flat-square) ![AppVersion: 0.1.54](https://img.shields.io/badge/AppVersion-0.1.54-informational?style=flat-square)
 
 ## Prerequisites
 
