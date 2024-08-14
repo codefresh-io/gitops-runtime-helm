@@ -38,7 +38,7 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 0.2.5
+  version: 0.2.9
   alias: gitops-operator
   condition: gitops-operator.enabled
 - name: garage
