@@ -6,7 +6,6 @@ templates:
   - app-proxy/workflows-crb.yaml
   - app-proxy/config.yaml
   - internal-router/config.yaml
-  - event-reporters/events-reporter/eventsource.yaml
   - event-reporters/rollout-reporter/clusterrolebinding.yaml
 tests:
 # ------------------------------------------------------------------------
@@ -37,29 +36,6 @@ tests:
       path: data.argoCdUrl
       value: https://argo-cd-test-server:443
 
-- it: events reporter eventsource argocd url - http
-  template: 'event-reporters/events-reporter/eventsource.yaml'
-  values:
-  - ./values/mandatory-values.yaml
-  set:
-    argo-cd.fullnameOverride: argo-cd-test
-    argo-cd.configs.params.server\.insecure: true
-  asserts:
-  - equal:
-      path: spec.generic.events.url
-      value: argo-cd-test-server:80
-
-- it: events reporter eventsource argocd url - http
-  template: 'event-reporters/events-reporter/eventsource.yaml'
-  values:
-  - ./values/mandatory-values.yaml
-  set:
-    argo-cd.fullnameOverride: argo-cd-test
-    argo-cd.configs.params.server\.insecure: false
-  asserts:
-  - equal:
-      path: spec.generic.events.url
-      value: argo-cd-test-server:443
 # ------------------------------------------------------------------------------------------
 # Argo Workflows
 # Affected templates: app-proxy ClusterRoleBinding to argo-server role, intenal-url config
