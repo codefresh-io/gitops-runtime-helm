@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.53
+appVersion: 0.1.54
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.10.0
+version: 0.10.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -14,46 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: changed
-      description: fix - support non default ArgoCD server host in event reporter
-    - kind: changed
-      description: update release 0.10 draft
-    - kind: changed
-      description: update init container version (#264)
-    - kind: changed
-      description: update release 0.10 draft
-    - kind: changed
-      description: update app-proxy (#257)
-    - kind: changed
-      description: create release 0.10 draft
-    - kind: changed
-      description: update app-proxy to `1.2963.0` (#263)
-    - kind: changed
-      description: update argo-workflows chart to `0.41.12-v3.5.9-cap-CR-24929` (#262)
-    - kind: changed
-      description: 'feat: add commit info in tasks (#259)'
-    - kind: changed
-      description: 'fix: selfheal monorepo support (#258)'
-    - kind: changed
-      description: update rollouts (#256)
-    - kind: changed
-      description: ' Feat: update argo-events chart to 2.4.7-1-cap-CR-24607  (#253)'
-    - kind: changed
-      description: 'patch: gitops operator - improve error handling and prevent changes to promotions notifications configuration (#251)'
-    - kind: changed
-      description: gitops operator custom tls injection (#250)
-    - kind: changed
-      description: update app-proxy to `1.2946.0` (#247)
-    - kind: changed
-      description: update argo-workflows chart to `0.41.11-v3.5.8-cap-CR-22608` (#246) (#249)
-    - kind: changed
-      description: Remove artifacthub changelog - will be added by prepare release script
-    - kind: changed
-      description: Patch - security ArgoCD webhook processing
-    - kind: changed
-      description: 'feat: gitops-operator update with critical and high vuln fixes (#244)'
-    - kind: changed
-      description: fix - ArgoCD event reporter servicemonitor selector lables (#241)
+    - kind: fixed
+      description: 'update codefresh-gitops-operator to `0.2.9` - fix trigerring promotion from git commit'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
