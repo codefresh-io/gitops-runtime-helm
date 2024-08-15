@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
 dependencies:
 - name: argo-cd
-  repository: quay.io/codefresh/charts/dev/argo-cd
+  repository: oci://quay.io/codefresh/charts/dev
   version: 6.11.1-6-cap-2.11-v1-reporter-removed-0
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
