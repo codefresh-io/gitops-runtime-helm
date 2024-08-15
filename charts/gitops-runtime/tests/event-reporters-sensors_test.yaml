@@ -4,25 +4,6 @@ templates:
   - event-reporters/events-reporter/sensor.yaml
   - event-reporters/rollout-reporter/sensor.yaml
 tests:
-  - it: Setting api/events url works - events reporter
-    template: 'event-reporters/events-reporter/sensor.yaml'
-    values:
-    - './values/mandatory-values.yaml'
-    set:
-      global.codefresh.url: "https://my.platform"
-      global.codefresh.apiEventsPath: "/api-events"
-      event-reporters.events.sensor:
-        replicas: 1
-        resources: {}
-        env: {}
-        tolerations: []
-        nodeSelector: {}
-        affinity: {}
-    asserts:
-    - equal:
-        path: spec.triggers[0].template.http.url
-        value: https://my.platform/api-events
-  
   - it: Setting api/events url works - workflow reporter
     template: 'event-reporters/workflow-reporter/sensor.yaml'
     values:
@@ -52,60 +33,6 @@ tests:
     - equal:
         path: spec.triggers[2].template.http.url
         value: https://my.platform/api-events
-  
-  - it: Setting various container specs - events reporter
-    template: 'event-reporters/events-reporter/sensor.yaml'
-    values:
-    - './values/mandatory-values.yaml'
-    set:
-      event-reporters.events.sensor:
-        replicas: 2
-        resources:
-          requests:
-            memory: 1Gi
-        env:
-          DEBUG_LOG: "true"
-        tolerations:
-        - key: "example-key"
-          operator: "Exists"
-          effect: "NoSchedule"
-        nodeSelector:
-          region: east
-          type: user-node
-        affinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: topology.kubernetes.io/zone
-                operator: In
-                values:
-                - antarctica-east1
-                - antarctica-west1
-    asserts:
-    - equal:
-        path: spec.replicas
-        value: 2
-    - equal:
-        path: spec.template.container.env
-        value:
-          - name: DEBUG_LOG
-            value: "true"
-    - equal:
-        path: spec.template.container.resources
-        value:
-          requests:
-            memory: 1Gi
-    - equal:
-        path: spec.template.tolerations
-        value:
-          - key: "example-key"
-            operator: "Exists"
-            effect: "NoSchedule"
-    - equal:
-        path: spec.template.nodeSelector
-        value:
-          region: east
-          type: user-node
   
   - it: Setting various container specs - workflow reporter
     template: 'event-reporters/workflow-reporter/sensor.yaml'
@@ -215,22 +142,6 @@ tests:
           region: east
           type: user-node
   
-  - it: Logging without interval works - events reporter
-    template: 'event-reporters/events-reporter/sensor.yaml'
-    values:
-    - './values/mandatory-values.yaml'
-    set:
-      event-reporters.events.sensor:
-        logging:
-          enabled: true
-    asserts:
-    - contains:
-        path: spec.triggers
-        content:
-          template:
-            log: {}
-            name: log-trigger
-  
   - it: Logging without interval works - workflow reporter
     template: 'event-reporters/workflow-reporter/sensor.yaml'
     values:
@@ -263,24 +174,6 @@ tests:
             log: {}
             name: log-trigger
   
-  - it: Logging with interval works - events reporter
-    template: 'event-reporters/events-reporter/sensor.yaml'
-    values:
-    - './values/mandatory-values.yaml'
-    set:
-      event-reporters.events.sensor:
-        logging:
-          intervalSeconds: 60
-          enabled: true
-    asserts:
-    - contains:
-        path: spec.triggers
-        content:
-          template:
-            log:
-              intervalSeconds: 60
-            name: log-trigger
-  
   - it: Logging with interval works - workflow reporter
     template: 'event-reporters/workflow-reporter/sensor.yaml'
     values:
@@ -298,27 +191,7 @@ tests:
             log:
               intervalSeconds: 60
             name: log-trigger
-  
-  - it: HTTP trigger contains retries if set - events reporter
-    template: 'event-reporters/events-reporter/sensor.yaml'
-    values:
-    - './values/mandatory-values.yaml'
-    set:
-      event-reporters.events.sensor:
-        retryStrategy:
-          steps: 3
-          duration: 1
-          factor: 1.2
-          jitter: 3
-    asserts:
-    - equal:
-        path: spec.triggers[0].retryStrategy
-        value:
-          steps: 3
-          duration: 1
-          factor: 1.2
-          jitter: 3
-  
+ 
   - it: HTTP trigger contains retries if set - workflow reporter
     template: 'event-reporters/workflow-reporter/sensor.yaml'
     values:

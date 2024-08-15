@@ -1,4 +1,0 @@
-{{- $eventReporterContext := deepCopy . }}
-{{- $_ := set $eventReporterContext "Values" (get .Values "event-reporters") }}
-{{- $_ := set $eventReporterContext.Values "global" (get .Values "global") }}
-{{- include "event-reporters.events-reporter.rbac" $eventReporterContext }}
