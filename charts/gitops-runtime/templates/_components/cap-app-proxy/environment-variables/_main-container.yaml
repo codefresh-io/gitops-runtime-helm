@@ -77,6 +77,11 @@ INGRESS_HOST:
       name: codefresh-cm
       key: ingressHost
 INSTALLATION_TYPE: HELM
+IS_CONFIGURATION_RUNTIME:
+  valueFrom:
+    configMapKeyRef:
+      name: codefresh-cm
+      key: isConfigurationRuntime
 MANAGED: false
 NAMESPACE:
   valueFrom:
