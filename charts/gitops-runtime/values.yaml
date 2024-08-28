@@ -54,6 +54,8 @@ global:
     codefreshHosted: false
     # -- Ingress settings
     ingress:
+      # -- if set to true, the pre-install hook will validate the existance of appropriate values, but *will not* attempt to make a web request to the ingress host
+      skipValidation: false
       # -- The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https.
       protocol: https
       # -- Defines if ingress-based access mode is enabled for runtime. To use tunnel-based (ingressless) access mode, set to false.
@@ -413,7 +415,7 @@ app-proxy:
           tag: 1.1.10-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.2969.0
+    tag: 1.3007.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -421,7 +423,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.2969.0
+      tag: 1.3007.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
