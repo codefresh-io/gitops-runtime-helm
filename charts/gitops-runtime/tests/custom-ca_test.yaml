@@ -5,7 +5,6 @@ templates:
   - tls-custom-ca/workflow-pipelines-git-webhooks.yaml
   - app-proxy/deployment.yaml
   - event-reporters/workflow-reporter/sensor.yaml
-  - event-reporters/events-reporter/sensor.yaml
   - event-reporters/rollout-reporter/sensor.yaml
   - hooks/pre-uninstall/delete-runtime-from-platform.yaml
   - "gitops-operator.yaml"
@@ -214,25 +213,6 @@ tests:
         name: SSL_CERT_FILE
         value:  /app/config/codefresh-tls-certs/ca-bundle.crt
 
-- it: events reporter sensor - check chart created secret with default key
-  template: event-reporters/events-reporter/sensor.yaml
-  values:
-  - ./values/mandatory-values.yaml
-  set:
-    global.codefresh.tls.caCerts.secret.annotations.test: 'test'
-    global.codefresh.tls.caCerts.secret.create: true
-    global.codefresh.tls.caCerts.secret.content: |
-      -----BEGIN CERTIFICATE-----
-      ... encoded certificate data here ...
-      -----END CERTIFICATE-----
-  asserts:
-  - equal:
-      path: spec.triggers[0].template.http.tls
-      value:
-        caCertSecret:
-          name: codefresh-tls-certs
-          key: ca-bundle.crt
-
 - it: rollout reporter sensor - check chart created secret with default key
   template: event-reporters/rollout-reporter/sensor.yaml
   values:
@@ -271,21 +251,6 @@ tests:
           name: codefresh-tls-certs
           key: ca-bundle.crt
 
-- it: events reporter sensor - secretKeyRef
-  template: event-reporters/events-reporter/sensor.yaml
-  values:
-  - ./values/mandatory-values.yaml
-  set:
-    global.codefresh.tls.caCerts.secretKeyRef.name: my-secret
-    global.codefresh.tls.caCerts.secretKeyRef.key: my-key
-  asserts:
-  - equal:
-      path: spec.triggers[0].template.http.tls
-      value:
-        caCertSecret:
-          name: my-secret
-          key: my-key
-
 - it: rollout reporter sensor - secretKeyRef
   template: event-reporters/rollout-reporter/sensor.yaml
   values:
@@ -314,26 +279,6 @@ tests:
       value:
         caCertSecret:
           name: my-secret
-          key: my-key
-
-- it: events reporter sensor - check chart created secret with custom key
-  template: event-reporters/events-reporter/sensor.yaml
-  values:
-  - ./values/mandatory-values.yaml
-  set:
-    global.codefresh.tls.caCerts.secret.annotations.test: 'test'
-    global.codefresh.tls.caCerts.secret.create: true
-    global.codefresh.tls.caCerts.secret.key: my-key
-    global.codefresh.tls.caCerts.secret.content: |
-      -----BEGIN CERTIFICATE-----
-      ... encoded certificate data here ...
-      -----END CERTIFICATE-----
-  asserts:
-  - equal:
-      path: spec.triggers[0].template.http.tls
-      value:
-        caCertSecret:
-          name: codefresh-tls-certs
           key: my-key
 
 - it: rollout reporter sensor - check chart created secret with custom key
@@ -375,14 +320,6 @@ tests:
         caCertSecret:
           name: codefresh-tls-certs
           key: my-key
-
-- it: events reporter sensor - no tls
-  template: event-reporters/events-reporter/sensor.yaml
-  values:
-  - ./values/mandatory-values.yaml
-  asserts:
-  - notExists:
-      path: spec.triggers[0].template.http.tls
 
 - it: rollout reporter sensor - no tls
   template: event-reporters/rollout-reporter/sensor.yaml
