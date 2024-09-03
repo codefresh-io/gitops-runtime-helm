@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.53
+appVersion: 0.1.54
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.0.0
+version: 0.11.0
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -13,36 +13,65 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: 'feat: gitops-operator with product crd update - versionSource & promotion as optional fields (#284)'
+    - kind: changed
+      description: bump app-proxy (#282)
+    - kind: changed
+      description: 'chore: remove v1 reporter (#271)'
+    - kind: changed
+      description: 'feat: bump app-proxy to 1.3007.0 - add validation to name and missing annotation in promotion-workflow (#280)'
+    - kind: changed
+      description: added IS_CONFIGURATION_RUNTIME env var (#278)
+    - kind: changed
+      description: bump app-proxy to `1.2989.3` (#276) - fix `configurationRuntime` not working immediately after installation
+    - kind: changed
+      description: added default value and description for ingress `switchValidation` (#274)
+    - kind: changed
+      description: 'feat: upgrade gitops operator (#273)'
+    - kind: changed
+      description: update app-proxy to `1.2987.1` (#269) - fix drag-n-drop releases
+    - kind: changed
+      description: 'fix: update codefresh-gitops-operator to `0.2.9` (#268)'
+    - kind: changed
+      description: fix - support non default ArgoCD server host in event reporter (#267)
+    - kind: changed
+      description: 'fix: test ci (#265)'
+    - kind: changed
+      description: update init container version (#264)
+    - kind: changed
+      description: update app-proxy (#257)
 dependencies:
-- name: argo-cd
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 6.11.1-7-cap-2.11-2024.8.19-6be897266
-- name: argo-events
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 2.4.7-1-cap-CR-24607
-- name: argo-workflows
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 0.41.12-v3.5.9-cap-CR-24929
-  condition: argo-workflows.enabled
-- name: argo-rollouts
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 2.37.3-1-v1.7.1-CR-24605
-  condition: argo-rollouts.enabled
-- name: sealed-secrets
-  repository: https://bitnami-labs.github.io/sealed-secrets/
-  version: 2.14.1
-- name: codefresh-tunnel-client
-  repository: oci://quay.io/codefresh/charts
-  version: 0.1.17
-  alias: tunnel-client
-  condition: tunnel-client.enabled
-- name: codefresh-gitops-operator
-  repository: oci://quay.io/codefresh/charts
-  version: 0.2.11
-  alias: gitops-operator
-  condition: gitops-operator.enabled
-- name: garage
-  repository: https://codefresh-io.github.io/garage
-  alias: garage-workflows-artifact-storage
-  version: 0.5.0-cf.1
-  condition: garage-workflows-artifact-storage.enabled
+  - name: argo-cd
+    repository: https://codefresh-io.github.io/argo-helm
+    version: 6.11.1-7-cap-2.11-2024.8.19-6be897266
+  - name: argo-events
+    repository: https://codefresh-io.github.io/argo-helm
+    version: 2.4.7-1-cap-CR-24607
+  - name: argo-workflows
+    repository: https://codefresh-io.github.io/argo-helm
+    version: 0.41.12-v3.5.9-cap-CR-24929
+    condition: argo-workflows.enabled
+  - name: argo-rollouts
+    repository: https://codefresh-io.github.io/argo-helm
+    version: 2.37.3-1-v1.7.1-CR-24605
+    condition: argo-rollouts.enabled
+  - name: sealed-secrets
+    repository: https://bitnami-labs.github.io/sealed-secrets/
+    version: 2.14.1
+  - name: codefresh-tunnel-client
+    repository: oci://quay.io/codefresh/charts
+    version: 0.1.17
+    alias: tunnel-client
+    condition: tunnel-client.enabled
+  - name: codefresh-gitops-operator
+    repository: oci://quay.io/codefresh/charts
+    version: 0.2.11
+    alias: gitops-operator
+    condition: gitops-operator.enabled
+  - name: garage
+    repository: https://codefresh-io.github.io/garage
+    alias: garage-workflows-artifact-storage
+    version: 0.5.0-cf.1
+    condition: garage-workflows-artifact-storage.enabled
