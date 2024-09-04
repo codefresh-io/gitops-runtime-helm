@@ -15,6 +15,10 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'update gitops-operator to `0.2.12` - fix: action script fails to extract commit_sha from response (#285)'
+    - kind: changed
+      description: create release 0.11 draft
+    - kind: changed
       description: 'feat: gitops-operator with product crd update - versionSource & promotion as optional fields (#284)'
     - kind: changed
       description: bump app-proxy (#282)
@@ -67,7 +71,7 @@ dependencies:
     condition: tunnel-client.enabled
   - name: codefresh-gitops-operator
     repository: oci://quay.io/codefresh/charts
-    version: 0.2.11
+    version: 0.2.12
     alias: gitops-operator
     condition: gitops-operator.enabled
   - name: garage
