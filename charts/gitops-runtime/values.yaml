@@ -124,6 +124,7 @@ installer:
 # Sealed secrets
 # -----------------------------------------------------------------------------------------------------------------------
 sealed-secrets:
+  enabled: true
   fullnameOverride: sealed-secrets-controller
   keyrenewperiod: "720h"
   image:
