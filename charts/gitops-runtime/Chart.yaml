@@ -1,6 +1,6 @@
 apiVersion: v2
 appVersion: 0.1.53
-description: A Helm chart for Codefresh gitops runtime-1
+description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
 version: 0.0.0
 home: https://github.com/codefresh-io/gitops-runtime-helm
