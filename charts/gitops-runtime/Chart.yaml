@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.55
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.0.0
+version: 0.12.0
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -13,36 +13,41 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: 'feat: update to upstream argo-cd 2.12.3 and helm 7.4.7 (#281)'
+    - kind: changed
+      description: 'update gitops-operator to `0.2.12` - fix: action script fails to extract commit_sha from response (#285)'
 dependencies:
-- name: argo-cd
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 7.4.7-0-cap-2.12-2024.9.3-6f8e0c7e2
-- name: argo-events
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 2.4.7-1-cap-CR-24607
-- name: argo-workflows
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 0.41.12-v3.5.9-cap-CR-24929
-  condition: argo-workflows.enabled
-- name: argo-rollouts
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 2.37.3-1-v1.7.1-CR-24605
-  condition: argo-rollouts.enabled
-- name: sealed-secrets
-  repository: https://bitnami-labs.github.io/sealed-secrets/
-  version: 2.14.1
-- name: codefresh-tunnel-client
-  repository: oci://quay.io/codefresh/charts
-  version: 0.1.17
-  alias: tunnel-client
-  condition: tunnel-client.enabled
-- name: codefresh-gitops-operator
-  repository: oci://quay.io/codefresh/charts
-  version: 0.2.12
-  alias: gitops-operator
-  condition: gitops-operator.enabled
-- name: garage
-  repository: https://codefresh-io.github.io/garage
-  alias: garage-workflows-artifact-storage
-  version: 0.5.0-cf.1
-  condition: garage-workflows-artifact-storage.enabled
+  - name: argo-cd
+    repository: https://codefresh-io.github.io/argo-helm
+    version: 7.4.7-0-cap-2.12-2024.9.3-6f8e0c7e2
+  - name: argo-events
+    repository: https://codefresh-io.github.io/argo-helm
+    version: 2.4.7-1-cap-CR-24607
+  - name: argo-workflows
+    repository: https://codefresh-io.github.io/argo-helm
+    version: 0.41.12-v3.5.9-cap-CR-24929
+    condition: argo-workflows.enabled
+  - name: argo-rollouts
+    repository: https://codefresh-io.github.io/argo-helm
+    version: 2.37.3-1-v1.7.1-CR-24605
+    condition: argo-rollouts.enabled
+  - name: sealed-secrets
+    repository: https://bitnami-labs.github.io/sealed-secrets/
+    version: 2.14.1
+  - name: codefresh-tunnel-client
+    repository: oci://quay.io/codefresh/charts
+    version: 0.1.17
+    alias: tunnel-client
+    condition: tunnel-client.enabled
+  - name: codefresh-gitops-operator
+    repository: oci://quay.io/codefresh/charts
+    version: 0.2.12
+    alias: gitops-operator
+    condition: gitops-operator.enabled
+  - name: garage
+    repository: https://codefresh-io.github.io/garage
+    alias: garage-workflows-artifact-storage
+    version: 0.5.0-cf.1
+    condition: garage-workflows-artifact-storage.enabled
