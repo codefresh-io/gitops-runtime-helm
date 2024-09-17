@@ -415,7 +415,7 @@ app-proxy:
           tag: 1.1.10-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3036.0-CR-22781-get-pr-by-sha-182b8b5
+    tag: 1.3036.0-CR-22781-get-pr-by-sha-909a925
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -423,7 +423,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3036.0-CR-22781-get-pr-by-sha-182b8b5
+      tag: 1.3036.0-CR-22781-get-pr-by-sha-909a925
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
