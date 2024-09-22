@@ -1,0 +1,54 @@
+global:
+  runtime:
+    isConfigurationRuntime: false
+
+sealed-secrets:
+  enabled: false
+
+argo-cd:
+  createClusterRoles: false
+  crds:
+    install: false # true for the 1st runtime, false for the others
+
+  configs:
+    params:
+      application.namespaces: ''
+
+argo-events:
+  controller:
+    rbac:
+      namespaced: true
+
+argo-workflows:
+  crds:
+    install: false # true for the 1st runtime, false for the others
+
+  singleNamespace: true
+  createAggregateRoles: false
+  controller:
+    clusterWorkflowTemplates:
+      enabled: false
+
+  server:
+    clusterWorkflowTemplates:
+      enabled: false
+
+argo-rollouts:
+  installCRDs: false # true for the 1st runtime, false for the others
+  clusterInstall: false
+
+tunnel-client:
+  enabled: false
+
+app-proxy:
+  singleNamespace: true # added in feat/cr-24670-multi-install branch
+
+gitops-operator:
+  enabled: false # disable gitops-operator for now
+  image:
+    tag: feat-cr-24670-namespaced-install-521a5ee
+
+  crds:
+    install: false
+
+  singleNamespace: true # added in feat/cr-24670-namespaced-install branch
