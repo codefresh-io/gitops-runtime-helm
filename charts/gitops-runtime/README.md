@@ -19,7 +19,7 @@ Prior to running the installation please see the official documentation at: http
 ## WARNING! ARGO-CD 7.x.x CHART BREAKING CHANGE
 
 In the runtime release `0.12.0` we upgraded to the latest argo-cd `7.x.x` helm chart which
-contains the breaking change in the values for providing cluster credentials
+contains a breaking change in the values used for providing cluster credentials
 (in this chart it's located under the path `argo-cd.configs.clusterCredentials`).
 `clusterCredentials` used to be of type `list` -- now it's a `map` (`object`).
 See the [release notes](https://github.com/argoproj/argo-helm/releases/tag/argo-cd-7.0.0).
