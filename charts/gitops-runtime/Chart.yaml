@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'feat: update to upstream argo-cd 2.12.3 and helm 7.4.7 (#281)'
+      description: 'feat: update to upstream argo-cd 2.12.3 and helm 7.4.7 (#281). Contains a BREAKING CHANGE in the chart -- see the README.md'
     - kind: changed
       description: 'update gitops-operator to `0.2.12` - fix: action script fails to extract commit_sha from response (#285)'
     - kind: changed
