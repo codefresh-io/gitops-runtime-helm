@@ -16,6 +16,17 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
+## WARNING! ARGO-CD 7.x.x CHART BREAKING CHANGE
+
+In the runtime release `0.12.0` we upgraded to the latest argo-cd `7.x.x` helm chart which
+contains the breaking change in the values for providing cluster credentials
+(in this chart it's located under the path `argo-cd.configs.clusterCredentials`).
+`clusterCredentials` used to be of type `list` -- now it's a `map` (`object`).
+See the [release notes](https://github.com/argoproj/argo-helm/releases/tag/argo-cd-7.0.0).
+
+Codefresh Gitops Runtime does NOT use these values directly -- so the runtimes
+with the default configuration are not affected.
+
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
 We have created a helper utility to resolve this issue:
