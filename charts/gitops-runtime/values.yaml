@@ -589,7 +589,8 @@ gitops-operator:
       memory: 64Mi
 
   kube-rbac-proxy:
-    image: {}
+    image:
+      tag: v0.16.0
       # -- defaults
       # repository: gcr.io/kubebuilder/kube-rbac-proxy
       # tag: v0.14.1
