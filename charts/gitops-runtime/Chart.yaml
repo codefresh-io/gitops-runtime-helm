@@ -15,13 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix: monorepo controller extra env (#294)'
-    - kind: changed
       description: 'feat: monorepo controller v1 (#293)'
-    - kind: changed
-      description: 'chore: add breaking change notice to the README.md (#291)'
-    - kind: changed
-      description: bump app-proxy to `1.3059.0` - fix hosted runtime init (#290)
     - kind: changed
       description: update app-proxy to `1.3056.1` - search repos by url (#289)
     - kind: changed
