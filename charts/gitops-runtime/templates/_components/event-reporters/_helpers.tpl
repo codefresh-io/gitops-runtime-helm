@@ -1,55 +1,8 @@
 {{/*
-Expand the name of the chart.
-*/}}
-{{- define "event-reporters.events-reporter.name" -}}
-{{- print "events-reporter"}}
-{{- end }}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "event-reporters.events-reporter.fullname" -}}
-{{- print "events-reporter"}}
-{{- end }}
-
-{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "event-reporters.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Common labels
-*/}}
-{{- define "event-reporters.events-reporter.labels" -}}
-helm.sh/chart: {{ include "event-reporters.chart" . }}
-{{ include "event-reporters.events-reporter.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: Helm
-codefresh.io/internal: "true"
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "event-reporters.events-reporter.selectorLabels" -}}
-app.kubernetes.io/part-of: events-reporter
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "event-reporters.events-reporter.serviceAccountName" -}}
-  {{- if .Values.events.serviceAccount.create }}
-    {{- default (include "event-reporters.events-reporter.fullname" .) .Values.events.serviceAccount.name }}
-  {{- else }}
-    {{- default "default" .Values.events.serviceAccount.name }}
-  {{- end }}
 {{- end }}
 
 {{/*

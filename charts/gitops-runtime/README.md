@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![AppVersion: 0.1.53](https://img.shields.io/badge/AppVersion-0.1.53-informational?style=flat-square)
+![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![AppVersion: 0.1.55](https://img.shields.io/badge/AppVersion-0.1.55-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -15,6 +15,17 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
+
+## WARNING! ARGO-CD 7.x.x CHART BREAKING CHANGE
+
+In the runtime release `0.12.0` we upgraded to the latest argo-cd `7.x.x` helm chart which
+contains a breaking change in the values used for providing cluster credentials
+(in this chart it's located under the path `argo-cd.configs.clusterCredentials`).
+`clusterCredentials` used to be of type `list` -- now it's a `map` (`object`).
+See the [release notes](https://github.com/argoproj/argo-helm/releases/tag/argo-cd-7.0.0).
+
+Codefresh Gitops Runtime does NOT use these values directly -- so the runtimes
+with the default configuration are not affected.
 
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
@@ -100,14 +111,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2946.0"` |  |
+| app-proxy.image.tag | string | `"1.2969.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2946.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.2969.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -167,26 +178,6 @@ sealed-secrets:
 | argo-workflows.fullnameOverride | string | `"argo"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
-| event-reporters.events.argoCDServerServiceName | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service name. |
-| event-reporters.events.argoCDServerServicePort | string | `nil` | LEAVE EMPTY and let the chart logic determine the name. Change only if you are totally sure you need to override ArgoCD service port. |
-| event-reporters.events.eventSource.affinity | object | `{}` |  |
-| event-reporters.events.eventSource.nodeSelector | object | `{}` |  |
-| event-reporters.events.eventSource.replicas | int | `1` |  |
-| event-reporters.events.eventSource.resources | object | `{}` |  |
-| event-reporters.events.eventSource.tolerations | list | `[]` |  |
-| event-reporters.events.sensor.affinity | object | `{}` |  |
-| event-reporters.events.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
-| event-reporters.events.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
-| event-reporters.events.sensor.nodeSelector | object | `{}` |  |
-| event-reporters.events.sensor.replicas | int | `1` |  |
-| event-reporters.events.sensor.resources | object | `{}` |  |
-| event-reporters.events.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
-| event-reporters.events.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
-| event-reporters.events.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
-| event-reporters.events.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
-| event-reporters.events.sensor.retryStrategy.steps | int | `3` | Number of retries |
-| event-reporters.events.sensor.tolerations | list | `[]` |  |
-| event-reporters.events.serviceAccount.create | bool | `true` |  |
 | event-reporters.rollout.eventSource.affinity | object | `{}` |  |
 | event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.eventSource.replicas | int | `1` |  |

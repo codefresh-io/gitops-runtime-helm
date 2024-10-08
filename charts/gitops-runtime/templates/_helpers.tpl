@@ -234,9 +234,8 @@ Output comma separated list of installed runtime components
   {{- $argoEvents := dict "name" "argo-events" "version" (get .Subcharts "argo-events").Chart.AppVersion }}
   {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
   {{- $internalRouter := dict "name" "internal-router" "version" .Chart.AppVersion }}
-  {{- $eventsReporter := dict "name" "events-reporter" "version" .Chart.AppVersion }}
   {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
-  {{- $comptList := list $argoCD $argoEvents $appProxy $eventsReporter $sealedSecrets $internalRouter}}
+  {{- $comptList := list $argoCD $argoEvents $appProxy $sealedSecrets $internalRouter}}
   {{- if index (get .Values "argo-rollouts") "enabled" }}
     {{- $rolloutReporter := dict "name" "rollout-reporter" "version" .Chart.AppVersion }}
     {{- $argoRollouts := dict "name" "argo-rollouts" "version" (get .Subcharts "argo-rollouts").Chart.AppVersion }}
