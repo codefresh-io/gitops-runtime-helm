@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.60
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.13.0
+version: 0.13.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,11 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'feat: monorepo controller v1 (#293)'
-    - kind: changed
-      description: update app-proxy to `1.3056.1` - search repos by url (#289)
-    - kind: changed
-      description: 'feat: support PR in promotions (#287)'
+      description: 'feat: argo-cd with event-reporter update to report change revisions metadata in app annotations (#301)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
