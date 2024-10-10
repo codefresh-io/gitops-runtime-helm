@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.13.1](https://img.shields.io/badge/Version-0.13.1-informational?style=flat-square) ![AppVersion: 0.1.60](https://img.shields.io/badge/AppVersion-0.1.60-informational?style=flat-square)
+![Version: 0.13.2](https://img.shields.io/badge/Version-0.13.2-informational?style=flat-square) ![AppVersion: 0.1.60](https://img.shields.io/badge/AppVersion-0.1.60-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.13.1 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.13.2 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -150,7 +150,7 @@ sealed-secrets:
 | argo-cd.eventReporter.enabled | bool | `true` | Installs new event reporter component to cluster |
 | argo-cd.eventReporter.replicas | int | `3` | Amount of shards to handle applications events |
 | argo-cd.eventReporter.version | string | `"v2"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
-| argo-events | object | `{"crds":{"install":false},"fullnameOverride":"argo-events"}` | ------------------------------------------------------------------------------------------------------------------- |
+| argo-events | object | `{"configs":{"jetstream":{"versions":[{"configReloaderImage":"natsio/nats-server-config-reloader:0.16.0","metricsExporterImage":"natsio/prometheus-nats-exporter:0.15.0","natsImage":"nats:2.10.21","startCommand":"/nats-server","version":"latest"}]},"nats":{"versions":[{"metricsExporterImage":"natsio/prometheus-nats-exporter:0.15.0","natsStreamingImage":"nats-streaming:0.25.6","version":"0.22.1"}]}},"crds":{"install":false},"fullnameOverride":"argo-events"}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-rollouts | object | `{"controller":{"replicas":1},"enabled":true,"fullnameOverride":"argo-rollouts","installCRDs":true}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-workflows | object | `{"crds":{"install":true},"enabled":true,"fullnameOverride":"argo","server":{"authModes":["client"],"baseHref":"/workflows/"}}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
@@ -199,7 +199,7 @@ sealed-secrets:
 | garage-workflows-artifact-storage.persistence.meta | object | `{"size":"100Mi","storageClass":""}` | Volume that stores cluster metadata |
 | garage-workflows-artifact-storage.persistence.meta.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
 | garage-workflows-artifact-storage.resources | object | `{}` | Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size. |
-| gitops-operator | object | `{"affinity":{},"argoCdNotifications":{"image":{},"imageOverride":false,"resources":{}},"crds":{"additionalLabels":{},"annotations":{},"install":true,"keep":false},"enabled":true,"env":{},"fullnameOverride":"","image":{},"imagePullSecrets":[],"kube-rbac-proxy":{"image":{},"resources":{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}},"libraryMode":true,"nameOverride":"","nodeSelector":{},"podAnnotations":{},"podLabels":{},"replicaCount":1,"resources":{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}},"serviceAccount":{"annotations":{},"create":true,"name":"gitops-operator-controller-manager"},"tolerations":[]}` | ------------------------------------------------------------------------------------------------------------------- |
+| gitops-operator | object | `{"affinity":{},"argoCdNotifications":{"image":{},"imageOverride":false,"resources":{}},"crds":{"additionalLabels":{},"annotations":{},"install":true,"keep":false},"enabled":true,"env":{},"fullnameOverride":"","image":{},"imagePullSecrets":[],"kube-rbac-proxy":{"image":{"tag":"v0.16.0"},"resources":{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}},"libraryMode":true,"nameOverride":"","nodeSelector":{},"podAnnotations":{},"podLabels":{},"replicaCount":1,"resources":{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}},"serviceAccount":{"annotations":{},"create":true,"name":"gitops-operator-controller-manager"},"tolerations":[]}` | ------------------------------------------------------------------------------------------------------------------- |
 | gitops-operator.argoCdNotifications | object | `{"image":{},"imageOverride":false,"resources":{}}` | Builtin notifications controller used by gitops-operator for promotion related notifications |
 | gitops-operator.argoCdNotifications.image | object | `{}` | Set image.repository and image.tag notifications image used by the gitops operator. Ignored unless imageOverride is set to true. |
 | gitops-operator.argoCdNotifications.imageOverride | bool | `false` | If set to true allows to override notifications image used by the gitops operator. When set to false the version of ArgoCD will be set to the version used for all other ArgoCD components. |
@@ -277,7 +277,7 @@ sealed-secrets:
 | internal-router.serviceAccount.create | bool | `true` |  |
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
-| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"v0.24.5"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | ------------------------------------------------------------------------------------------------------------------- |
+| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.27.1"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | ------------------------------------------------------------------------------------------------------------------- |
 | tunnel-client | object | `{"enabled":true,"libraryMode":true,"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | ------------------------------------------------------------------------------------------------------------------- |
 | tunnel-client.enabled | bool | `true` | Will only be used if global.runtime.ingress.enabled = false |
 | tunnel-client.libraryMode | bool | `true` | Do not change this value! Breaks chart logic |

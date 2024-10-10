@@ -115,7 +115,7 @@ installer:
     tag: ""
     pullPolicy: IfNotPresent
 # ---------------------------------------------------------------------------------------------------------------------
-# DOCS: https://artifacthub.io/packages/helm/bitnami-labs/sealed-secrets/2.14.1?modal=values
+# DOCS: https://artifacthub.io/packages/helm/bitnami-labs/sealed-secrets/2.16.1?modal=values
 # ---------------------------------------------------------------------------------------------------------------------
 sealed-secrets:
   fullnameOverride: sealed-secrets-controller
@@ -180,10 +180,9 @@ argo-events:
           metricsExporterImage: natsio/prometheus-nats-exporter:0.15.0
           configReloaderImage: natsio/nats-server-config-reloader:0.16.0
           startCommand: /nats-server
-
-#-----------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 # DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-workflows-0.41.12-v3.5.9-cap-CR-24929/charts/argo-workflows
-#-----------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 argo-workflows:
   fullnameOverride: argo
   enabled: true
@@ -561,7 +560,6 @@ gitops-operator:
       # -- defaults
       # repository: gcr.io/kubebuilder/kube-rbac-proxy
       # tag: v0.14.1
-
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
