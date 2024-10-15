@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.60
+appVersion: 0.1.61
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.13.2
+version: 0.13.3
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: update kube-rbac-proxy, sealed-secrets-controller and argo-events nats to latest (#296)'
+      description: 'fix: bump app-proxy to `1.3103.0` - fix failure to calculate diff when destApp is on a different branch from srcApp'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
