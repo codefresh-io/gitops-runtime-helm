@@ -1,0 +1,18 @@
+global:
+  runtime:
+    isConfigurationRuntime: true
+
+argo-cd:
+  crds:
+    install: true
+
+argo-workflows:
+  crds:
+    install: true
+
+argo-rollouts:
+  installCRDs: true
+
+gitops-operator:
+  crds:
+    install: true
