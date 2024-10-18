@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.62
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.13.3
+version: 0.13.4
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix: bump argocd to `2.12-2024.10.17-36fb3f0d1` - merge https://github.com/argoproj/argo-cd/pull/19799 to fork and acr controller minor fixes
+      description: 'chore: update argocd to 7.4.7-5-cap-2.12-2024.10.17-36fb3f0d1'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
