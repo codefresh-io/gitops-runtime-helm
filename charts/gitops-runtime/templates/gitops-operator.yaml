@@ -15,7 +15,9 @@
   {{/* Set repo server service and port */}}
   {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.argocd.repoServer "fullname" (include "codefresh-gitops-runtime.argocd.reposerver.servicename" . ) }}
   {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.argocd.repoServer "port" (include "codefresh-gitops-runtime.argocd.reposerver.serviceport" . ) }}
-
+  
+  {{/* Set argo-cd-server service and port */}}
+  {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_URL" (include "codefresh-gitops-runtime.argocd.server.url" . ) }}
 
   {{/* Set workflows url */}}
   {{- if index .Values "argo-workflows" "enabled" }}
