@@ -1,1 +1,4 @@
-* @codefresh-io/DevOps daniel.maizel@codefresh.io noam.gal@codefresh.io yaroslav@codefresh.io denis@codefresh.io pavel@codefresh.io eti.zaguri@codefresh.io
+* daniel.maizel@codefresh.io noam.gal@codefresh.io yaroslav@codefresh.io denis@codefresh.io pavel@codefresh.io eti.zaguri@codefresh.io
+
+.github @codefresh-io/DevOps
+charts/gitops-runtime/templates @codefresh-io/DevOps
