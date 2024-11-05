@@ -1,4 +1,7 @@
-*                               @codefresh-io/teamleads
+*                                @codefresh-io/teamleads
 
-.github                         @codefresh-io/DevOps
-charts/gitops-runtime/templates @codefresh-io/DevOps
+.github                          @codefresh-io/DevOps
+
+# any change to the chart should go through devops
+/charts/gitops-runtime/templates @codefresh-io/DevOps
+/charts/gitops-runtime/tests     @codefresh-io/DevOps
