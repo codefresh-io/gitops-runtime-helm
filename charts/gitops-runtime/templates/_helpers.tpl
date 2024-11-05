@@ -139,10 +139,11 @@ Determine argocd server url. Must be called with chart root context
 {{- $protocol := "https" }}
 {{- $serverName := include "codefresh-gitops-runtime.argocd.server.servicename" . }}
 {{- $port := include "codefresh-gitops-runtime.argocd.server.serviceport" . }}
+{{- $path := (get $argoCDValues.configs.params "server.rootpath") }}
 {{- if (eq $port "80") }}
   {{- $protocol = "http" }}
 {{- end }}
-{{- printf "%s://%s:%s" $protocol $serverName $port }}
+{{- printf "%s://%s:%s%s" $protocol $serverName $port $path }}
 {{- end}}
 
 {{/*
