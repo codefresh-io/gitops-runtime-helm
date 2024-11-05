@@ -304,11 +304,32 @@ tests:
   - contains:
       path: spec.template.spec.containers[2].args
       content: --argocd-repo-server=myargocd-repo-server:9080
+
+- it: argocd and workflows overrides for manager
+  template: gitops-operator.yaml
+  documentSelector:
+    path: kind
+    value: Deployment
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-cd.configs.params:
+      server.rootpath: /some-path
+    argo-cd.fullnameOverride: myargocd
+    argo-workflows.enabled: true
+    argo-workflows.fullnameOverride: argo-test
+    argo-workflows.server.secure: false
+  asserts:
   - contains:
       path: spec.template.spec.containers[1].env
       content:
         name: ARGO_WF_URL
         value: http://argo-test-server:2746
+  - contains:
+      path: spec.template.spec.containers[1].env
+      content:
+        name: ARGO_CD_URL
+        value: http://myargocd-server:80/some-path
 
 - it: contains all resources for notifications controller
   template: gitops-operator.yaml
@@ -318,23 +339,43 @@ tests:
     gitops-operator.argoCdNotifications.cm.name: "test-notifications-cm"
     gitops-operator.argoCdNotifications.secret.name: "test-notifications-secret"
   asserts:
-    - containsDocument:
-        kind: ConfigMap
-        apiVersion: v1
-        name: test-notifications-cm
-        any: true
-    - containsDocument:
-        kind: Secret
-        apiVersion: v1
-        name: test-notifications-secret
-        any: true
-    - containsDocument:
-        kind: ClusterRole
-        apiVersion: rbac.authorization.k8s.io/v1
-        name: codefresh-gitops-operator-notifications
-        any: true
-    - containsDocument:
-        kind: ClusterRoleBinding
-        apiVersion: rbac.authorization.k8s.io/v1
-        name: codefresh-gitops-operator-notifications
-        any: true
+  - containsDocument:
+      kind: ConfigMap
+      apiVersion: v1
+      name: test-notifications-cm
+      any: true
+  - containsDocument:
+      kind: Secret
+      apiVersion: v1
+      name: test-notifications-secret
+      any: true
+  - containsDocument:
+      kind: ClusterRole
+      apiVersion: rbac.authorization.k8s.io/v1
+      name: codefresh-gitops-operator-notifications
+      any: true
+  - containsDocument:
+      kind: ClusterRoleBinding
+      apiVersion: rbac.authorization.k8s.io/v1
+      name: codefresh-gitops-operator-notifications
+      any: true
+
+- it: uses explicit ARGO_CD_URL instead of value defined by argo-cd settings
+  template: gitops-operator.yaml
+  documentSelector:
+    path: kind
+    value: Deployment
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-cd.configs.params:
+      server.rootpath: /some-path
+    argo-cd.fullnameOverride: myargocd
+    gitops-operator.env.ARGO_CD_URL: http://some-other-url
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[1].env
+      content:
+        name: ARGO_CD_URL
+        value: http://some-other-url
+
