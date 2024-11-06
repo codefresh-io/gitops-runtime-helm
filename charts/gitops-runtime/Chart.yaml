@@ -15,47 +15,17 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'feat: bump app-proxy to `1.3142.0` with refresh in-cluster app after any related commit (#325)'
+      description: 'feat: bump cap-app-proxy to 1.3142.0 - refresh in-cluster app after any related commit (#325), promote all files in app if none is specified (#324), improve locking around git operations (#320), new rollouts steps support setHeaderRoute and setMirrorRoute (#316), multi-argh image reporting (#314), add Product Release initiator (#306), changeRevision fields support (#302)'
     - kind: changed
-      description: 'chore(cr-25581): updating app proxy, (fixed vulnerabilities in expat, curl, openssl) (#322)'
+      description: 'feat: update gitops-operator to 0.3.8 - support manual-sync applications (#327), fix memory leak (#313), publish error to product release in case failed to create workflow (#312)'
     - kind: changed
-      description: 'feat: bump app-proxy to `1.3138.0` (#324)'
+      description: 'sec: update nginxinc/nginx-unprivileged to 1.26-alpine3.20 - fixed vulnerabilities in expat, curl, openssl (#322)'
     - kind: changed
-      description: Update CODEOWNERS
-    - kind: changed
-      description: 'fix: use the rootpath from argo-cd config.params values, when injecting ARGO_CD_URL to gitops-operator (#323)'
-    - kind: changed
-      description: update cap-app-proxy to `1.3131.0` - improve locking around git operations (#320)
-    - kind: changed
-      description: Update CODEOWNERS (#319)
+      description: 'fix: use the rootpath from argo-cd config.params values, when injecting ARGO_CD_URL to gitops-operator (#323) (#311)'
     - kind: changed
       description: 'chore: update argocd to 2.12.3-2024.10.28-20100fc54 (#318)'
     - kind: changed
-      description: 'feat: app-proxy bump to `1.3127.1` (#316)'
-    - kind: changed
-      description: 'chore: update image-enrichment to 1.1.11 (#314)'
-    - kind: changed
-      description: update codefresh-gitops-operator to 0.3.6 (#313)
-    - kind: changed
-      description: fix:upgrade gitops operator to 0.3.1 to publish error to product release in case failed to create workflow (#312)
-    - kind: changed
-      description: inject the correct argo-cd server url into gitops-operator (#311)
-    - kind: changed
-      description: 'chore: update argocd to 7.4.7-5-cap-2.12-2024.10.17-36fb3f0d1 (#310)'
-    - kind: changed
-      description: 'fix: bump app-proxy to `1.3103.0` - fix failure to calculate diff when destApp is on a different branch from srcApp'
-    - kind: changed
-      description: Feat/cr 23204 synced version (#308)
-    - kind: changed
-      description: 'feat: Add Product Release Initiator functionality (#306)'
-    - kind: changed
       description: 'chore: update kube-rbac-proxy, sealed-secrets-controller and argo-events nats to latest (#296)'
-    - kind: changed
-      description: 'feat: app-proxy with changeRevision fields support (#302)'
-    - kind: changed
-      description: 'feat: argo-cd with event-reporter update to report change revisions metadata in app annotations (#301)'
-    - kind: changed
-      description: fix:upgrade gitops operator to 0.3.1 to publish error to product release in case failed to create workflow (#299)
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
@@ -81,7 +51,7 @@ dependencies:
     condition: tunnel-client.enabled
   - name: codefresh-gitops-operator
     repository: oci://quay.io/codefresh/charts
-    version: 0.3.6
+    version: 0.3.8
     alias: gitops-operator
     condition: gitops-operator.enabled
   - name: garage
