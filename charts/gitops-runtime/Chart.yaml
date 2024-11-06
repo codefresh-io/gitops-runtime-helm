@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'feat: bump cap-app-proxy to 1.3142.0 - refresh in-cluster app after any related commit (#325), promote all files in app if none is specified (#324), improve locking around git operations (#320), new rollouts steps support setHeaderRoute and setMirrorRoute (#316), multi-argh image reporting (#314), add Product Release initiator (#306), changeRevision fields support (#302)'
+      description: 'feat: bump cap-app-proxy to 1.3146.0 - fix accessing repo in parallel (#329), refresh in-cluster app after any related commit (#325), promote all files in app if none is specified (#324), improve locking around git operations (#320), new rollouts steps support setHeaderRoute and setMirrorRoute (#316), multi-argh image reporting (#314), add Product Release initiator (#306), changeRevision fields support (#302)'
     - kind: changed
       description: 'feat: update gitops-operator to 0.3.8 - support manual-sync applications (#327), fix memory leak (#313), publish error to product release in case failed to create workflow (#312)'
     - kind: changed
