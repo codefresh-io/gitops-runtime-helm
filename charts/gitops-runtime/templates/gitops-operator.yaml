@@ -18,7 +18,7 @@
   
   {{/* Set argo-cd-server service and port */}}
   {{ if not (index .Values "gitops-operator").env.ARGO_CD_URL }}
-    {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_URL" (include "codefresh-gitops-runtime.argocd.server.url" . ) }}
+    {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_URL" (include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . ) }}
   {{- end }}
 
   {{/* Set workflows url */}}
