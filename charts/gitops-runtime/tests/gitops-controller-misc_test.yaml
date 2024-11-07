@@ -329,7 +329,7 @@ tests:
       path: spec.template.spec.containers[1].env
       content:
         name: ARGO_CD_URL
-        value: http://myargocd-server:80/some-path
+        value: myargocd-server:80/some-path
 
 - it: contains all resources for notifications controller
   template: gitops-operator.yaml
@@ -371,11 +371,11 @@ tests:
     argo-cd.configs.params:
       server.rootpath: /some-path
     argo-cd.fullnameOverride: myargocd
-    gitops-operator.env.ARGO_CD_URL: http://some-other-url
+    gitops-operator.env.ARGO_CD_URL: some-other-url:123
   asserts:
   - contains:
       path: spec.template.spec.containers[1].env
       content:
         name: ARGO_CD_URL
-        value: http://some-other-url
+        value: some-other-url:123
 
