@@ -135,15 +135,24 @@ Determine argocd server service port. Must be called with chart root context
 Determine argocd server url. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.server.url" -}}
-{{- $argoCDValues := (get .Values "argo-cd") }}
 {{- $protocol := "https" }}
-{{- $serverName := include "codefresh-gitops-runtime.argocd.server.servicename" . }}
 {{- $port := include "codefresh-gitops-runtime.argocd.server.serviceport" . }}
-{{- $path := (get $argoCDValues.configs.params "server.rootpath") }}
 {{- if (eq $port "80") }}
   {{- $protocol = "http" }}
 {{- end }}
-{{- printf "%s://%s:%s%s" $protocol $serverName $port $path }}
+{{- $url := include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . }}
+{{- printf "%s://%s" $protocol $url }}
+{{- end}}
+
+{{/*
+Determine argocd server url witout the protocol. Must be called with chart root context
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.server.no-protocol-url" -}}
+{{- $argoCDValues := (get .Values "argo-cd") }}
+{{- $serverName := include "codefresh-gitops-runtime.argocd.server.servicename" . }}
+{{- $port := include "codefresh-gitops-runtime.argocd.server.serviceport" . }}
+{{- $path := (get $argoCDValues.configs.params "server.rootpath") }}
+{{- printf "%s:%s%s" $serverName $port $path }}
 {{- end}}
 
 {{/*
