@@ -649,3 +649,6 @@ garage-workflows-artifact-storage:
       size: 100Mi
   # -- Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size.
   resources: {}
+  # -- Helm tests
+  tests:
+    enabled: false
