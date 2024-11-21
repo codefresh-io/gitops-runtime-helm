@@ -132,7 +132,7 @@ sealed-secrets:
       cpu: 200m
       memory: 512Mi
 # ---------------------------------------------------------------------------------------------------------------------
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-cd-7.4.7-5-cap-2.12.3-2024.10.28-20100fc54/charts/argo-cd
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-cd-7.4.7-6-cap-2.12.3-2024.11.14-d7a4c4e7e/charts/argo-cd
 # ---------------------------------------------------------------------------------------------------------------------
 argo-cd:
   fullnameOverride: argo-cd
@@ -346,7 +346,7 @@ internal-router:
     # -- Set number of pods that are unavailable after eviction as number or percentage
     maxUnavailable: ""
 # ---------------------------------------------------------------------------------------------------------------------
-# DOCS: https://github.com/codefresh-io/codefresh-tunnel-charts/blob/codefresh-tunnel-client-0.1.17-helm/codefresh-tunnel-client/values.yaml
+# DOCS: https://github.com/codefresh-io/codefresh-tunnel-charts/blob/codefresh-tunnel-client-0.1.18-helm/codefresh-tunnel-client/values.yaml
 # ---------------------------------------------------------------------------------------------------------------------
 tunnel-client:
   # -- Will only be used if global.runtime.ingress.enabled = false
@@ -504,7 +504,7 @@ app-proxy:
     maxUnavailable: ""
 
 # ---------------------------------------------------------------------------------------------------------------------
-# DOCS: https://github.com/codefresh-io/codefresh-gitops-operator/tree/codefresh-gitops-operator-0.3.6-helm/charts/codefresh-gitops-operator
+# DOCS: https://github.com/codefresh-io/codefresh-gitops-operator/tree/codefresh-gitops-operator-0.3.8-helm/charts/codefresh-gitops-operator
 # ---------------------------------------------------------------------------------------------------------------------
 gitops-operator:
   # -- Do not change unless instructed otherwise by Codefresh support

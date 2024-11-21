@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.14.0](https://img.shields.io/badge/Version-0.14.0-informational?style=flat-square) ![AppVersion: 0.1.62](https://img.shields.io/badge/AppVersion-0.1.62-informational?style=flat-square)
+![Version: 0.14.1](https://img.shields.io/badge/Version-0.14.1-informational?style=flat-square) ![AppVersion: 0.1.64](https://img.shields.io/badge/AppVersion-0.1.64-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.14.0 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.14.1 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -100,14 +100,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3142.0"` |  |
+| app-proxy.image.tag | string | `"1.3146.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3142.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3146.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -192,13 +192,14 @@ sealed-secrets:
 | event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
 | event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| garage-workflows-artifact-storage | object | `{"deployment":{"kind":"StatefulSet","replicaCount":3},"enabled":false,"fullnameOverride":"garage","garage":{"replicationMode":3},"persistence":{"data":{"size":"100Mi","storageClass":""},"enabled":true,"meta":{"size":"100Mi","storageClass":""}},"resources":{}}` | Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC) |
+| garage-workflows-artifact-storage | object | `{"deployment":{"kind":"StatefulSet","replicaCount":3},"enabled":false,"fullnameOverride":"garage","garage":{"replicationMode":3},"persistence":{"data":{"size":"100Mi","storageClass":""},"enabled":true,"meta":{"size":"100Mi","storageClass":""}},"resources":{},"tests":{"enabled":false}}` | Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC) |
 | garage-workflows-artifact-storage.deployment.kind | string | `"StatefulSet"` | Only statefulset is supported for Codefresh gitops runtime. Do not change this |
 | garage-workflows-artifact-storage.persistence.data | object | `{"size":"100Mi","storageClass":""}` | Volume that stores artifacts and logs for workflows |
 | garage-workflows-artifact-storage.persistence.data.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
 | garage-workflows-artifact-storage.persistence.meta | object | `{"size":"100Mi","storageClass":""}` | Volume that stores cluster metadata |
 | garage-workflows-artifact-storage.persistence.meta.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
 | garage-workflows-artifact-storage.resources | object | `{}` | Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size. |
+| garage-workflows-artifact-storage.tests | object | `{"enabled":false}` | Helm tests |
 | gitops-operator | object | `{"affinity":{},"argoCdNotifications":{"image":{},"imageOverride":false,"resources":{}},"crds":{"additionalLabels":{},"annotations":{},"install":true,"keep":false},"enabled":true,"env":{},"fullnameOverride":"","image":{},"imagePullSecrets":[],"kube-rbac-proxy":{"image":{"tag":"v0.16.0"},"resources":{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}},"libraryMode":true,"nameOverride":"","nodeSelector":{},"podAnnotations":{},"podLabels":{},"replicaCount":1,"resources":{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}},"serviceAccount":{"annotations":{},"create":true,"name":"gitops-operator-controller-manager"},"tolerations":[]}` | ------------------------------------------------------------------------------------------------------------------- |
 | gitops-operator.argoCdNotifications | object | `{"image":{},"imageOverride":false,"resources":{}}` | Builtin notifications controller used by gitops-operator for promotion related notifications |
 | gitops-operator.argoCdNotifications.image | object | `{}` | Set image.repository and image.tag notifications image used by the gitops operator. Ignored unless imageOverride is set to true. |
