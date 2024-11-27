@@ -207,6 +207,18 @@ argo-workflows:
   crds:
     # -- Install and upgrade CRDs
     install: true
+  # executor controls how the init and wait container should be customized
+  executor:
+    resources:
+      limits:
+        ephemeral-storage: 50Mi
+      requests:
+        ephemeral-storage: 10Mi
+  # mainContainer adds default config for main container that could be overriden in workflows template
+  mainContainer:
+    resources:
+      requests:
+        ephemeral-storage: 10Mi
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo rollouts
