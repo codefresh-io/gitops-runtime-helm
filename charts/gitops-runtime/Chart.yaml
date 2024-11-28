@@ -19,7 +19,7 @@ annotations:
     - kind: changed
       description: updated frpc with security fixes (#334)
     - kind: changed
-      description: updated codefresh-gitops-operator to 0.3.11 (#340)(#343) - add retry in case workflow was not suspend yet, use argocd-get-global-tmpl on exit hook, support non-github promotions (commit only)
+      description: updated codefresh-gitops-operator to 0.3.11 (#340)(#343) - add retry in case workflow was not suspend yet, use argocd-get-global-tmpl on exit hook, support non-github promotions (commit only), fail submit-tmpl step if child wf failed
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
@@ -45,7 +45,7 @@ dependencies:
     condition: tunnel-client.enabled
   - name: codefresh-gitops-operator
     repository: oci://quay.io/codefresh/charts
-    version: 0.3.11
+    version: 0.3.12
     alias: gitops-operator
     condition: gitops-operator.enabled
   - name: garage
