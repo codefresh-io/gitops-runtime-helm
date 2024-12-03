@@ -19,7 +19,7 @@ annotations:
     - kind: changed
       description: updated frpc with security fixes (#334)
     - kind: changed
-      description: updated codefresh-gitops-operator to 0.3.11 (#340)(#343) - add retry in case workflow was not suspend yet, use argocd-get-global-tmpl on exit hook, support non-github promotions (commit only), fail submit-tmpl step if child wf failed
+      description: updated codefresh-gitops-operator to 0.3.12 (#340)(#343)(#345) - get APP_RESULT as a global output in the promotion-wrapper onExit handler, support non-github promotions (commit only), fail promotion-wrapper if pre or post-action step fails
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
