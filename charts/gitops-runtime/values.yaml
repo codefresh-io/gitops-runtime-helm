@@ -361,6 +361,7 @@ tunnel-client:
 #-----------------------------------------------------------------------------------------------------------------------
 app-proxy:
   replicaCount: 1
+  singleNamespace: false
   # -- Image enrichment process configuration
   image-enrichment:
     # -- Enable or disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.
@@ -521,11 +522,13 @@ gitops-operator:
     annotations: {}
     # -- Additional labels for gitops operator CRDs
     additionalLabels: {}
+
+  singleNamespace: false
   env: {}
-  image: {}
+  image:
   # -- defaults
   # repository: quay.io/codefresh/codefresh-gitops-operator
-  # tag: 'v{{ .Chart.AppVersion }}'
+    tag: feat-cr-24670-namespaced-install-cdc9a73
 
   serviceAccount:
     create: true
