@@ -242,10 +242,13 @@ Output comma separated list of installed runtime components
 {{- define "codefresh-gitops-runtime.component-list"}}
   {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
   {{- $argoEvents := dict "name" "argo-events" "version" (get .Subcharts "argo-events").Chart.AppVersion }}
-  {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
+  {{- if index (get .Values "sealed-secrets") "enabled" }}
+    {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
+    {{- $comptList = append $comptList $sealedSecrets }}
+  {{- end }}
   {{- $internalRouter := dict "name" "internal-router" "version" .Chart.AppVersion }}
   {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
-  {{- $comptList := list $argoCD $argoEvents $appProxy $sealedSecrets $internalRouter}}
+  {{- $comptList := list $argoCD $argoEvents $appProxy $internalRouter}}
   {{- if index (get .Values "argo-rollouts") "enabled" }}
     {{- $rolloutReporter := dict "name" "rollout-reporter" "version" .Chart.AppVersion }}
     {{- $argoRollouts := dict "name" "argo-rollouts" "version" (get .Subcharts "argo-rollouts").Chart.AppVersion }}

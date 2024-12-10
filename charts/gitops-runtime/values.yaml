@@ -118,6 +118,7 @@ installer:
 # DOCS: https://artifacthub.io/packages/helm/bitnami-labs/sealed-secrets/2.16.1?modal=values
 # ---------------------------------------------------------------------------------------------------------------------
 sealed-secrets:
+  enabled: true
   fullnameOverride: sealed-secrets-controller
   keyrenewperiod: "720h"
   image:
