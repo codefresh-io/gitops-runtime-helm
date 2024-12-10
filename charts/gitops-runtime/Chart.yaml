@@ -31,14 +31,15 @@ dependencies:
 - name: sealed-secrets
   repository: https://bitnami-labs.github.io/sealed-secrets/
   version: 2.16.1
+  condition: sealed-secrets.enabled
 - name: codefresh-tunnel-client
   repository: oci://quay.io/codefresh/charts
   version: 0.1.18
   alias: tunnel-client
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
-  repository: oci://quay.io/codefresh/charts
-  version: 0.3.12
+  repository: oci://quay.io/codefresh/charts/dev
+  version: 0.0.0-feat-cr-24670-namespaced-install
   alias: gitops-operator
   condition: gitops-operator.enabled
 - name: garage
