@@ -662,3 +662,10 @@ garage-workflows-artifact-storage:
   # -- Helm tests
   tests:
     enabled: false
+
+#-----------------------------------------------------------------------------------------------------------------------
+# octopus-argo
+#-----------------------------------------------------------------------------------------------------------------------
+# -- Services for communicating between Argo and Codefresh
+octopus-argo:
+  enabled: false
