@@ -42,8 +42,6 @@ tests:
     - failedTemplate:
         errorMessage: codefresh.accountId is required
 
-
-
 - it: when both tunnel-client and ingress are disabled fail rendering if ingressUrl is not provided
   template: templates/codefresh-cm.yaml
   values:
