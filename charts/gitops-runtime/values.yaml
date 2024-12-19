@@ -143,6 +143,10 @@ sealed-secrets:
 #-----------------------------------------------------------------------------------------------------------------------
 argo-cd:
   fullnameOverride: argo-cd
+  enabled: true
+  byoServerUrl: ''
+  byoRepoServerName: ''
+  byoRepoServerPort: ''
   crds:
     install: true
 
@@ -588,7 +592,9 @@ gitops-operator:
     # -- If set to true allows to override notifications image used by the gitops operator. When set to false the version of ArgoCD will be set to the version used for all other ArgoCD components.
     imageOverride: false
     # -- Set image.repository and image.tag notifications image used by the gitops operator. Ignored unless imageOverride is set to true.
-    image: {}
+    image:
+      repository: quay.io/codefresh/argocd
+      tag: v2.12.3-2024.11.14-d7a4c4e7e
     # -- Resources for notifications controller used by gitops-operator.
     resources: {}
 

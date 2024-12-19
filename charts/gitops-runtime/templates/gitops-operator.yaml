@@ -1,13 +1,13 @@
 {{- if index (get .Values "gitops-operator") "libraryMode" }}
   {{- $gitopsOperatorContext := (index .Subcharts "gitops-operator")}}
-  {{- $argoCDImageDict := index .Subcharts "argo-cd" "Values" "global" "image" }}
-  {{- if not $argoCDImageDict.tag }}
-    {{- $_ := set $argoCDImageDict "tag" (get .Subcharts "argo-cd").Chart.AppVersion }}
-  {{- end }}
-
 
   {{/* Set ArgoCD image */}}
-  {{- if not (index .Values "gitops-operator" "argoCdNotifications.imageOverride") }}
+  {{- if not (index $gitopsOperatorContext.Values.argoCdNotifications.imageOverride) }}
+    {{- $argoCDImageDict := index .Subcharts "argo-cd" "Values" "global" "image" }}
+    {{- if not $argoCDImageDict.tag }}
+      {{- $_ := set $argoCDImageDict "tag" (get .Subcharts "argo-cd").Chart.AppVersion }}
+    {{- end }}
+
     {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "repository" $argoCDImageDict.repository }}
     {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "tag" $argoCDImageDict.tag }}
   {{- end }}
