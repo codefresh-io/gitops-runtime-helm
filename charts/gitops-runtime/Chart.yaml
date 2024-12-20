@@ -47,6 +47,6 @@ dependencies:
   version: 0.5.0-cf.2
   condition: garage-workflows-artifact-storage.enabled
 - name: octopus-argo
-  repository: oci://quay.io/codefresh/charts/dev
-  version: 0.1.0-app-version-logic
+  repository: oci://quay.io/codefresh/charts
+  version: 0.1.0
   condition: octopus-argo.enabled
