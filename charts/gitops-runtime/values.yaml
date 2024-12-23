@@ -146,7 +146,7 @@ argo-cd:
   enabled: true
   byoServerUrl: ''
   byoRepoServerName: ''
-  byoRepoServerPort: ''
+  byoRepoServerPort: 8081
   crds:
     install: true
 
