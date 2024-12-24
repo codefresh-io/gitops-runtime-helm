@@ -18,10 +18,12 @@ annotations:
       description: updated app-proxy to 1.3196.4 - app proxy init without argo-cd, switch to @nestjs/axios, reset git state before doing any actions, upgrade HELM_VERSION to 3.16.2 and KUBESEAL_VERSION to 0.27.3 to fix critical vulnerabilities, throw original exception in case of NO_CHANGES
     - kind: changed
       description: updated argo-events to 2.4.7-1-cap-CR-26731 - fix security vulnerabilities
+    - kind: changed
+      description: updated argo-cd to 7.4.7-10-cap-2.12.3-2024.12.23-4a8e092c0 - fix securitty vulnerabilities
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
-    version: 7.4.7-8-cap-2.12.3-2024.12.17-4d75d35f4
+    version: 7.4.7-10-cap-2.12.3-2024.12.23-4a8e092c0
   - name: argo-events
     repository: https://codefresh-io.github.io/argo-helm
     version: 2.4.7-1-cap-CR-26731
