@@ -11,11 +11,6 @@ ARGO_CD_USERNAME:
       name: cap-app-proxy-cm
       key: argoCdUsername
       optional: true
-ARGO_CD_PASSWORD:
-  valueFrom:
-    secretKeyRef:
-      name: argocd-initial-admin-secret
-      key: password
 ARGO_WORKFLOWS_INSECURE:
   valueFrom:
     configMapKeyRef:

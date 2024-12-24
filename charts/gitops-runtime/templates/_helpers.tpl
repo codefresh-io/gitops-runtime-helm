@@ -1,10 +1,11 @@
 {{/* Validation for secretKeyRef to avoid conflicting secret names with secrets created by controllers */}}
-{{- define "codefresh-gitops-runtime.secret-name-validation"}}
+{{- define "codefresh-gitops-runtime.secret-name-validation" }}
   {{- $reservedSecretNames := list "codefresh-token" }}
   {{- if has .name $reservedSecretNames }}
     {{- fail (printf "%s is a reserved name and is not allowed. Please use a different secret name" .name) }}
   {{- end }}
 {{- end }}
+
 {{/*
 Expand the name of the chart.
 */}}
@@ -234,12 +235,11 @@ valueFrom:
     {{- include "codefresh-gitops-runtime.secret-name-validation" .Values.global.codefresh.userToken.secretKeyRef }}
 valueFrom:
   secretKeyRef:
-  {{- .Values.global.codefresh.userToken.secretKeyRef | toYaml | nindent 4 }}
+    {{- .Values.global.codefresh.userToken.secretKeyRef | toYaml | nindent 4 }}
   {{- else }}
     {{- fail "global.codefresh.userToken is mandatory. Set token or secretKeyRef!" }}
   {{- end }}
 {{- end }}
-
 
 {{/*
 Get ingress url for both tunnel based and ingress based runtimes
