@@ -1,14 +1,14 @@
 {{- define "cap-app-proxy.resources.configmap-documented-configs"}}
-argoCdUrl: {{ .Values.config.argoCdUrl }}
-argoCdUsername: {{ .Values.config.argoCdUsername }}
-argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
+argoCdUrl: {{ .Values.argoCdCredentials.url }}
+argoCdUsername: {{ .Values.argoCdCredentials.username }}
 argoWorkflowsUrl: {{ default "" .Values.config.argoWorkflowsUrl }}
+argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
+skipGitPermissionValidation: {{ .Values.config.skipGitPermissionValidation | quote }}
+logLevel: {{ .Values.config.logLevel | quote }}
 cors: {{ .Values.global.codefresh.url }}
 env: {{ .Values.config.env | quote}}
 isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote }} 
 runtimeName: {{ required "global.runtime.name is required" .Values.global.runtime.name | quote}}
-skipGitPermissionValidation: {{ .Values.config.skipGitPermissionValidation | quote }}
-logLevel: {{ .Values.config.logLevel | quote }}
   {{- $enrichmentValues := get .Values "image-enrichment" }}
   {{- if $enrichmentValues.enabled }}
 enrichmentConcurrencyCmName: {{ $enrichmentValues.config.concurrencyCmName | quote}}

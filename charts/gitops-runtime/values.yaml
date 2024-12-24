@@ -24,7 +24,7 @@ global:
           # -- Whether to create the secret.
           create: false
           # -- The secret key that holds the ca bundle
-          key: 'ca-bundle.crt'
+          key: "ca-bundle.crt"
           # Annotations
           annotations: {}
           # Certificate content
@@ -38,7 +38,8 @@ global:
       workflowPipelinesGitWebhooks:
         # Annotations on the secret resource
         annotatins: {}
-        certificates: {}
+        certificates:
+          {}
           # server.example.com: |
           #   -----BEGIN CERTIFICATE-----
           #   ...
@@ -81,10 +82,10 @@ global:
         # -- secretKeyReference for Git credentials password. Provide name and key fields.
         secretKeyRef: {}
 
-   # -- Runtime eventbus
+    # -- Runtime eventbus
     eventBus:
-       # -- Eventbus name
-      name: 'codefresh-eventbus'
+      # -- Eventbus name
+      name: "codefresh-eventbus"
       # -- Annotations on EventBus resource
       annotations: {}
       # -- Pod disruption budget for the eventbus
@@ -127,9 +128,9 @@ sealed-secrets:
   fullnameOverride: sealed-secrets-controller
   keyrenewperiod: "720h"
   image:
-    registry: 'quay.io'
-    repository: 'codefresh/sealed-secrets-controller'
-    tag: '0.27.1'
+    registry: "quay.io"
+    repository: "codefresh/sealed-secrets-controller"
+    tag: "0.27.1"
   resources:
     limits:
       cpu: 500m
@@ -144,8 +145,8 @@ sealed-secrets:
 argo-cd:
   fullnameOverride: argo-cd
   enabled: true
-  byoServerUrl: ''
-  byoRepoServerName: ''
+  byoServerUrl: ""
+  byoRepoServerName: ""
   byoRepoServerPort: 8081
   crds:
     install: true
@@ -157,7 +158,7 @@ argo-cd:
       application.resourceTrackingMethod: annotation+label
     params:
       server.insecure: true
-      application.namespaces: 'cf-*'
+      application.namespaces: "cf-*"
 
   eventReporter:
     # -- Installs new event reporter component to cluster
@@ -205,7 +206,7 @@ argo-workflows:
   server:
     # -- auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI
     authModes:
-    - client
+      - client
     # -- Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh.
     baseHref: /workflows/
   crds:
@@ -322,7 +323,8 @@ internal-router:
   podLabels: {}
   podSecurityContext: {}
   # -- Environment variables - see values.yaml inside the chart for usage
-  env: {}
+  env:
+    {}
     #  NAMESPACE:
     #    valueFrom:
     #     fieldRef:
@@ -360,11 +362,11 @@ internal-router:
   # -- Internal routing settings. Do not change this unless you are absolutely certain - the values are determined by chart's logic.
   routing: {}
   #  Example of values:
-    # workflows:
-    #   enabled: true
-    #   internalUrl: "https://argo-server1:2746/"
-    # app-proxy:
-    #   internalUrl: "http://cap-app-proxy:3017"
+  # workflows:
+  #   enabled: true
+  #   internalUrl: "https://argo-server1:2746/"
+  # app-proxy:
+  #   internalUrl: "http://cap-app-proxy:3017"
 
   dnsService: kube-dns
   dnsNamespace: kube-system
@@ -396,7 +398,10 @@ tunnel-client:
 # app-proxy
 #-----------------------------------------------------------------------------------------------------------------------
 app-proxy:
+  nameOverride: ""
+  fullnameOverride: "cap-app-proxy"
   replicaCount: 1
+
   # -- Image enrichment process configuration
   image-enrichment:
     # -- Enable or disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.
@@ -409,14 +414,15 @@ app-proxy:
       name: codefresh-image-enrichment-sa
       # -- Annotations on the service account
       annotations:
+
     # -- Configurations for image enrichment workflow
     config:
       # -- The name of the configmap to use as synchronization semaphore, see https://argoproj.github.io/argo-workflows/synchronization/
-      concurrencyCmName: 'workflow-synchronization-semaphores'
+      concurrencyCmName: "workflow-synchronization-semaphores"
       # -- The name of the key in the configmap to use as synchronization semaphore
-      concurrencyCmKey: 'imageReportExecutor'
+      concurrencyCmKey: "imageReportExecutor"
       # -- Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes.
-      podGcStrategy: 'OnWorkflowCompletion'
+      podGcStrategy: "OnWorkflowCompletion"
       # -- Number of seconds to live after completion
       ttlAfterCompletionInSeconds: 86400
       # -- Maximum allowed runtime for the enrichment workflow
@@ -444,6 +450,9 @@ app-proxy:
     repository: quay.io/codefresh/cap-app-proxy
     tag: 1.3263.2
     pullPolicy: IfNotPresent
+
+  imagePullSecrets: []
+
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
 
@@ -452,6 +461,7 @@ app-proxy:
       repository: quay.io/codefresh/cap-app-proxy-init
       tag: 1.3263.2
       pullPolicy: IfNotPresent
+
     command:
       - ./init.sh
 
@@ -460,23 +470,15 @@ app-proxy:
     resources:
       limits:
         memory: 512Mi
-        cpu: '1'
+        cpu: "1"
       requests:
         memory: 256Mi
-        cpu: '0.2'
+        cpu: "0.2"
 
     # -- Extra volume mounts for init container
     extraVolumeMounts: []
 
-  imagePullSecrets: []
-  nameOverride: ""
-  fullnameOverride: "cap-app-proxy"
-
   config:
-    # -- ArgoCD user to be used by app-proxy
-    argoCdUsername: "admin"
-    # -- ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to
-    argoCdUrl:
     # -- Workflows server url. Determined by chart logic. Do not change unless you are certain you need to
     argoWorkflowsUrl:
     argoWorkflowsInsecure: "true"
@@ -486,7 +488,25 @@ app-proxy:
     # -- Log Level
     logLevel: "info"
 
-  env: {}
+  # env:
+  #   ARGO_CD_PASSWORD:
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: argocd-initial-admin-secret
+  #         key: password
+
+  argoCdCredentials:
+    # -- ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to
+    url:
+    secretName: "gitops-runtime-argo-cd-password"
+    # -- ArgoCD user to be used by app-proxy
+    username: "admin"
+    # -- ArgoCD password in plain text. The chart creates and manages the secret for this token
+    password:
+    # -- ArgoCD password referenced by an existing secret
+    secretKeyRef:
+      name: argocd-initial-admin-secret
+      key: password
 
   serviceAccount:
     create: true
@@ -497,7 +517,8 @@ app-proxy:
 
   podLabels: {}
 
-  podSecurityContext: {}
+  podSecurityContext:
+    {}
     # fsGroup: 2000
 
   securityContext:
@@ -533,13 +554,13 @@ app-proxy:
 
   resources:
     requests:
-      memory: '512Mi'
-      ephemeral-storage: '2Gi'
-      cpu: '100m'
+      memory: "512Mi"
+      ephemeral-storage: "2Gi"
+      cpu: "100m"
     limits:
-      memory: '1Gi'
-      ephemeral-storage: '6Gi'
-      cpu: '1500m'
+      memory: "1Gi"
+      ephemeral-storage: "6Gi"
+      cpu: "1500m"
 
   nodeSelector: {}
   tolerations: []
@@ -577,7 +598,8 @@ gitops-operator:
     additionalLabels: {}
 
   env: {}
-  image: {}
+  image:
+    {}
     # -- defaults
     # repository: quay.io/codefresh/codefresh-gitops-operator
     # tag: 'v{{ .Chart.AppVersion }}'

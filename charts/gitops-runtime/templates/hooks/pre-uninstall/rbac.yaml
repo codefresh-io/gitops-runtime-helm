@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: runtime-cleanup
+  name: runtime-cleanup-r
   annotations:
     "helm.sh/hook": pre-delete
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
@@ -16,22 +16,22 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: runtime-cleanup
+  name: runtime-cleanup-rb
   annotations:
     "helm.sh/hook": pre-delete
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
 roleRef:
   apiGroup: ""
   kind: Role
-  name: runtime-cleanup
+  name: runtime-cleanup-r
 subjects:
   - kind: ServiceAccount
-    name: runtime-cleanup
+    name: runtime-cleanup-sa
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: runtime-cleanup
+  name: runtime-cleanup-sa
   annotations:
     "helm.sh/hook": pre-delete
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
