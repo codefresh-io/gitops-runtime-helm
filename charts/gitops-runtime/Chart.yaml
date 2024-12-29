@@ -15,45 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: update argo-workflows to 0.45.1-v3.6.2-cap-CR-26293 (#355)'
-    - kind: changed
-      description: update gitops-opeartor to 0.3.16 - fixed releases getting stuck on suspended during commit flow (#354)
-    - kind: changed
-      description: fix placement of isConfigurationRuntime field (#353)
-    - kind: changed
-      description: 'fix: add isConfigurationRuntime value to app-proxy cm (#352)'
-    - kind: changed
-      description: 'feat: argo-cd with multi-source app info reporting  (#339)'
-    - kind: changed
-      description: update gitops-opeartor to 0.3.14 and app-proxy to 1.3167.0 - monitor suspended workflows for closed PRs (#350)
-    - kind: changed
-      description: update codefresh-gitops-operator to 0.3.13 - fix release retry in case it failed on workflow resume (#349)
-    - kind: changed
-      description: 'feat: Add ability to set nodePort on internal-router service (#348)'
-    - kind: changed
-      description: CR-25908 add req and lim for ephemeral storage (argo-workflows) (#344)
-    - kind: changed
-      description: update codefresh-gitops-operator to 0.3.12 - fail submit-tmpl step if child wf failed (#345)
-    - kind: changed
-      description: 'chore: security fixes (#342)'
-    - kind: changed
-      description: update codefresh-gitops-operator to 0.3.11 - support non-github promotions (commit only) (#343)
-    - kind: changed
-      description: updated codefresh-gitops-operator to 0.3.10 (#340)
-    - kind: changed
-      description: argo-cd with repo-server repeated resources fix (#338)
-    - kind: changed
-      description: 'fix: remove aws-cli (#336)'
-    - kind: changed
-      description: updated frpc with security fixes (#334)
-    - kind: changed
-      description: 'fix: don''t use protocol for ARGO_CD_URL in gitops-operator (#332)'
-    - kind: changed
-      description: update gitops-operator to 0.3.8 - changed gitlog to take all commits since the last call (#331)
-    - kind: changed
-      description: 'fix: bump cap-app-proxy to 1.3146.0 - fix: accessing repo in parallel (#329)'
-    - kind: changed
-      description: update gitops-operator to 0.3.8 - support manual-sync applications (#327)
+      description: 'fix: bump cap-app-proxy to 1.3196.4 - app proxy init without argo-cd, switch to @nestjs/axios, reset git state before doing any actions, upgrade HELM_VERSION to 3.16.2 and KUBESEAL_VERSION to 0.27.3 to fix critical vulnerabilities, throw original exception in case of NO_CHANGES'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
