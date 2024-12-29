@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.65
+appVersion: 0.1.66
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.15.0
+version: 0.15.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,7 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix: bump cap-app-proxy to 1.3196.4 - app proxy init without argo-cd, switch to @nestjs/axios, reset git state before doing any actions, upgrade HELM_VERSION to 3.16.2 and KUBESEAL_VERSION to 0.27.3 to fix critical vulnerabilities, throw original exception in case of NO_CHANGES'
+      description: updated changes
+    - kind: changed
+      description: updated app-proxy to 1.3196.4 - app proxy init without argo-cd, switch to @nestjs/axios, reset git state before doing any actions, upgrade HELM_VERSION to 3.16.2 and KUBESEAL_VERSION to 0.27.3 to fix critical vulnerabilities, throw original exception in case of NO_CHANGES
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
