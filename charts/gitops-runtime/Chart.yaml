@@ -15,8 +15,6 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: updated changes
-    - kind: changed
       description: updated app-proxy to 1.3196.4 - app proxy init without argo-cd, switch to @nestjs/axios, reset git state before doing any actions, upgrade HELM_VERSION to 3.16.2 and KUBESEAL_VERSION to 0.27.3 to fix critical vulnerabilities, throw original exception in case of NO_CHANGES
     - kind: changed
       description: updated argo-events to 2.4.7-1-cap-CR-26731 - fix security vulnerabilities

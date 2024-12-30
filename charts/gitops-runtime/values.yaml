@@ -161,7 +161,7 @@ argo-cd:
     # -- Extract application version based on ApplicationConfiguration CRD
     useApplicationConfiguration: true
 # ---------------------------------------------------------------------------------------------------------------------
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-events-2.4.7-1-cap-CR-24607/charts/argo-events
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-events-2.4.7-1-cap-CR-26731/charts/argo-events
 # ---------------------------------------------------------------------------------------------------------------------
 argo-events:
   fullnameOverride: argo-events
