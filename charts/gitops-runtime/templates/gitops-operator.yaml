@@ -1,4 +1,4 @@
-{{- if index (get .Values "gitops-operator") "libraryMode" }}
+{{- if and (index (get .Values "gitops-operator") "libraryMode") (index (get .Values "gitops-operator") "enabled") }}
   {{- $gitopsOperatorContext := (index .Subcharts "gitops-operator")}}
   {{- $argoCDImageDict := index .Subcharts "argo-cd" "Values" "global" "image" }}
   {{- if not $argoCDImageDict.tag }}
