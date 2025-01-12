@@ -664,8 +664,8 @@ garage-workflows-artifact-storage:
     enabled: false
 
 #-----------------------------------------------------------------------------------------------------------------------
-# cf-argocd-satellites
+# cf-argocd-extras
 #-----------------------------------------------------------------------------------------------------------------------
-# -- Satellite services for ArgoCD
-cf-argocd-satellites:
+# -- Codefresh extra services for ArgoCD
+cf-argocd-extras:
   enabled: false
