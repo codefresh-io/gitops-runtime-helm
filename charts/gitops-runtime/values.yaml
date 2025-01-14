@@ -662,3 +662,10 @@ garage-workflows-artifact-storage:
   # -- Helm tests
   tests:
     enabled: false
+
+#-----------------------------------------------------------------------------------------------------------------------
+# cf-argocd-extras
+#-----------------------------------------------------------------------------------------------------------------------
+# -- Codefresh extra services for ArgoCD
+cf-argocd-extras:
+  enabled: false

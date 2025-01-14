@@ -46,3 +46,7 @@ dependencies:
   alias: garage-workflows-artifact-storage
   version: 0.5.0-cf.2
   condition: garage-workflows-artifact-storage.enabled
+- name: cf-argocd-extras
+  repository: oci://quay.io/codefresh/charts
+  version: 0.1.0
+  condition: cf-argocd-extras.enabled
