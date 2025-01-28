@@ -4,8 +4,9 @@ kind: ConfigMap
 metadata:
   name: validate-values-config
 data:
-  values.yaml: |-
+  values.yaml: |
     {{ .Values | toYaml | indent 4 }}
+
 ---
 apiVersion: batch/v1
 kind: Job
