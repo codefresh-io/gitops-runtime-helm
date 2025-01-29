@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.67
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.16.0
+version: 0.16.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,29 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: app-proxy  bump 1.3228.0 (#376)
+      description: 'chore(CR-26970): updated cf-cliv2, kubectl (#375)'
     - kind: changed
-      description: 'fix: upgrade argo-cd to upgrade to 7.7.14-1-cap-2.13.3-2025.1.16-39ce1d3d0 (#374)'
-    - kind: changed
-      description: updated codefresh-gitops-operator (#370)
-    - kind: changed
-      description: 'feat: sources-server (#359)'
-    - kind: changed
-      description: 'feat: update to upstream argo-cd 2.13.3 and helm 7.7.14  (#369)'
-    - kind: changed
-      description: 'fix: upgrade argo events to fix security vulnerability (#364)'
-    - kind: changed
-      description: updated app-proxy to 1.3196.4 - throw original exception in case of NO_CHANGES (#366)
-    - kind: changed
-      description: 'fix: security-vulns in codefresh-gitops-operator (#365)'
-    - kind: changed
-      description: 'fix: security-vulns in gitops-runtime-installer image'
-    - kind: changed
-      description: update argo-cd to 2.12.3-2024.12.23-4a8e092c0-with-dex-and-redis-bump (#362)
-    - kind: changed
-      description: update app-proxy to 1.3192.0 (#361)
-    - kind: changed
-      description: 'feat: cr 26386 argocd core proto wrong wire type (#357)'
+      description: 'chore(): updating csdp (#385)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
