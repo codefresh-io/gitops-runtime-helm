@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.67
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.16.1
+version: 0.16.2
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,9 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore(CR-26970): updated cf-cliv2, kubectl (#375)'
+      description: 'feat: update app proxy version (#391)'
     - kind: changed
-      description: 'chore(): updating csdp (#385)'
+      description: create release draft 0.16.2
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
