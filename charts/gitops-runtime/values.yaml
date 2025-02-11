@@ -429,6 +429,8 @@ app-proxy:
       ttlActiveInSeconds: 900
       # -- Client heartbeat interval in seconds for image enrichemnt workflow
       clientHeartbeatIntervalInSeconds: 5
+      # -- Skip git permission validation. Set to true to use github fine-grained tokens
+      skipGitPermissionValidation: false
       # -- Enrichemnt images
       images:
         # -- Report image enrichment task image
