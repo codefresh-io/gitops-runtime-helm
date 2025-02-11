@@ -9,5 +9,5 @@ metadata:
   {{- end }}
 type: Opaque
 stringData:
-  {{- $argocdTlsCerts := index .Values "argo-cd" "configs" "tls" "certificates"}}
+  {{- $argocdTlsCerts := dig "argo-cd" "configs" "tls" "certificates" dict (get .Values "argo-cd") }}
   {{- mergeOverwrite $argocdTlsCerts .Values.global.codefresh.tls.workflowPipelinesGitWebhooks.certificates | toYaml | nindent 2 }}

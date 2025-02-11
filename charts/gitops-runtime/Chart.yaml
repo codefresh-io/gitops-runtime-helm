@@ -17,6 +17,7 @@ dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
   version: 7.7.14-1-cap-2.13.3-2025.1.16-39ce1d3d0
+  condition: argo-cd.enabled
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.4.7-1-cap-CR-26731
@@ -37,8 +38,8 @@ dependencies:
   alias: tunnel-client
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
-  repository: oci://quay.io/codefresh/charts
-  version: 0.3.23
+  repository: oci://quay.io/codefresh/charts/dev
+  version: 0.0.0-cr-26342-support-byoacd
   alias: gitops-operator
   condition: gitops-operator.enabled
 - name: garage
