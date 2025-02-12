@@ -4,6 +4,9 @@ argoCdUsername: {{ .Values.config.argoCdUsername }}
 argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
 argoWorkflowsUrl: {{ default "" .Values.config.argoWorkflowsUrl }}
 cors: {{ .Values.global.codefresh.url }}
+  {{- if ((.Values.cron).clusterChunkSize) }}
+clusterChunkSize: {{ .Values.cron.clusterChunkSize | quote }}
+  {{- end }}
 env: {{ .Values.config.env | quote}}
 isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote }} 
 runtimeName: {{ required "global.runtime.name is required" .Values.global.runtime.name | quote}}

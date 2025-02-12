@@ -481,6 +481,10 @@ app-proxy:
     skipGitPermissionValidation: "false"
     # -- Log Level
     logLevel: "info"
+  
+  # cron:
+    # -- chunk size of the cluster lists to refresh the clusters in portion during cron job 
+    # clusterChunkSize: 5
 
   env: {}
 

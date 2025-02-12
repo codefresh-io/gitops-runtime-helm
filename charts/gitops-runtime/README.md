@@ -90,6 +90,7 @@ sealed-secrets:
 | app-proxy.config.env | string | `"production"` |  |
 | app-proxy.config.logLevel | string | `"info"` | Log Level |
 | app-proxy.config.skipGitPermissionValidation | string | `"false"` | Skit git permissions validation |
+| app-proxy.cron.clusterChunkSize | int | `0` | App-proxy will split and refresh the cluster list with chunks with size `clusterChunkSize`. When the default value is used the cluster list will be refreshed with one chunk (no split; not recommended when cluster list is too large). |
 | app-proxy.env | object | `{}` |  |
 | app-proxy.extraVolumeMounts | list | `[]` | Extra volume mounts for main container |
 | app-proxy.extraVolumes | list | `[]` | extra volumes |
