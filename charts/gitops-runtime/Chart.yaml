@@ -17,6 +17,7 @@ dependencies:
 - name: argo-cd
   repository: https://codefresh-io.github.io/argo-helm
   version: 7.7.14-3-cap-2.13.3-2025.2.12-7bfd6c858
+  condition: argo-cd.enabled
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
   version: 2.4.7-1-cap-CR-26731
@@ -47,6 +48,6 @@ dependencies:
   version: 0.5.0-cf.2
   condition: garage-workflows-artifact-storage.enabled
 - name: cf-argocd-extras
-  repository: oci://quay.io/codefresh/charts
-  version: 0.1.0
+  repository: oci://quay.io/codefresh/charts/dev
+  version: 0.3.0-feat-lib-chart
   condition: cf-argocd-extras.enabled

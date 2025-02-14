@@ -1,21 +1,27 @@
+{{- if and (index .Values "gitops-operator" "enabled") }}
+
 {{- if index (get .Values "gitops-operator") "libraryMode" }}
   {{- $gitopsOperatorContext := (index .Subcharts "gitops-operator")}}
-  {{- $argoCDImageDict := index .Subcharts "argo-cd" "Values" "global" "image" }}
-  {{- if not $argoCDImageDict.tag }}
-    {{- $_ := set $argoCDImageDict "tag" (get .Subcharts "argo-cd").Chart.AppVersion }}
-  {{- end }}
 
+  {{- if and (index .Subcharts "argo-cd") }}
+  
+    {{- $argoCDImageDict := index .Subcharts "argo-cd" "Values" "global" "image" }}
+    {{- if not $argoCDImageDict.tag }}
+      {{- $_ := set $argoCDImageDict "tag" (get .Subcharts "argo-cd").Chart.AppVersion }}
+    {{- end }}
 
-  {{/* Set ArgoCD image */}}
-  {{- if not (index .Values "gitops-operator" "argoCdNotifications.imageOverride") }}
-    {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "repository" $argoCDImageDict.repository }}
-    {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "tag" $argoCDImageDict.tag }}
+    {{/* Set ArgoCD image */}}
+    {{- if not (index .Values "gitops-operator" "argoCdNotifications.imageOverride") }}
+      {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "repository" $argoCDImageDict.repository }}
+      {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "tag" $argoCDImageDict.tag }}
+    {{- end }}
+
   {{- end }}
 
   {{/* Set repo server service and port */}}
   {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.argocd.repoServer "fullname" (include "codefresh-gitops-runtime.argocd.reposerver.servicename" . ) }}
   {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.argocd.repoServer "port" (include "codefresh-gitops-runtime.argocd.reposerver.serviceport" . ) }}
-  
+
   {{/* Set argo-cd-server service and port */}}
   {{ if not (index .Values "gitops-operator").env.ARGO_CD_URL }}
     {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_URL" (include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . ) }}
@@ -36,5 +42,7 @@
   {{- end }}
 
   {{- include "gitops-operator.resources" $gitopsOperatorContext}}
+
+{{- end }}
 
 {{- end }}
