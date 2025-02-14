@@ -261,7 +261,7 @@ Determine argocd redis url
   {{- $redis := (index .Values "global" "argo-cd" "redis") }}
   {{- $svc := $redis.svc }}
   {{- $port := $redis.port }}
-  {{- printf "%s:%d" $svc $port }}
+  {{- printf "%s:%v" $svc $port }}
 {{- else }}
   {{- fail "ArgoCD is not enabled and .Values.global.argo-cd.url is not set" }}
 {{- end }}
