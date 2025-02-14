@@ -108,6 +108,21 @@ global:
                 memory: 1Gi
                 ephemeral-storage: 2Gi
 
+  argo-cd: 
+    server: {}
+    redis: {}
+    repoServer: {}
+    secretName: "gitops-runtime-argo-cd-password"
+    username: "admin"
+    usernameSecretKeyRef: {}
+    password: ""
+    passwordSecretKeyRef: {}
+
+    # dummy placeholder
+    configs:
+      tls:
+        certificates: {}
+
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
