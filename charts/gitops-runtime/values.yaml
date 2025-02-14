@@ -108,7 +108,7 @@ global:
                 memory: 1Gi
                 ephemeral-storage: 2Gi
 
-  argo-cd: 
+  argo-cd:
     server: {}
     redis: {}
     repoServer: {}
