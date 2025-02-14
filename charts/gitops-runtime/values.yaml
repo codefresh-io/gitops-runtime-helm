@@ -157,6 +157,7 @@ sealed-secrets:
 # ArgoCD
 #-----------------------------------------------------------------------------------------------------------------------
 argo-cd:
+  enabled: true
   fullnameOverride: argo-cd
   crds:
     install: true
