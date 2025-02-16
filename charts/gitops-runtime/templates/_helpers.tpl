@@ -116,6 +116,27 @@ Determine argocd argocd repo server port
   {{- end }}
 {{- end }}
 
+
+{{/*
+Determine argocd repoServer url 
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.reposerver.url" -}}
+{{- $argoCDValues := (get .Values "argo-cd") }} 
+{{- if and (index .Values "argo-cd" "enabled") }}
+  {{- $serviceName := include "codefresh-gitops-runtime.argocd.reposerver.servicename" . }}
+  {{- $port := include "codefresh-gitops-runtime.argocd.reposerver.serviceport" . }}
+  {{- printf "%s:%s" $serviceName $port }}
+{{- else if and (index .Values "global" "argo-cd" "repoServer") }}
+  {{- $repoServer := (index .Values "global" "argo-cd" "repoServer") }}
+  {{- $svc := $repoServer.svc }}
+  {{- $port := $repoServer.port }}
+  {{- printf "%s:%v" $svc $port }}
+{{- else }}
+  {{- fail "ArgoCD is not enabled and .Values.global.argo-cd.url is not set" }}
+{{- end }}
+{{- end}}
+
+
 {{/*
 Determine argocd servicename. Must be called with chart root context
 */}}

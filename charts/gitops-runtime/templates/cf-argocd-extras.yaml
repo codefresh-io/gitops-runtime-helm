@@ -6,6 +6,7 @@
 
   {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "redis.server" (include "codefresh-gitops-runtime.argocd.redis.url" . ) }}
   {{- $_ := set (index $cfArgoCdExtrasContext.Values.sourcesServer.configMaps "cmd-params-cm" "data") "redis.server" (include "codefresh-gitops-runtime.argocd.redis.url" . ) }}
+  {{- $_ := set (index $cfArgoCdExtrasContext.Values.sourcesServer.configMaps "cmd-params-cm" "data") "repo.server" (include "codefresh-gitops-runtime.argocd.reposerver.url" . ) }}
 
   {{- include "cf-argocd-extras.event-reporter.resources" $cfArgoCdExtrasContext }}
 
