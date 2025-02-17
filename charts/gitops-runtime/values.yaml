@@ -713,4 +713,3 @@ cf-argocd-extras:
   # -- Event reporter configuration
   eventReporter:
     enabled: true
-
