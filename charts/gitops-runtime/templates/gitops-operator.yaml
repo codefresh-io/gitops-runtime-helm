@@ -11,11 +11,23 @@
     {{- end }}
 
     {{/* Set ArgoCD image */}}
-    {{- if not (index .Values "gitops-operator" "argoCdNotifications.imageOverride") }}
+    {{- if not (index .Values "gitops-operator" "argoCdNotifications" "imageOverride") }}
       {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "repository" $argoCDImageDict.repository }}
       {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "tag" $argoCDImageDict.tag }}
     {{- end }}
 
+  {{- else if and (index .Values "global" "external-argo-cd" "server" "image") }}
+    
+    {{ $argoCDImageDict := (index .Values "global" "external-argo-cd" "server" "image") }}
+
+    {{/* Set ArgoCD image */}}
+    {{- if not (index .Values "gitops-operator" "argoCdNotifications" "imageOverride") }}
+      {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "repository" $argoCDImageDict.repository }}
+      {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "tag" $argoCDImageDict.tag }}
+    {{- end }}
+
+  {{- else }}
+      {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.server.image is not set"  }}
   {{- end }}
 
   {{/* Set repo server service and port */}}

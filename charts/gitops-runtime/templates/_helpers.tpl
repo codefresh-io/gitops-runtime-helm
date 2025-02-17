@@ -96,7 +96,7 @@ Determine argocd repo server service name. Must be called with chart root contex
   {{- if and (index .Subcharts "argo-cd") }}
     {{- template "argo-cd.repoServer.fullname" (dict "Values" (get .Values "argo-cd")) }}
   {{- else }}
-    {{- $repoServer := index .Values "global" "argo-cd" "repoServer" }}
+    {{- $repoServer := index .Values "global" "external-argo-cd" "repoServer" }}
     {{- $svc := $repoServer.svc }}
     {{- printf "%s" $svc }}
   {{- end }}
@@ -110,7 +110,7 @@ Determine argocd argocd repo server port
   {{- if and (index .Subcharts "argo-cd") }}
     {{- index .Values "argo-cd" "repoServer" "service" "port" }}
   {{- else }}
-    {{- $repoServer := index .Values "global" "argo-cd" "repoServer" }}
+    {{- $repoServer := index .Values "global" "external-argo-cd" "repoServer" }}
     {{- $port := $repoServer.port }}
     {{- printf "%v" $port }}
   {{- end }}
@@ -126,13 +126,13 @@ Determine argocd repoServer url
   {{- $serviceName := include "codefresh-gitops-runtime.argocd.reposerver.servicename" . }}
   {{- $port := include "codefresh-gitops-runtime.argocd.reposerver.serviceport" . }}
   {{- printf "%s:%s" $serviceName $port }}
-{{- else if and (index .Values "global" "argo-cd" "repoServer") }}
-  {{- $repoServer := (index .Values "global" "argo-cd" "repoServer") }}
+{{- else if and (index .Values "global" "external-argo-cd" "repoServer") }}
+  {{- $repoServer := (index .Values "global" "external-argo-cd" "repoServer") }}
   {{- $svc := $repoServer.svc }}
   {{- $port := $repoServer.port }}
   {{- printf "%s:%v" $svc $port }}
 {{- else }}
-  {{- fail "ArgoCD is not enabled and .Values.global.argo-cd.url is not set" }}
+  {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer is not set" }}
 {{- end }}
 {{- end}}
 
@@ -193,8 +193,8 @@ Determine argocd server url. Must be called with chart root context
     {{- end }}
     {{- $url := include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . }}
     {{- printf "%s://%s" $protocol $url }}
-  {{- else if and (index .Values "global" "argo-cd" "server") }}
-    {{- $argoCDSrv := (index .Values "global" "argo-cd" "server") }}
+  {{- else if and (index .Values "global" "external-argo-cd" "server") }}
+    {{- $argoCDSrv := (index .Values "global" "external-argo-cd" "server") }}
     {{- $protocol := $argoCDSrv.protocol }}
     {{- $svc := $argoCDSrv.svc }}
     {{- $port := $argoCDSrv.port | toString }}
@@ -204,7 +204,7 @@ Determine argocd server url. Must be called with chart root context
       {{- printf "%s://%s:%s" $protocol $svc $port }}
     {{- end }}
   {{- else }}
-    {{- fail "ArgoCD is not enabled and .Values.global.argo-cd.url is not set" }}
+    {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set" }}
   {{- end }}
 {{- end}}
 
@@ -218,13 +218,13 @@ Determine argocd server url witout the protocol. Must be called with chart root 
   {{- $port := include "codefresh-gitops-runtime.argocd.server.serviceport" . }}
   {{- $path := (get $argoCDValues.configs.params "server.rootpath") }}
   {{- printf "%s:%s%s" $serverName $port $path }}
-{{- else if and (index .Values "global" "argo-cd" "server") }}
-  {{- $argoCDSrv := (index .Values "global" "argo-cd" "server") }}
+{{- else if and (index .Values "global" "external-argo-cd" "server") }}
+  {{- $argoCDSrv := (index .Values "global" "external-argo-cd" "server") }}
   {{- $svc := $argoCDSrv.svc }}
   {{- $port := $argoCDSrv.port }}
   {{- printf "%s:%v" $svc $port }}
 {{- else }}
-  {{- fail "ArgoCD is not enabled and .Values.global.argo-cd.url is not set" }}
+  {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set" }}
 {{- end }}
 {{- end}}
 
@@ -237,12 +237,15 @@ valueFrom:
   secretKeyRef:
     name: argocd-initial-admin-secret
     key: password
-  {{- else if and (index .Values "global" "argo-cd" "passwordSecretKeyRef") }}
+  {{- else if and (index .Values "global" "external-argo-cd" "passwordSecretKeyRef") }}
 valueFrom:
   secretKeyRef:
-{{- index .Values "global" "argo-cd" "passwordSecretKeyRef" | toYaml | nindent 4 }}
-  {{- else if and (index .Values "global" "argo-cd" "password") }}
-{{- printf "%s" (index .Values "global" "argo-cd" "password") }}
+{{- index .Values "global" "external-argo-cd" "passwordSecretKeyRef" | toYaml | nindent 4 }}
+  {{- else if and (index .Values "global" "external-argo-cd" "password") }}
+valueFrom:
+  secretKeyRef:
+    name: gitops-runtime-argo-cd-password
+    key: token
   {{- else }}
 {{ fail "ArgoCD is not enabled and .Values.global.argo-cd.password or .Values.global.argo-cd.passwordSecretKeyRef is not set" }}
   {{- end }}
@@ -258,12 +261,12 @@ valueFrom:
     name: cap-app-proxy-cm
     key: argoCdUsername
     optional: true
-  {{- else if and (index .Values "global" "argo-cd" "usernameSecretKeyRef") }}
+  {{- else if and (index .Values "global" "external-argo-cd" "usernameSecretKeyRef") }}
 valueFrom:
   secretKeyRef:
-{{- index .Values "global" "argo-cd" "usernameSecretKeyRef" | toYaml | nindent 4 }}
-  {{- else if and (index .Values "global" "argo-cd" "username") }}
-{{- printf "%s" (index .Values "global" "argo-cd" "username") }}
+{{- index .Values "global" "external-argo-cd" "usernameSecretKeyRef" | toYaml | nindent 4 }}
+  {{- else if and (index .Values "global" "external-argo-cd" "username") }}
+{{- printf "%s" (index .Values "global" "external-argo-cd" "username") }}
   {{- else }}
 {{ fail "ArgoCD is not enabled and .Values.global.argo-cd.username or .Values.global.argo-cd.usernameSecretKeyRef is not set" }}
   {{- end }}
@@ -278,13 +281,13 @@ Determine argocd redis url
   {{- $serviceName := include "codefresh-gitops-runtime.argocd.redis.servicename" . }}
   {{- $port := include "codefresh-gitops-runtime.argocd.redis.serviceport" . }}
   {{- printf "%s:%s" $serviceName $port }}
-{{- else if and (index .Values "global" "argo-cd" "redis") }}
-  {{- $redis := (index .Values "global" "argo-cd" "redis") }}
+{{- else if and (index .Values "global" "external-argo-cd" "redis") }}
+  {{- $redis := (index .Values "global" "external-argo-cd" "redis") }}
   {{- $svc := $redis.svc }}
   {{- $port := $redis.port }}
   {{- printf "%s:%v" $svc $port }}
 {{- else }}
-  {{- fail "ArgoCD is not enabled and .Values.global.argo-cd.url is not set" }}
+  {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.redis is not set" }}
 {{- end }}
 {{- end}}
 
