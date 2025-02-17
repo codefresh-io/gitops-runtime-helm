@@ -1,4 +1,4 @@
-{{- if index (get .Values "cf-argocd-extras") "libraryMode" }}
+{{- if and (index (get .Values "cf-argocd-extras") "libraryMode") (index .Values "cf-argocd-extras" "enabled") }}
   {{- $cfArgoCdExtrasContext := (index .Subcharts "cf-argocd-extras")}}
 
   {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "argocd.server" (include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . ) }}

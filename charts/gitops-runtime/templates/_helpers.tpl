@@ -254,7 +254,7 @@ valueFrom:
 {{/*
 Determine argocd server password. 
 */}}
-{{- define "codefresh-gitops-runtime.argocd.server.username" }}
+{{- define "codefresh-gitops-runtime.argocd.server.username-env-var" }}
   {{- if and (index .Values "argo-cd" "enabled") }}
 valueFrom:
   configMapKeyRef:
@@ -269,6 +269,19 @@ valueFrom:
 {{- printf "%s" (index .Values "global" "external-argo-cd" "username") }}
   {{- else }}
 {{ fail "ArgoCD is not enabled and .Values.global.argo-cd.username or .Values.global.argo-cd.usernameSecretKeyRef is not set" }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Determine argocd server password. 
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.server.username-cm" }}
+  {{- if and (index .Values "argo-cd" "enabled") }}
+    {{- printf "%s" (index .Values "app-proxy" "config" "argoCdUsername") }}
+  {{- else if and (index .Values "global" "external-argo-cd" "username") }}
+    {{- printf "%s" (index .Values "global" "external-argo-cd" "username") }}
+  {{- else }}
+    {{- fail "ArgoCD is not enabled and .Values.global.argo-cd.username is not set" }}
   {{- end }}
 {{- end }}
 
