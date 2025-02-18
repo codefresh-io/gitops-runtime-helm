@@ -97,7 +97,7 @@ Determine argocd repo server service name. Must be called with chart root contex
     {{- template "argo-cd.repoServer.fullname" (dict "Values" (get .Values "argo-cd")) }}
   {{- else }}
     {{- $repoServer := index .Values "global" "external-argo-cd" "repoServer" }}
-    {{- $svc := $repoServer.svc }}
+    {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.svc is not set" $repoServer.svc }}
     {{- printf "%s" $svc }}
   {{- end }}
 {{- end }}
@@ -111,7 +111,7 @@ Determine argocd argocd repo server port
     {{- index .Values "argo-cd" "repoServer" "service" "port" }}
   {{- else }}
     {{- $repoServer := index .Values "global" "external-argo-cd" "repoServer" }}
-    {{- $port := $repoServer.port }}
+    {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.svc is not set" $repoServer.port }}
     {{- printf "%v" $port }}
   {{- end }}
 {{- end }}
@@ -128,8 +128,8 @@ Determine argocd repoServer url
   {{- printf "%s:%s" $serviceName $port }}
 {{- else if and (index .Values "global" "external-argo-cd" "repoServer") }}
   {{- $repoServer := (index .Values "global" "external-argo-cd" "repoServer") }}
-  {{- $svc := $repoServer.svc }}
-  {{- $port := $repoServer.port }}
+  {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.svc is not set" $repoServer.svc }}
+  {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.port is not set" $repoServer.port }}
   {{- printf "%s:%v" $svc $port }}
 {{- else }}
   {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer is not set" }}
@@ -195,9 +195,9 @@ Determine argocd server url. Must be called with chart root context
     {{- printf "%s://%s" $protocol $url }}
   {{- else if and (index .Values "global" "external-argo-cd" "server") }}
     {{- $argoCDSrv := (index .Values "global" "external-argo-cd" "server") }}
-    {{- $protocol := $argoCDSrv.protocol }}
-    {{- $svc := $argoCDSrv.svc }}
-    {{- $port := $argoCDSrv.port | toString }}
+    {{- $protocol := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.protocol is not set" $argoCDSrv.protocol }}
+    {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.svc is not set" $argoCDSrv.svc }}
+    {{- $port := (required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.port is not port" $argoCDSrv.port) | toString }}
     {{- if and (eq $port "80") }}
       {{- printf "%s://%s" $protocol $svc }}    
     {{- else }}
@@ -220,8 +220,8 @@ Determine argocd server url witout the protocol. Must be called with chart root 
   {{- printf "%s:%s%s" $serverName $port $path }}
 {{- else if and (index .Values "global" "external-argo-cd" "server") }}
   {{- $argoCDSrv := (index .Values "global" "external-argo-cd" "server") }}
-  {{- $svc := $argoCDSrv.svc }}
-  {{- $port := $argoCDSrv.port }}
+  {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.svc is not set" $argoCDSrv.svc }}
+  {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.port is not set" $argoCDSrv.port }}
   {{- printf "%s:%v" $svc $port }}
 {{- else }}
   {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set" }}
@@ -296,8 +296,8 @@ Determine argocd redis url
   {{- printf "%s:%s" $serviceName $port }}
 {{- else if and (index .Values "global" "external-argo-cd" "redis") }}
   {{- $redis := (index .Values "global" "external-argo-cd" "redis") }}
-  {{- $svc := $redis.svc }}
-  {{- $port := $redis.port }}
+  {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.redis.svc is not set" $redis.svc }}
+  {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.redis.port is not set" $redis.port }}
   {{- printf "%s:%v" $svc $port }}
 {{- else }}
   {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.redis is not set" }}
