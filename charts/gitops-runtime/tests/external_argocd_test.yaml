@@ -1,0 +1,83 @@
+suite: Test External ArgoCD with GitOps Runtime
+templates:
+  - app-proxy/config.yaml
+  - app-proxy/deployment.yaml
+  - gitops-operator.yaml
+tests:
+  - it: app-proxy ConfigMap with external ArgoCD
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/config.yaml
+    set:
+      gitops-operator.libraryMode: false
+    asserts:
+      - equal:
+          path: data.argoCdUrl
+          value: http://my-argocd-server
+      - equal:
+          path: data.argoCdUsername
+          value: admin
+  
+  - it: app-proxy ConfigMap with external ArgoCD (override username)
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/config.yaml
+    set:
+      gitops-operator.libraryMode: false
+      global.external-argo-cd.username: adminoverride
+    asserts:
+      - equal:
+          path: data.argoCdUsername
+          value: adminoverride
+
+  - it: ARGO_CD_PASSWORD env var in app-proxy (set via passwordSecretKeyRef)
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/deployment.yaml
+    set:
+      gitops-operator.libraryMode: false
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: argocd-initial-admin-secret
+
+  - it: ARGO_CD_USERNAME env var in app-proxy (set via username)
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/deployment.yaml
+    set:
+      gitops-operator.libraryMode: false
+      global.external-argo-cd.username: adminoverride
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_USERNAME
+            value: adminoverride
+
+  - it: ARGO_CD_URL env var in gitops-operator
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: gitops-operator.yaml
+    set:
+      gitops-operator:
+        libraryMode: true
+        crds:
+          install: false
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[1].env
+          content:
+            name: ARGO_CD_URL
+            value: my-argocd-server:80
+
