@@ -50,4 +50,4 @@ dependencies:
 - name: cf-argocd-extras
   repository: oci://quay.io/codefresh/charts/dev
   version: 0.3.0-feat-lib-chart
-  condition: cf-argocd-extras.enabled
+

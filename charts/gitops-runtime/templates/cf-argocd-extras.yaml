@@ -1,4 +1,4 @@
-{{- if and (index (get .Values "cf-argocd-extras") "libraryMode") (index .Values "cf-argocd-extras" "enabled") (not (index .Values "argo-cd" "enabled")) }}
+{{- if and (not (index .Values "argo-cd" "enabled")) }}
   {{- $cfArgoCdExtrasContext := (index .Subcharts "cf-argocd-extras")}}
 
   {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "argocd.server" (include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . ) }}
@@ -11,6 +11,4 @@
   {{- include "cf-argocd-extras.event-reporter.resources" $cfArgoCdExtrasContext }}
 
   {{- include "cf-argocd-extras.sources-server.resources" $cfArgoCdExtrasContext }}
-{{- else }}
-  {{- fail "cf-argocd-extras Subchart must be enabled when external ArgoCd is used. Set .Values.cf-argocd-extras.enabled to true" }}
 {{- end }}
