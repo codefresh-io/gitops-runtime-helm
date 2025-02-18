@@ -22,8 +22,8 @@
 
     {{/* Set ArgoCD image */}}
     {{- if not (index .Values "gitops-operator" "argoCdNotifications" "imageOverride") }}
-      {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "repository" $argoCDImageDict.repository }}
-      {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "tag" $argoCDImageDict.tag }}
+      {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "repository" (required ".Values.global.external-argo-cd.server.image is required" $argoCDImageDict.repository) }}
+      {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "tag" (required ".Values.global.external-argo-cd.server.tag is required" $argoCDImageDict.tag) }}
     {{- end }}
 
   {{- else }}
