@@ -108,6 +108,39 @@ global:
                 memory: 1Gi
                 ephemeral-storage: 2Gi
 
+  # -- Configuration for external ArgoCD
+  external-argo-cd:
+    # -- ArgoCD server settings
+    server:
+      # -- Protocol used to access the ArgoCD server. Can be http or https.
+      protocol: http
+      # -- Service name of the ArgoCD server
+      svc: argocd
+      # -- Port of the ArgoCD server
+      port: 80
+      # -- Image settings for the ArgoCD server
+      image:
+        repository: quay.io/argoproj/argocd
+        tag: ""
+    redis:
+      # -- Service name of the ArgoCD Redis
+      svc: argocd-redis
+      # -- Port of the ArgoCD Redis
+      port: 6379
+    repoServer:
+      # -- Service name of the ArgoCD repo server
+      svc: argocd-repo-server
+      # -- Port of the ArgoCD repo server
+      port: 8081
+        # -- ArgoCD username in plain text
+    username: "admin"
+    # -- ArgoCD password in plain text
+    password: ""
+    # -- ArgoCD password referenced by an existing secret
+    passwordSecretKeyRef:
+      name: argocd-initial-admin-secret
+      key: password
+
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
@@ -142,6 +175,7 @@ sealed-secrets:
 # ArgoCD
 #-----------------------------------------------------------------------------------------------------------------------
 argo-cd:
+  enabled: true
   fullnameOverride: argo-cd
   crds:
     install: true
@@ -668,4 +702,8 @@ garage-workflows-artifact-storage:
 #-----------------------------------------------------------------------------------------------------------------------
 # -- Codefresh extra services for ArgoCD
 cf-argocd-extras:
-  enabled: false
+  # -- Library mode for the chart. Allows to inject values from gitops runtime chart
+  libraryMode: true
+  # -- Event reporter configuration
+  eventReporter:
+    enabled: true
