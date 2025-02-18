@@ -66,4 +66,4 @@ tests:
           content:
             name: ARGO_CD_USERNAME
             value: adminoverride
-    
+
