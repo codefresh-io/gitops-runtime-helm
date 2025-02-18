@@ -2,7 +2,6 @@ suite: Test External ArgoCD with GitOps Runtime
 templates:
   - app-proxy/config.yaml
   - app-proxy/deployment.yaml
-  - gitops-operator.yaml
 tests:
   - it: app-proxy ConfigMap with external ArgoCD
     values:
