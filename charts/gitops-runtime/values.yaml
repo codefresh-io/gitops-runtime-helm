@@ -669,3 +669,18 @@ garage-workflows-artifact-storage:
 # -- Codefresh extra services for ArgoCD
 cf-argocd-extras:
   enabled: false
+  sourcesServer:
+    container:
+      image:
+        tag: 2025.01.27-6069b19
+      env:
+        SOURCES_SERVER_ARGO_CD_TOKEN:
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name: argocd-token
+        SOURCES_SERVER_ARGO_CD_SERVER:
+          valueFrom:
+            configMapKeyRef:
+              key: argoCdUrl
+              name: cap-app-proxy-cm
