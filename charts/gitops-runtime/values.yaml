@@ -481,11 +481,11 @@ app-proxy:
     skipGitPermissionValidation: "false"
     # -- Log Level
     logLevel: "info"
-  
+
   cron:
     # -- chunk size of the cluster lists to refresh the clusters in portion during cron job:
-    #    - reduce this value if you have a lot of clusters and the cron job is failing with payload too large error
-    #    - use 0 to sync all clusters at once 
+    # - reduce this value if you have a lot of clusters and the cron job is failing with payload too large error
+    # - use 0 to sync all clusters at once 
     clusterChunkSize: 50
 
   env: {}
