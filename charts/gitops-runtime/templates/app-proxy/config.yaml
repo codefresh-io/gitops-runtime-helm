@@ -14,7 +14,7 @@
     {{- $_ := set $appProxyContext.Values.config "argoWorkflowsUrl" $argoWorkflowsUrl }}
   {{- end }}
 {{- end}}
-{{- if not (and (index .Values "argo-cd" "enabled")) }}
+{{- if not (index .Values "argo-cd" "enabled") }}
   {{- $_ := set $appProxyContext.Values.config "isExternalArgoCD" "true" }}
 {{- end }}
 {{- include "cap-app-proxy.resources.configmap" $appProxyContext }}

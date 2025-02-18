@@ -134,12 +134,12 @@ global:
       port: 8081
         # -- ArgoCD username in plain text
     username: "admin"
-    # -- ArgoCD username referenced by an existing secret
-    usernameSecretKeyRef: {}
     # -- ArgoCD password in plain text
     password: ""
     # -- ArgoCD password referenced by an existing secret
-    passwordSecretKeyRef: {}
+    passwordSecretKeyRef:
+      name: argocd-initial-admin-secret
+      key: password
 
     # dummy placeholder
     configs:

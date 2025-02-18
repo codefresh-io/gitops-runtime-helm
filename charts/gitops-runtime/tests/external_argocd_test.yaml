@@ -31,6 +31,9 @@ tests:
       - equal:
           path: data.argoCdUsername
           value: adminoverride
+      - equal:
+          path: data.isExternalArgoCD
+          value: "true"
 
   - it: ARGO_CD_PASSWORD env var in app-proxy (set via passwordSecretKeyRef)
     values:
@@ -63,4 +66,4 @@ tests:
           content:
             name: ARGO_CD_USERNAME
             value: adminoverride
-
+    
