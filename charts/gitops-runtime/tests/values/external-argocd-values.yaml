@@ -13,7 +13,6 @@ global:
     repoServer:
       svc: my-argocd-repo-server
       port: 8081
-    secretName: "gitops-runtime-argo-cd-password"
     username: "admin"
     password: ""
     passwordSecretKeyRef:
@@ -23,5 +22,3 @@ global:
 argo-cd:
   enabled: false
 
-cf-argocd-extras:
-  enabled: true

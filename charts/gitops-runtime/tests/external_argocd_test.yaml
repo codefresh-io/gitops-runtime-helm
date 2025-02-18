@@ -52,6 +52,25 @@ tests:
                 key: password
                 name: argocd-initial-admin-secret
 
+  - it: ARGO_CD_PASSWORD env var in app-proxy (set via password plain text)
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/deployment.yaml
+    set:
+      gitops-operator.libraryMode: false
+      global.external-argo-cd.passwordSecretKeyRef: []
+      global.external-argo-cd.password: token
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: token
+                name: gitops-runtime-argo-cd-password
+
   - it: ARGO_CD_USERNAME env var in app-proxy (set via username)
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -66,4 +85,3 @@ tests:
           content:
             name: ARGO_CD_USERNAME
             value: adminoverride
-
