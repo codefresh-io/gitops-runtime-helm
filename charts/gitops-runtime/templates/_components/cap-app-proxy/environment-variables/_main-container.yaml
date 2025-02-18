@@ -73,6 +73,12 @@ IS_CONFIGURATION_RUNTIME:
     configMapKeyRef:
       name: codefresh-cm
       key: isConfigurationRuntime
+IS_EXTERNAL_ARGOCD:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: isExternalArgoCD
+      optional: true
 MANAGED: false
 NAMESPACE:
   valueFrom:

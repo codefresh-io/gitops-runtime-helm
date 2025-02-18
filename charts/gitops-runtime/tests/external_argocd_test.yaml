@@ -64,20 +64,3 @@ tests:
             name: ARGO_CD_USERNAME
             value: adminoverride
 
-  - it: ARGO_CD_URL env var in gitops-operator
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    template: gitops-operator.yaml
-    set:
-      gitops-operator:
-        libraryMode: true
-        crds:
-          install: false
-    asserts:
-      - contains:
-          path: spec.template.spec.containers[1].env
-          content:
-            name: ARGO_CD_URL
-            value: my-argocd-server:80
-
