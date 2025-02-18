@@ -481,6 +481,11 @@ app-proxy:
     skipGitPermissionValidation: "false"
     # -- Log Level
     logLevel: "info"
+    # -- define cluster list size per request to report the cluster state to platform, e.g.
+    # if you have 90 clusters and set clusterChunkSize: 40, it means cron job will report cluster state to platform in 3 iterations (40,40,10)
+    # - reduce this value if you have a lot of clusters and the cron job is failing with payload too large error
+    # - use 0 to sync all clusters at once
+    clusterChunkSize: 50
 
   env: {}
 

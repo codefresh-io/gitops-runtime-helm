@@ -36,6 +36,12 @@ CF_HOST:
       key: base-url
       optional: true
 CLUSTER: https://kubernetes.default.svc
+CLUSTER_CHUNK_SIZE:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: clusterChunkSize
+      optional: true
 CORS:
   valueFrom:
     configMapKeyRef:
