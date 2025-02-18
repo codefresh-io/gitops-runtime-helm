@@ -16,5 +16,7 @@
 {{- end}}
 {{- if not (index .Values "argo-cd" "enabled") }}
   {{- $_ := set $appProxyContext.Values.config "isExternalArgoCD" "true" }}
+{{- else }}
+  {{- $_ := set $appProxyContext.Values.config "isExternalArgoCD" "false" }}
 {{- end }}
 {{- include "cap-app-proxy.resources.configmap" $appProxyContext }}
