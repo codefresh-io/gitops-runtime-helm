@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 ARG CF_CLI_VERSION=v0.1.70
 ARG TARGETARCH
