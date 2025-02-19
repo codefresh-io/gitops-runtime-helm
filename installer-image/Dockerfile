@@ -1,4 +1,6 @@
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
+
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 ARG CF_CLI_VERSION=v0.1.70
 ARG TARGETARCH
