@@ -34,7 +34,7 @@ tests:
           path: data.isExternalArgoCD
           value: "true"
 
-  - it: ARGO_CD_PASSWORD env var in app-proxy (set via passwordSecretKeyRef)
+  - it: ARGO_CD_PASSWORD env var in app-proxy Deployment (set via passwordSecretKeyRef)
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -51,7 +51,7 @@ tests:
                 key: password
                 name: argocd-initial-admin-secret
 
-  - it: ARGO_CD_PASSWORD env var in app-proxy (set via password plain text)
+  - it: ARGO_CD_PASSWORD env var in app-proxy Deployment (set via password plain text)
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -70,7 +70,7 @@ tests:
                 key: token
                 name: gitops-runtime-argo-cd-password
 
-  - it: ARGO_CD_USERNAME env var in app-proxy (set via username)
+  - it: ARGO_CD_USERNAME env var in app-proxy Deployment (set via username)
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
