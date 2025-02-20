@@ -4,8 +4,8 @@ argoCdUsername: {{ .Values.config.argoCdUsername }}
 argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
 argoWorkflowsUrl: {{ default "" .Values.config.argoWorkflowsUrl }}
 cors: {{ .Values.global.codefresh.url }}
-  {{- if ((.Values.config).clusterChunkSize) }}
-clusterChunkSize: {{ .Values.config.clusterChunkSize | quote }}
+  {{- with .Values.config.clusterChunkSize }} 
+clusterChunkSize: {{ . | quote }}
   {{- end }}
 env: {{ .Values.config.env | quote}}
 isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote }} 
