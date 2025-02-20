@@ -29,7 +29,7 @@ enrichmentJiraEnrichmentImage: {{ printf "%s/%s:%s" $enrichmentValues.config.ima
 
 {{- define "cap-app-proxy.resources.configmap" }}
 {{- $documentedConfigs := (include "cap-app-proxy.resources.configmap-documented-configs" . | fromYaml ) }}
-{{- $overrides := .Values.config }}
+{{- $overrides := omit .Values.config "clusterChunkSize" }}
 {{- $mergedConfig := mergeOverwrite $documentedConfigs $overrides }}
 apiVersion: v1
 kind: ConfigMap
