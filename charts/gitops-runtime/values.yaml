@@ -677,8 +677,6 @@ cf-argocd-extras:
   sourcesServer:
     container:
       env:
-        SOURCES_SERVER_URL:
-          value: http://sources-server
         SOURCES_SERVER_ARGO_CD_TOKEN:
           valueFrom:
             secretKeyRef:
