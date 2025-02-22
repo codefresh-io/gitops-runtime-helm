@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![AppVersion: 0.1.55](https://img.shields.io/badge/AppVersion-0.1.55-informational?style=flat-square)
+![Version: 0.17.0](https://img.shields.io/badge/Version-0.17.0-informational?style=flat-square) ![AppVersion: 0.1.68](https://img.shields.io/badge/AppVersion-0.1.68-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -16,17 +16,6 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
-## WARNING! ARGO-CD 7.x.x CHART BREAKING CHANGE
-
-In the runtime release `0.12.0` we upgraded to the latest argo-cd `7.x.x` helm chart which
-contains a breaking change in the values used for providing cluster credentials
-(in this chart it's located under the path `argo-cd.configs.clusterCredentials`).
-`clusterCredentials` used to be of type `list` -- now it's a `map` (`object`).
-See the [release notes](https://github.com/argoproj/argo-helm/releases/tag/argo-cd-7.0.0).
-
-Codefresh Gitops Runtime does NOT use these values directly -- so the runtimes
-with the default configuration are not affected.
-
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
 We have created a helper utility to resolve this issue:
@@ -38,7 +27,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.0.0 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.17.0 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -87,21 +76,21 @@ sealed-secrets:
 | app-proxy.config.argoCdUsername | string | `"admin"` | ArgoCD user to be used by app-proxy |
 | app-proxy.config.argoWorkflowsInsecure | string | `"true"` |  |
 | app-proxy.config.argoWorkflowsUrl | string | `nil` | Workflows server url. Determined by chart logic. Do not change unless you are certain you need to |
+| app-proxy.config.clusterChunkSize | int | `50` | define cluster list size per request to report the cluster state to platform, e.g. if you have 90 clusters and set clusterChunkSize: 40, it means cron job will report cluster state to platform in 3 iterations (40,40,10) - reduce this value if you have a lot of clusters and the cron job is failing with payload too large error - use 0 to sync all clusters at once |
 | app-proxy.config.env | string | `"production"` |  |
 | app-proxy.config.logLevel | string | `"info"` | Log Level |
 | app-proxy.config.skipGitPermissionValidation | string | `"false"` | Skit git permissions validation |
-| app-proxy.config.clusterChunkSize | int | `0` | Number of clusters per request. App-proxy will split and refresh the cluster list with chunks with size `clusterChunkSize`. When the default value is used the cluster list will be refreshed with one chunk (no split; not recommended when cluster list is too large). |
 | app-proxy.env | object | `{}` |  |
 | app-proxy.extraVolumeMounts | list | `[]` | Extra volume mounts for main container |
 | app-proxy.extraVolumes | list | `[]` | extra volumes |
 | app-proxy.fullnameOverride | string | `"cap-app-proxy"` |  |
-| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.11-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.11-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.11-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
-| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.11-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.11-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.11-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
+| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.12-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.12-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.12-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
+| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.12-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.12-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.12-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
 | app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds | int | `5` | Client heartbeat interval in seconds for image enrichemnt workflow |
 | app-proxy.image-enrichment.config.concurrencyCmKey | string | `"imageReportExecutor"` | The name of the key in the configmap to use as synchronization semaphore |
 | app-proxy.image-enrichment.config.concurrencyCmName | string | `"workflow-synchronization-semaphores"` | The name of the configmap to use as synchronization semaphore, see https://argoproj.github.io/argo-workflows/synchronization/ |
-| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.11-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.11-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.11-main"}}` | Enrichemnt images |
-| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.11-main"}` | Report image enrichment task image |
+| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.12-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.12-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.12-main"}}` | Enrichemnt images |
+| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.12-main"}` | Report image enrichment task image |
 | app-proxy.image-enrichment.config.podGcStrategy | string | `"OnWorkflowCompletion"` | Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes. |
 | app-proxy.image-enrichment.config.ttlActiveInSeconds | int | `900` | Maximum allowed runtime for the enrichment workflow |
 | app-proxy.image-enrichment.config.ttlAfterCompletionInSeconds | int | `86400` | Number of seconds to live after completion |
@@ -112,14 +101,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.2969.0"` |  |
+| app-proxy.image.tag | string | `"1.3307.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.2969.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3307.0"` |  |
 | app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
 | app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
@@ -156,29 +145,19 @@ sealed-secrets:
 | app-proxy.serviceAccount.create | bool | `true` |  |
 | app-proxy.serviceAccount.name | string | `"cap-app-proxy"` |  |
 | app-proxy.tolerations | list | `[]` |  |
+| argo-cd | object | `{"applicationVersioning":{"enabled":true,"useApplicationConfiguration":true},"configs":{"cm":{"accounts.admin":"apiKey,login","application.resourceTrackingMethod":"annotation+label","timeout.reconciliation":"20s"},"params":{"application.namespaces":"cf-*","server.insecure":true}},"crds":{"install":true},"eventReporter":{"enabled":true,"replicas":3,"version":"v2"},"fullnameOverride":"argo-cd"}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-cd.applicationVersioning.enabled | bool | `true` | Enable application versioning |
 | argo-cd.applicationVersioning.useApplicationConfiguration | bool | `true` | Extract application version based on ApplicationConfiguration CRD |
-| argo-cd.configs.cm."accounts.admin" | string | `"apiKey,login"` |  |
-| argo-cd.configs.cm."application.resourceTrackingMethod" | string | `"annotation+label"` |  |
-| argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
-| argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
-| argo-cd.configs.params."server.insecure" | bool | `true` |  |
-| argo-cd.crds.install | bool | `true` |  |
 | argo-cd.eventReporter.enabled | bool | `true` | Installs new event reporter component to cluster |
 | argo-cd.eventReporter.replicas | int | `3` | Amount of shards to handle applications events |
 | argo-cd.eventReporter.version | string | `"v2"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
-| argo-cd.fullnameOverride | string | `"argo-cd"` |  |
-| argo-events.crds.install | bool | `false` |  |
-| argo-events.fullnameOverride | string | `"argo-events"` |  |
-| argo-rollouts.controller.replicas | int | `1` |  |
-| argo-rollouts.enabled | bool | `true` |  |
-| argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
-| argo-rollouts.installCRDs | bool | `true` |  |
+| argo-events | object | `{"configs":{"jetstream":{"versions":[{"configReloaderImage":"natsio/nats-server-config-reloader:0.16.0","metricsExporterImage":"natsio/prometheus-nats-exporter:0.15.0","natsImage":"nats:2.10.21","startCommand":"/nats-server","version":"latest"}]},"nats":{"versions":[{"metricsExporterImage":"natsio/prometheus-nats-exporter:0.15.0","natsStreamingImage":"nats-streaming:0.25.6","version":"0.22.1"}]}},"crds":{"install":false},"fullnameOverride":"argo-events"}` | ------------------------------------------------------------------------------------------------------------------- |
+| argo-rollouts | object | `{"controller":{"replicas":1},"enabled":true,"fullnameOverride":"argo-rollouts","installCRDs":true}` | ------------------------------------------------------------------------------------------------------------------- |
+| argo-workflows | object | `{"crds":{"install":true},"enabled":true,"executor":{"resources":{"requests":{"ephemeral-storage":"10Mi"}}},"fullnameOverride":"argo","mainContainer":{"resources":{"requests":{"ephemeral-storage":"10Mi"}}},"server":{"authModes":["client"],"baseHref":"/workflows/"}}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
-| argo-workflows.enabled | bool | `true` |  |
-| argo-workflows.fullnameOverride | string | `"argo"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
+| cf-argocd-extras | object | `{"enabled":false,"sourcesServer":{"container":{"env":{"SOURCES_SERVER_ARGO_CD_SERVER":{"valueFrom":{"configMapKeyRef":{"key":"argoCdUrl","name":"cap-app-proxy-cm"}}},"SOURCES_SERVER_ARGO_CD_TOKEN":{"valueFrom":{"secretKeyRef":{"key":"token","name":"argocd-token"}}}}}}}` | Codefresh extra services for ArgoCD |
 | event-reporters.rollout.eventSource.affinity | object | `{}` |  |
 | event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.eventSource.replicas | int | `1` |  |
@@ -215,14 +194,15 @@ sealed-secrets:
 | event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
 | event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| garage-workflows-artifact-storage | object | `{"deployment":{"kind":"StatefulSet","replicaCount":3},"enabled":false,"fullnameOverride":"garage","garage":{"replicationMode":3},"persistence":{"data":{"size":"100Mi","storageClass":""},"enabled":true,"meta":{"size":"100Mi","storageClass":""}},"resources":{}}` | Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC) |
+| garage-workflows-artifact-storage | object | `{"deployment":{"kind":"StatefulSet","replicaCount":3},"enabled":false,"fullnameOverride":"garage","garage":{"replicationMode":3},"persistence":{"data":{"size":"100Mi","storageClass":""},"enabled":true,"meta":{"size":"100Mi","storageClass":""}},"resources":{},"tests":{"enabled":false}}` | Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC) |
 | garage-workflows-artifact-storage.deployment.kind | string | `"StatefulSet"` | Only statefulset is supported for Codefresh gitops runtime. Do not change this |
 | garage-workflows-artifact-storage.persistence.data | object | `{"size":"100Mi","storageClass":""}` | Volume that stores artifacts and logs for workflows |
 | garage-workflows-artifact-storage.persistence.data.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
 | garage-workflows-artifact-storage.persistence.meta | object | `{"size":"100Mi","storageClass":""}` | Volume that stores cluster metadata |
 | garage-workflows-artifact-storage.persistence.meta.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
 | garage-workflows-artifact-storage.resources | object | `{}` | Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size. |
-| gitops-operator.affinity | object | `{}` |  |
+| garage-workflows-artifact-storage.tests | object | `{"enabled":false}` | Helm tests |
+| gitops-operator | object | `{"affinity":{},"argoCdNotifications":{"image":{},"imageOverride":false,"resources":{}},"crds":{"additionalLabels":{},"annotations":{},"install":true,"keep":false},"enabled":true,"env":{},"fullnameOverride":"","image":{},"imagePullSecrets":[],"kube-rbac-proxy":{"image":{"tag":"v0.16.0"},"resources":{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}},"libraryMode":true,"nameOverride":"","nodeSelector":{},"podAnnotations":{},"podLabels":{},"replicaCount":1,"resources":{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}},"serviceAccount":{"annotations":{},"create":true,"name":"gitops-operator-controller-manager"},"tolerations":[]}` | ------------------------------------------------------------------------------------------------------------------- |
 | gitops-operator.argoCdNotifications | object | `{"image":{},"imageOverride":false,"resources":{}}` | Builtin notifications controller used by gitops-operator for promotion related notifications |
 | gitops-operator.argoCdNotifications.image | object | `{}` | Set image.repository and image.tag notifications image used by the gitops operator. Ignored unless imageOverride is set to true. |
 | gitops-operator.argoCdNotifications.imageOverride | bool | `false` | If set to true allows to override notifications image used by the gitops operator. When set to false the version of ArgoCD will be set to the version used for all other ArgoCD components. |
@@ -232,32 +212,7 @@ sealed-secrets:
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
-| gitops-operator.enabled | bool | `true` |  |
-| gitops-operator.env | object | `{}` |  |
-| gitops-operator.fullnameOverride | string | `""` |  |
-| gitops-operator.image | object | `{}` |  |
-| gitops-operator.imagePullSecrets | list | `[]` |  |
-| gitops-operator.kube-rbac-proxy.image | object | `{}` |  |
-| gitops-operator.kube-rbac-proxy.resources.limits.cpu | string | `"500m"` |  |
-| gitops-operator.kube-rbac-proxy.resources.limits.memory | string | `"128Mi"` |  |
-| gitops-operator.kube-rbac-proxy.resources.requests.cpu | string | `"100m"` |  |
-| gitops-operator.kube-rbac-proxy.resources.requests.memory | string | `"64Mi"` |  |
-| gitops-operator.kube-rbac-proxy.securityContext.allowPrivilegeEscalation | bool | `false` |  |
-| gitops-operator.kube-rbac-proxy.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitops-operator.libraryMode | bool | `true` | Do not change unless instructed otherwise by Codefresh support |
-| gitops-operator.nameOverride | string | `""` |  |
-| gitops-operator.nodeSelector | object | `{}` |  |
-| gitops-operator.podAnnotations | object | `{}` |  |
-| gitops-operator.podLabels | object | `{}` |  |
-| gitops-operator.replicaCount | int | `1` |  |
-| gitops-operator.resources.limits.cpu | string | `"500m"` |  |
-| gitops-operator.resources.limits.memory | string | `"128Mi"` |  |
-| gitops-operator.resources.requests.cpu | string | `"100m"` |  |
-| gitops-operator.resources.requests.memory | string | `"64Mi"` |  |
-| gitops-operator.serviceAccount.annotations | object | `{}` |  |
-| gitops-operator.serviceAccount.create | bool | `true` |  |
-| gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
-| gitops-operator.tolerations | list | `[]` |  |
 | global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","tls":{"caCerts":{"secret":{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"},"secretKeyRef":{}},"workflowPipelinesGitWebhooks":{"annotatins":{},"certificates":{}}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |
 | global.codefresh.apiEventsPath | string | `"/2.0/api/events"` | Events API endpoint URL suffix. |
@@ -271,7 +226,7 @@ sealed-secrets:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
+| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
 | global.runtime.eventBus.annotations | object | `{}` | Annotations on EventBus resource |
@@ -283,10 +238,11 @@ sealed-secrets:
 | global.runtime.gitCredentials.password.secretKeyRef | object | `{}` | secretKeyReference for Git credentials password. Provide name and key fields. |
 | global.runtime.gitCredentials.password.value | string | `nil` | Plain text password |
 | global.runtime.gitCredentials.username | string | `"username"` | Username. Optional when using token in password. |
-| global.runtime.ingress | object | `{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","tls":[]}` | Ingress settings |
+| global.runtime.ingress | object | `{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","skipValidation":false,"tls":[]}` | Ingress settings |
 | global.runtime.ingress.enabled | bool | `false` | Defines if ingress-based access mode is enabled for runtime. To use tunnel-based (ingressless) access mode, set to false. |
 | global.runtime.ingress.hosts | list | `[]` | Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime. |
 | global.runtime.ingress.protocol | string | `"https"` | The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https. |
+| global.runtime.ingress.skipValidation | bool | `false` | if set to true, the pre-install hook will validate the existance of appropriate values, but *will not* attempt to make a web request to the ingress host |
 | global.runtime.ingressUrl | string | `""` | Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false) |
 | global.runtime.isConfigurationRuntime | bool | `false` | is the runtime set as a "configuration runtime". |
 | global.runtime.name | string | `nil` | Runtime name. Must be unique per platform account. |
@@ -300,7 +256,7 @@ sealed-secrets:
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
 | internal-router.image.repository | string | `"nginxinc/nginx-unprivileged"` |  |
-| internal-router.image.tag | string | `"1.25-alpine"` |  |
+| internal-router.image.tag | string | `"1.26-alpine3.20"` |  |
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.ipv6 | object | `{"enabled":false}` | For ipv6 enabled clusters switch ipv6 enabled to true |
 | internal-router.nameOverride | string | `""` |  |
@@ -324,7 +280,7 @@ sealed-secrets:
 | internal-router.serviceAccount.create | bool | `true` |  |
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
-| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"v0.24.5"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
-| tunnel-client | object | `{"enabled":true,"libraryMode":true,"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes. |
+| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.28.0"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | ------------------------------------------------------------------------------------------------------------------- |
+| tunnel-client | object | `{"enabled":true,"libraryMode":true,"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | ------------------------------------------------------------------------------------------------------------------- |
 | tunnel-client.enabled | bool | `true` | Will only be used if global.runtime.ingress.enabled = false |
 | tunnel-client.libraryMode | bool | `true` | Do not change this value! Breaks chart logic |
