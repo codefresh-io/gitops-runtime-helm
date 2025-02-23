@@ -129,7 +129,7 @@ sealed-secrets:
   image:
     registry: 'quay.io'
     repository: 'codefresh/sealed-secrets-controller'
-    tag: '0.27.1'
+    tag: '0.28.0'
   resources:
     limits:
       cpu: 500m
@@ -438,7 +438,7 @@ app-proxy:
           tag: 1.1.12-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3228.0
+    tag: 1.3307.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -446,7 +446,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3228.0
+      tag: 1.3307.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -481,6 +481,11 @@ app-proxy:
     skipGitPermissionValidation: "false"
     # -- Log Level
     logLevel: "info"
+    # -- define cluster list size per request to report the cluster state to platform, e.g.
+    # if you have 90 clusters and set clusterChunkSize: 40, it means cron job will report cluster state to platform in 3 iterations (40,40,10)
+    # - reduce this value if you have a lot of clusters and the cron job is failing with payload too large error
+    # - use 0 to sync all clusters at once
+    clusterChunkSize: 50
 
   env: {}
 
@@ -669,3 +674,16 @@ garage-workflows-artifact-storage:
 # -- Codefresh extra services for ArgoCD
 cf-argocd-extras:
   enabled: false
+  sourcesServer:
+    container:
+      env:
+        SOURCES_SERVER_ARGO_CD_TOKEN:
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name: argocd-token
+        SOURCES_SERVER_ARGO_CD_SERVER:
+          valueFrom:
+            configMapKeyRef:
+              key: argoCdUrl
+              name: cap-app-proxy-cm
