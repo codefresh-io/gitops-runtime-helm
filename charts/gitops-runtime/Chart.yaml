@@ -15,11 +15,15 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 0.17.0 runtime release notes
+      description: 0.17.0 runtime release notes updated
+    - kind: changed
+      description: helm docs update to include sources server default changes
     - kind: changed
       description: 'chore: source server image 2025.01.27-6069b19 (#407)'
     - kind: changed
       description: 'feat: upgrade Argo Rollouts to 1.7.2 plus security fixes (#392)'
+    - kind: changed
+      description: 0.17.0 runtime release notes
     - kind: changed
       description: 'feat: sources server update with get manifest request and app-proxy 1.3307.0 (#382)'
     - kind: changed
@@ -48,112 +52,6 @@ annotations:
       description: 'chore: CR-26261 - updated gitops operator to v0.3.22 to support promotion queue (#379)'
     - kind: changed
       description: 'chore(CR-26970): updated cf-cliv2, kubectl (#375)'
-    - kind: changed
-      description: app-proxy  bump 1.3228.0 (#376)
-    - kind: changed
-      description: 'fix: upgrade argo-cd to upgrade to 7.7.14-1-cap-2.13.3-2025.1.16-39ce1d3d0 (#374)'
-    - kind: changed
-      description: updated codefresh-gitops-operator (#370)
-    - kind: changed
-      description: 'feat: sources-server (#359)'
-    - kind: changed
-      description: 'feat: update to upstream argo-cd 2.13.3 and helm 7.7.14  (#369)'
-    - kind: changed
-      description: 'fix: upgrade argo events to fix security vulnerability (#364)'
-    - kind: changed
-      description: updated app-proxy to 1.3196.4 - throw original exception in case of NO_CHANGES (#366)
-    - kind: changed
-      description: 'fix: security-vulns in codefresh-gitops-operator (#365)'
-    - kind: changed
-      description: 'fix: security-vulns in gitops-runtime-installer image'
-    - kind: changed
-      description: update argo-cd to 2.12.3-2024.12.23-4a8e092c0-with-dex-and-redis-bump (#362)
-    - kind: changed
-      description: update app-proxy to 1.3192.0 (#361)
-    - kind: changed
-      description: 'feat: cr 26386 argocd core proto wrong wire type (#357)'
-    - kind: changed
-      description: 'chore: update argo-workflows to 0.45.1-v3.6.2-cap-CR-26293 (#355)'
-    - kind: changed
-      description: update gitops-opeartor to 0.3.16 - fixed releases getting stuck on suspended during commit flow (#354)
-    - kind: changed
-      description: fix placement of isConfigurationRuntime field (#353)
-    - kind: changed
-      description: 'fix: add isConfigurationRuntime value to app-proxy cm (#352)'
-    - kind: changed
-      description: 'feat: argo-cd with multi-source app info reporting  (#339)'
-    - kind: changed
-      description: update gitops-opeartor to 0.3.14 and app-proxy to 1.3167.0 - monitor suspended workflows for closed PRs (#350)
-    - kind: changed
-      description: update codefresh-gitops-operator to 0.3.13 - fix release retry in case it failed on workflow resume (#349)
-    - kind: changed
-      description: 'feat: Add ability to set nodePort on internal-router service (#348)'
-    - kind: changed
-      description: CR-25908 add req and lim for ephemeral storage (argo-workflows) (#344)
-    - kind: changed
-      description: update codefresh-gitops-operator to 0.3.12 - fail submit-tmpl step if child wf failed (#345)
-    - kind: changed
-      description: 'chore: security fixes (#342)'
-    - kind: changed
-      description: update codefresh-gitops-operator to 0.3.11 - support non-github promotions (commit only) (#343)
-    - kind: changed
-      description: updated codefresh-gitops-operator to 0.3.10 (#340)
-    - kind: changed
-      description: argo-cd with repo-server repeated resources fix (#338)
-    - kind: changed
-      description: 'fix: remove aws-cli (#336)'
-    - kind: changed
-      description: updated frpc with security fixes (#334)
-    - kind: changed
-      description: 'fix: don''t use protocol for ARGO_CD_URL in gitops-operator (#332)'
-    - kind: changed
-      description: update gitops-operator to 0.3.8 - changed gitlog to take all commits since the last call (#331)
-    - kind: changed
-      description: 'fix: bump cap-app-proxy to 1.3146.0 - fix: accessing repo in parallel (#329)'
-    - kind: changed
-      description: update gitops-operator to 0.3.8 - support manual-sync applications (#327)
-    - kind: changed
-      description: 'feat: bump app-proxy to `1.3142.0` with refresh in-cluster app after any related commit (#325)'
-    - kind: changed
-      description: 'chore(cr-25581): updating app proxy, (fixed vulnerabilities in expat, curl, openssl) (#322)'
-    - kind: changed
-      description: 'feat: bump app-proxy to `1.3138.0` (#324)'
-    - kind: changed
-      description: Update CODEOWNERS
-    - kind: changed
-      description: 'fix: use the rootpath from argo-cd config.params values, when injecting ARGO_CD_URL to gitops-operator (#323)'
-    - kind: changed
-      description: update cap-app-proxy to `1.3131.0` - improve locking around git operations (#320)
-    - kind: changed
-      description: Update CODEOWNERS (#319)
-    - kind: changed
-      description: 'chore: update argocd to 2.12.3-2024.10.28-20100fc54 (#318)'
-    - kind: changed
-      description: 'feat: app-proxy bump to `1.3127.1` (#316)'
-    - kind: changed
-      description: 'chore: update image-enrichment to 1.1.11 (#314)'
-    - kind: changed
-      description: update codefresh-gitops-operator to 0.3.6 (#313)
-    - kind: changed
-      description: fix:upgrade gitops operator to 0.3.1 to publish error to product release in case failed to create workflow (#312)
-    - kind: changed
-      description: inject the correct argo-cd server url into gitops-operator (#311)
-    - kind: changed
-      description: 'chore: update argocd to 7.4.7-5-cap-2.12-2024.10.17-36fb3f0d1 (#310)'
-    - kind: changed
-      description: 'fix: bump app-proxy to `1.3103.0` - fix failure to calculate diff when destApp is on a different branch from srcApp'
-    - kind: changed
-      description: Feat/cr 23204 synced version (#308)
-    - kind: changed
-      description: 'feat: Add Product Release Initiator functionality (#306)'
-    - kind: changed
-      description: 'chore: update kube-rbac-proxy, sealed-secrets-controller and argo-events nats to latest (#296)'
-    - kind: changed
-      description: 'feat: app-proxy with changeRevision fields support (#302)'
-    - kind: changed
-      description: 'feat: argo-cd with event-reporter update to report change revisions metadata in app annotations (#301)'
-    - kind: changed
-      description: fix:upgrade gitops operator to 0.3.1 to publish error to product release in case failed to create workflow (#299)
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
