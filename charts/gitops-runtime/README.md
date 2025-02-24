@@ -157,7 +157,7 @@ sealed-secrets:
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
-| cf-argocd-extras | object | `{"enabled":false,"sourcesServer":{"container":{"env":{"SOURCES_SERVER_ARGO_CD_SERVER":{"valueFrom":{"configMapKeyRef":{"key":"argoCdUrl","name":"cap-app-proxy-cm"}}},"SOURCES_SERVER_ARGO_CD_TOKEN":{"valueFrom":{"secretKeyRef":{"key":"token","name":"argocd-token"}}}}}}}` | Codefresh extra services for ArgoCD |
+| cf-argocd-extras | object | `{"enabled":false,"sourcesServer":{"container":{"env":{"SOURCES_SERVER_ARGO_CD_SERVER":{"valueFrom":{"configMapKeyRef":{"key":"argoCdUrl","name":"cap-app-proxy-cm"}}},"SOURCES_SERVER_ARGO_CD_TOKEN":{"valueFrom":{"secretKeyRef":{"key":"token","name":"argocd-token"}}}},"image":{"tag":"2025.01.27-6069b19"}}}}` | Codefresh extra services for ArgoCD |
 | event-reporters.rollout.eventSource.affinity | object | `{}` |  |
 | event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.eventSource.replicas | int | `1` |  |
