@@ -206,7 +206,7 @@ argo-workflows:
       requests:
         ephemeral-storage: 10Mi
 # ---------------------------------------------------------------------------------------------------------------------
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-rollouts-2.37.3-1-v1.7.1-CR-24605/charts/argo-rollouts
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-rollouts-2.37.3-2-v1.7.2-cap-CR-26082/charts/argo-rollouts
 # ---------------------------------------------------------------------------------------------------------------------
 argo-rollouts:
   enabled: true

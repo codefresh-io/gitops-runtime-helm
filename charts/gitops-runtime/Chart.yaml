@@ -15,6 +15,12 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 0.17.0 runtime release notes
+    - kind: changed
+      description: 'chore: source server image 2025.01.27-6069b19 (#407)'
+    - kind: changed
+      description: 'feat: upgrade Argo Rollouts to 1.7.2 plus security fixes (#392)'
+    - kind: changed
       description: 'feat: sources server update with get manifest request and app-proxy 1.3307.0 (#382)'
     - kind: changed
       description: 'chore(argo-workflows): bump argo-workflows to 0.45.2-v3.6.4-cap-CR-27392 (#404)'
