@@ -626,6 +626,8 @@ cf-argocd-extras:
   enabled: false
   sourcesServer:
     container:
+      image:
+        tag: 2025.01.27-6069b19
       env:
         SOURCES_SERVER_ARGO_CD_TOKEN:
           valueFrom:
