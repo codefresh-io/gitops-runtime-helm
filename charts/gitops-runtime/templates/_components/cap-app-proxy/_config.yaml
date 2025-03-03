@@ -4,6 +4,9 @@ argoCdUsername: {{ .Values.config.argoCdUsername }}
 argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
 argoWorkflowsUrl: {{ default "" .Values.config.argoWorkflowsUrl }}
 cors: {{ .Values.global.codefresh.url }}
+  {{- with .Values.config.clusterChunkSize }} 
+clusterChunkSize: {{ . | quote }}
+  {{- end }}
 env: {{ .Values.config.env | quote}}
 isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote }}
 isExternalArgoCD: {{ .Values.global.runtime.isExternalArgoCD | quote }}
@@ -27,7 +30,7 @@ enrichmentJiraEnrichmentImage: {{ printf "%s/%s:%s" $enrichmentValues.config.ima
 
 {{- define "cap-app-proxy.resources.configmap" }}
 {{- $documentedConfigs := (include "cap-app-proxy.resources.configmap-documented-configs" . | fromYaml ) }}
-{{- $overrides := .Values.config }}
+{{- $overrides := omit .Values.config "clusterChunkSize" }}
 {{- $mergedConfig := mergeOverwrite $documentedConfigs $overrides }}
 apiVersion: v1
 kind: ConfigMap

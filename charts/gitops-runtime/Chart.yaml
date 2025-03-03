@@ -23,15 +23,15 @@ dependencies:
   version: 2.4.7-1-cap-CR-26731
 - name: argo-workflows
   repository: https://codefresh-io.github.io/argo-helm
-  version: 0.45.1-v3.6.2-cap-CR-26293
+  version: 0.45.2-v3.6.4-cap-CR-27392
   condition: argo-workflows.enabled
 - name: argo-rollouts
   repository: https://codefresh-io.github.io/argo-helm
-  version: 2.37.3-1-v1.7.1-CR-24605
+  version: 2.37.3-2-v1.7.2-cap-CR-26082
   condition: argo-rollouts.enabled
 - name: sealed-secrets
   repository: https://bitnami-labs.github.io/sealed-secrets/
-  version: 2.16.1
+  version: 2.17.0
 - name: codefresh-tunnel-client
   repository: oci://quay.io/codefresh/charts
   version: 0.1.18
@@ -39,7 +39,7 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 0.3.23
+  version: 0.3.26
   alias: gitops-operator
   condition: gitops-operator.enabled
 - name: garage

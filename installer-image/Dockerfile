@@ -1,4 +1,5 @@
-FROM debian:bookworm-slim
+#bookworm-slim
+FROM debian:12.9-slim
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
