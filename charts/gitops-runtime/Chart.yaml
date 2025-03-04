@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.68
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.17.0
+version: 0.17.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,43 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 0.17.0 runtime release notes updated
-    - kind: changed
-      description: helm docs update to include sources server default changes
-    - kind: changed
-      description: 'chore: source server image 2025.01.27-6069b19 (#407)'
-    - kind: changed
-      description: 'feat: upgrade Argo Rollouts to 1.7.2 plus security fixes (#392)'
-    - kind: changed
-      description: 0.17.0 runtime release notes
-    - kind: changed
-      description: 'feat: sources server update with get manifest request and app-proxy 1.3307.0 (#382)'
-    - kind: changed
-      description: 'chore(argo-workflows): bump argo-workflows to 0.45.2-v3.6.4-cap-CR-27392 (#404)'
-    - kind: changed
-      description: updated gitops-operator version to 0.3.26 (#405)
-    - kind: changed
-      description: 'Feat(CR-27391): add new option to app-proxy (#403)'
-    - kind: changed
-      description: 'chore: updated sealed-secrets-controller (#402)'
-    - kind: changed
-      description: Update Chart.yaml (#396)
-    - kind: changed
-      description: 'feat: update app-proxy version (gitSourceConfigured status) (#393)'
-    - kind: changed
-      description: bump argocd helm to argo-cd-7.7.14-3-cap-2.13.3-2025.2.12-7bfd6c858 (#394)
-    - kind: changed
-      description: 'feat: update app proxy version (#391)'
-    - kind: changed
-      description: 'Fix(job): argument list too long (#383)'
-    - kind: changed
-      description: 'feat: bump gitops operator with promotion hooks support (#368)'
-    - kind: changed
-      description: 'chore(): updating csdp (#385)'
-    - kind: changed
-      description: 'chore: CR-26261 - updated gitops operator to v0.3.22 to support promotion queue (#379)'
-    - kind: changed
-      description: 'chore(CR-26970): updated cf-cliv2, kubectl (#375)'
+      description: 'chore: bump gitops-operator version to 0.3.27 (#409)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
@@ -77,7 +41,7 @@ dependencies:
     condition: tunnel-client.enabled
   - name: codefresh-gitops-operator
     repository: oci://quay.io/codefresh/charts
-    version: 0.3.26
+    version: 0.3.27
     alias: gitops-operator
     condition: gitops-operator.enabled
   - name: garage
