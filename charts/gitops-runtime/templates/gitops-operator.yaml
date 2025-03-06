@@ -30,6 +30,16 @@
       {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.server.image is not set"  }}
   {{- end }}
 
+  {{- if and (not (index .Values "argo-cd" "enabled")) }}
+    
+    {{- if and (index .Values "global" "external-argo-cd" "tokenSecretKeyRef") (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
+      
+      {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "name")) }}
+      {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "key")) }}
+    
+    {{- end }}
+  {{- end }}
+
   {{/* Set repo server service and port */}}
   {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.argocd.repoServer "fullname" (include "codefresh-gitops-runtime.argocd.reposerver.servicename" . ) }}
   {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.argocd.repoServer "port" (include "codefresh-gitops-runtime.argocd.reposerver.serviceport" . ) }}
@@ -51,11 +61,6 @@
   {{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef}}
     {{- $_ := set $gitopsOperatorContext.Values.global.codefresh.tls.caCerts.secretKeyRef "name" (.Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name) }}
     {{- $_ := set $gitopsOperatorContext.Values.global.codefresh.tls.caCerts.secretKeyRef "key" (.Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key) }}
-  {{- end }}
-
-  {{- if and (index .Values "global" "external-argo-cd" "tokenSecretKeyRef") }}
-    {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_NAME" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "name" ) }}
-    {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_KEY" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "key" ) }}
   {{- end }}
 
   {{- include "gitops-operator.resources" $gitopsOperatorContext}}

@@ -14,10 +14,16 @@ global:
       svc: my-argocd-repo-server
       port: 8081
     username: "admin"
+    auth:
+      type: password
     password: ""
     passwordSecretKeyRef:
       name: argocd-initial-admin-secret
       key: password
+    token: ""
+    tokenSecretKeyRef:
+      name: ""
+      key: ""
 
 argo-cd:
   enabled: false

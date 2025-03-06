@@ -133,6 +133,10 @@ global:
       # -- Port of the ArgoCD repo server
       port: 8081
         # -- ArgoCD username in plain text
+    
+    auth:
+      type: password
+    
     username: "admin"
     # -- ArgoCD password in plain text
     password: ""
@@ -140,8 +144,13 @@ global:
     passwordSecretKeyRef:
       name: argocd-initial-admin-secret
       key: password
+    
     token: ""
     tokenSecretKeyRef: {}
+    # e.g:
+    # tokenSecretKeyRef:
+    #   name: argocd-token
+    #   key: token
 
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer

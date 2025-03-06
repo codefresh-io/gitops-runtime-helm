@@ -84,3 +84,42 @@ tests:
           content:
             name: ARGO_CD_USERNAME
             value: adminoverride
+
+  - it: ARGO_CD_TOKEN env var in app-proxy Deployment (set via tokenSecretKeyRef)
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/deployment.yaml
+    set:
+      gitops-operator.libraryMode: false
+      global.external-argo-cd.auth.type: token
+      global.external-argo-cd.tokenSecretKeyRef.name: my-argocd-secret
+      global.external-argo-cd.tokenSecretKeyRef.key: my-token
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: my-token
+                name: my-argocd-secret
+
+  - it: ARGO_CD_TOKEN env var in app-proxy Deployment (set via token)
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/deployment.yaml
+    set:
+      gitops-operator.libraryMode: false
+      global.external-argo-cd.auth.type: token
+      global.external-argo-cd.token: "plaintexttoken"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: token
+                name: argocd-token

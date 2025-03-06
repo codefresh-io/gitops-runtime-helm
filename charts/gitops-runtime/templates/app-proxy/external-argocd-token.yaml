@@ -1,5 +1,6 @@
 {{- $externalArgoCDValues := (index .Values "global" "external-argo-cd") }}
 {{- if $externalArgoCDValues.password -}}
+---
 apiVersion: v1
 kind: Secret
 metadata:
@@ -10,3 +11,16 @@ type: Opaque
 stringData:
   token: {{ $externalArgoCDValues.password }}
 {{- end }}
+{{- if $externalArgoCDValues.token -}}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: argocd-token
+  labels:
+    {{- include "codefresh-gitops-runtime.labels" . | nindent 4 }}
+type: Opaque
+stringData:
+  token: {{ $externalArgoCDValues.token }}
+{{- end }}
+

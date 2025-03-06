@@ -256,16 +256,11 @@ valueFrom:
 Determine argocd token password. 
 */}}
 {{- define "codefresh-gitops-runtime.argocd.server.token" }}
-  {{- if and (index .Values "argo-cd" "enabled") }}
-valueFrom:
-  secretKeyRef:
-    name: argocd-token
-    key: token
-  {{- else if and (index .Values "global" "external-argo-cd" "tokenSecretKeyRef") }}
+  {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "name") (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "key")}}
 valueFrom:
   secretKeyRef:
 {{- index .Values "global" "external-argo-cd" "tokenSecretKeyRef" | toYaml | nindent 4 }}
-  {{- else if and (index .Values "global" "external-argo-cd" "token") }}
+  {{- else }}
 valueFrom:
   secretKeyRef:
     name: argocd-token
