@@ -53,6 +53,11 @@
     {{- $_ := set $gitopsOperatorContext.Values.global.codefresh.tls.caCerts.secretKeyRef "key" (.Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key) }}
   {{- end }}
 
+  {{- if and (index .Values "global" "external-argo-cd" "tokenSecretKeyRef") }}
+    {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_NAME" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "name" ) }}
+    {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_KEY" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "key" ) }}
+  {{- end }}
+
   {{- include "gitops-operator.resources" $gitopsOperatorContext}}
 
 {{- end }}

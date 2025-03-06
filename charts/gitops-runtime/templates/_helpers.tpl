@@ -251,6 +251,28 @@ valueFrom:
   {{- end }}
 {{- end }}
 
+
+{{/*
+Determine argocd token password. 
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.server.token" }}
+  {{- if and (index .Values "argo-cd" "enabled") }}
+valueFrom:
+  secretKeyRef:
+    name: argocd-token
+    key: token
+  {{- else if and (index .Values "global" "external-argo-cd" "tokenSecretKeyRef") }}
+valueFrom:
+  secretKeyRef:
+{{- index .Values "global" "external-argo-cd" "tokenSecretKeyRef" | toYaml | nindent 4 }}
+  {{- else if and (index .Values "global" "external-argo-cd" "token") }}
+valueFrom:
+  secretKeyRef:
+    name: argocd-token
+    key: token
+  {{- end }}
+{{- end }}
+
 {{/*
 Determine argocd server password. 
 */}}

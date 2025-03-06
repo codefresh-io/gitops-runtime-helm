@@ -140,6 +140,8 @@ global:
     passwordSecretKeyRef:
       name: argocd-initial-admin-secret
       key: password
+    token: ""
+    tokenSecretKeyRef: {}
 
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
