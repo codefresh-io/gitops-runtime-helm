@@ -32,11 +32,13 @@
 
   {{- if and (not (index .Values "argo-cd" "enabled")) }}
     
-    {{- if and (index .Values "global" "external-argo-cd" "tokenSecretKeyRef") (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
+    {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
       
-      {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "name")) }}
-      {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "key")) }}
-    
+      {{- if not (index .Values "global" "external-argo-cd" "token") }}
+        {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "name")) }}
+        {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "key")) }}
+      {{- end }}
+
     {{- end }}
   {{- end }}
 

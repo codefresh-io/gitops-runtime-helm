@@ -8,11 +8,13 @@
   {{- $_ := set (index $cfArgoCdExtrasContext.Values.sourcesServer.configMaps "cmd-params-cm" "data") "redis.server" (include "codefresh-gitops-runtime.argocd.redis.url" . ) }}
   {{- $_ := set (index $cfArgoCdExtrasContext.Values.sourcesServer.configMaps "cmd-params-cm" "data") "repo.server" (include "codefresh-gitops-runtime.argocd.reposerver.url" . ) }}
 
-  {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "tokenSecretKeyRef")  }}
-    {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "name")) }}
-    {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "key" )) }}
-    {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "name")) }}
-    {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "key" )) }}
+  {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
+    {{- if not (index .Values "global" "external-argo-cd" "token") }}
+        {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "name")) }}
+        {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "key" )) }}
+        {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "name")) }}
+        {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "key" )) }}
+    {{- end }}
   {{- end }}
 
   {{- include "cf-argocd-extras.event-reporter.resources" $cfArgoCdExtrasContext }}
