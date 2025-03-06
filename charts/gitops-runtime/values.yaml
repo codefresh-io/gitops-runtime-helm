@@ -134,23 +134,30 @@ global:
       port: 8081
         # -- ArgoCD username in plain text
     
+    # -- How GitOps Runtime should authenticate with ArgoCD
     auth:
+      # -- Authentication type. Can be password or token
       type: password
     
-    username: "admin"
-    # -- ArgoCD password in plain text
-    password: ""
-    # -- ArgoCD password referenced by an existing secret
-    passwordSecretKeyRef:
-      name: argocd-initial-admin-secret
-      key: password
-    
-    token: ""
-    tokenSecretKeyRef: {}
-    # e.g:
-    # tokenSecretKeyRef:
-    #   name: argocd-token
-    #   key: token
+      # If `auth.type=password` is set
+      # -- ArgoCD username in plain text
+      username: "admin"
+      # -- ArgoCD password in plain text
+      password: ""
+      # -- ArgoCD password referenced by an existing secret
+      passwordSecretKeyRef:
+        name: argocd-initial-admin-secret
+        key: password
+      
+      # If `auth.type=token` is set
+      # -- ArgoCD token in plain text
+      token: ""
+      # -- ArgoCD token referenced by an existing secret
+      tokenSecretKeyRef: {}
+      # e.g:
+      # tokenSecretKeyRef:
+      #   name: argocd-token
+      #   key: token
 
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer

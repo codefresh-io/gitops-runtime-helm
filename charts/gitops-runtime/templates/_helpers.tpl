@@ -237,17 +237,17 @@ valueFrom:
   secretKeyRef:
     name: argocd-initial-admin-secret
     key: password
-  {{- else if and (index .Values "global" "external-argo-cd" "passwordSecretKeyRef") }}
+  {{- else if and (index .Values "global" "external-argo-cd" "auth" "passwordSecretKeyRef") }}
 valueFrom:
   secretKeyRef:
-{{- index .Values "global" "external-argo-cd" "passwordSecretKeyRef" | toYaml | nindent 4 }}
-  {{- else if and (index .Values "global" "external-argo-cd" "password") }}
+{{- index .Values "global" "external-argo-cd" "auth" "passwordSecretKeyRef" | toYaml | nindent 4 }}
+  {{- else if and (index .Values "global" "external-argo-cd" "auth" "password") }}
 valueFrom:
   secretKeyRef:
     name: gitops-runtime-argo-cd-password
     key: token
   {{- else }}
-{{ fail "ArgoCD is not enabled and .Values.global.argo-cd.password or .Values.global.argo-cd.passwordSecretKeyRef is not set" }}
+{{ fail "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.password or .Values.global.external-argo-cd.auth.passwordSecretKeyRef is not set" }}
   {{- end }}
 {{- end }}
 
@@ -256,10 +256,10 @@ valueFrom:
 Determine argocd token password. 
 */}}
 {{- define "codefresh-gitops-runtime.argocd.server.token" }}
-  {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "name") (index .Values "global" "external-argo-cd" "tokenSecretKeyRef" "key")}}
+  {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name") (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "key")}}
 valueFrom:
   secretKeyRef:
-{{- index .Values "global" "external-argo-cd" "tokenSecretKeyRef" | toYaml | nindent 4 }}
+{{- index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" | toYaml | nindent 4 }}
   {{- else }}
 valueFrom:
   secretKeyRef:
@@ -278,14 +278,14 @@ valueFrom:
     name: cap-app-proxy-cm
     key: argoCdUsername
     optional: true
-  {{- else if and (index .Values "global" "external-argo-cd" "usernameSecretKeyRef") }}
+  {{- else if and (index .Values "global" "external-argo-cd" "auth" "usernameSecretKeyRef") }}
 valueFrom:
   secretKeyRef:
-{{- index .Values "global" "external-argo-cd" "usernameSecretKeyRef" | toYaml | nindent 4 }}
-  {{- else if and (index .Values "global" "external-argo-cd" "username") }}
-{{- printf "%s" (index .Values "global" "external-argo-cd" "username") }}
+{{- index .Values "global" "external-argo-cd" "auth" "usernameSecretKeyRef" | toYaml | nindent 4 }}
+  {{- else if and (index .Values "global" "external-argo-cd" "auth" "username") }}
+{{- printf "%s" (index .Values "global" "external-argo-cd" "auth" "username") }}
   {{- else }}
-{{ fail "ArgoCD is not enabled and .Values.global.argo-cd.username or .Values.global.argo-cd.usernameSecretKeyRef is not set" }}
+{{ fail "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.username or .Values.global.external-argo-cd.auth.usernameSecretKeyRef is not set" }}
   {{- end }}
 {{- end }}
 
@@ -295,10 +295,10 @@ Determine argocd server password.
 {{- define "codefresh-gitops-runtime.argocd.server.username-cm" }}
   {{- if and (index .Values "argo-cd" "enabled") }}
     {{- printf "%s" (index .Values "app-proxy" "config" "argoCdUsername") }}
-  {{- else if and (index .Values "global" "external-argo-cd" "username") }}
-    {{- printf "%s" (index .Values "global" "external-argo-cd" "username") }}
+  {{- else if and (index .Values "global" "external-argo-cd" "auth" "username") }}
+    {{- printf "%s" (index .Values "global" "external-argo-cd" "auth" "username") }}
   {{- else }}
-    {{- fail "ArgoCD is not enabled and .Values.global.argo-cd.username is not set" }}
+    {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.username is not set" }}
   {{- end }}
 {{- end }}
 
