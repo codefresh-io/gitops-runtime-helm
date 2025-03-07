@@ -571,20 +571,6 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: token
 
-  # - it: should require ArgoCd token if auth.type=token is set and no token is provided
-  #   template: sources-server.yaml
-  #   values:
-  #     - ./values/mandatory-values-ingress.yaml
-  #     - ./values/external-argocd-values.yaml
-  #   set:
-  #     global.external-argo-cd.auth.type: token
-  #     global.external-argo-cd.auth.token: null
-  #     global.external-argo-cd.auth.tokenSecretKeyRef.name: null
-  #     global.external-argo-cd.auth.tokenSecretKeyRef.key: null
-  #   asserts:
-  #     - failedTemplate:
-  #         errorMessage: ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required"
-
   - it: should require ArgoCd password if auth.type=password is set and no password is provided
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -597,17 +583,6 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.password or .Values.global.external-argo-cd.auth.passwordSecretKeyRef is not set"
-
-  # - it: should require ArgoCd server address if it's not provided
-  #   template: sources-server.yaml
-  #   values:
-  #     - ./values/mandatory-values-ingress.yaml
-  #     - ./values/external-argocd-values.yaml
-  #   set:
-  #     global.external-argo-cd.server: null
-  #   asserts:
-  #     - failedTemplate:
-  #         errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set"
 
   - it: should require ArgoCd redis address if it's not provided
     template: sources-server.yaml
@@ -631,6 +606,33 @@ tests:
       - failedTemplate:
           errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer is not set"
 
+  - it: should required only allowed auth type for external ArgoCd
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/deployment.yaml
+    set:
+      global.external-argo-cd.auth.type: invalid
+    asserts:
+      - failedTemplate:
+          errorMessage: "Invalid value for .Values.global.external-argo-cd.auth.type: invalid. Allowed values are: [password token]"
+
+  # TO-DO: fix these tests!
+
+  # - it: should require ArgoCd token if auth.type=token is set and no token is provided
+  #   template: sources-server.yaml
+  #   values:
+  #     - ./values/mandatory-values-ingress.yaml
+  #     - ./values/external-argocd-values.yaml
+  #   set:
+  #     global.external-argo-cd.auth.type: token
+  #     global.external-argo-cd.auth.token: null
+  #     global.external-argo-cd.auth.tokenSecretKeyRef.name: null
+  #     global.external-argo-cd.auth.tokenSecretKeyRef.key: null
+  #   asserts:
+  #     - failedTemplate:
+  #         errorMessage: ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required"
+
   # - it: should require ArgoCd image tag if it's not provided
   #   template: gitops-operator.yaml
   #   values:
@@ -642,13 +644,13 @@ tests:
   #     - failedTemplate:
   #         errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.server.tag is not set"
 
-  - it: should required only allowed auth type for external ArgoCd
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    template: app-proxy/deployment.yaml
-    set:
-      global.external-argo-cd.auth.type: invalid
-    asserts:
-      - failedTemplate:
-          errorMessage: "Invalid value for .Values.global.external-argo-cd.auth.type: invalid. Allowed values are: [password token]"
+  # - it: should require ArgoCd server address if it's not provided
+  #   template: sources-server.yaml
+  #   values:
+  #     - ./values/mandatory-values-ingress.yaml
+  #     - ./values/external-argocd-values.yaml
+  #   set:
+  #     global.external-argo-cd.server: null
+  #   asserts:
+  #     - failedTemplate:
+  #         errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set"
