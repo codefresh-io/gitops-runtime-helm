@@ -1,0 +1,16 @@
+{{- if and (not (index .Values "argo-cd" "enabled")) }}
+  {{- $cfArgoCdExtrasContext := (index .Subcharts "cf-argocd-extras")}}
+
+  {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "argocd.server" (include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . ) }}
+  {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "redis.server" (include "codefresh-gitops-runtime.argocd.redis.url" . ) }}
+
+  {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
+    {{- if not (index .Values "global" "external-argo-cd" "auth" "token") }}
+        {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name")) }}
+        {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "key" )) }}
+    {{- end }}
+  {{- end }}
+
+  {{- include "cf-argocd-extras.event-reporter.resources" $cfArgoCdExtrasContext }}
+
+{{- end }}
