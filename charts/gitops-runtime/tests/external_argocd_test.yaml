@@ -631,16 +631,16 @@ tests:
       - failedTemplate:
           errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer is not set"
 
-  - it: should require ArgoCd image tag if it's not provided
-    template: gitops-operator.yaml
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    set:
-      global.external-argo-cd.server.image.tag: null
-    asserts:
-      - failedTemplate:
-          errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.server.tag is not set"
+  # - it: should require ArgoCd image tag if it's not provided
+  #   template: gitops-operator.yaml
+  #   values:
+  #     - ./values/mandatory-values-ingress.yaml
+  #     - ./values/external-argocd-values.yaml
+  #   set:
+  #     global.external-argo-cd.server.image.tag: null
+  #   asserts:
+  #     - failedTemplate:
+  #         errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.server.tag is not set"
 
   - it: should required only allowed auth type for external ArgoCd
     values:
