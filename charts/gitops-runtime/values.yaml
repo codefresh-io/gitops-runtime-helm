@@ -121,7 +121,7 @@ global:
       # -- Image settings for the ArgoCD server
       image:
         repository: quay.io/argoproj/argocd
-        tag: ""
+        tag: "v2.14.2"
       # -- ArgoCD root path
       rootpath: ''
     redis:

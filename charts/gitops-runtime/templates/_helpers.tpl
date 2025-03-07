@@ -270,6 +270,7 @@ valueFrom:
   secretKeyRef:
     name: argocd-token
     key: token
+    optional: true
   {{- else }}
     {{ fail (printf "Invalid value for .Values.global.external-argo-cd.auth.type: %s. Allowed values are: [password token]" (index .Values "global" "external-argo-cd" "auth" "type")) }}
   {{- end }}
