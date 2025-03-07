@@ -260,11 +260,18 @@ Determine argocd token password.
 valueFrom:
   secretKeyRef:
 {{- index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" | toYaml | nindent 4 }}
-  {{- else }}
+  {{- else if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "auth" "token") }}
 valueFrom:
   secretKeyRef:
     name: argocd-token
     key: token
+  {{- else if or (eq (index .Values "global" "external-argo-cd" "auth" "type") "password") }}
+valueFrom:
+  secretKeyRef:
+    name: argocd-token
+    key: token
+  {{- else }}
+    {{ fail (printf "Invalid value for .Values.global.external-argo-cd.auth.type: %s. Allowed values are: [password token]" (index .Values "global" "external-argo-cd" "auth" "type")) }}
   {{- end }}
 {{- end }}
 

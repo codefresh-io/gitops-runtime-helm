@@ -1,0 +1,8 @@
+{{- if and (index .Values "gitops-operator" "enabled") }}
+
+{{- if index (get .Values "gitops-operator") "libraryMode" }}
+  {{- $gitopsOperatorContext := (index .Subcharts "gitops-operator")}}
+  {{- include "gitops-operator.crds" $gitopsOperatorContext }}
+{{- end }}
+
+{{- end }}

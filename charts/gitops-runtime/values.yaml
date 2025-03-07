@@ -122,6 +122,8 @@ global:
       image:
         repository: quay.io/argoproj/argocd
         tag: ""
+      # -- ArgoCD root path
+      rootpath: ''
     redis:
       # -- Service name of the ArgoCD Redis
       svc: argocd-redis

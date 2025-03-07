@@ -23,7 +23,7 @@
     {{/* Set ArgoCD image */}}
     {{- if not (index .Values "gitops-operator" "argoCdNotifications" "imageOverride") }}
       {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "repository" (required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.image is not set" $argoCDImageDict.repository) }}
-      {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "tag" (required "ArgoCD is not enabled  .Values.global.external-argo-cd.server.tag is not set" $argoCDImageDict.tag) }}
+      {{- $_ := set $gitopsOperatorContext.Values.argoCdNotifications.image "tag" (required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.tag is not set" $argoCDImageDict.tag) }}
     {{- end }}
 
   {{- else }}
@@ -65,7 +65,7 @@
     {{- $_ := set $gitopsOperatorContext.Values.global.codefresh.tls.caCerts.secretKeyRef "key" (.Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key) }}
   {{- end }}
 
-  {{- include "gitops-operator.resources" $gitopsOperatorContext}}
+  {{- include "gitops-operator.resources.deployment" $gitopsOperatorContext}}
 
 {{- end }}
 

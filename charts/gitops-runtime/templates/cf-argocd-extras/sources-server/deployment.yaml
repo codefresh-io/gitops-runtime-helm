@@ -1,0 +1,12 @@
+{{- if and (not (index .Values "argo-cd" "enabled")) }}
+  {{- $cfArgoCdExtrasContext := (index .Subcharts "cf-argocd-extras") }}
+
+  {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
+    {{- if not (index .Values "global" "external-argo-cd" "auth" "token") }}
+        {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name")) }}
+        {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "key" )) }}
+    {{- end }}
+  {{- end }}
+
+  {{- include "cf-argocd-extras.sources-server.deployment" $cfArgoCdExtrasContext }}
+{{- end }}
