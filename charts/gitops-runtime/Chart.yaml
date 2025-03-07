@@ -33,7 +33,7 @@ dependencies:
   version: 2.17.0
 - name: codefresh-tunnel-client
   repository: oci://quay.io/codefresh/charts
-  version: 0.1.18
+  version: 0.1.19
   alias: tunnel-client
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
