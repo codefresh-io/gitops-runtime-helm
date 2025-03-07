@@ -1,8 +1,0 @@
-{{- if and (not (index .Values "argo-cd" "enabled")) }}
-  {{- $cfArgoCdExtrasContext := (index .Subcharts "cf-argocd-extras") }}
-
-  {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "argocd.server" (include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . ) }}
-  {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "redis.server" (include "codefresh-gitops-runtime.argocd.redis.url" . ) }}
-
-  {{- include "cf-argocd-extras.event-reporter.configmap" $cfArgoCdExtrasContext }}
-{{- end }}

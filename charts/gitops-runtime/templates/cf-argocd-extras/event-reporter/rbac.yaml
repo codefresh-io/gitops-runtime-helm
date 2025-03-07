@@ -1,4 +1,0 @@
-{{- if and (not (index .Values "argo-cd" "enabled")) }}
-  {{- $cfArgoCdExtrasContext := (index .Subcharts "cf-argocd-extras") }}
-  {{- include "cf-argocd-extras.event-reporter.rbac" $cfArgoCdExtrasContext }}
-{{- end }}
