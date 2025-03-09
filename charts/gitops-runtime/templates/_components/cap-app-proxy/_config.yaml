@@ -8,7 +8,8 @@ cors: {{ .Values.global.codefresh.url }}
 clusterChunkSize: {{ . | quote }}
   {{- end }}
 env: {{ .Values.config.env | quote}}
-isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote }} 
+isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote }}
+isExternalArgoCD: {{ .Values.global.runtime.isExternalArgoCD | quote }}
 runtimeName: {{ required "global.runtime.name is required" .Values.global.runtime.name | quote}}
 skipGitPermissionValidation: {{ .Values.config.skipGitPermissionValidation | quote }}
 logLevel: {{ .Values.config.logLevel | quote }}

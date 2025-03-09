@@ -5,17 +5,9 @@ ARGO_CD_URL:
       name: cap-app-proxy-cm
       key: argoCdUrl
       optional: true
-ARGO_CD_USERNAME:
-  valueFrom:
-    configMapKeyRef:
-      name: cap-app-proxy-cm
-      key: argoCdUsername
-      optional: true
-ARGO_CD_PASSWORD:
-  valueFrom:
-    secretKeyRef:
-      name: argocd-initial-admin-secret
-      key: password
+ARGO_CD_TOKEN: {{ include "codefresh-gitops-runtime.argocd.server.token" . | nindent 2 }}
+ARGO_CD_USERNAME: {{ include "codefresh-gitops-runtime.argocd.server.username-env-var" . | nindent 2 }}
+ARGO_CD_PASSWORD: {{ include "codefresh-gitops-runtime.argocd.server.password" . | nindent 2 }}
 ARGO_WORKFLOWS_INSECURE:
   valueFrom:
     configMapKeyRef:
@@ -88,6 +80,12 @@ IS_CONFIGURATION_RUNTIME:
     configMapKeyRef:
       name: codefresh-cm
       key: isConfigurationRuntime
+IS_EXTERNAL_ARGOCD:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: isExternalArgoCD
+      optional: true
 MANAGED: false
 NAMESPACE:
   valueFrom:
