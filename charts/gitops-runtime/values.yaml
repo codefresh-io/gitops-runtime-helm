@@ -120,7 +120,9 @@ global:
       image:
         repository: quay.io/argoproj/argocd
         tag: "v2.14.2"
-      # -- ArgoCD root path
+      # -- Set if Argo CD is running behind reverse proxy under subpath different from /
+      # e.g.
+      # rootpath: '/argocd'
       rootpath: ''
     redis:
       # -- Service name of the ArgoCD Redis
