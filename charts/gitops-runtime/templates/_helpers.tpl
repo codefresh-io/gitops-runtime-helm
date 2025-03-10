@@ -195,7 +195,7 @@ Determine argocd server url. Must be called with chart root context
     {{- printf "%s://%s" $protocol $url }}
   {{- else if and (index .Values "global" "external-argo-cd" "server") }}
     {{- $argoCDSrv := (index .Values "global" "external-argo-cd" "server") }}
-    {{- $protocol := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.protocol is not set" $argoCDSrv.protocol }}
+    {{- $protocol := "http" }}
     {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.svc is not set" $argoCDSrv.svc }}
     {{- $port := (required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.port is not port" $argoCDSrv.port) | toString }}
     {{- if and (eq $port "80") }}

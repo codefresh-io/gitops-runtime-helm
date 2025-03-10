@@ -112,8 +112,6 @@ global:
   external-argo-cd:
     # -- ArgoCD server settings
     server:
-      # -- Protocol used to access the ArgoCD server. Can be http or https.
-      protocol: http
       # -- Service name of the ArgoCD server
       svc: argocd
       # -- Port of the ArgoCD server
