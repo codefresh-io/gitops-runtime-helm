@@ -11,6 +11,10 @@
     {{- end }}
   {{- end }}
 
+  {{- if and (index .Values "global" "external-argo-cd" "server" "rootpath") }}
+    {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGOCD_SERVER_ROOTPATH" (index .Values "global" "external-argo-cd" "server" "rootpath") }}  
+  {{- end }}
+
   {{- include "cf-argocd-extras.event-reporter.resources" $cfArgoCdExtrasContext }}
 
 {{- end }}

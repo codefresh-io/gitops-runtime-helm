@@ -617,6 +617,40 @@ tests:
       - failedTemplate:
           errorMessage: "Invalid value for .Values.global.external-argo-cd.auth.type: invalid. Allowed values are: [password token]"
 
+  - it: event-reporter StatefulSet should have valid ARGOCD_SERVER_ROOTPATH env var
+    template: event-reporter.yaml
+    documentSelector:
+      path: kind
+      value: StatefulSet
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    set:
+      global.external-argo-cd.server.rootpath: /argocd
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGOCD_SERVER_ROOTPATH
+            value: /argocd
+
+  - it: sources-server Deployment should have valid ARGOCD_SERVER_ROOTPATH env var
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: Deployment
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    set:
+      global.external-argo-cd.server.rootpath: /argocd
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGOCD_SERVER_ROOTPATH
+            value: /argocd
+
   # TO-DO: fix these tests!
 
   # - it: should require ArgoCd token if auth.type=token is set and no token is provided
