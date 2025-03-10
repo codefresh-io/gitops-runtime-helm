@@ -237,6 +237,7 @@ valueFrom:
   secretKeyRef:
     name: argocd-initial-admin-secret
     key: password
+    optional: true
   {{- else if and (index .Values "global" "external-argo-cd" "auth" "passwordSecretKeyRef") }}
 valueFrom:
   secretKeyRef:
