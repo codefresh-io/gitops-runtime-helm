@@ -663,7 +663,7 @@ tests:
           path: data.argoCdUrl
           value: http://my-argocd-server/argocd
   
-  - it: gitops-operator Deployment should have valid 
+  - it: gitops-operator Deployment should have valid ARGO_CD_URL env var with rootpath suffix
     template: gitops-operator.yaml
     documentSelector:
       path: kind
