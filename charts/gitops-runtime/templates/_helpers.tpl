@@ -246,12 +246,14 @@ valueFrom:
   secretKeyRef:
     name: gitops-runtime-argo-cd-password
     key: token
-  {{- else }}
+  {{- else if (index .Values "global" "external-argo-cd" "auth" "token") }}
 valueFrom:
   secretKeyRef:
     name: argocd-initial-admin-secret
     key: password
     optional: true
+  {{- else }}
+{{ fail "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.password or .Values.global.external-argo-cd.auth.passwordSecretKeyRef is not set" }}
   {{- end }}
 {{- end }}
 
