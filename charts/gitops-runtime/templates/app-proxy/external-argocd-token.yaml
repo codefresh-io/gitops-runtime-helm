@@ -1,4 +1,4 @@
-{{- $externalArgoCDValues := (index .Values "global" "external-argo-cd") }}
+{{- $externalArgoCDValues := (index .Values "global" "external-argo-cd" "auth") }}
 {{- if $externalArgoCDValues.password -}}
 ---
 apiVersion: v1
