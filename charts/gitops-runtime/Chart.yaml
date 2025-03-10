@@ -47,7 +47,7 @@ dependencies:
 - name: garage
   repository: https://codefresh-io.github.io/garage
   alias: garage-workflows-artifact-storage
-  version: 0.5.0-cf.2
+  version: 0.5.0-cf.3
   condition: garage-workflows-artifact-storage.enabled
 - name: cf-argocd-extras
   repository: oci://quay.io/codefresh/charts
