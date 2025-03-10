@@ -198,10 +198,11 @@ Determine argocd server url. Must be called with chart root context
     {{- $protocol := "http" }}
     {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.svc is not set" $argoCDSrv.svc }}
     {{- $port := (required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.port is not port" $argoCDSrv.port) | toString }}
+    {{- $rootpath := (index .Values "global" "external-argo-cd" "server" "rootpath") }}
     {{- if and (eq $port "80") }}
-      {{- printf "%s://%s" $protocol $svc }}    
+      {{- printf "%s://%s%s" $protocol $svc $rootpath }}    
     {{- else }}
-      {{- printf "%s://%s:%s" $protocol $svc $port }}
+      {{- printf "%s://%s:%s%s" $protocol $svc $port $rootpath }}
     {{- end }}
   {{- else }}
     {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set" }}
@@ -222,7 +223,8 @@ Determine argocd server url witout the protocol. Must be called with chart root 
   {{- $argoCDSrv := (index .Values "global" "external-argo-cd" "server") }}
   {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.svc is not set" $argoCDSrv.svc }}
   {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.port is not set" $argoCDSrv.port }}
-  {{- printf "%s:%v" $svc $port }}
+  {{- $rootpath := (index .Values "global" "external-argo-cd" "server" "rootpath") }}
+  {{- printf "%s:%v%s" $svc $port $rootpath }}
 {{- else }}
   {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set" }}
 {{- end }}

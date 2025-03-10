@@ -651,6 +651,35 @@ tests:
             name: ARGOCD_SERVER_ROOTPATH
             value: /argocd
 
+  - it: app-proxy ConfigMap should have valid ArgoCD url with rootpath suffix
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/config.yaml
+    set:
+      global.external-argo-cd.server.rootpath: /argocd
+    asserts:
+      - equal:
+          path: data.argoCdUrl
+          value: http://my-argocd-server/argocd
+  
+  - it: gitops-operator Deployment should have valid 
+    template: gitops-operator.yaml
+    documentSelector:
+      path: kind
+      value: Deployment
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    set:
+      global.external-argo-cd.server.rootpath: /argocd
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[1].env
+          content:
+            name: ARGO_CD_URL
+            value: my-argocd-server:80/argocd
+
   # TO-DO: fix these tests!
 
   # - it: should require ArgoCd token if auth.type=token is set and no token is provided
