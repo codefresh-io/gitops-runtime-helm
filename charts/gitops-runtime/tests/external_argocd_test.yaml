@@ -7,6 +7,7 @@ templates:
   - sources-server.yaml
   - charts/gitops-operator/*
   - charts/cf-argocd-extras/*
+  - app-proxy/external-argocd-token.yaml
 tests:
   - it: app-proxy ConfigMap should have valid ArgoCd URL
     values:
@@ -678,6 +679,40 @@ tests:
           content:
             name: ARGO_CD_URL
             value: my-argocd-server:80/argocd
+
+  - it: gitops-runtime-argo-cd-token secret should be create when `auth.type=token` and `auth.token` are set
+    template: app-proxy/external-argocd-token.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    set:
+      global.external-argo-cd.auth.type: token
+      global.external-argo-cd.auth.token: mytoken
+    asserts:
+      - isKind:
+          of: Secret
+      - equal:
+          path: metadata.name
+          value: gitops-runtime-argo-cd-token
+      - isNotNullOrEmpty:
+          path: stringData.token
+
+  - it: gitops-runtime-argo-cd-password secret should be create when `auth.type=password` and `auth.password` are set
+    template: app-proxy/external-argocd-token.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    set:
+      global.external-argo-cd.auth.type: password
+      global.external-argo-cd.auth.password: mypassword
+    asserts:
+      - isKind:
+          of: Secret
+      - equal:
+          path: metadata.name
+          value: gitops-runtime-argo-cd-password
+      - isNotNullOrEmpty:
+          path: stringData.token
 
   # TO-DO: fix these tests!
 
