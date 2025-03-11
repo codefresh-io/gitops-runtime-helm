@@ -114,7 +114,7 @@ global:
     # -- ArgoCD server settings
     server:
       # -- Service name of the ArgoCD server
-      svc: argocd
+      svc: argocd-server
       # -- Port of the ArgoCD server
       port: 80
       # -- Image settings for the ArgoCD server
