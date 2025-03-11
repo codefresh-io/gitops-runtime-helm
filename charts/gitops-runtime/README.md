@@ -338,7 +338,7 @@ sealed-secrets:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.external-argo-cd | object | `{"auth":{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"},"redis":{"port":6379,"svc":"argocd-redis"},"repoServer":{"port":8081,"svc":"argocd-repo-server"},"server":{"image":{"repository":"quay.io/argoproj/argocd","tag":"v2.14.2"},"port":80,"rootpath":"","svc":"argocd"}}` | Configuration for external ArgoCD Should be used when `argo-cd.enabled` is set to false |
+| global.external-argo-cd | object | `{"auth":{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"},"redis":{"port":6379,"svc":"argocd-redis"},"repoServer":{"port":8081,"svc":"argocd-repo-server"},"server":{"image":{"repository":"quay.io/argoproj/argocd","tag":"v2.14.2"},"port":80,"rootpath":"","svc":"argocd-server"}}` | Configuration for external ArgoCD Should be used when `argo-cd.enabled` is set to false |
 | global.external-argo-cd.auth | object | `{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"}` | How GitOps Runtime should authenticate with ArgoCD |
 | global.external-argo-cd.auth.password | string | `""` | ArgoCD password in plain text |
 | global.external-argo-cd.auth.passwordSecretKeyRef | object | `{"key":"password","name":"argocd-initial-admin-secret"}` | ArgoCD password referenced by an existing secret |
@@ -350,11 +350,11 @@ sealed-secrets:
 | global.external-argo-cd.redis.svc | string | `"argocd-redis"` | Service name of the ArgoCD Redis |
 | global.external-argo-cd.repoServer.port | int | `8081` | Port of the ArgoCD repo server |
 | global.external-argo-cd.repoServer.svc | string | `"argocd-repo-server"` | Service name of the ArgoCD repo server |
-| global.external-argo-cd.server | object | `{"image":{"repository":"quay.io/argoproj/argocd","tag":"v2.14.2"},"port":80,"rootpath":"","svc":"argocd"}` | ArgoCD server settings |
+| global.external-argo-cd.server | object | `{"image":{"repository":"quay.io/argoproj/argocd","tag":"v2.14.2"},"port":80,"rootpath":"","svc":"argocd-server"}` | ArgoCD server settings |
 | global.external-argo-cd.server.image | object | `{"repository":"quay.io/argoproj/argocd","tag":"v2.14.2"}` | Image settings for the ArgoCD server |
 | global.external-argo-cd.server.port | int | `80` | Port of the ArgoCD server |
 | global.external-argo-cd.server.rootpath | string | `""` | Set if Argo CD is running behind reverse proxy under subpath different from / e.g. rootpath: '/argocd' |
-| global.external-argo-cd.server.svc | string | `"argocd"` | Service name of the ArgoCD server |
+| global.external-argo-cd.server.svc | string | `"argocd-server"` | Service name of the ArgoCD server |
 | global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
