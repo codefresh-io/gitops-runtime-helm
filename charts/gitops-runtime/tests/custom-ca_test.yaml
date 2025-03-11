@@ -398,12 +398,12 @@ tests:
       -----END CERTIFICATE-----
   asserts:
   - contains:
-      path: spec.template.spec.containers[1].env
+      path: spec.template.spec.containers[0].env
       content:
         name: CF_CA_CERT
         value: /app/config/codefresh-tls/my-key
   - contains:
-      path: spec.template.spec.containers[1].volumeMounts
+      path: spec.template.spec.containers[0].volumeMounts
       content:
         name: codefresh-tls
         mountPath: /app/config/codefresh-tls
@@ -426,12 +426,12 @@ tests:
     global.codefresh.tls.caCerts.secretKeyRef.key: my-key
   asserts:
   - contains:
-      path: spec.template.spec.containers[1].env
+      path: spec.template.spec.containers[0].env
       content:
         name: CF_CA_CERT
         value: /app/config/codefresh-tls/my-key
   - contains:
-      path: spec.template.spec.containers[1].volumeMounts
+      path: spec.template.spec.containers[0].volumeMounts
       content:
         name: codefresh-tls
         mountPath: /app/config/codefresh-tls

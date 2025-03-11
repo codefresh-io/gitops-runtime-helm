@@ -151,7 +151,7 @@ tests:
       global.external-argo-cd.auth.tokenSecretKeyRef.key: my-token
     asserts:
       - contains:
-          path: spec.template.spec.containers[1].env
+          path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN_SECRET_NAME
             value: my-argocd-token-secret
@@ -170,7 +170,7 @@ tests:
       global.external-argo-cd.auth.tokenSecretKeyRef.key: my-token
     asserts:
       - contains:
-          path: spec.template.spec.containers[1].env
+          path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: my-token
@@ -188,7 +188,7 @@ tests:
       global.external-argo-cd.auth.token: "plaintexttoken"
     asserts:
       - contains:
-          path: spec.template.spec.containers[1].env
+          path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN_SECRET_NAME
             value: gitops-runtime-argo-cd-token
@@ -206,7 +206,7 @@ tests:
       global.external-argo-cd.auth.token: "plaintexttoken"
     asserts:
       - contains:
-          path: spec.template.spec.containers[1].env
+          path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: token
@@ -221,7 +221,7 @@ tests:
       value: Deployment
     asserts:
       - contains:
-          path: spec.template.spec.containers[1].env
+          path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN_SECRET_NAME
             value: argocd-token
@@ -236,7 +236,7 @@ tests:
       value: Deployment
     asserts:
       - contains:
-          path: spec.template.spec.containers[1].env
+          path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: token
@@ -251,7 +251,7 @@ tests:
       value: Deployment
     asserts:
       - contains:
-          path: spec.template.spec.containers[1].env
+          path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_URL
             value: my-argocd-server:80
@@ -266,7 +266,7 @@ tests:
       value: Deployment
     asserts:
       - contains:
-          path: spec.template.spec.containers[2].args
+          path: spec.template.spec.containers[1].args
           content:
             --argocd-repo-server=my-argocd-repo-server:8081
 
@@ -282,7 +282,7 @@ tests:
       global.external-argo-cd.server.image.tag: v1.2.3
     asserts:
       - equal:
-          path: spec.template.spec.containers[2].image
+          path: spec.template.spec.containers[1].image
           value: quay.io/argoproj/argocd:v1.2.3
 
   - it: event-reporter ConfigMap should have valid ArgoCd URL
@@ -675,7 +675,7 @@ tests:
       global.external-argo-cd.server.rootpath: /argocd
     asserts:
       - contains:
-          path: spec.template.spec.containers[1].env
+          path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_URL
             value: my-argocd-server:80/argocd
