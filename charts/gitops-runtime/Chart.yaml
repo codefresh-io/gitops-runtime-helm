@@ -48,5 +48,5 @@ dependencies:
   version: 0.5.0-cf.3
   condition: garage-workflows-artifact-storage.enabled
 - name: cf-argocd-extras
-  repository: oci://quay.io/codefresh/charts/dev
-  version: 0.3.6-feat-checksum-annotation
+  repository: oci://quay.io/codefresh/charts
+  version: 0.3.6
