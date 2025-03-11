@@ -124,7 +124,6 @@ tests:
       - ./values/external-argocd-values.yaml
     template: app-proxy/deployment.yaml
     set:
-      gitops-operator.libraryMode: false
       global.external-argo-cd.auth.type: token
       global.external-argo-cd.auth.token: "plaintexttoken"
     asserts:
@@ -135,7 +134,7 @@ tests:
             valueFrom:
               secretKeyRef:
                 key: token
-                name: argocd-token
+                name: gitops-runtime-argo-cd-token
 
   - it: gitops-operator Deployment should have valid ARGO_CD_TOKEN_SECRET_NAME env var set via tokenSecretKeyRef
     values:
@@ -191,7 +190,7 @@ tests:
           path: spec.template.spec.containers[1].env
           content:
             name: ARGO_CD_TOKEN_SECRET_NAME
-            value: argocd-token
+            value: gitops-runtime-argo-cd-token
 
   - it: gitops-operator Deployment should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via plaintext token
     values:
@@ -408,7 +407,7 @@ tests:
           path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN_SECRET_NAME
-            value: argocd-token
+            value: gitops-runtime-argo-cd-token
 
   - it: event-reporter StatefulSet should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via plaintext token
     template: event-reporter.yaml
@@ -551,9 +550,9 @@ tests:
           path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN_SECRET_NAME
-            value: argocd-token
+            value: gitops-runtime-argo-cd-token
 
-  - it: sources-server Deployment should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via plaintext toke
+  - it: sources-server Deployment should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via plaintext token
     template: sources-server.yaml
     documentSelector:
       path: kind

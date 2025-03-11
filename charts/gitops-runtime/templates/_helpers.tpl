@@ -271,7 +271,7 @@ valueFrom:
   {{- else if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "auth" "token") }}
 valueFrom:
   secretKeyRef:
-    name: argocd-token
+    name: gitops-runtime-argo-cd-token
     key: token
   {{- else if or (eq (index .Values "global" "external-argo-cd" "auth" "type") "password") }}
 valueFrom:
