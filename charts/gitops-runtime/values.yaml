@@ -109,6 +109,7 @@ global:
                 ephemeral-storage: 2Gi
 
   # -- Configuration for external ArgoCD
+  # Should be used when `argo-cd.enabled` is set to false
   external-argo-cd:
     # -- ArgoCD server settings
     server:
