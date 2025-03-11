@@ -239,21 +239,24 @@ valueFrom:
   secretKeyRef:
     name: argocd-initial-admin-secret
     key: password
-  {{- else if and (not (index .Values "global" "external-argo-cd" "auth" "token")) (index .Values "global" "external-argo-cd" "auth" "passwordSecretKeyRef") }}
+  {{- else if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "password") (index .Values "global" "external-argo-cd" "auth" "passwordSecretKeyRef") }}
 valueFrom:
   secretKeyRef:
 {{- index .Values "global" "external-argo-cd" "auth" "passwordSecretKeyRef" | toYaml | nindent 4 }}
-  {{- else if and (not (index .Values "global" "external-argo-cd" "auth" "token")) (index .Values "global" "external-argo-cd" "auth" "password") }}
+  {{- else if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "password") (index .Values "global" "external-argo-cd" "auth" "password") }}
 valueFrom:
   secretKeyRef:
     name: gitops-runtime-argo-cd-password
     key: token
-  {{- else if (index .Values "global" "external-argo-cd" "auth" "token") }}
+  {{- else if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "auth" "token") }}
 valueFrom:
   secretKeyRef:
-    name: argocd-initial-admin-secret
-    key: password
-    optional: true
+    name: gitops-runtime-argo-cd-token
+    key: token
+  {{- else if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef") }}
+valueFrom:
+  secretKeyRef:
+{{- index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" | toYaml | nindent 4 }}
   {{- else }}
 {{ fail "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.password or .Values.global.external-argo-cd.auth.passwordSecretKeyRef is not set" }}
   {{- end }}
