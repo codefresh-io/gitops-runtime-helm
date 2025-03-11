@@ -257,6 +257,7 @@ valueFrom:
 valueFrom:
   secretKeyRef:
 {{- index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" | toYaml | nindent 4 }}
+    optional: true
   {{- else }}
 {{ fail "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.password or .Values.global.external-argo-cd.auth.passwordSecretKeyRef is not set" }}
   {{- end }}
