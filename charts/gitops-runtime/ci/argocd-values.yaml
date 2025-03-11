@@ -1,4 +1,0 @@
-# values file for external ArgoCD
-configs:
-  cm:
-    accounts.admin: apiKey,login

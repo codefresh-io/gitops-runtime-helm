@@ -18,4 +18,8 @@
   {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container.env "ARGOCD_SERVER_ROOTPATH" (index .Values "global" "external-argo-cd" "server" "rootpath") }}  
 {{- end }}
 
-{{- include "cf-argocd-extras.sources-server.resources" $cfArgoCdExtrasContext }}
+{{- include "cf-argocd-extras.sources-server.hpa" $cfArgoCdExtrasContext }}
+{{- include "cf-argocd-extras.sources-server.deployment" $cfArgoCdExtrasContext }}
+{{- include "cf-argocd-extras.sources-server.service" $cfArgoCdExtrasContext }}
+{{- include "cf-argocd-extras.sources-server.rbac" $cfArgoCdExtrasContext }}
+{{- include "cf-argocd-extras.sources-server.configmap" $cfArgoCdExtrasContext }}
