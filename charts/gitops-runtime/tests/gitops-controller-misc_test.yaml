@@ -24,7 +24,7 @@ tests:
       path: spec.template.spec.containers[0].image
       value: example.com/repo:0.0.1
   - equal:
-      path: spec.template.spec.containers[1].image
+      path: spec.template.spec.containers[0].image
       value: example.com/repo:0.0.1
 
 - it: override service account name - sa object
@@ -65,7 +65,7 @@ tests:
     gitops-operator.env.PORT: '8787'
   asserts:
   - contains:
-      path: spec.template.spec.containers[1].env
+      path: spec.template.spec.containers[0].env
       content:
         name: PORT
         value: "8787"
@@ -81,7 +81,7 @@ tests:
     gitops-operator.env.SOME_ENV: 'test'
   asserts:
   - contains:
-      path: spec.template.spec.containers[1].env
+      path: spec.template.spec.containers[0].env
       content:
         name: SOME_ENV
         value: test
@@ -97,7 +97,7 @@ tests:
     gitops-operator.securityContext.runAsUser: 1000
   asserts:
   - equal:
-      path: spec.template.spec.containers[1].securityContext.runAsUser
+      path: spec.template.spec.containers[0].securityContext.runAsUser
       value: 1000
 
 - it: override readiness and liveness probes values
@@ -120,34 +120,34 @@ tests:
     gitops-operator.livenessProbe.failureThreshold: 1
   asserts:
   - equal:
-      path: spec.template.spec.containers[1].readinessProbe.initialDelaySeconds
+      path: spec.template.spec.containers[0].readinessProbe.initialDelaySeconds
       value: 1
   - equal:
-      path: spec.template.spec.containers[1].readinessProbe.periodSeconds
+      path: spec.template.spec.containers[0].readinessProbe.periodSeconds
       value: 1
   - equal:
-      path: spec.template.spec.containers[1].readinessProbe.timeoutSeconds
+      path: spec.template.spec.containers[0].readinessProbe.timeoutSeconds
       value: 1
   - equal:
-      path: spec.template.spec.containers[1].readinessProbe.successThreshold
+      path: spec.template.spec.containers[0].readinessProbe.successThreshold
       value: 1
   - equal:
-      path: spec.template.spec.containers[1].readinessProbe.failureThreshold
+      path: spec.template.spec.containers[0].readinessProbe.failureThreshold
       value: 1
   - equal:
-      path: spec.template.spec.containers[1].livenessProbe.initialDelaySeconds
+      path: spec.template.spec.containers[0].livenessProbe.initialDelaySeconds
       value: 1
   - equal:
-      path: spec.template.spec.containers[1].livenessProbe.periodSeconds
+      path: spec.template.spec.containers[0].livenessProbe.periodSeconds
       value: 1
   - equal:
-      path: spec.template.spec.containers[1].livenessProbe.timeoutSeconds
+      path: spec.template.spec.containers[0].livenessProbe.timeoutSeconds
       value: 1
   - equal:
-      path: spec.template.spec.containers[1].livenessProbe.successThreshold
+      path: spec.template.spec.containers[0].livenessProbe.successThreshold
       value: 1
   - equal:
-      path: spec.template.spec.containers[1].livenessProbe.failureThreshold
+      path: spec.template.spec.containers[0].livenessProbe.failureThreshold
       value: 1
 
 - it: setting node selector
@@ -299,10 +299,10 @@ tests:
     argo-workflows.server.secure: false
   asserts:
   - equal:
-      path: spec.template.spec.containers[2].image
+      path: spec.template.spec.containers[1].image
       value: argocd/test:test
   - contains:
-      path: spec.template.spec.containers[2].args
+      path: spec.template.spec.containers[1].args
       content: --argocd-repo-server=myargocd-repo-server:9080
 
 - it: argocd and workflows overrides for manager
@@ -321,12 +321,12 @@ tests:
     argo-workflows.server.secure: false
   asserts:
   - contains:
-      path: spec.template.spec.containers[1].env
+      path: spec.template.spec.containers[0].env
       content:
         name: ARGO_WF_URL
         value: http://argo-test-server:2746
   - contains:
-      path: spec.template.spec.containers[1].env
+      path: spec.template.spec.containers[0].env
       content:
         name: ARGO_CD_URL
         value: myargocd-server:80/some-path
@@ -374,7 +374,7 @@ tests:
     gitops-operator.env.ARGO_CD_URL: some-other-url:123
   asserts:
   - contains:
-      path: spec.template.spec.containers[1].env
+      path: spec.template.spec.containers[0].env
       content:
         name: ARGO_CD_URL
         value: some-other-url:123
