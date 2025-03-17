@@ -1,0 +1,36 @@
+suite: Test GitOps Operator
+templates:
+  - gitops-operator.yaml
+  - charts/gitops-operator/*
+tests:
+  - it: should have LEADER_ELECT set to true if replicaCount is greater than 1
+    values:
+      - ./values/mandatory-values.yaml
+    template: gitops-operator.yaml
+    documentSelector:
+      path: kind
+      value: Deployment
+    set:
+      gitops-operator.replicaCount: 2
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[1].env
+          content:
+            name: LEADER_ELECT
+            value: "true"
+
+  - it: should have LEADER_ELECT set to false if replicaCount is 1
+    values:
+      - ./values/mandatory-values.yaml
+    template: gitops-operator.yaml
+    documentSelector:
+      path: kind
+      value: Deployment
+    set:
+      gitops-operator.replicaCount: 1
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[1].env
+          content:
+            name: LEADER_ELECT
+            value: "false"
