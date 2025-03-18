@@ -14,7 +14,7 @@ tests:
       gitops-operator.replicaCount: 2
     asserts:
       - contains:
-          path: spec.template.spec.containers[1].env
+          path: spec.template.spec.containers[0].env
           content:
             name: LEADER_ELECT
             value: "true"
@@ -30,7 +30,7 @@ tests:
       gitops-operator.replicaCount: 1
     asserts:
       - contains:
-          path: spec.template.spec.containers[1].env
+          path: spec.template.spec.containers[0].env
           content:
             name: LEADER_ELECT
             value: "false"
