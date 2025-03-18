@@ -1,0 +1,22 @@
+suite: Sources Server Tests
+templates:
+  - sources-server.yaml
+  - charts/cf-argocd-extras/*
+tests:
+  - it: Sources Server should have valid data
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: ConfigMap
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - equal:
+          path: data["argocd.server"]
+          value: argo-cd-server:80
+      - equal:
+          path: data["redis.server"]
+          value: argo-cd-redis:6379
+      - equal:
+          path: data["repo.server"]
+          value: argo-cd-repo-server:8081
