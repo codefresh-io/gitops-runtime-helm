@@ -64,7 +64,21 @@ tests:
       - ./values/mandatory-values-ingress.yaml
     asserts:
       - containsDocument:
-          kind: Deployment
+          kind: StatefulSet
           apiVersion: apps/v1
           name: event-reporter
         not: true
+
+  - it: New Event-Reporter should be deployed with external OSS ArgoCD
+    template: event-reporter.yaml
+    documentSelector:
+      path: kind
+      value: StatefulSet
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    asserts:
+      - containsDocument:
+          kind: StatefulSet
+          apiVersion: apps/v1
+          name: event-reporter
