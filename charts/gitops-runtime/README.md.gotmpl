@@ -50,7 +50,6 @@ global:
       svc: argocd-repo-server
       # -- Port of the ArgoCD repo server
       port: 8081
-        # -- ArgoCD username in plain text
 
     # -- How GitOps Runtime should authenticate with ArgoCD
     auth:
