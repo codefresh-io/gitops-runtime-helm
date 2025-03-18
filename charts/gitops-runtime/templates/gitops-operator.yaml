@@ -68,6 +68,12 @@
     {{- $_ := set $gitopsOperatorContext.Values.global.codefresh.tls.caCerts.secretKeyRef "key" (.Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key) }}
   {{- end }}
 
+  {{- if and (gt (int $gitopsOperatorContext.Values.replicaCount) 1 ) }}
+    {{- $_ := set $gitopsOperatorContext.Values.env "LEADER_ELECT" "true" }}
+  {{- else }}
+    {{- $_ := set $gitopsOperatorContext.Values.env "LEADER_ELECT" "false" }}    
+  {{- end }}
+
   {{- include "gitops-operator.resources" $gitopsOperatorContext}}
 
 {{- end }}
