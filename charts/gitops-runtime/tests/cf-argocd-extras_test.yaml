@@ -57,3 +57,14 @@ tests:
             app.kubernetes.io/name: cf-argocd-extras
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/component: sources-server
+
+  - it: New Event-Reporter should not be deployed with forked ArgoCD
+    template: event-reporter.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - containsDocument:
+          kind: Deployment
+          apiVersion: apps/v1
+          name: event-reporter
+        not: true
