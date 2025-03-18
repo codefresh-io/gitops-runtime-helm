@@ -324,6 +324,19 @@ tests:
           path: data["sources.server"]
           value: http://sources-server
 
+  - it: event-reporte ConfigMap should have valid Repo Server URL
+    template: event-reporter.yaml
+    documentSelector:
+      path: kind
+      value: ConfigMap
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    asserts:
+      - equal:
+          path: data["repo.server"]
+          value: my-argocd-repo-server:8081
+
   - it: event-reporter StatefulSet should have valid default ARGO_CD_TOKEN_SECRET_NAME env var
     template: event-reporter.yaml
     documentSelector:

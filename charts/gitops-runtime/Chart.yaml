@@ -49,4 +49,4 @@ dependencies:
   condition: garage-workflows-artifact-storage.enabled
 - name: cf-argocd-extras
   repository: oci://quay.io/codefresh/charts
-  version: 0.3.10
+  version: 0.3.11
