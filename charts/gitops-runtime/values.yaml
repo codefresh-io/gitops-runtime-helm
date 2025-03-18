@@ -509,9 +509,7 @@ app-proxy:
     env: {}
 
     resources:
-      limits:
-        memory: 512Mi
-        cpu: '1'
+      limits: {}
       requests:
         memory: 256Mi
         cpu: '0.2'
@@ -664,12 +662,10 @@ gitops-operator:
   affinity: {}
 
   resources:
-    limits:
-      cpu: 500m
-      memory: 128Mi
+    limits: {}
     requests:
       cpu: 100m
-      memory: 64Mi
+      memory: 128Mi
 
   kube-rbac-proxy:
     image:
