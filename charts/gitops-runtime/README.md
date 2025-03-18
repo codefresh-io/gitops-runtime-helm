@@ -18,6 +18,9 @@ Prior to running the installation please see the official documentation at: http
 
 ## Installation with External ArgoCD
 
+If you want to use an existing ArgoCD installation, you can disable the built-in ArgoCD and configure the GitOps Runtime to use the external ArgoCD.
+See the `values.yaml` example below:
+
 ```yaml
 global:
   # -- Configuration for external ArgoCD
@@ -32,7 +35,7 @@ global:
       # -- Image settings for the ArgoCD server
       image:
         repository: quay.io/argoproj/argocd
-        tag: "v2.14.2"
+        tag: "v2.14.4"
       # -- Set if Argo CD is running behind reverse proxy under subpath different from /
       # e.g.
       # rootpath: '/argocd'
@@ -164,16 +167,15 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3318.0"` |  |
+| app-proxy.image.tag | string | `"1.3353.1"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3307.0"` |  |
-| app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
-| app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3336.1"` |  |
+| app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
 | app-proxy.livenessProbe.failureThreshold | int | `10` | Minimum consecutive failures for the [probe] to be considered failed after having succeeded. |
@@ -317,10 +319,9 @@ sealed-secrets:
 | gitops-operator.podAnnotations | object | `{}` |  |
 | gitops-operator.podLabels | object | `{}` |  |
 | gitops-operator.replicaCount | int | `1` |  |
-| gitops-operator.resources.limits.cpu | string | `"500m"` |  |
-| gitops-operator.resources.limits.memory | string | `"128Mi"` |  |
+| gitops-operator.resources.limits | object | `{}` |  |
 | gitops-operator.resources.requests.cpu | string | `"100m"` |  |
-| gitops-operator.resources.requests.memory | string | `"64Mi"` |  |
+| gitops-operator.resources.requests.memory | string | `"128Mi"` |  |
 | gitops-operator.serviceAccount.annotations | object | `{}` |  |
 | gitops-operator.serviceAccount.create | bool | `true` |  |
 | gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
@@ -338,7 +339,7 @@ sealed-secrets:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.external-argo-cd | object | `{"auth":{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"},"redis":{"port":6379,"svc":"argocd-redis"},"repoServer":{"port":8081,"svc":"argocd-repo-server"},"server":{"image":{"repository":"quay.io/argoproj/argocd","tag":"v2.14.2"},"port":80,"rootpath":"","svc":"argocd-server"}}` | Configuration for external ArgoCD Should be used when `argo-cd.enabled` is set to false |
+| global.external-argo-cd | object | `{"auth":{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"},"redis":{"port":6379,"svc":"argocd-redis"},"repoServer":{"port":8081,"svc":"argocd-repo-server"},"server":{"image":{"repository":"quay.io/argoproj/argocd","tag":"v2.14.4"},"port":80,"rootpath":"","svc":"argocd-server"}}` | Configuration for external ArgoCD Should be used when `argo-cd.enabled` is set to false |
 | global.external-argo-cd.auth | object | `{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"}` | How GitOps Runtime should authenticate with ArgoCD |
 | global.external-argo-cd.auth.password | string | `""` | ArgoCD password in plain text |
 | global.external-argo-cd.auth.passwordSecretKeyRef | object | `{"key":"password","name":"argocd-initial-admin-secret"}` | ArgoCD password referenced by an existing secret |
@@ -350,8 +351,8 @@ sealed-secrets:
 | global.external-argo-cd.redis.svc | string | `"argocd-redis"` | Service name of the ArgoCD Redis |
 | global.external-argo-cd.repoServer.port | int | `8081` | Port of the ArgoCD repo server |
 | global.external-argo-cd.repoServer.svc | string | `"argocd-repo-server"` | Service name of the ArgoCD repo server |
-| global.external-argo-cd.server | object | `{"image":{"repository":"quay.io/argoproj/argocd","tag":"v2.14.2"},"port":80,"rootpath":"","svc":"argocd-server"}` | ArgoCD server settings |
-| global.external-argo-cd.server.image | object | `{"repository":"quay.io/argoproj/argocd","tag":"v2.14.2"}` | Image settings for the ArgoCD server |
+| global.external-argo-cd.server | object | `{"image":{"repository":"quay.io/argoproj/argocd","tag":"v2.14.4"},"port":80,"rootpath":"","svc":"argocd-server"}` | ArgoCD server settings |
+| global.external-argo-cd.server.image | object | `{"repository":"quay.io/argoproj/argocd","tag":"v2.14.4"}` | Image settings for the ArgoCD server |
 | global.external-argo-cd.server.port | int | `80` | Port of the ArgoCD server |
 | global.external-argo-cd.server.rootpath | string | `""` | Set if Argo CD is running behind reverse proxy under subpath different from / e.g. rootpath: '/argocd' |
 | global.external-argo-cd.server.svc | string | `"argocd-server"` | Service name of the ArgoCD server |

@@ -18,6 +18,9 @@ Prior to running the installation please see the official documentation at: http
 
 ## Installation with External ArgoCD
 
+If you want to use an existing ArgoCD installation, you can disable the built-in ArgoCD and configure the GitOps Runtime to use the external ArgoCD.
+See the `values.yaml` example below:
+
 ```yaml
 global:
   # -- Configuration for external ArgoCD
@@ -32,7 +35,7 @@ global:
       # -- Image settings for the ArgoCD server
       image:
         repository: quay.io/argoproj/argocd
-        tag: "v2.14.2"
+        tag: "v2.14.4"
       # -- Set if Argo CD is running behind reverse proxy under subpath different from /
       # e.g.
       # rootpath: '/argocd'
