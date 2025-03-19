@@ -81,11 +81,25 @@ Determine argocd server service name. Must be called with chart root context
 {{- end }}
 
 {{/*
+Determine argocd redis service name. Must be called with chart root context
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.redis.servicename" -}}
+{{/* For now use template from ArgoCD chart until better approach */}}
+{{- template "argo-cd.redis.fullname" (dict "Values" (get .Values "argo-cd")) }}
+{{- end }}
+
+{{/*
 Determine argocd repo server service name. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.reposerver.servicename" -}}
 {{/* For now use template from ArgoCD chart until better approach */}}
-{{- template "argo-cd.repoServer.fullname" (dict "Values" (get .Values "argo-cd")) }}
+  {{- if and (index .Subcharts "argo-cd") }}
+    {{- template "argo-cd.repoServer.fullname" (dict "Values" (get .Values "argo-cd")) }}
+  {{- else }}
+    {{- $repoServer := index .Values "global" "external-argo-cd" "repoServer" }}
+    {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.svc is not set" $repoServer.svc }}
+    {{- printf "%s" $svc }}
+  {{- end }}
 {{- end }}
 
 {{/*
@@ -93,8 +107,35 @@ Determine argocd argocd repo server port
 */}}
 {{- define "codefresh-gitops-runtime.argocd.reposerver.serviceport" -}}
 {{/* For now use template from ArgoCD chart until better approach */}}
-  {{- index .Values "argo-cd" "repoServer" "service" "port" }}
+  {{- if and (index .Subcharts "argo-cd") }}
+    {{- index .Values "argo-cd" "repoServer" "service" "port" }}
+  {{- else }}
+    {{- $repoServer := index .Values "global" "external-argo-cd" "repoServer" }}
+    {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.svc is not set" $repoServer.port }}
+    {{- printf "%v" $port }}
+  {{- end }}
 {{- end }}
+
+
+{{/*
+Determine argocd repoServer url 
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.reposerver.url" -}}
+{{- $argoCDValues := (get .Values "argo-cd") }} 
+{{- if and (index .Values "argo-cd" "enabled") }}
+  {{- $serviceName := include "codefresh-gitops-runtime.argocd.reposerver.servicename" . }}
+  {{- $port := include "codefresh-gitops-runtime.argocd.reposerver.serviceport" . }}
+  {{- printf "%s:%s" $serviceName $port }}
+{{- else if and (index .Values "global" "external-argo-cd" "repoServer") }}
+  {{- $repoServer := (index .Values "global" "external-argo-cd" "repoServer") }}
+  {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.svc is not set" $repoServer.svc }}
+  {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.port is not set" $repoServer.port }}
+  {{- printf "%s:%v" $svc $port }}
+{{- else }}
+  {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer is not set" }}
+{{- end }}
+{{- end}}
+
 
 {{/*
 Determine argocd servicename. Must be called with chart root context
@@ -132,27 +173,172 @@ Determine argocd server service port. Must be called with chart root context
 {{- end}}
 
 {{/*
+Determine argocd redis service port. Must be called with chart root context
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.redis.serviceport" -}}
+{{- $argoCDValues := (get .Values "argo-cd") }}
+{{- $port := $argoCDValues.redis.servicePort }}
+{{- print $port }}
+{{- end}}
+
+{{/*
 Determine argocd server url. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.server.url" -}}
-{{- $protocol := "https" }}
-{{- $port := include "codefresh-gitops-runtime.argocd.server.serviceport" . }}
-{{- if (eq $port "80") }}
-  {{- $protocol = "http" }}
-{{- end }}
-{{- $url := include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . }}
-{{- printf "%s://%s" $protocol $url }}
+  {{- if and (index .Values "argo-cd" "enabled") }}
+    {{- $protocol := "https" }}
+    {{- $port := include "codefresh-gitops-runtime.argocd.server.serviceport" . }}
+    {{- if (eq $port "80") }}
+      {{- $protocol = "http" }}
+    {{- end }}
+    {{- $url := include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . }}
+    {{- printf "%s://%s" $protocol $url }}
+  {{- else if and (index .Values "global" "external-argo-cd" "server") }}
+    {{- $argoCDSrv := (index .Values "global" "external-argo-cd" "server") }}
+    {{- $protocol := "http" }}
+    {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.svc is not set" $argoCDSrv.svc }}
+    {{- $port := (required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.port is not port" $argoCDSrv.port) | toString }}
+    {{- $rootpath := (index .Values "global" "external-argo-cd" "server" "rootpath") }}
+    {{- if and (eq $port "80") }}
+      {{- printf "%s://%s%s" $protocol $svc $rootpath }}    
+    {{- else }}
+      {{- printf "%s://%s:%s%s" $protocol $svc $port $rootpath }}
+    {{- end }}
+  {{- else }}
+    {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set" }}
+  {{- end }}
 {{- end}}
 
 {{/*
 Determine argocd server url witout the protocol. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.server.no-protocol-url" -}}
-{{- $argoCDValues := (get .Values "argo-cd") }}
-{{- $serverName := include "codefresh-gitops-runtime.argocd.server.servicename" . }}
-{{- $port := include "codefresh-gitops-runtime.argocd.server.serviceport" . }}
-{{- $path := (get $argoCDValues.configs.params "server.rootpath") }}
-{{- printf "%s:%s%s" $serverName $port $path }}
+{{- $argoCDValues := (get .Values "argo-cd") }} 
+{{- if and (index .Values "argo-cd" "enabled") }}
+  {{- $serverName := include "codefresh-gitops-runtime.argocd.server.servicename" . }}
+  {{- $port := include "codefresh-gitops-runtime.argocd.server.serviceport" . }}
+  {{- $path := (get $argoCDValues.configs.params "server.rootpath") }}
+  {{- printf "%s:%s%s" $serverName $port $path }}
+{{- else if and (index .Values "global" "external-argo-cd" "server") }}
+  {{- $argoCDSrv := (index .Values "global" "external-argo-cd" "server") }}
+  {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.svc is not set" $argoCDSrv.svc }}
+  {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.port is not set" $argoCDSrv.port }}
+  {{- $rootpath := (index .Values "global" "external-argo-cd" "server" "rootpath") }}
+  {{- printf "%s:%v%s" $svc $port $rootpath }}
+{{- else }}
+  {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set" }}
+{{- end }}
+{{- end}}
+
+{{/*
+Determine argocd server password. 
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.server.password" }}
+  {{- if and (index .Values "argo-cd" "enabled") }}
+valueFrom:
+  secretKeyRef:
+    name: argocd-initial-admin-secret
+    key: password
+  {{- else if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "password") (index .Values "global" "external-argo-cd" "auth" "passwordSecretKeyRef") }}
+valueFrom:
+  secretKeyRef:
+{{- index .Values "global" "external-argo-cd" "auth" "passwordSecretKeyRef" | toYaml | nindent 4 }}
+  {{- else if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "password") (index .Values "global" "external-argo-cd" "auth" "password") }}
+valueFrom:
+  secretKeyRef:
+    name: gitops-runtime-argo-cd-password
+    key: token
+  {{- else if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "auth" "token") }}
+valueFrom:
+  secretKeyRef:
+    name: gitops-runtime-argo-cd-token
+    key: token
+  {{- else if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef") }}
+valueFrom:
+  secretKeyRef:
+{{- index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" | toYaml | nindent 4 }}
+    optional: true
+  {{- else }}
+{{ fail "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.password or .Values.global.external-argo-cd.auth.passwordSecretKeyRef is not set" }}
+  {{- end }}
+{{- end }}
+
+
+{{/*
+Determine argocd token password. 
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.server.token" }}
+  {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name") (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "key")}}
+valueFrom:
+  secretKeyRef:
+{{- index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" | toYaml | nindent 4 }}
+  {{- else if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") (index .Values "global" "external-argo-cd" "auth" "token") }}
+valueFrom:
+  secretKeyRef:
+    name: gitops-runtime-argo-cd-token
+    key: token
+  {{- else if or (eq (index .Values "global" "external-argo-cd" "auth" "type") "password") }}
+valueFrom:
+  secretKeyRef:
+    name: argocd-token
+    key: token
+    optional: true
+  {{- else }}
+    {{ fail (printf "Invalid value for .Values.global.external-argo-cd.auth.type: %s. Allowed values are: [password token]" (index .Values "global" "external-argo-cd" "auth" "type")) }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Determine argocd server password. 
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.server.username-env-var" }}
+  {{- if and (index .Values "argo-cd" "enabled") }}
+valueFrom:
+  configMapKeyRef:
+    name: cap-app-proxy-cm
+    key: argoCdUsername
+    optional: true
+  {{- else if and (index .Values "global" "external-argo-cd" "auth" "usernameSecretKeyRef") }}
+valueFrom:
+  secretKeyRef:
+{{- index .Values "global" "external-argo-cd" "auth" "usernameSecretKeyRef" | toYaml | nindent 4 }}
+  {{- else if and (index .Values "global" "external-argo-cd" "auth" "username") }}
+{{- printf "%s" (index .Values "global" "external-argo-cd" "auth" "username") }}
+  {{- else }}
+{{ fail "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.username or .Values.global.external-argo-cd.auth.usernameSecretKeyRef is not set" }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Determine argocd server password. 
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.server.username-cm" }}
+  {{- if and (index .Values "argo-cd" "enabled") }}
+    {{- printf "%s" (index .Values "app-proxy" "config" "argoCdUsername") }}
+  {{- else if and (index .Values "global" "external-argo-cd" "auth" "username") }}
+    {{- printf "%s" (index .Values "global" "external-argo-cd" "auth" "username") }}
+  {{- else }}
+    {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.username is not set" }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Determine argocd redis url 
+*/}}
+{{- define "codefresh-gitops-runtime.argocd.redis.url" -}}
+{{- $argoCDValues := (get .Values "argo-cd") }} 
+{{- if and (index .Values "argo-cd" "enabled") }}
+  {{- $serviceName := include "codefresh-gitops-runtime.argocd.redis.servicename" . }}
+  {{- $port := include "codefresh-gitops-runtime.argocd.redis.serviceport" . }}
+  {{- printf "%s:%s" $serviceName $port }}
+{{- else if and (index .Values "global" "external-argo-cd" "redis") }}
+  {{- $redis := (index .Values "global" "external-argo-cd" "redis") }}
+  {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.redis.svc is not set" $redis.svc }}
+  {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.redis.port is not set" $redis.port }}
+  {{- printf "%s:%v" $svc $port }}
+{{- else }}
+  {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.redis is not set" }}
+{{- end }}
 {{- end}}
 
 {{/*
@@ -240,12 +426,15 @@ Get ingress url for both tunnel based and ingress based runtimes
 Output comma separated list of installed runtime components
 */}}
 {{- define "codefresh-gitops-runtime.component-list"}}
-  {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
   {{- $argoEvents := dict "name" "argo-events" "version" (get .Subcharts "argo-events").Chart.AppVersion }}
   {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
   {{- $internalRouter := dict "name" "internal-router" "version" .Chart.AppVersion }}
   {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
-  {{- $comptList := list $argoCD $argoEvents $appProxy $sealedSecrets $internalRouter}}
+  {{- $comptList := list $argoEvents $appProxy $sealedSecrets $internalRouter}}
+{{- if and (index .Values "argo-cd" "enabled") }}
+  {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
+  {{- $comptList = append $comptList $argoCD }}
+{{- end }}
   {{- if index (get .Values "argo-rollouts") "enabled" }}
     {{- $rolloutReporter := dict "name" "rollout-reporter" "version" .Chart.AppVersion }}
     {{- $argoRollouts := dict "name" "argo-rollouts" "version" (get .Subcharts "argo-rollouts").Chart.AppVersion }}
