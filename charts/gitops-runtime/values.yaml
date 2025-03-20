@@ -217,6 +217,17 @@ argo-workflows:
     resources:
       requests:
         ephemeral-storage: 10Mi
+  controller:
+    workflowDefaults:
+      spec:
+        # -- By default artifact repository is set to a Codefresh provided repository. For data privacy it is reccommended to set your own artifact repository. For instructions see: https://argo-workflows.readthedocs.io/en/latest/configure-artifact-repository/#configuring-your-artifact-repository
+        artifactRepositoryRef:
+          configMap: codefresh-workflows-log-store
+          key: codefresh-workflows-log-store
+  # -- Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support.
+  codefreshWorkflowLogs:
+    endpoint: gitops-workflow-logs.codefresh.io
+    insecure: false
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo rollouts
