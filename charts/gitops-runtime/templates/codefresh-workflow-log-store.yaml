@@ -1,3 +1,4 @@
+{{- $_ := required "global.codefresh.accountId is required" .Values.global.codefresh.accountId }}
 apiVersion: v1
 data:
   codefresh-workflows-log-store: |
