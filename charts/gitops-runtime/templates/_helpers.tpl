@@ -430,7 +430,8 @@ Output comma separated list of installed runtime components
   {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
   {{- $internalRouter := dict "name" "internal-router" "version" .Chart.AppVersion }}
   {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
-  {{- $comptList := list $argoEvents $appProxy $sealedSecrets $internalRouter}}
+  {{- $sourcesServer := dict "name" "sources-server" "version" (get .Subcharts "cf-argocd-extras").Chart.AppVersion }}
+  {{- $comptList := list $argoEvents $appProxy $sealedSecrets $internalRouter $sourcesServer }}
 {{- if and (index .Values "argo-cd" "enabled") }}
   {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
   {{- $comptList = append $comptList $argoCD }}
@@ -454,6 +455,10 @@ Output comma separated list of installed runtime components
   {{- if index (get .Values "gitops-operator") "enabled" }}
     {{- $gitopsOperator := dict "name" "gitops-operator" "version" (get .Subcharts "gitops-operator").Chart.AppVersion }}
     {{- $comptList = append $comptList $gitopsOperator }}
+  {{- end }}
+  {{- if not (index .Values "argo-cd" "enabled") }}
+    {{- $eventReporter := dict "name" "event-reporter" "version" (get .Subcharts "cf-argocd-extras").Chart.AppVersion }}
+    {{- $comptList = append $comptList $eventReporter }} 
   {{- end }}
 {{- $comptList | toYaml }}
 {{- end }}
