@@ -17,7 +17,7 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
 ## Argo-workflows artifact and log storage
-> [!IMPORTANT]
+> [!NOTE]
 > This version of the chart includes default configuration for storing workflow artifacts and logs in Codefresh provided s3 compatible storage.
 If you have your own storage configuration using the default configmap `artifact-repositories` upgrading the chart will override your artifact storage configuration.
 To prevent this please set `argo-workflows.controller.workflowDefaults.spec.workflowDefaults.artifactRepository.configMap` to `artifact-repositories` and `argo-workflows.controller.workflowDefaults.spec.workflowDefaults.artifactRepository.key`
