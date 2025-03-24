@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![AppVersion: 0.1.67](https://img.shields.io/badge/AppVersion-0.1.67-informational?style=flat-square)
+![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![AppVersion: 0.1.69-0](https://img.shields.io/badge/AppVersion-0.1.69--0-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -27,6 +27,71 @@ to the respective key in your configmap identifying the repository.
 > It's highly recommended to use your own artifact storage for data privacy reasons.
 > Codefresh provided storage has a retention policy of 14 days and limitations on uploaded file sizes.
 > Please refer to the official documentation for more details.
+
+## Installation with External ArgoCD
+
+If you want to use an existing ArgoCD installation, you can disable the built-in ArgoCD and configure the GitOps Runtime to use the external ArgoCD.
+See the `values.yaml` example below:
+
+```yaml
+global:
+  # -- Configuration for external ArgoCD
+  # Should be used when `argo-cd.enabled` is set to false
+  external-argo-cd:
+    # -- ArgoCD server settings
+    server:
+      # -- Service name of the ArgoCD server
+      svc: argocd
+      # -- Port of the ArgoCD server
+      port: 80
+      # -- Image settings for the ArgoCD server
+      image:
+        repository: quay.io/argoproj/argocd
+        tag: "v2.14.4"
+      # -- Set if Argo CD is running behind reverse proxy under subpath different from /
+      # e.g.
+      # rootpath: '/argocd'
+      rootpath: ''
+    redis:
+      # -- Service name of the ArgoCD Redis
+      svc: argocd-redis
+      # -- Port of the ArgoCD Redis
+      port: 6379
+    repoServer:
+      # -- Service name of the ArgoCD repo server
+      svc: argocd-repo-server
+      # -- Port of the ArgoCD repo server
+      port: 8081
+
+    # -- How GitOps Runtime should authenticate with ArgoCD
+    auth:
+      # -- Authentication type. Can be password or token
+      type: password
+
+      # If `auth.type=password` is set
+      # -- ArgoCD username in plain text
+      username: "admin"
+      # -- ArgoCD password in plain text
+      password: ""
+      # -- ArgoCD password referenced by an existing secret
+      passwordSecretKeyRef:
+        name: argocd-initial-admin-secret
+        key: password
+
+      # If `auth.type=token` is set
+      # -- ArgoCD token in plain text
+      token: ""
+      # -- ArgoCD token referenced by an existing secret
+      tokenSecretKeyRef: {}
+      # e.g:
+      # tokenSecretKeyRef:
+      #   name: argocd-token
+      #   key: token
+
+argo-cd:
+  # -- Disable built-in ArgoCD
+  enabled: false
+```
 
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
@@ -113,16 +178,15 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3318.0"` |  |
+| app-proxy.image.tag | string | `"1.3362.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3307.0"` |  |
-| app-proxy.initContainer.resources.limits.cpu | string | `"1"` |  |
-| app-proxy.initContainer.resources.limits.memory | string | `"512Mi"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3362.0"` |  |
+| app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
 | app-proxy.livenessProbe.failureThreshold | int | `10` | Minimum consecutive failures for the [probe] to be considered failed after having succeeded. |
@@ -165,6 +229,7 @@ sealed-secrets:
 | argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
 | argo-cd.crds.install | bool | `true` |  |
+| argo-cd.enabled | bool | `true` |  |
 | argo-cd.eventReporter.enabled | bool | `true` | Installs new event reporter component to cluster |
 | argo-cd.eventReporter.replicas | int | `3` | Amount of shards to handle applications events |
 | argo-cd.eventReporter.version | string | `"v2"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
@@ -192,7 +257,9 @@ sealed-secrets:
 | argo-workflows.mainContainer.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
-| cf-argocd-extras | object | `{"enabled":false,"sourcesServer":{"container":{"env":{"SOURCES_SERVER_ARGO_CD_SERVER":{"valueFrom":{"configMapKeyRef":{"key":"argoCdUrl","name":"cap-app-proxy-cm"}}},"SOURCES_SERVER_ARGO_CD_TOKEN":{"valueFrom":{"secretKeyRef":{"key":"token","name":"argocd-token"}}}},"image":{"tag":"2025.01.27-6069b19"}}}}` | Codefresh extra services for ArgoCD |
+| cf-argocd-extras | object | `{"eventReporter":{"enabled":true},"libraryMode":true}` | Codefresh extra services for ArgoCD |
+| cf-argocd-extras.eventReporter | object | `{"enabled":true}` | Event reporter configuration |
+| cf-argocd-extras.libraryMode | bool | `true` | Library mode for the chart. Allows to inject values from gitops runtime chart |
 | event-reporters.rollout.eventSource.affinity | object | `{}` |  |
 | event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.eventSource.replicas | int | `1` |  |
@@ -257,10 +324,9 @@ sealed-secrets:
 | gitops-operator.podAnnotations | object | `{}` |  |
 | gitops-operator.podLabels | object | `{}` |  |
 | gitops-operator.replicaCount | int | `1` |  |
-| gitops-operator.resources.limits.cpu | string | `"500m"` |  |
-| gitops-operator.resources.limits.memory | string | `"128Mi"` |  |
+| gitops-operator.resources.limits | object | `{}` |  |
 | gitops-operator.resources.requests.cpu | string | `"100m"` |  |
-| gitops-operator.resources.requests.memory | string | `"64Mi"` |  |
+| gitops-operator.resources.requests.memory | string | `"128Mi"` |  |
 | gitops-operator.serviceAccount.annotations | object | `{}` |  |
 | gitops-operator.serviceAccount.create | bool | `true` |  |
 | gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
@@ -278,6 +344,23 @@ sealed-secrets:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
+| global.external-argo-cd | object | `{"auth":{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"},"redis":{"port":6379,"svc":"argocd-redis"},"repoServer":{"port":8081,"svc":"argocd-repo-server"},"server":{"image":{"repository":"quay.io/argoproj/argocd","tag":"v2.14.4"},"port":80,"rootpath":"","svc":"argocd-server"}}` | Configuration for external ArgoCD Should be used when `argo-cd.enabled` is set to false |
+| global.external-argo-cd.auth | object | `{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"}` | How GitOps Runtime should authenticate with ArgoCD |
+| global.external-argo-cd.auth.password | string | `""` | ArgoCD password in plain text |
+| global.external-argo-cd.auth.passwordSecretKeyRef | object | `{"key":"password","name":"argocd-initial-admin-secret"}` | ArgoCD password referenced by an existing secret |
+| global.external-argo-cd.auth.token | string | `""` | ArgoCD token in plain text |
+| global.external-argo-cd.auth.tokenSecretKeyRef | object | `{}` | ArgoCD token referenced by an existing secret |
+| global.external-argo-cd.auth.type | string | `"password"` | Authentication type. Can be password or token |
+| global.external-argo-cd.auth.username | string | `"admin"` | ArgoCD username in plain text |
+| global.external-argo-cd.redis.port | int | `6379` | Port of the ArgoCD Redis |
+| global.external-argo-cd.redis.svc | string | `"argocd-redis"` | Service name of the ArgoCD Redis |
+| global.external-argo-cd.repoServer.port | int | `8081` | Port of the ArgoCD repo server |
+| global.external-argo-cd.repoServer.svc | string | `"argocd-repo-server"` | Service name of the ArgoCD repo server |
+| global.external-argo-cd.server | object | `{"image":{"repository":"quay.io/argoproj/argocd","tag":"v2.14.4"},"port":80,"rootpath":"","svc":"argocd-server"}` | ArgoCD server settings |
+| global.external-argo-cd.server.image | object | `{"repository":"quay.io/argoproj/argocd","tag":"v2.14.4"}` | Image settings for the ArgoCD server |
+| global.external-argo-cd.server.port | int | `80` | Port of the ArgoCD server |
+| global.external-argo-cd.server.rootpath | string | `""` | Set if Argo CD is running behind reverse proxy under subpath different from / e.g. rootpath: '/argocd' |
+| global.external-argo-cd.server.svc | string | `"argocd-server"` | Service name of the ArgoCD server |
 | global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |

@@ -1,0 +1,111 @@
+suite: cf-argocd-extras tests
+templates:
+  - sources-server.yaml
+  - event-reporter.yaml
+  - charts/cf-argocd-extras/*
+tests:
+  - it: Sources Server ConfigMap should have valid data
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: ConfigMap
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - equal:
+          path: data["argocd.server"]
+          value: argo-cd-server:80
+      - equal:
+          path: data["redis.server"]
+          value: argo-cd-redis:6379
+      - equal:
+          path: data["repo.server"]
+          value: argo-cd-repo-server:8081
+
+  - it: Sources Server Deployment should have valid matchLabel selectors
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: Deployment
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/name: cf-argocd-extras
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/component: sources-server
+      - equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/name: cf-argocd-extras
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/component: sources-server
+
+  - it: Sources Server Service should have valid matchLabel selectors
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: Service
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - equal:
+          path: spec.selector
+          value:
+            app.kubernetes.io/name: cf-argocd-extras
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/component: sources-server
+
+  - it: New Event-Reporter should NOT be deployed with forked ArgoCD
+    template: event-reporter.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - containsDocument:
+          kind: StatefulSet
+          apiVersion: apps/v1
+          name: event-reporter
+        not: true
+
+  - it: New Event-Reporter should be deployed with external OSS ArgoCD
+    template: event-reporter.yaml
+    documentSelector:
+      path: kind
+      value: StatefulSet
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    asserts:
+      - containsDocument:
+          kind: StatefulSet
+          apiVersion: apps/v1
+          name: event-reporter
+
+  - it: Sources-Server should be deployed with forked ArgoCD
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: Deployment
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - containsDocument:
+          kind: Deployment
+          apiVersion: apps/v1
+          name: sources-server
+
+  - it: Sources-Server should be deployed with external OSS ArgoCD
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: Deployment
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    asserts:
+      - containsDocument:
+          kind: Deployment
+          apiVersion: apps/v1
+          name: sources-server
