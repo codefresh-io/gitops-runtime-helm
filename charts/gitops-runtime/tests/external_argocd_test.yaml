@@ -8,6 +8,7 @@ templates:
   - charts/gitops-operator/*
   - charts/cf-argocd-extras/*
   - app-proxy/external-argocd-token.yaml
+  - codefresh-cm.yaml
 tests:
   - it: app-proxy ConfigMap should have valid ArgoCd URL
     values:
@@ -726,6 +727,19 @@ tests:
           value: gitops-runtime-argo-cd-password
       - isNotNullOrEmpty:
           path: stringData.token
+
+  - it: codefresh-cm ConfigMap should have event-reporter and sources-server
+    template: codefresh-cm.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    asserts:
+      - matchRegex:
+          path: data.components
+          pattern: "name: event-reporter"
+      - matchRegex:
+          path: data.components
+          pattern: "name: sources-server"
 
   # TO-DO: fix these tests!
 
