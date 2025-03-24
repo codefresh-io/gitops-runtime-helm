@@ -109,3 +109,19 @@ tests:
           kind: Deployment
           apiVersion: apps/v1
           name: sources-server
+
+  - it: Sources-Server ConfigMap should have valid redis-ha url
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: ConfigMap
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      argo-cd:
+        redis-ha:
+          enabled: true
+    asserts:
+      - equal:
+          path: data["redis.server"]
+          value: RELEASE-NAME-redis-ha-haproxy:6379
