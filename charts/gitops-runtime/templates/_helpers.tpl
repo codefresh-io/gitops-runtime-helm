@@ -77,7 +77,7 @@ Determine argocd server service name. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.server.servicename" -}}
 {{/* For now use template from ArgoCD chart until better approach */}}
-{{- template "argo-cd.server.fullname" (dict "Values" (get .Values "argo-cd")) }}
+{{- template "argo-cd.server.fullname" (dict "Values" (get .Values "argo-cd") "Release" .Release ) }}
 {{- end }}
 
 {{/*
@@ -85,7 +85,7 @@ Determine argocd redis service name. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.redis.servicename" -}}
 {{/* For now use template from ArgoCD chart until better approach */}}
-{{- template "argo-cd.redis.fullname" (dict "Values" (get .Values "argo-cd")) }}
+{{- template "argo-cd.redis.fullname" (dict "Values" (get .Values "argo-cd") "Release" .Release ) }}
 {{- end }}
 
 {{/*
@@ -94,7 +94,7 @@ Determine argocd repo server service name. Must be called with chart root contex
 {{- define "codefresh-gitops-runtime.argocd.reposerver.servicename" -}}
 {{/* For now use template from ArgoCD chart until better approach */}}
   {{- if and (index .Subcharts "argo-cd") }}
-    {{- template "argo-cd.repoServer.fullname" (dict "Values" (get .Values "argo-cd")) }}
+    {{- template "argo-cd.repoServer.fullname" (dict "Values" (get .Values "argo-cd") "Release" .Release ) }}
   {{- else }}
     {{- $repoServer := index .Values "global" "external-argo-cd" "repoServer" }}
     {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.svc is not set" $repoServer.svc }}
@@ -142,7 +142,7 @@ Determine argocd servicename. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.appcontroller.serviceAccountName" -}}
 {{/* For now use template from ArgoCD chart until better approach */}}
-{{- template "argo-cd.controllerServiceAccountName" (dict "Values" (get .Values "argo-cd")) }}
+{{- template "argo-cd.controllerServiceAccountName" (dict "Values" (get .Values "argo-cd") "Release" .Release ) }}
 {{- end }}
 
 {{/*
@@ -430,7 +430,8 @@ Output comma separated list of installed runtime components
   {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
   {{- $internalRouter := dict "name" "internal-router" "version" .Chart.AppVersion }}
   {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
-  {{- $comptList := list $argoEvents $appProxy $sealedSecrets $internalRouter}}
+  {{- $sourcesServer := dict "name" "sources-server" "version" (get .Subcharts "cf-argocd-extras").Chart.AppVersion }}
+  {{- $comptList := list $argoEvents $appProxy $sealedSecrets $internalRouter $sourcesServer }}
 {{- if and (index .Values "argo-cd" "enabled") }}
   {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
   {{- $comptList = append $comptList $argoCD }}
@@ -454,6 +455,10 @@ Output comma separated list of installed runtime components
   {{- if index (get .Values "gitops-operator") "enabled" }}
     {{- $gitopsOperator := dict "name" "gitops-operator" "version" (get .Subcharts "gitops-operator").Chart.AppVersion }}
     {{- $comptList = append $comptList $gitopsOperator }}
+  {{- end }}
+  {{- if not (index .Values "argo-cd" "enabled") }}
+    {{- $eventReporter := dict "name" "event-reporter" "version" (get .Subcharts "cf-argocd-extras").Chart.AppVersion }}
+    {{- $comptList = append $comptList $eventReporter }} 
   {{- end }}
 {{- $comptList | toYaml }}
 {{- end }}
