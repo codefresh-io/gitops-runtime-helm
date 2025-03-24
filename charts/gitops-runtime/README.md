@@ -16,6 +16,17 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
+## Argo-workflows artifact and log storage
+[!IMPORTANT]
+This version of the chart includes default configuration for storing workflow artifacts and logs in Codefresh provided s3 compatible storage.
+If you have your own storage configuration using the default configmap `artifact-repositories` upgrading the chart will override your artifact storage configuration.
+To prevent this please set `argo-workflows.controller.workflowDefaults.spec.workflowDefaults.artifactRepository.configMap` to `artifact-repositories` and `argo-workflows.controller.workflowDefaults.spec.workflowDefaults.artifactRepository.key`
+to the respective key in your configmap identifying the repository.
+[!WARNING]
+It's highly recommended to use your own artifact storage for data privacy reasons.
+Codefresh provided storage has a retention policy of 14 days and limitations on uploaded file sizes.
+Please refer to the official documentation for more details.
+
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
 We have created a helper utility to resolve this issue:
@@ -217,14 +228,6 @@ sealed-secrets:
 | event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
 | event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| garage-workflows-artifact-storage | object | `{"deployment":{"kind":"StatefulSet","replicaCount":3},"enabled":false,"fullnameOverride":"garage","garage":{"replicationMode":3},"persistence":{"data":{"size":"100Mi","storageClass":""},"enabled":true,"meta":{"size":"100Mi","storageClass":""}},"resources":{},"tests":{"enabled":false}}` | Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC) |
-| garage-workflows-artifact-storage.deployment.kind | string | `"StatefulSet"` | Only statefulset is supported for Codefresh gitops runtime. Do not change this |
-| garage-workflows-artifact-storage.persistence.data | object | `{"size":"100Mi","storageClass":""}` | Volume that stores artifacts and logs for workflows |
-| garage-workflows-artifact-storage.persistence.data.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
-| garage-workflows-artifact-storage.persistence.meta | object | `{"size":"100Mi","storageClass":""}` | Volume that stores cluster metadata |
-| garage-workflows-artifact-storage.persistence.meta.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
-| garage-workflows-artifact-storage.resources | object | `{}` | Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size. |
-| garage-workflows-artifact-storage.tests | object | `{"enabled":false}` | Helm tests |
 | gitops-operator.affinity | object | `{}` |  |
 | gitops-operator.argoCdNotifications | object | `{"image":{},"imageOverride":false,"resources":{}}` | Builtin notifications controller used by gitops-operator for promotion related notifications |
 | gitops-operator.argoCdNotifications.image | object | `{}` | Set image.repository and image.tag notifications image used by the gitops operator. Ignored unless imageOverride is set to true. |
