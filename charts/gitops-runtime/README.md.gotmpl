@@ -19,6 +19,7 @@ Prior to running the installation please see the official documentation at: http
 ## Argo-workflows artifact and log storage
 > [!NOTE]
 > This version of the chart includes default configuration for storing workflow artifacts and logs in Codefresh provided s3 compatible storage.
+
 If you have your own storage configuration using the default configmap `artifact-repositories` upgrading the chart will override your artifact storage configuration.
 To prevent this please set `argo-workflows.controller.workflowDefaults.spec.workflowDefaults.artifactRepository.configMap` to `artifact-repositories` and `argo-workflows.controller.workflowDefaults.spec.workflowDefaults.artifactRepository.key`
 to the respective key in your configmap identifying the repository.
