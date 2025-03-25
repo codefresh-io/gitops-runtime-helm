@@ -1,0 +1,68 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ensure-argocd-last-uninstall
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-weight": "10"  # A positive value to ensure it runs later
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      serviceAccountName: {{ .Release.Name }}-argocd-last-hook
+      restartPolicy: Never
+      containers:
+      - name: ensure-argocd-last
+        image: "bitnami/kubectl:latest"
+        command: 
+        - "/bin/bash"
+        - "-c"
+        - |
+          echo "Checking if ArgoCD resources have been removed..."
+          
+          # Wait until no argocd resources exist
+          while kubectl get deployment -l app.kubernetes.io/part-of=argocd -A 2>/dev/null | grep -q .; do
+            echo "ArgoCD resources still exist, waiting..."
+            sleep 5
+          done
+          
+          echo "All ArgoCD resources have been uninstalled successfully."
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-argocd-last-hook
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-weight": "9"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-argocd-last-hook
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-weight": "9"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-argocd-last-hook
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-weight": "9"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-argocd-last-hook
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-argocd-last-hook 
