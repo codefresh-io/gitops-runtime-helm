@@ -1,2 +1,2 @@
 GitOps Runtime {{ .Values.global.runtime.name }} has been successfully installed in your cluster! 
-To complete the setup, please finalize the process in the platform here: https://g.codefresh.io/2.0/account-settings/runtimes/{{ .Values.global.runtime.name }}/runtime-components
+To complete the setup, please finalize the process in the platform here: https://g.codefresh.io/2.0/account-settings/runtimes/info/list
