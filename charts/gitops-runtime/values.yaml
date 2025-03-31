@@ -288,6 +288,9 @@ argo-rollouts:
 #-----------------------------------------------------------------------------------------------------------------------
 event-reporters:
   rollout:
+    external-argo-rollouts:
+      enabled: false
+      fullnameOverride: argo-rollouts
     serviceAccount:
       create: true
     eventSource:

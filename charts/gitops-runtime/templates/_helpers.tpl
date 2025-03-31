@@ -150,7 +150,11 @@ Determine rollouts name
 */}}
 {{- define "codefresh-gitops-runtime.argo-rollouts.name" -}}
 {{/* For now use template from rollouts chart until better approach */}}
-{{- template "argo-rollouts.fullname" (dict "Values" (get .Values "argo-rollouts")) }}
+{{- if and (index .Values "argo-rollouts" "enabled") }}
+  {{- template "argo-rollouts.fullname" (dict "Values" (get .Values "argo-rollouts")) }}
+{{- else }}
+  {{- printf "%s" (index .Values "event-reporters" "rollout" "external-argo-rollouts" "fullnameOverride") }}
+{{- end }}
 {{- end }}
 
 

@@ -1,4 +1,4 @@
-{{- if index (get .Values "argo-rollouts") "enabled" }}
+{{- if or (index (get .Values "argo-rollouts") "enabled") (index .Values "event-reporters" "rollout" "external-argo-rollouts" "enabled") }}
   {{- $eventReporterContext := deepCopy . }}
   {{- $_ := set $eventReporterContext "Values" (deepCopy (get .Values "event-reporters")) }}
   {{- $_ := set $eventReporterContext.Values "global" (deepCopy (get .Values "global")) }}
