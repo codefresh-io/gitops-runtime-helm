@@ -667,13 +667,6 @@ gitops-operator:
       cpu: 100m
       memory: 128Mi
 
-  kube-rbac-proxy:
-    image:
-      tag: v0.16.0
-      # -- defaults
-      # repository: gcr.io/kubebuilder/kube-rbac-proxy
-      # tag: v0.14.1
-
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:

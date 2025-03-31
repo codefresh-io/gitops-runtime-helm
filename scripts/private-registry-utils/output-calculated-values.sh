@@ -1,7 +1,4 @@
 #!/bin/bash
-MYDIR=$(dirname $0)
-CHARTDIR="/chart"
-VALUESFILE="${CHARTDIR}/ci/values-all-images.yaml"
 OUTPUTFILE=$1
 # This template prints all values and also sets tags for all images with non-empty repository value, where the tag is empty and should be derived from the appVersion of the subchart.
 ALL_VALUES_TEMPLATE=$(cat <<END
@@ -14,6 +11,15 @@ ALL_VALUES_TEMPLATE=$(cat <<END
       {{/* If tag is not provided, check for subchart appVersion*/}}
         {{ if kindOf \$val | eq "map" }}
           {{- if hasKey \$val "tag" }}
+            {{- if contains "{{" \$val.tag }}
+              {{- \$suspectedSubChart := \$rootKey }}
+                {{- if hasKey \$root.Subcharts \$suspectedSubChart }}
+                  {{ \$subchart := get \$root.Subcharts \$suspectedSubChart }}
+                  {{- \$_ := set \$val "tag"  (tpl \$val.tag \$subchart) }}
+                {{- else }}
+                  {{- \$_ := set \$val "tag"  (tpl \$val.tag \$root) }}
+                {{- end }}
+            {{- end}}
             {{/* If tag has no value*/}}
             {{- if and (not \$val.tag) \$val.repository}}
               {{- \$suspectedSubChart := \$rootKey }}
@@ -38,7 +44,7 @@ ALL_VALUES_TEMPLATE=$(cat <<END
   {{- range \$key, \$val := .Values -}}
     {{- if kindOf \$val | eq "map" }}
       {{- /* Recursively get all paths containing image value */}}
-      {{- \$imagesValsDict := include "recurse-set-image-tags" (dict "rootKey" \$key "root" $ "Values" \$val) | fromYaml }}
+      {{- \$imagesValsDict := include "recurse-set-image-tags" (dict "rootKey" \$key "root" \$ "Values" \$val) | fromYaml }}
     {{- end }}
   {{- end }}
 {{ .Values | toYaml }}

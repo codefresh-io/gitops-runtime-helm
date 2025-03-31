@@ -103,6 +103,11 @@ The utility will output 4 files into the folder:
 3. `values-images-no-tags.yaml` - a values file with all image values with the private registry **excluding tags**. If provided through --values to helm install/upgrade command - it will override all images to use the private registry.
 4. `values-images-with-tags.yaml` - The same as 3 but with tags **included**.
 
+For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
+```
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.0.0 <local_registry>
+```
+
 ## Openshift
 
 ```yaml
@@ -166,14 +171,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3353.1"` |  |
+| app-proxy.image.tag | string | `"1.3389.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3336.1"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3389.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -305,13 +310,6 @@ sealed-secrets:
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image | object | `{}` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
-| gitops-operator.kube-rbac-proxy.image.tag | string | `"v0.16.0"` |  |
-| gitops-operator.kube-rbac-proxy.resources.limits.cpu | string | `"500m"` |  |
-| gitops-operator.kube-rbac-proxy.resources.limits.memory | string | `"128Mi"` |  |
-| gitops-operator.kube-rbac-proxy.resources.requests.cpu | string | `"100m"` |  |
-| gitops-operator.kube-rbac-proxy.resources.requests.memory | string | `"64Mi"` |  |
-| gitops-operator.kube-rbac-proxy.securityContext.allowPrivilegeEscalation | bool | `false` |  |
-| gitops-operator.kube-rbac-proxy.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitops-operator.libraryMode | bool | `true` | Do not change unless instructed otherwise by Codefresh support |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
@@ -321,6 +319,12 @@ sealed-secrets:
 | gitops-operator.resources.limits | object | `{}` |  |
 | gitops-operator.resources.requests.cpu | string | `"100m"` |  |
 | gitops-operator.resources.requests.memory | string | `"128Mi"` |  |
+| gitops-operator.resources.resources.limits.cpu | string | `"500m"` |  |
+| gitops-operator.resources.resources.limits.memory | string | `"128Mi"` |  |
+| gitops-operator.resources.resources.requests.cpu | string | `"100m"` |  |
+| gitops-operator.resources.resources.requests.memory | string | `"64Mi"` |  |
+| gitops-operator.resources.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| gitops-operator.resources.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitops-operator.serviceAccount.annotations | object | `{}` |  |
 | gitops-operator.serviceAccount.create | bool | `true` |  |
 | gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
