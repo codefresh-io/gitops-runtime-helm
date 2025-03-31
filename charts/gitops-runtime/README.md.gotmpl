@@ -104,6 +104,13 @@ The utility will output 4 files into the folder:
 3. `values-images-no-tags.yaml` - a values file with all image values with the private registry **excluding tags**. If provided through --values to helm install/upgrade command - it will override all images to use the private registry.
 4. `values-images-with-tags.yaml` - The same as 3 but with tags **included**.
 
+
+For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
+```
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:{{ template "chart.version" . }} <local_registry>
+```
+
+
 ## Openshift
 
 ```yaml

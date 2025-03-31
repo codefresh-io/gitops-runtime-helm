@@ -2,8 +2,8 @@
 {{ $argoCdUrl := include "codefresh-gitops-runtime.argocd.server.url" . }}
 {{ $argoCdUsername := include "codefresh-gitops-runtime.argocd.server.username-cm" . }}
 {{ $appProxyContext := deepCopy . }}
-{{ $_ := set $appProxyContext "Values" (get .Values "app-proxy") }}
-{{ $_ := set $appProxyContext.Values "global" (get .Values "global") }}
+{{ $_ := set $appProxyContext "Values" (deepCopy (get .Values "app-proxy")) }}
+{{ $_ := set $appProxyContext.Values "global" (deepCopy (get .Values "global")) }}
 {{- if not $appProxyContext.Values.config.argoCdUrl }}
   {{ $_ := set $appProxyContext.Values.config "argoCdUrl" $argoCdUrl }}
 {{- end }}
@@ -14,7 +14,7 @@
     {{- $_ := set $appProxyContext.Values.config "argoWorkflowsUrl" $argoWorkflowsUrl }}
   {{- end }}
 {{- end}}
-{{- if not (index .Values "argo-cd" "enabled") }}
+{{- if not (index $.Values "argo-cd" "enabled") }}
   {{- $_ := set $appProxyContext.Values.config "isExternalArgoCD" "true" }}
 {{- else }}
   {{- $_ := set $appProxyContext.Values.config "isExternalArgoCD" "false" }}

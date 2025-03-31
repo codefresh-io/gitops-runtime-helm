@@ -15,14 +15,7 @@ tests:
       image:
         repository: example.com/repo
         tag: 0.0.1
-      kube-rbac-proxy:
-        image:
-          repository: example.com/repo
-          tag: 0.0.1
   asserts:
-  - equal:
-      path: spec.template.spec.containers[0].image
-      value: example.com/repo:0.0.1
   - equal:
       path: spec.template.spec.containers[0].image
       value: example.com/repo:0.0.1
@@ -378,4 +371,3 @@ tests:
       content:
         name: ARGO_CD_URL
         value: some-other-url:123
-
