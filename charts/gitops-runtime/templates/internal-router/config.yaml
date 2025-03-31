@@ -1,6 +1,6 @@
 {{- $internalRouterContext := deepCopy . }}
-{{- $_ := set $internalRouterContext "Values" (get .Values "internal-router") }}
-{{- $_ := set $internalRouterContext.Values "global" (get .Values "global") }}
+{{- $_ := set $internalRouterContext "Values" (deepCopy (get .Values "internal-router")) }}
+{{- $_ := set $internalRouterContext.Values "global" (deepCopy (get .Values "global")) }}
 {{/*
 Set workflows routing
 */}}

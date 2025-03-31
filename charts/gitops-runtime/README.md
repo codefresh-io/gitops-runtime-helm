@@ -21,7 +21,7 @@ Prior to running the installation please see the official documentation at: http
 > This version of the chart includes default configuration for storing workflow artifacts and logs in Codefresh provided s3 compatible storage.
 
 If you have your own storage configuration using the default configmap `artifact-repositories` upgrading the chart will override your artifact storage configuration.
-To prevent this please set `argo-workflows.controller.workflowDefaults.spec.workflowDefaults.artifactRepository.configMap` to `artifact-repositories` and `argo-workflows.controller.workflowDefaults.spec.workflowDefaults.artifactRepository.key`
+To prevent this please set `argo-workflows.controller.workflowDefaults.spec.artifactRepository.configMap` to `artifact-repositories` and `argo-workflows.controller.workflowDefaults.spec.artifactRepository.key`
 to the respective key in your configmap identifying the repository.
 > [!WARNING]
 > It's highly recommended to use your own artifact storage for data privacy reasons.
@@ -115,6 +115,11 @@ The utility will output 4 files into the folder:
 3. `values-images-no-tags.yaml` - a values file with all image values with the private registry **excluding tags**. If provided through --values to helm install/upgrade command - it will override all images to use the private registry.
 4. `values-images-with-tags.yaml` - The same as 3 but with tags **included**.
 
+For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
+```
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.0.0 <local_registry>
+```
+
 ## Openshift
 
 ```yaml
@@ -178,14 +183,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3362.0"` |  |
+| app-proxy.image.tag | string | `"1.3389.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3362.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3389.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -249,6 +254,7 @@ sealed-secrets:
 | argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
 | argo-rollouts.installCRDs | bool | `true` |  |
 | argo-workflows.codefreshWorkflowLogs | object | `{"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
+| argo-workflows.controller.workflowDefaults.spec.archiveLogs | bool | `true` |  |
 | argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef | object | `{"configMap":"codefresh-workflows-log-store","key":"codefresh-workflows-log-store"}` | By default artifact repository is set to a Codefresh provided repository. For data privacy it is reccommended to set your own artifact repository. For instructions see: https://argo-workflows.readthedocs.io/en/latest/configure-artifact-repository/#configuring-your-artifact-repository |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
@@ -311,13 +317,6 @@ sealed-secrets:
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image | object | `{}` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
-| gitops-operator.kube-rbac-proxy.image.tag | string | `"v0.16.0"` |  |
-| gitops-operator.kube-rbac-proxy.resources.limits.cpu | string | `"500m"` |  |
-| gitops-operator.kube-rbac-proxy.resources.limits.memory | string | `"128Mi"` |  |
-| gitops-operator.kube-rbac-proxy.resources.requests.cpu | string | `"100m"` |  |
-| gitops-operator.kube-rbac-proxy.resources.requests.memory | string | `"64Mi"` |  |
-| gitops-operator.kube-rbac-proxy.securityContext.allowPrivilegeEscalation | bool | `false` |  |
-| gitops-operator.kube-rbac-proxy.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitops-operator.libraryMode | bool | `true` | Do not change unless instructed otherwise by Codefresh support |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
@@ -327,6 +326,12 @@ sealed-secrets:
 | gitops-operator.resources.limits | object | `{}` |  |
 | gitops-operator.resources.requests.cpu | string | `"100m"` |  |
 | gitops-operator.resources.requests.memory | string | `"128Mi"` |  |
+| gitops-operator.resources.resources.limits.cpu | string | `"500m"` |  |
+| gitops-operator.resources.resources.limits.memory | string | `"128Mi"` |  |
+| gitops-operator.resources.resources.requests.cpu | string | `"100m"` |  |
+| gitops-operator.resources.resources.requests.memory | string | `"64Mi"` |  |
+| gitops-operator.resources.securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| gitops-operator.resources.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitops-operator.serviceAccount.annotations | object | `{}` |  |
 | gitops-operator.serviceAccount.create | bool | `true` |  |
 | gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
