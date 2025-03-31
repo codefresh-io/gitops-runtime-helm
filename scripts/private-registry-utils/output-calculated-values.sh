@@ -1,7 +1,4 @@
 #!/bin/bash
-MYDIR=$(dirname $0)
-CHARTDIR="/chart"
-VALUESFILE="${CHARTDIR}/ci/values-all-images.yaml"
 OUTPUTFILE=$1
 # This template prints all values and also sets tags for all images with non-empty repository value, where the tag is empty and should be derived from the appVersion of the subchart.
 ALL_VALUES_TEMPLATE=$(cat <<END

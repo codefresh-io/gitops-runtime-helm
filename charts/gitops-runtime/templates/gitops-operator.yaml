@@ -1,10 +1,10 @@
 {{- if and (index .Values "gitops-operator" "enabled") }}
 
 {{- if index (get .Values "gitops-operator") "libraryMode" }}
-  {{- $gitopsOperatorContext := (index .Subcharts "gitops-operator")}}
+  {{- $gitopsOperatorContext := (deepCopy (index .Subcharts "gitops-operator"))}}
 
   {{- if and (index .Subcharts "argo-cd") }}
-  
+
     {{- $argoCDImageDict := index .Subcharts "argo-cd" "Values" "global" "image" }}
     {{- if not $argoCDImageDict.tag }}
       {{- $_ := set $argoCDImageDict "tag" (get .Subcharts "argo-cd").Chart.AppVersion }}
@@ -17,7 +17,7 @@
     {{- end }}
 
   {{- else if and (index .Values "global" "external-argo-cd" "server" "image") }}
-    
+
     {{ $argoCDImageDict := (index .Values "global" "external-argo-cd" "server" "image") }}
 
     {{/* Set ArgoCD image */}}
@@ -31,9 +31,9 @@
   {{- end }}
 
   {{- if and (not (index .Values "argo-cd" "enabled")) }}
-    
+
     {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
-      
+
       {{- if not (index .Values "global" "external-argo-cd" "auth" "token") }}
         {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name")) }}
         {{- $_ := set $gitopsOperatorContext.Values.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "key")) }}
@@ -71,7 +71,7 @@
   {{- if and (gt (int $gitopsOperatorContext.Values.replicaCount) 1 ) }}
     {{- $_ := set $gitopsOperatorContext.Values.env "LEADER_ELECT" "true" }}
   {{- else }}
-    {{- $_ := set $gitopsOperatorContext.Values.env "LEADER_ELECT" "false" }}    
+    {{- $_ := set $gitopsOperatorContext.Values.env "LEADER_ELECT" "false" }}
   {{- end }}
 
   {{- include "gitops-operator.resources" $gitopsOperatorContext}}
