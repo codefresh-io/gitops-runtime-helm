@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.70
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.18.1
+version: 0.18.2
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,15 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix: argo-events 2.4.7-1-cap-CR-28072 with fix for eventsource restarts (#435)'
-    - kind: changed
-      description: 'feat: bump app-proxy to 1.3389.0 (#432)'
-    - kind: changed
-      description: 'chore: update chart NOTES.txt (#431)'
-    - kind: changed
-      description: 'fix: argocd fullname template; feat: add sources-server and event-reporter versions to codefresh-cm ConfigMap (#430)'
-    - kind: changed
-      description: 'chore(deps): update cf-argocd-extras dependency to 0.3.13 (#427)'
+      description: patch - private registry external-argocd support and values structure fix (#436)
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
