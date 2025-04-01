@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.18.2](https://img.shields.io/badge/Version-0.18.2-informational?style=flat-square) ![AppVersion: 0.1.70](https://img.shields.io/badge/AppVersion-0.1.70-informational?style=flat-square)
+![Version: 0.18.3](https://img.shields.io/badge/Version-0.18.3-informational?style=flat-square) ![AppVersion: 0.1.70](https://img.shields.io/badge/AppVersion-0.1.70-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -92,7 +92,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.18.2 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.18.3 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -105,7 +105,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.18.2 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.18.3 <local_registry>
 ```
 
 ## Openshift
@@ -273,7 +273,7 @@ sealed-secrets:
 | garage-workflows-artifact-storage.persistence.meta.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
 | garage-workflows-artifact-storage.resources | object | `{}` | Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size. |
 | garage-workflows-artifact-storage.tests | object | `{"enabled":false}` | Helm tests |
-| gitops-operator | object | `{"affinity":{},"argoCdNotifications":{"image":{},"imageOverride":false,"resources":{}},"crds":{"additionalLabels":{},"annotations":{},"install":true,"keep":false},"enabled":true,"env":{},"fullnameOverride":"","image":{},"imagePullSecrets":[],"libraryMode":true,"nameOverride":"","nodeSelector":{},"podAnnotations":{},"podLabels":{},"replicaCount":1,"resources":{"limits":{},"requests":{"cpu":"100m","memory":"128Mi"},"resources":{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"100m","memory":"64Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}},"serviceAccount":{"annotations":{},"create":true,"name":"gitops-operator-controller-manager"},"tolerations":[]}` | ------------------------------------------------------------------------------------------------------------------- |
+| gitops-operator | object | `{"affinity":{},"argoCdNotifications":{"image":{},"imageOverride":false,"resources":{}},"crds":{"additionalLabels":{},"annotations":{},"install":true,"keep":false},"enabled":true,"env":{},"fullnameOverride":"","image":{},"imagePullSecrets":[],"libraryMode":true,"nameOverride":"","nodeSelector":{},"podAnnotations":{},"podLabels":{},"replicaCount":1,"resources":{"limits":{},"requests":{"cpu":"100m","memory":"128Mi"}},"serviceAccount":{"annotations":{},"create":true,"name":"gitops-operator-controller-manager"},"tolerations":[]}` | ------------------------------------------------------------------------------------------------------------------- |
 | gitops-operator.argoCdNotifications | object | `{"image":{},"imageOverride":false,"resources":{}}` | Builtin notifications controller used by gitops-operator for promotion related notifications |
 | gitops-operator.argoCdNotifications.image | object | `{}` | Set image.repository and image.tag notifications image used by the gitops operator. Ignored unless imageOverride is set to true. |
 | gitops-operator.argoCdNotifications.imageOverride | bool | `false` | If set to true allows to override notifications image used by the gitops operator. When set to false the version of ArgoCD will be set to the version used for all other ArgoCD components. |
