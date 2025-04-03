@@ -558,6 +558,7 @@ app-proxy:
     allowPrivilegeEscalation: false
 
   readinessProbe:
+    enabled: true
     # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded.
     failureThreshold: 3
     # -- Number of seconds after the container has started before [probe] is initiated.
@@ -570,6 +571,7 @@ app-proxy:
     timeoutSeconds: 10
 
   livenessProbe:
+    enabled: true
     # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded.
     failureThreshold: 10
     # -- Number of seconds after the container has started before [probe] is initiated.
