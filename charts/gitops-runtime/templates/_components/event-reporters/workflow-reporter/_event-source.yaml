@@ -40,4 +40,8 @@ spec:
     {{- with .Values.workflow.eventSource.affinity }}
       {{- toYaml . | nindent 6 }}
     {{- end }}
+    imagePullSecrets:
+    {{- with .Values.workflow.eventSource.imagePullSecrets }}
+      {{- toYaml . | nindent 6 }}
+    {{- end -}}
 {{- end }}

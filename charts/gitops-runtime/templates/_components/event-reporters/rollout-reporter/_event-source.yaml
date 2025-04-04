@@ -59,4 +59,8 @@ spec:
     {{- with .Values.rollout.eventSource.affinity }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
+    imagePullSecrets:
+    {{- with .Values.rollout.eventSource.imagePullSecrets }}
+      {{- toYaml . | nindent 6 }}
+    {{- end -}}
 {{- end }}
