@@ -162,6 +162,14 @@ global:
       #   name: argocd-token
       #   key: token
 
+  # -- Configuration for external Argo Rollouts
+  external-argo-rollouts:
+    # -- Rollout reporter settings
+    rollout-reporter:
+      # -- Enable or disable rollout reporter
+      # Configuration is defined at .Values.event-reporters.rollout
+      enabled: false
+
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------

@@ -1,8 +1,8 @@
 {{/* Mapping of argo rollouts clusterrole if such is created (see https://github.com/codefresh-io/argo-helm/blob/argo-rollouts/charts/argo-rollouts/templates/controller/clusterrolebinding.yaml)
  to the reporters ServiceAccount
 */}}
-{{- if index (get .Values "argo-rollouts") "enabled" }}
-  {{- if and (index (get .Values "argo-rollouts") "clusterInstall") (index (get .Values "argo-rollouts") "controller" "createClusterRole") }}
+{{- if or (index (get .Values "argo-rollouts") "enabled") (and (not (index (get .Values "argo-rollouts") "enabled")) (index .Values.global "external-argo-rollouts" "rollout-reporter" "enabled" )) }}
+  {{- if or (and (index (get .Values "argo-rollouts") "clusterInstall") (index (get .Values "argo-rollouts") "controller" "createClusterRole")) (and (not (index (get .Values "argo-rollouts") "enabled")) (index .Values.global "external-argo-rollouts" "rollout-reporter" "enabled" ))}}
     {{- $eventReporterContext := deepCopy . }}
     {{- $_ := set $eventReporterContext "Values" (deepCopy (get .Values "event-reporters")) }}
     {{- $_ := set $eventReporterContext.Values "global" (deepCopy (get .Values "global")) }}
