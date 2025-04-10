@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.18.3](https://img.shields.io/badge/Version-0.18.3-informational?style=flat-square) ![AppVersion: 0.1.70](https://img.shields.io/badge/AppVersion-0.1.70-informational?style=flat-square)
+![Version: 0.18.4](https://img.shields.io/badge/Version-0.18.4-informational?style=flat-square) ![AppVersion: 0.1.70](https://img.shields.io/badge/AppVersion-0.1.70-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -92,7 +92,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.18.3 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.18.4 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -105,7 +105,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.18.3 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.18.4 <local_registry>
 ```
 
 ## Openshift
@@ -314,6 +314,9 @@ sealed-secrets:
 | global.external-argo-cd.server.port | int | `80` | Port of the ArgoCD server |
 | global.external-argo-cd.server.rootpath | string | `""` | Set if Argo CD is running behind reverse proxy under subpath different from / e.g. rootpath: '/argocd' |
 | global.external-argo-cd.server.svc | string | `"argocd-server"` | Service name of the ArgoCD server |
+| global.external-argo-rollouts | object | `{"rollout-reporter":{"enabled":false}}` | Configuration for external Argo Rollouts |
+| global.external-argo-rollouts.rollout-reporter | object | `{"enabled":false}` | Rollout reporter settings |
+| global.external-argo-rollouts.rollout-reporter.enabled | bool | `false` | Enable or disable rollout reporter Configuration is defined at .Values.event-reporters.rollout |
 | global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
