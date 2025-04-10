@@ -93,6 +93,26 @@ argo-cd:
   enabled: false
 ```
 
+## Installation with External Argo Rollouts
+
+If you want to use an existing Argo Rollouts installation, you can disable the built-in Argo Rollouts and configure the GitOps Runtime to use the external Argo Rollouts.
+See the `values.yaml` example below:
+
+```yaml
+global:
+  # -- Configuration for external Argo Rollouts
+  external-argo-rollouts:
+    # -- Rollout reporter settings
+    rollout-reporter:
+      # -- Enable rollout reporter
+      # Configuration is defined at .Values.event-reporters.rollout
+      enabled: true
+
+argo-rollouts:
+  # -- Disable built-in Argo Rollouts
+  enabled: false
+```
+
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
 We have created a helper utility to resolve this issue:
@@ -230,6 +250,7 @@ sealed-secrets:
 | argo-cd.applicationVersioning.useApplicationConfiguration | bool | `true` | Extract application version based on ApplicationConfiguration CRD |
 | argo-cd.configs.cm."accounts.admin" | string | `"apiKey,login"` |  |
 | argo-cd.configs.cm."application.resourceTrackingMethod" | string | `"annotation+label"` |  |
+| argo-cd.configs.cm."resource.customizations.actions.argoproj.io_Rollout" | string | `"mergeBuiltinActions: true\ndiscovery.lua: |\n  actions = {}\n  local fullyPromoted = obj.status.currentPodHash == obj.status.stableRS\n  actions[\"pause\"] = {[\"disabled\"] = fullyPromoted or obj.spec.paused == true}\n  actions[\"skip-current-step\"] = {[\"disabled\"] = obj.spec.strategy.canary == nil or obj.spec.strategy.canary.steps == nil or obj.status.currentStepIndex == table.getn(obj.spec.strategy.canary.steps)}\n  return actions\ndefinitions:\n- name: pause\n  action.lua: |\n    obj.spec.paused = true\n    return obj\n- name: skip-current-step\n  action.lua: |\n    if obj.status ~= nil then\n        if obj.spec.strategy.canary ~= nil and obj.spec.strategy.canary.steps ~= nil and obj.status.currentStepIndex < table.getn(obj.spec.strategy.canary.steps) then\n            if obj.status.pauseConditions ~= nil and table.getn(obj.status.pauseConditions) > 0 then\n                obj.status.pauseConditions = nil\n            end\n            obj.status.currentStepIndex = obj.status.currentStepIndex + 1\n        end\n    end\n    return obj\n"` |  |
 | argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
 | argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
@@ -326,12 +347,6 @@ sealed-secrets:
 | gitops-operator.resources.limits | object | `{}` |  |
 | gitops-operator.resources.requests.cpu | string | `"100m"` |  |
 | gitops-operator.resources.requests.memory | string | `"128Mi"` |  |
-| gitops-operator.resources.resources.limits.cpu | string | `"500m"` |  |
-| gitops-operator.resources.resources.limits.memory | string | `"128Mi"` |  |
-| gitops-operator.resources.resources.requests.cpu | string | `"100m"` |  |
-| gitops-operator.resources.resources.requests.memory | string | `"64Mi"` |  |
-| gitops-operator.resources.securityContext.allowPrivilegeEscalation | bool | `false` |  |
-| gitops-operator.resources.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | gitops-operator.serviceAccount.annotations | object | `{}` |  |
 | gitops-operator.serviceAccount.create | bool | `true` |  |
 | gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
@@ -366,6 +381,9 @@ sealed-secrets:
 | global.external-argo-cd.server.port | int | `80` | Port of the ArgoCD server |
 | global.external-argo-cd.server.rootpath | string | `""` | Set if Argo CD is running behind reverse proxy under subpath different from / e.g. rootpath: '/argocd' |
 | global.external-argo-cd.server.svc | string | `"argocd-server"` | Service name of the ArgoCD server |
+| global.external-argo-rollouts | object | `{"rollout-reporter":{"enabled":false}}` | Configuration for external Argo Rollouts |
+| global.external-argo-rollouts.rollout-reporter | object | `{"enabled":false}` | Rollout reporter settings |
+| global.external-argo-rollouts.rollout-reporter.enabled | bool | `false` | Enable or disable rollout reporter Configuration is defined at .Values.event-reporters.rollout |
 | global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
