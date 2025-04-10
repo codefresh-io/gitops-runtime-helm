@@ -81,6 +81,25 @@ argo-cd:
   enabled: false
 ```
 
+## Installation with External Argo Rollouts
+
+If you want to use an existing Argo Rollouts installation, you can disable the built-in Argo Rollouts and configure the GitOps Runtime to use the external Argo Rollouts.
+See the `values.yaml` example below:
+
+```yaml
+global:
+  # -- Configuration for external Argo Rollouts
+  external-argo-rollouts:
+    # -- Rollout reporter settings
+    rollout-reporter:
+      # -- Enable rollout reporter
+      # Configuration is defined at .Values.event-reporters.rollout
+      enabled: true
+
+argo-rollouts:
+  # -- Disable built-in Argo Rollouts
+  enabled: false
+```
 
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
