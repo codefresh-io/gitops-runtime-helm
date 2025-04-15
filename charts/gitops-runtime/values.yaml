@@ -275,6 +275,7 @@ argo-workflows:
   controller:
     workflowDefaults:
       spec:
+        archiveLogs: true
         # -- By default artifact repository is set to a Codefresh provided repository. For data privacy it is reccommended to set your own artifact repository. For instructions see: https://argo-workflows.readthedocs.io/en/latest/configure-artifact-repository/#configuring-your-artifact-repository
         artifactRepositoryRef:
           configMap: codefresh-workflows-log-store
