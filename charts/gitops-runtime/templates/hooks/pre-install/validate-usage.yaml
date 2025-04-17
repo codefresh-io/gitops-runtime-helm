@@ -1,0 +1,24 @@
+{{- if  not .Values.installer.skipUsageValidation }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: validate-usage
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      serviceAccountName: validate-values-sa
+      restartPolicy: Never
+      containers:
+      - name: validate-usage
+        image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
+        imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
+        command: ["sh", "-c"]
+        args: 
+        - |
+          cf account validate-usage --fail-condition=reached --subject=clusters --log-level debug
+{{- end }}
