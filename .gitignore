@@ -7,12 +7,11 @@ output
 **/charts/**/charts
 **/charts/**/Chart.lock
 
-# only ignore the values.yaml file at the root of the repo
-/values.yaml
+# only ignore any values*.yaml file at the root of the repo
+/values*.yaml
 .devcontainer
 
 # ignore local dev
 values-dev.yaml
 dry-run.yaml
-values-test.yaml
 .debug
