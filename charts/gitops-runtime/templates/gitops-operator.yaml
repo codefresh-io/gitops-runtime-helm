@@ -76,10 +76,6 @@
 
   {{- include "gitops-operator.resources" $gitopsOperatorContext}}
 
-  {{/* Set DEFAULT_TASK_PULLING_INTERVAL */}}
-  {{- if not (index .Values "gitops-operator").env.TASK_PULLING_INTERVAL }}
-    {{- $_ := set $gitopsOperatorContext.Values.env "TASK_PULLING_INTERVAL" "10s" }}
-  {{- end }}
 {{- end }}
 
 {{- end }}
