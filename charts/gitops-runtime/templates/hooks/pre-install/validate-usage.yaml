@@ -15,7 +15,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: validate-usage
-        image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
+        image: docker.io/codefresh/cli-v2:cr-28341-val-lim
         imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
         command: ["sh", "-c"]
         args: 
