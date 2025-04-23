@@ -50,7 +50,7 @@ metadata:
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
-    helm.sh/hook-weight: "-10"
+    helm.sh/hook-weight: "5"
 rules:
   - apiGroups:
       - "*"
@@ -66,7 +66,7 @@ metadata:
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
-    helm.sh/hook-weight: "-10"
+    helm.sh/hook-weight: "5"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -83,5 +83,5 @@ metadata:
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
-    helm.sh/hook-weight: "-10"
+    helm.sh/hook-weight: "5"
 {{- end }}
