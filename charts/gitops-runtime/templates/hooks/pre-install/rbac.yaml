@@ -1,4 +1,4 @@
-{{- if  not .Values.installer.skipValidation }}
+{{- if  not (and .Values.installer.skipValidation .Values.installer.skipUsageValidation) }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:

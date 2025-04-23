@@ -1,4 +1,17 @@
 {{- if  not .Values.installer.skipUsageValidation }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: validate-values-config
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
+    helm.sh/hook-weight: "-10"
+data:
+  values.yaml: |
+{{ .Values | toYaml | indent 4 }}
+
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -15,10 +28,22 @@ spec:
       restartPolicy: Never
       containers:
       - name: validate-usage
-        image: docker.io/codefresh/cli-v2:cr-28341-val-lim
-        imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
+        image: quay.io/codefresh/cli-v2:cr-28341-val-lim
+        imagePullPolicy: Always
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
         command: ["sh", "-c"]
         args: 
         - |
-          cf account validate-usage --fail-condition=reached --subject=clusters --log-level debug
+          cf account validate-usage --fail-condition=reached --subject=clusters --values /job_tmp/values.yaml --namespace ${NAMESPACE} --hook --log-level debug
+        volumeMounts:
+          - name: customized-values
+            mountPath: "/job_tmp"
+      volumes:
+        - name: customized-values
+          configMap:
+            name: validate-values-config
 {{- end }}
