@@ -6,7 +6,7 @@ metadata:
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
-    helm.sh/hook-weight: "-10"
+    helm.sh/hook-weight: "5"
 data:
   values.yaml: |
 {{ .Values | toYaml | indent 4 }}
@@ -19,6 +19,7 @@ metadata:
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+    helm.sh/hook-weight: "10"
 spec:
   backoffLimit: 0
   ttlSecondsAfterFinished: 300
@@ -28,8 +29,8 @@ spec:
       restartPolicy: Never
       containers:
       - name: validate-usage
-        image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
-        imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
+        image: "quay.io/codefresh/cli-v2:cr-28341-val-lim"
+        imagePullPolicy: Always
         env:
         - name: NAMESPACE
           valueFrom:
