@@ -29,8 +29,8 @@ spec:
       restartPolicy: Never
       containers:
       - name: validate-usage
-        image: "quay.io/codefresh/cli-v2:cr-28341-val-lim"
-        imagePullPolicy: Always
+        image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
+        imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
         env:
         - name: NAMESPACE
           valueFrom:

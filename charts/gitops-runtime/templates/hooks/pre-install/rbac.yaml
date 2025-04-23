@@ -43,6 +43,7 @@ metadata:
 {{- end }}
 
 {{- if  not .Values.installer.skipUsageValidation }}
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
