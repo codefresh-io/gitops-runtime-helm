@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: validate-values-config
+  name: validate-usage-config
   annotations:
     helm.sh/hook: pre-install
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
@@ -24,7 +24,7 @@ spec:
   ttlSecondsAfterFinished: 300
   template:
     spec:
-      serviceAccountName: validate-values-sa
+      serviceAccountName: validate-usage-sa
       restartPolicy: Never
       containers:
       - name: validate-usage
@@ -40,10 +40,10 @@ spec:
         - |
           cf account validate-usage --fail-condition=reached --subject=clusters --values /job_tmp/values.yaml --namespace ${NAMESPACE} --hook --log-level debug
         volumeMounts:
-          - name: customized-values
+          - name: validate-usage-volume
             mountPath: "/job_tmp"
       volumes:
-        - name: customized-values
+        - name: validate-usage-volume
           configMap:
-            name: validate-values-config
+            name: validate-usage-config
 {{- end }}
