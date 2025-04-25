@@ -182,6 +182,20 @@ installer:
     tag: ""
     pullPolicy: IfNotPresent
 
+  argoCdVersionCheck:
+    enabled: true
+    # Labels to find the Argo CD API server service
+    # Note: Typically the 'server' component provides the API, not 'repo-server'. Adjust if needed.
+    argoServerLabels:
+      app.kubernetes.io/component: server
+      app.kubernetes.io/part-of: argocd
+    # API path to get version info
+    versionPath: /api/version
+    # Scheme to use (http or https). Dynamic detection is complex, assuming http.
+    scheme: http
+    # Set to true if using https with self-signed certs and want to skip verification
+    insecureSkipVerify: false
+
 # -----------------------------------------------------------------------------------------------------------------------
 # Sealed secrets
 # -----------------------------------------------------------------------------------------------------------------------
