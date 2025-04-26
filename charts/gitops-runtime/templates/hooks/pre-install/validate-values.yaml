@@ -107,7 +107,7 @@ spec:
           echo "Performing semver check using 'semver' CLI..."
           # The semver command will exit non-zero if the version doesn't satisfy the range.
           # 'set -e' will cause the script to exit immediately if semver fails.
-          if semver "$CLEAN_VERSION_STRING" --range "$REQUIRED_VERSION_CONSTRAINT"; then
+          if semver-cli satisfies "$CLEAN_VERSION_STRING" "$REQUIRED_VERSION_CONSTRAINT"; then
             echo "Argo CD version $VERSION_STRING satisfies range '$REQUIRED_VERSION_CONSTRAINT'."
           else
             echo "Error: Argo CD version $VERSION_STRING does not satisfy required range '$REQUIRED_VERSION_CONSTRAINT'."
