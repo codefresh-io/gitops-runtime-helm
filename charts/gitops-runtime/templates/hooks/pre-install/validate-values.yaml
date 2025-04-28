@@ -31,92 +31,142 @@ spec:
         image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
         imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
         env:
-        - name: ARGOCD_LABELS
-          value: "{{ range $k, $v := .Values.installer.argoCdVersionCheck.argoServerLabels }}{{ $k }}={{ $v }},{{ end }}"
-        - name: ARGOCD_VERSION_PATH
-          value: {{ .Values.installer.argoCdVersionCheck.versionPath | default "/api/version" }}
-        - name: ARGOCD_SCHEME
-          value: {{ .Values.installer.argoCdVersionCheck.scheme | default "http" }}
-        - name: ARGOCD_INSECURE
-          value: {{ .Values.installer.argoCdVersionCheck.insecureSkipVerify | default false | quote }}
-        - name: REQUIRED_VERSION_CONSTRAINT
-          value: ">=2.12 <3"
         - name: NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
         - name: CHART_VERSION
           value: {{ .Chart.Version }}
+{{- if not (get .Values "argo-cd").enabled }}
+        - name: ARGOCD_LABELS
+          value: "{{ range $k, $v := .Values.installer.argoCdVersionCheck.argoServerLabels }}{{ $k }}={{ $v }},{{ end }}"
+        - name: ARGOCD_VERSION_PATH
+          value: "/api/version"
+        - name: REQUIRED_VERSION_CONSTRAINT
+          value: ">=2.12 <3"
+{{- end }}
         command: ["sh", "-c"]
         args:
         - | # shell
-          # --- Service Discovery and Version Fetching ---
-          # (This part remains the same as the previous version)
-          CLEAN_LABELS=$(echo "$ARGOCD_LABELS" | sed 's/,$//')
-          echo "Searching for Argo CD service in namespace '$NAMESPACE' with labels '$CLEAN_LABELS'"
-          SERVICE_INFO=$(kubectl get svc -n "$NAMESPACE" -l "$CLEAN_LABELS" -o json)
-          SERVICE_COUNT=$(echo "$SERVICE_INFO" | jq '.items | length')
+{{- if not (get .Values "argo-cd").enabled }}
+          # Function to find Argo CD service and export its name and port
+          get_argocd_service_info() {
+            local service_info
+            local service_count
 
-          if [ "$SERVICE_COUNT" -eq 0 ]; then
-            echo "Error: No Argo CD service found matching labels '$CLEAN_LABELS' in namespace '$NAMESPACE'."
-            exit 1
-          elif [ "$SERVICE_COUNT" -gt 1 ]; then
-            echo "Warning: Found multiple services matching labels '$CLEAN_LABELS'. Using the first one found."
-          fi
+            # Clean labels
+            CLEAN_LABELS=$(echo "$ARGOCD_LABELS" | sed 's/,$//')
 
-          SERVICE_NAME=$(echo "$SERVICE_INFO" | jq -r '.items[0].metadata.name')
-          SERVICE_PORT=$(echo "$SERVICE_INFO" | jq -r '.items[0].spec.ports[0].port')
+            echo "Searching for Argo CD service in namespace '$NAMESPACE' with labels '$CLEAN_LABELS'"
+            service_info=$(kubectl get svc -n "$NAMESPACE" -l "$CLEAN_LABELS" -o json)
+            service_count=$(echo "$service_info" | jq '.items | length')
 
-          if [ -z "$SERVICE_NAME" ] || [ "$SERVICE_NAME" = "null" ] || [ -z "$SERVICE_PORT" ] || [ "$SERVICE_PORT" = "null" ]; then
-            echo "Error: Could not extract service name or port from the found service."
-            exit 1
-          fi
+            if [ "$service_count" -eq 0 ]; then
+              echo "Error: No Argo CD service found matching labels '$CLEAN_LABELS' in namespace '$NAMESPACE'."
+              exit 1
+            elif [ "$service_count" -gt 1 ]; then
+              echo "Warning: Found multiple services matching labels '$CLEAN_LABELS'. Using the first one found."
+            fi
 
-          echo "Found Argo CD service '$SERVICE_NAME' on port '$SERVICE_PORT'"
-          TARGET_URL="${ARGOCD_SCHEME}://${SERVICE_NAME}.${NAMESPACE}.svc.cluster.local:${SERVICE_PORT}${ARGOCD_VERSION_PATH}"
-          echo "Checking Argo CD version via API: $TARGET_URL"
+            # Set global variables
+            SERVICE_NAME=$(echo "$service_info" | jq -r '.items[0].metadata.name')
+            SERVICE_PORT=$(echo "$service_info" | jq -r '.items[0].spec.ports[0].port')
 
-          CURL_OPTS="-sS --fail --connect-timeout 10"
-          if [ "$ARGOCD_SCHEME" = "https" ] && [ "$ARGOCD_INSECURE" = "true" ]; then
-            CURL_OPTS="$CURL_OPTS -k"
-          fi
+            if [ -z "$SERVICE_NAME" ] || [ "$SERVICE_NAME" = "null" ] || [ -z "$SERVICE_PORT" ] || [ "$SERVICE_PORT" = "null" ]; then
+              echo "Error: Could not extract service name or port from the found service."
+              exit 1
+            fi
 
-          VERSION_JSON=$(curl $CURL_OPTS "$TARGET_URL")
-          CURL_EXIT_CODE=$?
+            echo "Found Argo CD service '$SERVICE_NAME' on port '$SERVICE_PORT'"
+          }
 
-          if [ $CURL_EXIT_CODE -ne 0 ]; then
-            echo "Error: Failed to connect to Argo CD API at $TARGET_URL (curl exit code: $CURL_EXIT_CODE)."
-            exit 1
-          fi
+          # Function to get and normalize the Argo CD root path
+          get_argocd_root_path() {
+            local root_path
 
-          VERSION_STRING=$(echo "$VERSION_JSON" | jq -r '.Version')
+            echo "Fetching Argo CD root path from ConfigMap '$ARGOCD_CM_PARAMS_NAME' in namespace '$NAMESPACE'..."
+            root_path=$(kubectl get configmap "$ARGOCD_CM_PARAMS_NAME" -n "$NAMESPACE" -o jsonpath='{.data.server\.rootpath}' 2>/dev/null || echo "")
 
-          if [ -z "$VERSION_STRING" ] || [ "$VERSION_STRING" = "null" ]; then
-            echo "Error: Could not parse '.Version' field from API response using jq."
-            echo "Response JSON: $VERSION_JSON"
-            exit 1
-          fi
+            if [ -n "$root_path" ] && [ "$root_path" != "/" ]; then
+              root_path=$(echo "$root_path" | sed 's:/*$::') # Remove trailing slash
+              [ "${root_path#\/}" = "$root_path" ] && root_path="/$root_path" # Add leading slash if missing
+            elif [ "$root_path" = "/" ]; then
+              root_path="" # Treat as empty for URL construction
+            else
+              echo "Warning: 'server.rootpath' not found in ConfigMap '$ARGOCD_CM_PARAMS_NAME' or ConfigMap not found. Assuming default root path '/'. "
+              root_path="" # Default to empty string
+            fi
 
-          # Clean potential 'v' prefix for semver tool
-          CLEAN_VERSION_STRING=${VERSION_STRING#v}
+            # Set global variable
+            ARGOCD_ROOT_PATH="$root_path"
+            echo "Using Argo CD root path: '${ARGOCD_ROOT_PATH:-/}'"
+          }
 
-          echo "Found Argo CD version string: $VERSION_STRING (using $CLEAN_VERSION_STRING for check)"
-          echo "Required version constraint: $REQUIRED_VERSION_CONSTRAINT"
+          # Function to get the Argo CD version string via API
+          get_argocd_version_string() {
+            # Local variables for values obtained internally
+            local api_full_path
+            local target_url
+            local curl_opts
+            local version_json
+            local curl_exit_code
 
-          # --- Semver Check (using semver CLI) ---
-          echo "Performing semver check using 'semver' CLI..."
-          # The semver command will exit non-zero if the version doesn't satisfy the range.
-          # 'set -e' will cause the script to exit immediately if semver fails.
-          if semver-cli satisfies "$CLEAN_VERSION_STRING" "$REQUIRED_VERSION_CONSTRAINT"; then
-            echo "Argo CD version $VERSION_STRING satisfies range '$REQUIRED_VERSION_CONSTRAINT'."
-          else
-            echo "Error: Argo CD version $VERSION_STRING does not satisfy required range '$REQUIRED_VERSION_CONSTRAINT'."
-            exit 1 # Explicitly exit 1 for clarity, though 'set -e' would handle it
-          fi
+            # Call functions to get required info - they set global vars
+            # We'll use the global vars directly after calling
+            get_argocd_service_info
+            get_argocd_root_path
+
+            # Construct Target URL using the globally set variables
+            api_full_path=$(echo "${ARGOCD_ROOT_PATH}${ARGOCD_VERSION_PATH}" | sed 's://:/:g')
+            target_url="http://${SERVICE_NAME}.${NAMESPACE}.svc.cluster.local:${SERVICE_PORT}${api_full_path}"
+            echo "Checking Argo CD version via API: $target_url"
+
+            # Curl Execution
+            curl_opts="-sS --fail --connect-timeout 10 -L -k" # Base options, follow redirects
+            version_json=$(curl $curl_opts "$target_url")
+            curl_exit_code=$?
+
+            if [ $curl_exit_code -ne 0 ]; then
+              echo "Error: Failed to connect to Argo CD API at $target_url (curl exit code: $curl_exit_code)."
+              exit 1
+            fi
+
+            # Version Parsing - Set global variable
+            VERSION_STRING=$(echo "$version_json" | jq -r '.Version')
+            if [ -z "$VERSION_STRING" ] || [ "$VERSION_STRING" = "null" ]; then
+              echo "Error: Could not parse '.Version' field from API response using jq."
+              echo "Response JSON: $version_json"
+              exit 1
+            fi
+          }
+
+          # Function to validate Argo CD version and perform semver check
+          validate_argocd_version() {
+            # Call function to get version string (sets VERSION_STRING)
+            # This function now internally calls get_argocd_service_info and get_argocd_root_path
+            get_argocd_version_string
+
+            # Clean potential 'v' prefix for semver tool
+            CLEAN_VERSION_STRING=${VERSION_STRING#v}
+
+            echo "Found Argo CD version string: $VERSION_STRING (using $CLEAN_VERSION_STRING for check)"
+            echo "Required version constraint: $REQUIRED_VERSION_CONSTRAINT"
+
+            # --- Semver Check (using semver CLI) ---
+            echo "Performing semver check using 'semver-cli'..."
+            if semver-cli satisfies "$CLEAN_VERSION_STRING" "$REQUIRED_VERSION_CONSTRAINT"; then
+              echo "Argo CD version $VERSION_STRING satisfies range '$REQUIRED_VERSION_CONSTRAINT'."
+            else
+              echo "Error: Argo CD version $VERSION_STRING does not satisfy required range '$REQUIRED_VERSION_CONSTRAINT'."
+              exit 1
+            fi
+          }
+
+          validate_argocd_version
 
           # --- Helm Values Validation (cf cli) ---
-          # This part only runs if the semver check passes
           echo "Argo CD version check passed. Validating helm values using cf cli..."
+{{- end }}
           cf helm validate --values /job_tmp/values.yaml --namespace ${NAMESPACE} --version ${CHART_VERSION} --hook --log-level debug
         volumeMounts:
         - name: customized-values
