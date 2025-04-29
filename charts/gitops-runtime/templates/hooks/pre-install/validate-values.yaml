@@ -37,18 +37,17 @@ spec:
               fieldPath: metadata.namespace
         - name: CHART_VERSION
           value: {{ .Chart.Version }}
-{{- if not (get .Values "argo-cd").enabled }}
+        - name: ARGOCD_CHECK_VERSION
+          value: {{ not (get .Values "argo-cd").enabled | quote }}
         - name: ARGOCD_LABELS
           value: "{{ range $k, $v := .Values.installer.argoCdVersionCheck.argoServerLabels }}{{ $k }}={{ $v }},{{ end }}"
         - name: ARGOCD_VERSION_PATH
           value: "/api/version"
         - name: REQUIRED_VERSION_CONSTRAINT
           value: ">=2.12 <3"
-{{- end }}
         command: ["sh", "-c"]
         args:
         - | # shell
-{{- if not (get .Values "argo-cd").enabled }}
           # Function to find Argo CD service and export its name and port
           get_argocd_service_info() {
             local service_info
@@ -162,11 +161,12 @@ spec:
             fi
           }
 
-          validate_argocd_version
+          if [ "$ARGOCD_CHECK_VERSION" = "true" ]; then
+            validate_argocd_version
+          fi
 
           # --- Helm Values Validation (cf cli) ---
           echo "Argo CD version check passed. Validating helm values using cf cli..."
-{{- end }}
           cf helm validate --values /job_tmp/values.yaml --namespace ${NAMESPACE} --version ${CHART_VERSION} --hook --log-level debug
         volumeMounts:
         - name: customized-values
