@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
 dependencies:
 - name: argo-cd
-  repository: https://codefresh-io.github.io/argo-helm
+  repository: https://codefresh-io.github.io/argo-helm/dev
   condition: argo-cd.enabled
   version: 7.8.23-2-cap-v2.14.9-2025-04-23-4de04dd8
 - name: argo-events

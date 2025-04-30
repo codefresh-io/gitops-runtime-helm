@@ -729,6 +729,3 @@ garage-workflows-artifact-storage:
 cf-argocd-extras:
   # -- Library mode for the chart. Allows to inject values from gitops runtime chart
   libraryMode: true
-  # -- Event reporter configuration
-  eventReporter:
-    enabled: true
