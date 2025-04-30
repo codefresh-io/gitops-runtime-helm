@@ -191,7 +191,7 @@ sealed-secrets:
   image:
     registry: 'quay.io'
     repository: 'codefresh/sealed-secrets-controller'
-    tag: '0.28.0'
+    tag: '0.29.0'
   resources:
     limits:
       cpu: 500m
@@ -525,7 +525,7 @@ app-proxy:
           tag: 1.1.12-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3430.2
+    tag: 1.3451.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -533,7 +533,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3430.2
+      tag: 1.3451.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
