@@ -242,16 +242,6 @@ argo-cd:
       server.insecure: true
       application.namespaces: 'cf-*'
 
-  eventReporter:
-    # -- Installs new event reporter component to cluster
-    enabled: true
-    # -- Amount of shards to handle applications events
-    replicas: 3
-    # -- Switches between old and new reporter version.
-    # Possible values: v1, v2.
-    # For v2 `argo-cd.eventReporter.enabled=true` is required
-    version: v2
-
   applicationVersioning:
     # -- Enable application versioning
     enabled: true
