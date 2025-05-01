@@ -390,7 +390,7 @@ internal-router:
   image:
     repository: nginxinc/nginx-unprivileged
     pullPolicy: IfNotPresent
-    tag: 1.26-alpine3.20
+    tag: 1.28-alpine3.21
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
