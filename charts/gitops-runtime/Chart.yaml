@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: Added pre-install hook validation for bring-your-own Argo-CD installations - version must satisfy ">=2.12 <3"
+    - kind: changed
+      description: Updated Argo CD dependency version to 7.8.23-2-cap-v2.14.9 (#461)
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
