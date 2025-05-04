@@ -182,6 +182,12 @@ installer:
     tag: ""
     pullPolicy: IfNotPresent
 
+  argoCdVersionCheck:
+    # Labels to find the Argo CD API server service
+    argoServerLabels:
+      app.kubernetes.io/component: server
+      app.kubernetes.io/part-of: argocd
+
 # -----------------------------------------------------------------------------------------------------------------------
 # Sealed secrets
 # -----------------------------------------------------------------------------------------------------------------------
