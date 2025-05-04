@@ -13,7 +13,9 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
-  artifacthub.io/changes: ""
+  artifacthub.io/changes: |-
+    - kind: added
+      description: Added pre-install hook validation for bring-your-own Argo-CD installations - version must satisfy ">=2.12 <3"
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
