@@ -27,11 +27,11 @@ dependencies:
   condition: argo-workflows.enabled
 - name: argo-rollouts
   repository: https://codefresh-io.github.io/argo-helm
-  version: 2.37.3-2-v1.7.2-cap-CR-26082
+  version: 2.37.3-3-v1.7.2-cap-CR-28008
   condition: argo-rollouts.enabled
 - name: sealed-secrets
   repository: https://bitnami-labs.github.io/sealed-secrets/
-  version: 2.17.0
+  version: 2.17.2
 - name: codefresh-tunnel-client
   repository: oci://quay.io/codefresh/charts
   version: 0.1.19
