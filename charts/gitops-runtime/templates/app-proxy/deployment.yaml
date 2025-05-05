@@ -20,17 +20,17 @@
   {{- $_ := set $appProxyContext.Values.initContainer "extraVolumeMounts" $initContainerExtraVolumeMounts }}
 {{- end }}
 
-{{- $nodeSelector := .Values.nodeSelector | default dict }}
+{{- $nodeSelector := $appProxyContext.Values.nodeSelector | default dict }}
 {{- $globalNodeSelector := .Values.global.nodeSelector | default dict }}
 {{- $allNodeSelector := mergeOverwrite $globalNodeSelector $nodeSelector }}
 {{- $_ := set $appProxyContext.Values "nodeSelector" $allNodeSelector }}
 
-{{- $tolerations := .Values.tolerations | default list }}
+{{- $tolerations := $appProxyContext.Values.tolerations | default list }}
 {{- $globalTolerations := .Values.global.tolerations | default list }}
 {{- $allToleration := concat $globalTolerations $tolerations }}
 {{- $_ := set $appProxyContext.Values "tolerations" $allToleration }}
 
-{{- $affinity := .Values.affinity | default dict }}
+{{- $affinity := $appProxyContext.Values.affinity | default dict }}
 {{- $globalAffinity := .Values.global.affinity | default dict }}
 {{- $allAffinity := mergeOverwrite $globalAffinity $affinity }}
 {{- $_ := set $appProxyContext.Values "affinity" $allAffinity }}
