@@ -22,15 +22,15 @@ spec:
         {{- . | toYaml | nindent 8 }}
       {{- end }}
     tolerations:
-    {{- with .Values.workflow.sensor.tolerations }}
+    {{- with .Values.tolerations }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
     nodeSelector:
-    {{- with .Values.workflow.sensor.nodeSelector }}
+    {{- with .Values.nodeSelector }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
     affinity:
-    {{- with .Values.workflow.sensor.affinity }}
+    {{- with .Values.affinity }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
   triggers:

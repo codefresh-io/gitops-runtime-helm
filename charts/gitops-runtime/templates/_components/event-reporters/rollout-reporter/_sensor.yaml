@@ -28,15 +28,15 @@ spec:
         {{- . | toYaml | nindent 8 }}
       {{- end }}
     tolerations:
-    {{- with .Values.rollout.sensor.tolerations }}
+    {{- with .Values.tolerations }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
     nodeSelector:
-    {{- with .Values.rollout.sensor.nodeSelector }}
+    {{- with .Values.nodeSelector }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
     affinity:
-    {{- with .Values.rollout.sensor.affinity }}
+    {{- with .Values.affinity }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
   triggers:

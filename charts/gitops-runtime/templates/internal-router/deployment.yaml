@@ -1,4 +1,20 @@
 {{- $internalRouterContext := deepCopy . }}
 {{- $_ := set $internalRouterContext "Values" (deepCopy (get .Values "internal-router")) }}
 {{- $_ := set $internalRouterContext.Values "global" (deepCopy (get .Values "global")) }}
+
+{{- $nodeSelector := index .Values "internal-router" "nodeSelector" | default dict }}
+{{- $globalNodeSelector := .Values.global.nodeSelector | default dict }}
+{{- $allNodeSelector := mergeOverwrite $globalNodeSelector $nodeSelector }}
+{{- $_ := set $internalRouterContext.Values "nodeSelector" $allNodeSelector }}
+
+{{- $tolerations := index .Values "internal-router" "tolerations" | default list }}
+{{- $globalTolerations := .Values.global.tolerations | default list }}
+{{- $allToleration := concat $globalTolerations $tolerations }}
+{{- $_ := set $internalRouterContext.Values "tolerations" $allToleration }}
+
+{{- $affinity := index .Values "internal-router" "affinity" | default dict }}
+{{- $globalAffinity := .Values.global.affinity | default dict }}
+{{- $allAffinity := mergeOverwrite $globalAffinity $affinity }}
+{{- $_ := set $internalRouterContext.Values "affinity" $allAffinity }}
+
 {{- include "internal-router.resources.deployment" $internalRouterContext }}

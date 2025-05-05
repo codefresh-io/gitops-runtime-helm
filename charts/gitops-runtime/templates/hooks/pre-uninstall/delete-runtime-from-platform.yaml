@@ -4,6 +4,18 @@
   {{- $customCASecretName = .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
   {{- $customCASecretKey = .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
 {{- end }}
+{{- $nodeSelector := .Values.installer.nodeSelector | default dict }}
+{{- $globalNodeSelector := .Values.global.nodeSelector | default dict }}
+{{- $allNodeSelector := mergeOverwrite $globalNodeSelector $nodeSelector }}
+
+{{- $tolerations := .Values.installer.tolerations | default list }}
+{{- $globalTolerations := .Values.global.tolerations | default list }}
+{{- $allToleration := concat $globalTolerations $tolerations }}
+
+{{- $affinity := .Values.installer.affinity | default dict }}
+{{- $globalAffinity := .Values.global.affinity | default dict }}
+{{- $allAffinity := mergeOverwrite $globalAffinity $affinity }}
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -38,7 +50,7 @@ spec:
           readOnly: true
 {{- end }}
         command: ["sh", "-c"]
-        args: 
+        args:
         - |
           if [ ! -z "$USER_TOKEN" ]; then
             curl ${PLATFORM_URL}/2.0/api/graphql -H "Authorization: ${USER_TOKEN}" -H "Content-Type: application/json" -d "{\"query\": \"mutation deleteRuntime(\$name: String"'!'") {\n  deleteRuntime(name: \$name) }\",\"variables\": {\"name\": \"${RUNTIME_NAME}\"}}"
@@ -54,3 +66,12 @@ spec:
           defaultMode: 420
           optional: true
 {{- end }}
+      {{- with $allNodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $allToleration }}
+      tolerations: {{ toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with $allAffinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}

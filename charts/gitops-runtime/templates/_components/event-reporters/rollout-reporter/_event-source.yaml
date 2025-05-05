@@ -48,15 +48,15 @@ spec:
       {{- end }}
     serviceAccountName: {{ include "event-reporters.rollout-reporter.serviceAccountName" .}}
     tolerations:
-    {{- with .Values.rollout.eventSource.tolerations }}
+    {{- with .Values.tolerations }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
     nodeSelector:
-    {{- with .Values.rollout.eventSource.nodeSelector }}
+    {{- with .Values.nodeSelector }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
     affinity:
-    {{- with .Values.rollout.eventSource.affinity }}
+    {{- with .Values.affinity }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
 {{- end }}
