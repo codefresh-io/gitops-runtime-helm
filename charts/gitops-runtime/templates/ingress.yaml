@@ -18,6 +18,9 @@ metadata:
   name: codefresh-gitops-runtime
   labels:
     {{- include "codefresh-gitops-runtime.labels" . | nindent 4 }}
+  {{- with .Values.global.runtime.ingress.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- with .Values.global.runtime.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -63,6 +66,6 @@ spec:
               port:
                 number: 80
           path: /app-proxy
-          pathType: Prefix  
+          pathType: Prefix
     {{- end }}
 {{- end }}

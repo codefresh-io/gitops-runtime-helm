@@ -63,6 +63,7 @@ global:
       className: nginx
       tls: []
       annotations: {}
+      labels: {}
       # -- Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime.
       hosts: []
     # -- Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false)
