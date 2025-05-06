@@ -29,11 +29,11 @@ spec:
       {{- end }}
     serviceAccountName: {{ include "event-reporters.workflow-reporter.serviceAccountName" .}}
     tolerations:
-    {{- with .Values.tolerations }}
+    {{- with .Values.workflow.eventSource.tolerations | default .Values.global.tolerations }}
       {{- toYaml . | nindent 6 }}
     {{- end }}
     nodeSelector:
-    {{- with .Values.nodeSelector }}
+    {{- with .Values.workflow.eventSource.nodeSelector | default .Values.global.nodeSelector }}
       {{- toYaml . | nindent 6 }}
     {{- end }}
     affinity:

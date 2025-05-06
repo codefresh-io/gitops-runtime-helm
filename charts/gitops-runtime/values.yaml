@@ -173,6 +173,11 @@ global:
       # Configuration is defined at .Values.event-reporters.rollout
       enabled: false
 
+  # -- Global nodeSelector for all components
+  nodeSelector: {}
+  # -- Global tolerations for all components
+  tolerations: []
+
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
@@ -190,6 +195,10 @@ installer:
     argoServerLabels:
       app.kubernetes.io/component: server
       app.kubernetes.io/part-of: argocd
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 # -----------------------------------------------------------------------------------------------------------------------
 # Sealed secrets
@@ -484,6 +493,9 @@ tunnel-client:
     host: "register-tunnels.cf-cd.com"
     subdomainHost: "tunnels.cf-cd.com"
 
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 #-----------------------------------------------------------------------------------------------------------------------
 # app-proxy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -742,3 +754,12 @@ cf-argocd-extras:
   # -- Event reporter configuration
   eventReporter:
     enabled: true
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+  # -- Sources server configuration
+  sourcesServer:
+    enabled: true
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}

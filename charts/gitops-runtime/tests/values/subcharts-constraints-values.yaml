@@ -1,0 +1,62 @@
+anchors:
+  scheduling:
+    nodeSelector: &nodeSelector
+      some-key: another-value
+      foo: bar
+    tolerations: &tolerations
+      - key: another-key
+        operator: Equal
+        value: another-value
+        effect: NoSchedule
+
+global:
+  runtime:
+    eventBus:
+      nats:
+        native:
+          nodeSelector: *nodeSelector
+          tolerations: *tolerations
+
+app-proxy:
+  nodeSelector: *nodeSelector
+  tolerations: *tolerations
+
+internal-router:
+  nodeSelector: *nodeSelector
+  tolerations: *tolerations
+
+event-reporters:
+  rollout:
+    eventSource:
+      nodeSelector: *nodeSelector
+      tolerations: *tolerations
+    sensor:
+      nodeSelector: *nodeSelector
+      tolerations: *tolerations
+  workflow:
+    eventSource:
+      nodeSelector: *nodeSelector
+      tolerations: *tolerations
+    sensor:
+      nodeSelector: *nodeSelector
+      tolerations: *tolerations
+
+installer:
+  nodeSelector: *nodeSelector
+  tolerations: *tolerations
+
+cf-argocd-extras:
+  sourcesServer:
+    nodeSelector: *nodeSelector
+    tolerations: *tolerations
+  eventReporter:
+    nodeSelector: *nodeSelector
+    tolerations: *tolerations
+
+gitops-operator:
+  nodeSelector: *nodeSelector
+  tolerations: *tolerations
+
+tunnel-client:
+  nodeSelector: *nodeSelector
+  tolerations: *tolerations

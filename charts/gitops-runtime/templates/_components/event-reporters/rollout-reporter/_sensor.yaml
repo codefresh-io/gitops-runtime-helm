@@ -28,11 +28,11 @@ spec:
         {{- . | toYaml | nindent 8 }}
       {{- end }}
     tolerations:
-    {{- with .Values.tolerations }}
+    {{- with .Values.rollout.sensor.tolerations | default .Values.global.tolerations }}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
     nodeSelector:
-    {{- with .Values.nodeSelector }}
+    {{- with .Values.rollout.sensor.nodeSelector | default .Values.global.nodeSelector}}
       {{- . | toYaml | nindent 6 }}
     {{- end }}
     affinity:

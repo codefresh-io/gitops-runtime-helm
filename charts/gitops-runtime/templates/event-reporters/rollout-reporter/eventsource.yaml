@@ -2,21 +2,5 @@
   {{- $eventReporterContext := deepCopy . }}
   {{- $_ := set $eventReporterContext "Values" (deepCopy (get .Values "event-reporters")) }}
   {{- $_ := set $eventReporterContext.Values "global" (deepCopy (get .Values "global")) }}
-
-  {{- $nodeSelector := index .Values "event-reporters" "rollout" "eventSource" "nodeSelector" | default dict }}
-  {{- $globalNodeSelector := .Values.global.nodeSelector | default dict }}
-  {{- $allNodeSelector := mergeOverwrite $globalNodeSelector $nodeSelector }}
-  {{- $_ := set $eventReporterContext.Values "nodeSelector" $allNodeSelector }}
-
-  {{- $tolerations := index .Values "event-reporters" "rollout" "eventSource" "tolerations" | default list }}
-  {{- $globalTolerations := .Values.global.tolerations | default list }}
-  {{- $allToleration := concat $globalTolerations $tolerations }}
-  {{- $_ := set $eventReporterContext.Values "tolerations" $allToleration }}
-
-  {{- $affinity := index .Values "event-reporters" "rollout" "eventSource" "affinity" | default dict }}
-  {{- $globalAffinity := .Values.global.affinity | default dict }}
-  {{- $allAffinity := mergeOverwrite $globalAffinity $affinity }}
-  {{- $_ := set $eventReporterContext.Values "affinity" $allAffinity }}
-
   {{- include "event-reporters.rollout-reporter.eventsource" $eventReporterContext }}
 {{- end }}

@@ -1,15 +1,3 @@
-{{- $nodeSelector := .Values.installer.nodeSelector | default dict }}
-{{- $globalNodeSelector := .Values.global.nodeSelector | default dict }}
-{{- $allNodeSelector := mergeOverwrite $globalNodeSelector $nodeSelector }}
-
-{{- $tolerations := .Values.installer.tolerations | default list }}
-{{- $globalTolerations := .Values.global.tolerations | default list }}
-{{- $allToleration := concat $globalTolerations $tolerations }}
-
-{{- $affinity := .Values.installer.affinity | default dict }}
-{{- $globalAffinity := .Values.global.affinity | default dict }}
-{{- $allAffinity := mergeOverwrite $globalAffinity $affinity }}
----
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -34,12 +22,12 @@ spec:
           kubectl patch Eventsource $(kubectl get EventSource -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge && \
           kubectl patch Sensor $(kubectl get Sensor -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge ;
           return 0
-      {{- with $allNodeSelector }}
+      {{- with .Values.installer.nodeSelector | default .Values.global.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
-      {{- with $allToleration }}
+      {{- with .Values.installer.tolerations | default .Values.global.tolerations}}
       tolerations: {{ toYaml . | nindent 6 }}
       {{- end }}
-      {{- with $allAffinity }}
+      {{- with .Values.installer.affinity }}
       affinity: {{ toYaml . | nindent 8 }}
       {{- end }}

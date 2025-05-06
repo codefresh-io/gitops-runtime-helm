@@ -1,4 +1,5 @@
 {{- $appProxyContext := deepCopy . }}
+
 {{- $_ := set $appProxyContext "Values" (deepCopy (get .Values "app-proxy")) }}
 {{- $_ := set $appProxyContext.Values "global" (deepCopy (get .Values "global")) }}
 {{- $_ := set $appProxyContext.Values "argo-cd" (get .Values "argo-cd") }}
@@ -19,20 +20,5 @@
   {{- $initContainerExtraVolumeMounts := concat (get $initContainerCalculatedVolumeMounts "extraVolumeMounts") $appProxyContext.Values.extraVolumeMounts }}
   {{- $_ := set $appProxyContext.Values.initContainer "extraVolumeMounts" $initContainerExtraVolumeMounts }}
 {{- end }}
-
-{{- $nodeSelector := $appProxyContext.Values.nodeSelector | default dict }}
-{{- $globalNodeSelector := .Values.global.nodeSelector | default dict }}
-{{- $allNodeSelector := mergeOverwrite $globalNodeSelector $nodeSelector }}
-{{- $_ := set $appProxyContext.Values "nodeSelector" $allNodeSelector }}
-
-{{- $tolerations := $appProxyContext.Values.tolerations | default list }}
-{{- $globalTolerations := .Values.global.tolerations | default list }}
-{{- $allToleration := concat $globalTolerations $tolerations }}
-{{- $_ := set $appProxyContext.Values "tolerations" $allToleration }}
-
-{{- $affinity := $appProxyContext.Values.affinity | default dict }}
-{{- $globalAffinity := .Values.global.affinity | default dict }}
-{{- $allAffinity := mergeOverwrite $globalAffinity $affinity }}
-{{- $_ := set $appProxyContext.Values "affinity" $allAffinity }}
 
 {{- include "cap-app-proxy.resources.deployment" $appProxyContext }}
