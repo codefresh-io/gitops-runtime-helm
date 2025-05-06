@@ -176,9 +176,8 @@ installer:
     argoServerLabels:
       app.kubernetes.io/component: server
       app.kubernetes.io/part-of: argocd
-
 # ---------------------------------------------------------------------------------------------------------------------
-# DOCS: https://artifacthub.io/packages/helm/bitnami-labs/sealed-secrets/2.17.0?modal=values
+# DOCS: https://artifacthub.io/packages/helm/bitnami-labs/sealed-secrets/2.17.2?modal=values
 # ---------------------------------------------------------------------------------------------------------------------
 sealed-secrets:
   fullnameOverride: sealed-secrets-controller
@@ -294,7 +293,7 @@ argo-workflows:
       requests:
         ephemeral-storage: 10Mi
 # ---------------------------------------------------------------------------------------------------------------------
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-rollouts-2.37.3-2-v1.7.2-cap-CR-26082/charts/argo-rollouts
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-rollouts-2.37.3-3-v1.7.2-cap-CR-28008/charts/argo-rollouts
 # ---------------------------------------------------------------------------------------------------------------------
 argo-rollouts:
   enabled: true
@@ -605,7 +604,7 @@ app-proxy:
     maxUnavailable: ""
 
 # ---------------------------------------------------------------------------------------------------------------------
-# DOCS: https://github.com/codefresh-io/codefresh-gitops-operator/tree/codefresh-gitops-operator-0.5.4-helm/charts/codefresh-gitops-operator
+# DOCS: https://github.com/codefresh-io/codefresh-gitops-operator/tree/codefresh-gitops-operator-0.5.5-helm/charts/codefresh-gitops-operator
 # ---------------------------------------------------------------------------------------------------------------------
 gitops-operator:
   # -- Do not change unless instructed otherwise by Codefresh support

@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.71
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.19.1
+version: 0.19.2
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -14,10 +14,14 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: added
-      description: Added pre-install hook validation for bring-your-own Argo-CD installations - version must satisfy ">=2.12 <3"
     - kind: changed
-      description: Updated Argo CD dependency version to 7.8.23-2-cap-v2.14.9 (#461)
+      description: updated csdp, gitops-operator (#467)
+    - kind: changed
+      description: updated nginx (#465)
+    - kind: changed
+      description: 'feat: security fixes for Argo Rollouts 1.7.2 (#460)'
+    - kind: changed
+      description: updated sealed-secrets (#464)
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
