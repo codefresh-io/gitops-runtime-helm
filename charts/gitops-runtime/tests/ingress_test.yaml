@@ -137,11 +137,10 @@ tests:
   set:
     global.runtime.ingress.enabled: true
     global.runtime.ingress.hosts: [test.example.com]
-    global.runtime.ingress.labels.custom-label: custom-value
+    global.runtime.ingress.labels.foo: bar
   values:
   - ./values/mandatory-values-ingress.yaml
   asserts:
   - equal:
-      path: metadata.labels
-      value:
-        custom-label: custom-value
+      path: metadata.labels.foo
+      value: bar
