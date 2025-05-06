@@ -182,6 +182,12 @@ installer:
     tag: ""
     pullPolicy: IfNotPresent
 
+  argoCdVersionCheck:
+    # Labels to find the Argo CD API server service
+    argoServerLabels:
+      app.kubernetes.io/component: server
+      app.kubernetes.io/part-of: argocd
+
 # -----------------------------------------------------------------------------------------------------------------------
 # Sealed secrets
 # -----------------------------------------------------------------------------------------------------------------------
@@ -191,7 +197,7 @@ sealed-secrets:
   image:
     registry: 'quay.io'
     repository: 'codefresh/sealed-secrets-controller'
-    tag: '0.28.0'
+    tag: '0.29.0'
   resources:
     limits:
       cpu: 500m
@@ -380,7 +386,7 @@ internal-router:
   image:
     repository: nginxinc/nginx-unprivileged
     pullPolicy: IfNotPresent
-    tag: 1.26-alpine3.20
+    tag: 1.28-alpine3.21
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
@@ -502,20 +508,20 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.12-main
+          tag: 1.1.13-main
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.12-main
+          tag: 1.1.13-main
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.12-main
+          tag: 1.1.13-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3451.0
+    tag: 1.3470.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -523,7 +529,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3451.0
+      tag: 1.3470.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
