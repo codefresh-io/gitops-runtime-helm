@@ -1,0 +1,25 @@
+suite: forked argo-cd tests
+templates:
+  - charts/argo-cd/*
+tests:
+  - it: Should not have argo-cd-event-reporter in forked argo-cd
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - containsDocument:
+          kind: StatefulSet
+          apiVersion: apps/v1
+          name: argo-cd-event-reporter
+        not: true
+  - it: Should not have argo-cd-event-reporter in forked argo-cd even when it has old values
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      argo-cd.eventReporter.enabled: true
+      argo-cd.eventReporter.replicas: 2
+    asserts:
+      - containsDocument:
+          kind: StatefulSet
+          apiVersion: apps/v1
+          name: argo-cd-event-reporter
+        not: true
