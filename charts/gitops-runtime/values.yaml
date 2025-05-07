@@ -334,6 +334,7 @@ event-reporters:
       tolerations: []
       nodeSelector: {}
       affinity: {}
+      imagePullSecrets: []
     sensor:
       # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
       logging:
@@ -356,6 +357,7 @@ event-reporters:
       tolerations: []
       nodeSelector: {}
       affinity: {}
+      imagePullSecrets: []
   workflow:
     serviceAccount:
       create: true
@@ -365,6 +367,7 @@ event-reporters:
       tolerations: []
       nodeSelector: {}
       affinity: {}
+      imagePullSecrets: []
     sensor:
       # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
       logging:
@@ -387,6 +390,7 @@ event-reporters:
       tolerations: []
       nodeSelector: {}
       affinity: {}
+      imagePullSecrets: []
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Internal router
