@@ -203,14 +203,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3389.0"` |  |
+| app-proxy.image.tag | string | `"1.3451.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3389.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3451.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -256,9 +256,6 @@ sealed-secrets:
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
 | argo-cd.crds.install | bool | `true` |  |
 | argo-cd.enabled | bool | `true` |  |
-| argo-cd.eventReporter.enabled | bool | `true` | Installs new event reporter component to cluster |
-| argo-cd.eventReporter.replicas | int | `3` | Amount of shards to handle applications events |
-| argo-cd.eventReporter.version | string | `"v2"` | Switches between old and new reporter version. Possible values: v1, v2. For v2 `argo-cd.eventReporter.enabled=true` is required |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
 | argo-events.configs.jetstream.versions[0].configReloaderImage | string | `"natsio/nats-server-config-reloader:0.16.0"` |  |
 | argo-events.configs.jetstream.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.15.0"` |  |
@@ -334,7 +331,7 @@ sealed-secrets:
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
 | gitops-operator.enabled | bool | `true` |  |
-| gitops-operator.env | object | `{}` |  |
+| gitops-operator.env.TASK_PULLING_INTERVAL | string | `"10s"` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image | object | `{}` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
