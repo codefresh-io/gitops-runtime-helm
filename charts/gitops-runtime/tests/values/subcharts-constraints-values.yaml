@@ -60,3 +60,24 @@ gitops-operator:
 tunnel-client:
   nodeSelector: *nodeSelector
   tolerations: *tolerations
+
+argo-events:
+  controller:
+    nodeSelector: *nodeSelector
+    tolerations: *tolerations
+  webhook:
+    nodeSelector: *nodeSelector
+    tolerations: *tolerations
+
+argo-rollouts:
+  controller:
+    nodeSelector: *nodeSelector
+    tolerations: *tolerations
+
+argo-workflows:
+  controller:
+    nodeSelector: *nodeSelector
+    tolerations: *tolerations
+  server:
+    nodeSelector: *nodeSelector
+    tolerations: *tolerations

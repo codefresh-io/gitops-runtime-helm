@@ -17,6 +17,9 @@ templates:
   - hooks/pre-install/validate-values.yaml
   - hooks/pre-uninstall/cleanup-resources.yaml
   - hooks/pre-uninstall/delete-runtime-from-platform.yaml
+  - charts/argo-events/*
+  - charts/argo-rollouts/*
+  - charts/argo-workflows/*
 values:
   - ./values/mandatory-values.yaml
 tests:
@@ -807,3 +810,253 @@ tests:
             operator: Equal
             value: another-value
             effect: NoSchedule
+
+  - it: argo-events-controller should have nodeSelector from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: charts/argo-events/templates/argo-events-controller/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: some-value
+            extra-key: extra-value
+
+  - it: argo-events-controller should have nodeSelector from and .Values.argo-events and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: charts/argo-events/templates/argo-events-controller/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: another-value
+            foo: bar
+
+  - it: argo-events-controller should have tolerations from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: charts/argo-events/templates/argo-events-controller/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
+
+  - it: argo-events-controller should have tolerations from .Values.argo-events and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: charts/argo-events/templates/argo-events-controller/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: another-key
+              operator: Equal
+              value: another-value
+              effect: NoSchedule
+
+  - it: argo-events-webhook should have nodeSelector from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: some-value
+            extra-key: extra-value
+
+  - it: argo-events-webhook should have nodeSelector from and .Values.argo-events and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: another-value
+            foo: bar
+
+  - it: argo-events-webhook should have tolerations from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
+
+  - it: argo-events-webhook should have tolerations from .Values.argo-events and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: another-key
+              operator: Equal
+              value: another-value
+              effect: NoSchedule
+
+  - it: argo-rollouts controller should have nodeSelector from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: charts/argo-rollouts/templates/controller/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: some-value
+            extra-key: extra-value
+
+  - it: argo-rollouts controller should have nodeSelector from and .Values.argo-rollouts and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: charts/argo-rollouts/templates/controller/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: another-value
+            foo: bar
+
+  - it: argo-rollouts controller should have tolerations from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: charts/argo-rollouts/templates/controller/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
+
+  - it: argo-rollouts controller should have tolerations from .Values.argo-rollouts and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: charts/argo-rollouts/templates/controller/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: another-key
+              operator: Equal
+              value: another-value
+              effect: NoSchedule
+
+  - it: argo-workflow controller should have nodeSelector from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: some-value
+            extra-key: extra-value
+
+  - it: argo-workflow controller should have nodeSelector from and .Values.argo-workflows and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: another-value
+            foo: bar
+
+  - it: argo-workflow controller should have tolerations from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
+
+  - it: argo-workflow controller should have tolerations from .Values.argo-workflows and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: another-key
+              operator: Equal
+              value: another-value
+              effect: NoSchedule
+
+  - it: argo-workflow server should have nodeSelector from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: charts/argo-workflows/templates/server/server-deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: some-value
+            extra-key: extra-value
+
+  - it: argo-workflow server should have nodeSelector from and .Values.argo-workflows and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: charts/argo-workflows/templates/server/server-deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: another-value
+            foo: bar
+
+  - it: argo-workflow server should have tolerations from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: charts/argo-workflows/templates/server/server-deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
+
+  - it: argo-workflow server should have tolerations from .Values.argo-workflows and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: charts/argo-workflows/templates/server/server-deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: another-key
+              operator: Equal
+              value: another-value
+              effect: NoSchedule
