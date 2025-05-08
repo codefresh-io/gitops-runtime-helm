@@ -1,0 +1,9 @@
+global:
+  nodeSelector:
+    some-key: some-value
+    extra-key: extra-value
+  tolerations:
+    - key: some-key
+      operator: Equal
+      value: some-value
+      effect: NoSchedule

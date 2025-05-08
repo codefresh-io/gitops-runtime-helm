@@ -11,6 +11,10 @@
 {{- if hasKey $eventBusSpec "annotations" }}
 {{- $eventBusSpec = unset $eventBusSpec "annotations" }}
 {{- end }}
+
+{{- $_ := set $eventBusSpec.nats.native "nodeSelector" ($eventBusSpec.nats.native.nodeSelector | default .Values.global.nodeSelector) }}
+{{- $_ := set $eventBusSpec.nats.native "tolerations" ($eventBusSpec.nats.native.tolerations | default .Values.global.tolerations) }}
+
 apiVersion: argoproj.io/v1alpha1
 kind: EventBus
 metadata:

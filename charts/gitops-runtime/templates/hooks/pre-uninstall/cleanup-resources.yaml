@@ -16,9 +16,18 @@ spec:
         image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
         imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
         command: ["sh", "-c"]
-        args: 
+        args:
         - |
           kubectl patch EventBus $(kubectl get eventbus -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge && \
           kubectl patch Eventsource $(kubectl get EventSource -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge && \
           kubectl patch Sensor $(kubectl get Sensor -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge ;
           return 0
+      {{- with .Values.installer.nodeSelector | default .Values.global.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.installer.tolerations | default .Values.global.tolerations}}
+      tolerations: {{ toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.installer.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}

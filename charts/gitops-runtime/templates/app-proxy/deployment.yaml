@@ -1,4 +1,5 @@
 {{- $appProxyContext := deepCopy . }}
+
 {{- $_ := set $appProxyContext "Values" (deepCopy (get .Values "app-proxy")) }}
 {{- $_ := set $appProxyContext.Values "global" (deepCopy (get .Values "global")) }}
 {{- $_ := set $appProxyContext.Values "argo-cd" (get .Values "argo-cd") }}
