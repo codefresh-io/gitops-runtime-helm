@@ -186,6 +186,8 @@ global:
 installer:
   # -- if set to true, pre-install hook will *not* run
   skipValidation: false
+  # -- if set to true, pre-install hook will *not* run
+  skipUsageValidation: false
   image:
     repository: quay.io/codefresh/gitops-runtime-installer
     tag: ""
@@ -260,16 +262,6 @@ argo-cd:
     params:
       server.insecure: true
       application.namespaces: 'cf-*'
-
-  eventReporter:
-    # -- Installs new event reporter component to cluster
-    enabled: true
-    # -- Amount of shards to handle applications events
-    replicas: 3
-    # -- Switches between old and new reporter version.
-    # Possible values: v1, v2.
-    # For v2 `argo-cd.eventReporter.enabled=true` is required
-    version: v2
 
   applicationVersioning:
     # -- Enable application versioning
@@ -547,7 +539,7 @@ app-proxy:
           tag: 1.1.13-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3451.0
+    tag: 1.3470.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -555,7 +547,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3451.0
+      tag: 1.3470.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -752,7 +744,6 @@ garage-workflows-artifact-storage:
 cf-argocd-extras:
   # -- Library mode for the chart. Allows to inject values from gitops runtime chart
   libraryMode: true
-  # -- Event reporter configuration
   eventReporter:
     enabled: true
     nodeSelector: {}
