@@ -1,0 +1,34 @@
+# Values file used to render all image values
+global:
+  codefresh:
+    accountId: 628a80b693a15c0f9c13ab75 # Codefresh Account id for ilia-codefresh for now, needs to be some test account
+    gitIntegration:
+      provider:
+        name: 'GITHUB'
+        apiUrl: 'https://api.github.com'
+    userToken:
+      secretKeyRef:
+        name: mysecret
+        key: myvalue
+        optional: true
+
+  runtime:
+    name: default
+
+    ingress:
+      enabled: false
+
+    repoCredentialsTemplate:
+      url: 'https://github.com'
+      username: 'username'
+      password: 'dummy'
+
+argo-rollouts:
+  dashboard:
+    enabled: true
+
+argo-cd:
+  enabled: false
+
+garage-workflows-artifact-storage:
+  enabled: true

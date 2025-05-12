@@ -8,6 +8,7 @@ templates:
   - charts/gitops-operator/*
   - charts/cf-argocd-extras/*
   - app-proxy/external-argocd-token.yaml
+  - codefresh-cm.yaml
 tests:
   - it: app-proxy ConfigMap should have valid ArgoCd URL
     values:
@@ -28,7 +29,7 @@ tests:
       - equal:
           path: data.argoCdUsername
           value: admin
-  
+
   - it: app-proxy ConfigMap should have valid ArgoCd Username with override
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -225,7 +226,7 @@ tests:
           content:
             name: ARGO_CD_TOKEN_SECRET_NAME
             value: argocd-token
-          
+
   - it: gitops-operator Deployment should have valid default ARGO_CD_TOKEN_SECRET_KEY env var
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -255,35 +256,6 @@ tests:
           content:
             name: ARGO_CD_URL
             value: my-argocd-server:80
-
-  - it: gitops-operator Deployment should have a valid --argocd-repo-server arg set in notifications container
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    template: gitops-operator.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - contains:
-          path: spec.template.spec.containers[1].args
-          content:
-            --argocd-repo-server=my-argocd-repo-server:8081
-
-  - it: gitops-operator Deployment should have a valid image set in notifications container
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    template: gitops-operator.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    set:
-      global.external-argo-cd.server.image.tag: v1.2.3
-    asserts:
-      - equal:
-          path: spec.template.spec.containers[1].image
-          value: quay.io/argoproj/argocd:v1.2.3
 
   - it: event-reporter ConfigMap should have valid ArgoCd URL
     template: event-reporter.yaml
@@ -675,7 +647,7 @@ tests:
       - equal:
           path: data.argoCdUrl
           value: http://my-argocd-server/argocd
-  
+
   - it: gitops-operator Deployment should have valid ARGO_CD_URL env var with rootpath suffix
     template: gitops-operator.yaml
     documentSelector:
@@ -726,6 +698,19 @@ tests:
           value: gitops-runtime-argo-cd-password
       - isNotNullOrEmpty:
           path: stringData.token
+
+  - it: codefresh-cm ConfigMap should have event-reporter and sources-server
+    template: codefresh-cm.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    asserts:
+      - matchRegex:
+          path: data.components
+          pattern: "name: event-reporter"
+      - matchRegex:
+          path: data.components
+          pattern: "name: sources-server"
 
   # TO-DO: fix these tests!
 

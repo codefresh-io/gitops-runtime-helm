@@ -58,7 +58,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/component: sources-server
 
-  - it: New Event-Reporter should NOT be deployed with forked ArgoCD
+  - it: New Event-Reporter should be deployed with forked ArgoCD
     template: event-reporter.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -67,7 +67,20 @@ tests:
           kind: StatefulSet
           apiVersion: apps/v1
           name: event-reporter
-        not: true
+        documentIndex: 4
+
+  - it: New Event-Reporter should be deployed with forked ArgoCD even if it's disabled in extras values
+    template: event-reporter.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      cf-argocd-extras.eventReporter.enabled: false
+    asserts:
+      - containsDocument:
+          kind: StatefulSet
+          apiVersion: apps/v1
+          name: event-reporter
+        documentIndex: 4
 
   - it: New Event-Reporter should be deployed with external OSS ArgoCD
     template: event-reporter.yaml
@@ -109,3 +122,19 @@ tests:
           kind: Deployment
           apiVersion: apps/v1
           name: sources-server
+
+  - it: Sources-Server ConfigMap should have valid redis-ha url
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: ConfigMap
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      argo-cd:
+        redis-ha:
+          enabled: true
+    asserts:
+      - equal:
+          path: data["redis.server"]
+          value: RELEASE-NAME-redis-ha-haproxy:6379

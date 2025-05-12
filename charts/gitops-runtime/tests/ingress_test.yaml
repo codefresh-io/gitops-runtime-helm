@@ -131,3 +131,16 @@ tests:
       - hosts:
         - "test.example.com"
         secretName: blah
+
+- it: ingress has custom labels
+  template: templates/ingress.yaml
+  set:
+    global.runtime.ingress.enabled: true
+    global.runtime.ingress.hosts: [test.example.com]
+    global.runtime.ingress.labels.foo: bar
+  values:
+  - ./values/mandatory-values-ingress.yaml
+  asserts:
+  - equal:
+      path: metadata.labels.foo
+      value: bar

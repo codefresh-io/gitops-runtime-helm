@@ -14,6 +14,11 @@ def recurse_filter(currValue, filteredDict, filterKeyPathList, currentPath):
     for filterKeyPath in filterKeyPathList:
         if currentPath.endswith(filterKeyPath) and currValue:
             bMatched = True
+    # Exclude paths starting with "-"
+    for filterKeyPath in filterKeyPathList:
+        if filterKeyPath.startswith("-"):
+            if filterKeyPath[1:] in currentPath:
+                bMatched = False
     if bMatched == True:
         set_nested_dict_value(filteredDict,currentPath,currValue)
     elif type(currValue) is dict:
@@ -38,7 +43,7 @@ def main(yamlFilepath, filterKeys):
     lstFilterKeys = filterKeys.split(",")
     recurse_filter(d, filteredDict, lstFilterKeys, "")
     print(yaml.dump(filteredDict))
-        
+
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         raise SyntaxError("Wrong number of arguments. Usage: filter-values.py <path to yaml> <key paths to filter by, separated by commas - for example image.repository,foo.bar>")
