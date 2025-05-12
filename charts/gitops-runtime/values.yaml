@@ -63,6 +63,7 @@ global:
       className: nginx
       tls: []
       annotations: {}
+      labels: {}
       # -- Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime.
       hosts: []
     # -- Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false)
@@ -94,6 +95,9 @@ global:
         minAvailable: 2
       nats:
         native:
+          nodeSelector: {}
+          tolerations: []
+          affinity: {}
           replicas: 3
           auth: token
           maxPayload: "4MB"
@@ -170,6 +174,11 @@ global:
       # Configuration is defined at .Values.event-reporters.rollout
       enabled: false
 
+  # -- Global nodeSelector for all components
+  nodeSelector: {}
+  # -- Global tolerations for all components
+  tolerations: []
+
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
@@ -189,6 +198,10 @@ installer:
     argoServerLabels:
       app.kubernetes.io/component: server
       app.kubernetes.io/part-of: argocd
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 # -----------------------------------------------------------------------------------------------------------------------
 # Sealed secrets
@@ -485,6 +498,9 @@ tunnel-client:
     host: "register-tunnels.cf-cd.com"
     subdomainHost: "tunnels.cf-cd.com"
 
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 #-----------------------------------------------------------------------------------------------------------------------
 # app-proxy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -685,15 +701,6 @@ gitops-operator:
     annotations: {}
     name: "gitops-operator-controller-manager"
 
-  # -- Builtin notifications controller used by gitops-operator for promotion related notifications
-  argoCdNotifications:
-    # -- If set to true allows to override notifications image used by the gitops operator. When set to false the version of ArgoCD will be set to the version used for all other ArgoCD components.
-    imageOverride: false
-    # -- Set image.repository and image.tag notifications image used by the gitops operator. Ignored unless imageOverride is set to true.
-    image: {}
-    # -- Resources for notifications controller used by gitops-operator.
-    resources: {}
-
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: ""
@@ -717,3 +724,14 @@ gitops-operator:
 cf-argocd-extras:
   # -- Library mode for the chart. Allows to inject values from gitops runtime chart
   libraryMode: true
+  eventReporter:
+    enabled: true
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+  # -- Sources server configuration
+  sourcesServer:
+    enabled: true
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}

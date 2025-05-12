@@ -174,5 +174,14 @@ spec:
       volumes:
       - name: customized-values
         configMap:
-          name: validate-values-config  
+          name: validate-values-config
+      {{- with .Values.installer.nodeSelector | default .Values.global.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.installer.tolerations | default .Values.global.tolerations}}
+      tolerations: {{ toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.installer.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}
 {{- end }}
