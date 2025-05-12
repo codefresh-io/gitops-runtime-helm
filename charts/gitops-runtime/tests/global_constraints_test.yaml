@@ -15,6 +15,7 @@ templates:
   - event-reporters/workflow-reporter/sensor.yaml
   - eventbus/codefresh-eventbus.yaml
   - hooks/pre-install/validate-values.yaml
+  - hooks/pre-install/validate-usage.yaml
   - hooks/pre-uninstall/cleanup-resources.yaml
   - hooks/pre-uninstall/delete-runtime-from-platform.yaml
   - charts/argo-events/*
@@ -434,6 +435,69 @@ tests:
               operator: Equal
               value: another-value
               effect: NoSchedule
+
+  - it: validate-usage job should have nodeSelector from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: hooks/pre-install/validate-usage.yaml
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: some-value
+            extra-key: extra-value
+
+  - it: validate-usage job should have nodeSelector from .Values.installer and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: hooks/pre-install/validate-usage.yaml
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            some-key: another-value
+            foo: bar
+
+  - it: validate-usage job should have tolerations from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+    template: hooks/pre-install/validate-usage.yaml
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
+
+  - it: validate-usage job should have tolerations from .Values.installer and NOT from .Values.global
+    values:
+      - ./values/global-constraints-values.yaml
+      - ./values/subcharts-constraints-values.yaml
+    template: hooks/pre-install/validate-usage.yaml
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: another-key
+              operator: Equal
+              value: another-value
+              effect: NoSchedule
+
 
   - it: cleanup-resources job should have nodeSelector from .Values.global
     values:
