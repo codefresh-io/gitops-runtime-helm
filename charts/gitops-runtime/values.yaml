@@ -186,8 +186,6 @@ global:
 installer:
   # -- if set to true, pre-install hook will *not* run
   skipValidation: false
-  # -- if set to true, pre-install hook will *not* run
-  skipUsageValidation: false
   image:
     repository: quay.io/codefresh/gitops-runtime-installer
     tag: ""
