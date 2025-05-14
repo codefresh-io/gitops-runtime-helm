@@ -54,4 +54,11 @@ data:
         return 200 'ok';
       }
     }
+    gzip on;
+    gzip_comp_level 6;
+    gzip_min_length 1000;
+    gzip_types
+      text/plain
+      application/xml
+      application/json;
 {{- end }}
