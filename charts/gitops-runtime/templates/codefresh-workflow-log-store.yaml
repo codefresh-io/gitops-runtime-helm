@@ -1,4 +1,6 @@
-{{- $_ := required "global.codefresh.accountId is required" .Values.global.codefresh.accountId }}
+{{- if hasKey  (index .Values "argo-workflows" "controller" "workflowDefaults" "spec" "artifactRepositoryRef") "configMap" }}
+    {{- if eq (index .Values "argo-workflows" "controller" "workflowDefaults" "spec" "artifactRepositoryRef" "configMap") "codefresh-workflows-log-store" }}
+      {{- $_ := required "global.codefresh.accountId is required" .Values.global.codefresh.accountId }}
 apiVersion: v1
 data:
   codefresh-workflows-log-store: |
@@ -19,3 +21,5 @@ metadata:
   annotations:
     workflows.argoproj.io/default-artifact-repository: codefresh-workflows-log-store
   name: codefresh-workflows-log-store
+  {{- end }}
+{{- end }}

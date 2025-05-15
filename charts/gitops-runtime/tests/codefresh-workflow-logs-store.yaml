@@ -1,0 +1,35 @@
+suite: codefresh-workflow-logs-store tests
+templates:
+  - codefresh-workflow-log-store.yaml
+tests:
+
+- it: Should only create the configmap when the workflowDefaults.artifactRepositoryRef.configMap is set to codefresh-workflows-log-store
+  template: 'codefresh-workflow-log-store.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef.configMap: "some-other-configmap"
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: Should only create the configmap when the workflowDefaults.artifactRepositoryRef.configMap is set to codefresh-workflows-log-store
+  template: 'codefresh-workflow-log-store.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef.configMap: "codefresh-workflows-log-store"
+  asserts:
+  - hasDocuments:
+      count: 1
+
+- it: Should fail if the accountId is not set
+  template: 'codefresh-workflow-log-store.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef.configMap: "codefresh-workflows-log-store"
+    global.codefresh.accountId: ""
+  asserts:
+  - failedTemplate:
+      errorMessage: 'global.codefresh.accountId is required'
