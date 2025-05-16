@@ -27,7 +27,29 @@ data:
         proxy_set_header Connection "upgrade";
         chunked_transfer_encoding off;
 
+        error_page 502 = @app_proxy_init_error;
+
         proxy_pass {{ index (get .Values.routing "app-proxy") "internalUrl" }};
+      }
+
+      location @app_proxy_init_error {
+        internal;
+
+        if ($request_method = OPTIONS) {
+          add_header 'Access-Control-Allow-Origin' "{{ .Values.app-proxy.config.cors }}" always;
+          add_header 'Access-Control-Allow-Methods' 'GET,HEAD,PUT,PATCH,POST,DELETE' always;
+          add_header 'Access-Control-Allow-Headers' 'content-type,x-access-token' always;
+          add_header 'Access-Control-Allow-Credentials' 'true' always;
+          add_header 'Content-Length' 0;
+          return 204;
+        }
+
+        add_header 'Access-Control-Allow-Origin' "{{ .Values.app-proxy.config.cors }}" always;
+        add_header 'Access-Control-Allow-Methods' 'GET,HEAD,PUT,PATCH,POST,DELETE' always;
+        add_header 'Access-Control-Allow-Headers' 'content-type,x-access-token' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        return 502;
+
       }
 
       {{- if .Values.routing.workflows.enabled }}
