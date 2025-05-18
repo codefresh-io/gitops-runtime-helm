@@ -689,10 +689,10 @@ gitops-operator:
   env:
     GITOPS_OPERATOR_VERSION: 0.7.7
 
-  image: {}
+  image:
     # -- defaults
     # repository: quay.io/codefresh/codefresh-gitops-operator
-    # tag: 'v{{ .Chart.AppVersion }}'
+    tag: cr-28267-improve-efficiency-700fa36
 
   serviceAccount:
     create: true
