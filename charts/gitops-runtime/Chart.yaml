@@ -39,7 +39,7 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts/dev
-  version: 0.0.0-cr-29084-1-removal-fbd12df
+  version: 0.0.0-chore-remove-notifcation-66803b7
   alias: gitops-operator
   condition: gitops-operator.enabled
 - name: garage
