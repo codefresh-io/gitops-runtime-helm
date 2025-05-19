@@ -749,7 +749,7 @@ cf-argocd-extras:
     affinity: {}
     pdb:
       # -- Enable PDB for event reporter
-      enabled: true
+      enabled: false
     serviceMonitor:
       main:
         # -- Enable ServiceMonitor for event reporter
