@@ -15,18 +15,6 @@ tests:
         template: event-reporters/rollout-reporter/serviceaccount.yaml
         not: true
       - containsDocument:
-          apiVersion: argoproj.io/v1alpha1
-          kind: Sensor
-          name: rollout-reporter
-        template: event-reporters/rollout-reporter/sensor.yaml
-        not: true
-      - containsDocument:
-          apiVersion: argoproj.io/v1alpha1
-          kind: EventSource
-          name: rollout-reporter
-        template: event-reporters/rollout-reporter/eventsource.yaml
-        not: true
-      - containsDocument:
           apiVersion: rbac.authorization.k8s.io/v1
           kind: Role
           name: rollout-reporter-sa
@@ -59,16 +47,6 @@ tests:
           kind: ServiceAccount
           name: rollout-reporter
         template: event-reporters/rollout-reporter/serviceaccount.yaml
-      - containsDocument:
-          apiVersion: argoproj.io/v1alpha1
-          kind: Sensor
-          name: rollout-reporter
-        template: event-reporters/rollout-reporter/sensor.yaml
-      - containsDocument:
-          apiVersion: argoproj.io/v1alpha1
-          kind: EventSource
-          name: rollout-reporter
-        template: event-reporters/rollout-reporter/eventsource.yaml
       - containsDocument:
           apiVersion: rbac.authorization.k8s.io/v1
           kind: Role
