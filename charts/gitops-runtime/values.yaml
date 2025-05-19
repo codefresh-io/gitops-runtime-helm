@@ -747,9 +747,19 @@ cf-argocd-extras:
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    pdb:
+      # -- Enable PDB for event reporter
+      enabled: true
+    serviceMonitor:
+      main:
+        # -- Enable ServiceMonitor for event reporter
+        enabled: false
   # -- Sources server configuration
   sourcesServer:
     enabled: true
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    hpa:
+      # -- Enable HPA for sources server
+      enabled: true
