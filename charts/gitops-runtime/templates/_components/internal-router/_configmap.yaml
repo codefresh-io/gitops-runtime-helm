@@ -36,7 +36,7 @@ data:
         internal;
 
         if ($request_method = OPTIONS) {
-          add_header 'Access-Control-Allow-Origin' "{{ .Values.app-proxy.config.cors }}" always;
+          add_header 'Access-Control-Allow-Origin' "{{ index .Values "app-proxy" "config" "cors" }}" always;
           add_header 'Access-Control-Allow-Methods' 'GET,HEAD,PUT,PATCH,POST,DELETE' always;
           add_header 'Access-Control-Allow-Headers' 'content-type,x-access-token' always;
           add_header 'Access-Control-Allow-Credentials' 'true' always;
@@ -44,7 +44,7 @@ data:
           return 204;
         }
 
-        add_header 'Access-Control-Allow-Origin' "{{ .Values.app-proxy.config.cors }}" always;
+        add_header 'Access-Control-Allow-Origin' "{{ index .Values "app-proxy" "config" "cors" }}" always;
         add_header 'Access-Control-Allow-Methods' 'GET,HEAD,PUT,PATCH,POST,DELETE' always;
         add_header 'Access-Control-Allow-Headers' 'content-type,x-access-token' always;
         add_header 'Access-Control-Allow-Credentials' 'true' always;
