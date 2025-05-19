@@ -11,7 +11,11 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: http
       protocol: TCP
-      name: http
+      name: htt
+    - port: 9100
+      targetPort: http
+      protocol: TCP
+      name: http-metrics
   selector:
     {{- include "cap-app-proxy.selectorLabels" . | nindent 4 }}
 {{- end }}
