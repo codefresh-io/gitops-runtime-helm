@@ -583,6 +583,8 @@ app-proxy:
     # - reduce this value if you have a lot of clusters and the cron job is failing with payload too large error
     # - use 0 to sync all clusters at once
     clusterChunkSize: 50
+    # -- Cors settings for app-proxy. This is the list of allowed domains for platform.
+    cors: "https://g.codefresh.io"
 
   env: {}
 
