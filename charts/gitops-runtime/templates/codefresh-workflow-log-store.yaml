@@ -1,14 +1,13 @@
-{{- if hasKey  (index .Values "argo-workflows" "controller" "workflowDefaults" "spec" "artifactRepositoryRef") "configMap" }}
-    {{- if eq (index .Values "argo-workflows" "controller" "workflowDefaults" "spec" "artifactRepositoryRef" "configMap") "codefresh-workflows-log-store" }}
-      {{- $_ := required "global.codefresh.accountId is required" .Values.global.codefresh.accountId }}
+{{- if .Values.codefreshWorkflowLogStoreCM.enabled }}
+    {{- $_ := required "global.codefresh.accountId is required if codefreshWorkflowLogStoreCM is enabled" .Values.global.codefresh.accountId }}
 apiVersion: v1
 data:
   codefresh-workflows-log-store: |
     archiveLogs: true
     s3:
       bucket: {{ .Values.global.codefresh.accountId }}
-      endpoint: {{ index .Values "argo-workflows" "codefreshWorkflowLogs" "endpoint" }}
-      insecure: {{ index .Values "argo-workflows" "codefreshWorkflowLogs" "insecure" }}
+      endpoint: {{ .Values.codefreshWorkflowLogStoreCM.endpoint }}
+      insecure: {{ .Values.codefreshWorkflowLogStoreCM.insecure }}
       keyFormat: {{ .Values.global.runtime.name }}/{{ "{{" }}workflow.name{{ "}}" }}/{{ "{{" }}pod.name{{ "}}" }}
       accessKeySecret:
         name: codefresh-token
@@ -21,5 +20,4 @@ metadata:
   annotations:
     workflows.argoproj.io/default-artifact-repository: codefresh-workflows-log-store
   name: codefresh-workflows-log-store
-  {{- end }}
 {{- end }}

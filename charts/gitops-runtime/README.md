@@ -17,12 +17,10 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
 ## Argo-workflows artifact and log storage
-> [!NOTE]
-> This version of the chart includes default configuration for storing workflow artifacts and logs in Codefresh provided s3 compatible storage.
+Codefresh provides a SaaS object storage based solution for Argo workflows logs storage. The chart deploys a configmap named `codefresh-workflows-log-store` with the repository configuration.
+If you want to utilize the Codefresh SaaS solution for log storage for all workflows in the runtime please set `argo-workflows.controller.workflowDefaults.spec.artifactRepository.configMap` to `codefresh-workflows-log-store` and `argo-workflows.controller.workflowDefaults.spec.artifactRepository.key`
+to `codefresh-workflows-log-store` as well.
 
-If you have your own storage configuration using the default configmap `artifact-repositories` upgrading the chart will override your artifact storage configuration.
-To prevent this please set `argo-workflows.controller.workflowDefaults.spec.artifactRepository.configMap` to `artifact-repositories` and `argo-workflows.controller.workflowDefaults.spec.artifactRepository.key`
-to the respective key in your configmap identifying the repository.
 > [!WARNING]
 > It's highly recommended to use your own artifact storage for data privacy reasons.
 > Codefresh provided storage has a retention policy of 14 days and limitations on uploaded file sizes.
@@ -271,9 +269,7 @@ sealed-secrets:
 | argo-rollouts.enabled | bool | `true` |  |
 | argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
 | argo-rollouts.installCRDs | bool | `true` |  |
-| argo-workflows.codefreshWorkflowLogs | object | `{"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
 | argo-workflows.controller.workflowDefaults.spec.archiveLogs | bool | `true` |  |
-| argo-workflows.controller.workflowDefaults.spec.artifactRepositoryRef | object | `{"configMap":"codefresh-workflows-log-store","key":"codefresh-workflows-log-store"}` | By default artifact repository is set to a Codefresh provided repository. For data privacy it is reccommended to set your own artifact repository. For instructions see: https://argo-workflows.readthedocs.io/en/latest/configure-artifact-repository/#configuring-your-artifact-repository |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.executor.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
@@ -281,8 +277,10 @@ sealed-secrets:
 | argo-workflows.mainContainer.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
-| cf-argocd-extras | object | `{"libraryMode":true}` | Codefresh extra services for ArgoCD |
+| cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"enabled":true,"nodeSelector":{},"tolerations":[]},"libraryMode":true,"sourcesServer":{"affinity":{},"enabled":true,"nodeSelector":{},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
 | cf-argocd-extras.libraryMode | bool | `true` | Library mode for the chart. Allows to inject values from gitops runtime chart |
+| cf-argocd-extras.sourcesServer | object | `{"affinity":{},"enabled":true,"nodeSelector":{},"tolerations":[]}` | Sources server configuration |
+| codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
 | event-reporters.rollout.eventSource.affinity | object | `{}` |  |
 | event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.eventSource.replicas | int | `1` |  |
@@ -376,7 +374,8 @@ sealed-secrets:
 | global.external-argo-rollouts | object | `{"rollout-reporter":{"enabled":false}}` | Configuration for external Argo Rollouts |
 | global.external-argo-rollouts.rollout-reporter | object | `{"enabled":false}` | Rollout reporter settings |
 | global.external-argo-rollouts.rollout-reporter.enabled | bool | `false` | Enable or disable rollout reporter Configuration is defined at .Values.event-reporters.rollout |
-| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
+| global.nodeSelector | object | `{}` | Global nodeSelector for all components |
+| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"affinity":{},"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","nodeSelector":{},"replicas":3,"tolerations":[]}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
 | global.runtime.eventBus.annotations | object | `{}` | Annotations on EventBus resource |
@@ -388,7 +387,7 @@ sealed-secrets:
 | global.runtime.gitCredentials.password.secretKeyRef | object | `{}` | secretKeyReference for Git credentials password. Provide name and key fields. |
 | global.runtime.gitCredentials.password.value | string | `nil` | Plain text password |
 | global.runtime.gitCredentials.username | string | `"username"` | Username. Optional when using token in password. |
-| global.runtime.ingress | object | `{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","skipValidation":false,"tls":[]}` | Ingress settings |
+| global.runtime.ingress | object | `{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]}` | Ingress settings |
 | global.runtime.ingress.enabled | bool | `false` | Defines if ingress-based access mode is enabled for runtime. To use tunnel-based (ingressless) access mode, set to false. |
 | global.runtime.ingress.hosts | list | `[]` | Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime. |
 | global.runtime.ingress.protocol | string | `"https"` | The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https. |
@@ -396,7 +395,8 @@ sealed-secrets:
 | global.runtime.ingressUrl | string | `""` | Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false) |
 | global.runtime.isConfigurationRuntime | bool | `false` | is the runtime set as a "configuration runtime". |
 | global.runtime.name | string | `nil` | Runtime name. Must be unique per platform account. |
-| installer | object | `{"argoCdVersionCheck":{"argoServerLabels":{"app.kubernetes.io/component":"server","app.kubernetes.io/part-of":"argocd"}},"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""},"skipValidation":false}` | Runtime installer used for running hooks and checks on the release |
+| global.tolerations | list | `[]` | Global tolerations for all components |
+| installer | object | `{"affinity":{},"argoCdVersionCheck":{"argoServerLabels":{"app.kubernetes.io/component":"server","app.kubernetes.io/part-of":"argocd"}},"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""},"nodeSelector":{},"skipValidation":false,"tolerations":[]}` | Runtime installer used for running hooks and checks on the release |
 | installer.skipValidation | bool | `false` | if set to true, pre-install hook will *not* run |
 | internal-router.affinity | object | `{}` |  |
 | internal-router.clusterDomain | string | `"cluster.local"` |  |
@@ -431,6 +431,6 @@ sealed-secrets:
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
 | sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.29.0"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
-| tunnel-client | object | `{"enabled":true,"libraryMode":true,"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes. |
+| tunnel-client | object | `{"affinity":{},"enabled":true,"libraryMode":true,"nodeSelector":{},"tolerations":[],"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes. |
 | tunnel-client.enabled | bool | `true` | Will only be used if global.runtime.ingress.enabled = false |
 | tunnel-client.libraryMode | bool | `true` | Do not change this value! Breaks chart logic |
