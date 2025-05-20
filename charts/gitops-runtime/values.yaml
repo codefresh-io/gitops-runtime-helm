@@ -686,13 +686,10 @@ gitops-operator:
     # -- An optional template for the promotion wrapper (empty default will use the embedded one)
     promotionWrapperTemplate: ''
 
-  env:
-    GITOPS_OPERATOR_VERSION: 0.7.7
-
   image:
     # -- defaults
     # repository: quay.io/codefresh/codefresh-gitops-operator
-    tag: cr-28267-improve-efficiency-700fa36
+    tag: 'v{{ .Chart.AppVersion }}'
 
   serviceAccount:
     create: true
