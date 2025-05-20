@@ -487,6 +487,7 @@ tunnel-client:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
 #-----------------------------------------------------------------------------------------------------------------------
 # app-proxy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -686,10 +687,10 @@ gitops-operator:
     # -- An optional template for the promotion wrapper (empty default will use the embedded one)
     promotionWrapperTemplate: ''
 
-  image:
+  image: {}
     # -- defaults
     # repository: quay.io/codefresh/codefresh-gitops-operator
-    tag: 'v{{ .Chart.AppVersion }}'
+    # tag: 'v{{ .Chart.AppVersion }}'
 
   serviceAccount:
     create: true
@@ -712,6 +713,7 @@ gitops-operator:
     requests:
       cpu: 100m
       memory: 128Mi
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Garage
 #-----------------------------------------------------------------------------------------------------------------------
