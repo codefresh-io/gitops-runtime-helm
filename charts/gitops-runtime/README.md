@@ -18,8 +18,17 @@ Prior to running the installation please see the official documentation at: http
 
 ## Argo-workflows artifact and log storage
 Codefresh provides a SaaS object storage based solution for Argo workflows logs storage. The chart deploys a configmap named `codefresh-workflows-log-store` with the repository configuration.
-If you want to utilize the Codefresh SaaS solution for log storage for all workflows in the runtime please set `argo-workflows.controller.workflowDefaults.spec.artifactRepository.configMap` to `codefresh-workflows-log-store` and `argo-workflows.controller.workflowDefaults.spec.artifactRepository.key`
-to `codefresh-workflows-log-store` as well.
+If you want to utilize the Codefresh SaaS solution for log storage for all workflows in the runtime please set the following values:
+
+```yaml
+argo-workflows:
+  controller:
+    workflowDefaults:
+      spec:
+        artifactRepository:
+          configMap: codefresh-workflows-log-store
+          key: codefresh-workflows-log-store
+```
 
 > [!WARNING]
 > It's highly recommended to use your own artifact storage for data privacy reasons.
