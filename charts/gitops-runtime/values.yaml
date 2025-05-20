@@ -539,7 +539,7 @@ app-proxy:
           tag: 1.1.13-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3497.0
+    tag: 1.3498.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -547,7 +547,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3497.0
+      tag: 1.3498.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -749,9 +749,19 @@ cf-argocd-extras:
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    pdb:
+      # -- Enable PDB for event reporter
+      enabled: false
+    serviceMonitor:
+      main:
+        # -- Enable ServiceMonitor for event reporter
+        enabled: false
   # -- Sources server configuration
   sourcesServer:
     enabled: true
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    hpa:
+      # -- Enable HPA for sources server
+      enabled: true

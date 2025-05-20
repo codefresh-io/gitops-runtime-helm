@@ -39,7 +39,7 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 0.7.3
+  version: 0.7.8
   alias: gitops-operator
   condition: gitops-operator.enabled
 - name: garage
@@ -49,4 +49,4 @@ dependencies:
   condition: garage-workflows-artifact-storage.enabled
 - name: cf-argocd-extras
   repository: oci://quay.io/codefresh/charts
-  version: 0.4.0
+  version: 0.5.1
