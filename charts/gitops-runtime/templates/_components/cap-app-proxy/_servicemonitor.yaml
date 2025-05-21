@@ -1,0 +1,21 @@
+{{- define "cap-app-proxy.resources.serviceMonitor" }}
+  {{- if .Values.serviceMonitor.create }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ default (include "cap-app-proxy.fullname" .) .Values.serviceMonitor.name }}
+  labels:
+    {{- include "cap-app-proxy.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "cap-app-proxy.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: http-metrics
+      interval: 30s
+      path: /metrics
+  {{- end }}
+{{- end }}
