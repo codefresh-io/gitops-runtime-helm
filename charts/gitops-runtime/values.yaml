@@ -594,6 +594,11 @@ app-proxy:
     annotations: {}
     name: "cap-app-proxy"
 
+  serviceMonitor:
+    enabled: false
+    name: ''
+    labels: {}
+
   podAnnotations: {}
 
   podLabels: {}
