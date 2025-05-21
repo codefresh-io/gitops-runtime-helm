@@ -315,7 +315,16 @@ argo-workflows:
     resources:
       requests:
         ephemeral-storage: 10Mi
+  controller:
+    workflowDefaults:
+      spec:
+        archiveLogs: true
 
+# -- Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support.
+codefreshWorkflowLogStoreCM:
+  enabled: true
+  endpoint: gitops-workflow-logs.codefresh.io
+  insecure: false
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo rollouts
 #-----------------------------------------------------------------------------------------------------------------------
@@ -720,38 +729,6 @@ gitops-operator:
     requests:
       cpu: 100m
       memory: 128Mi
-
-#-----------------------------------------------------------------------------------------------------------------------
-# Garage
-#-----------------------------------------------------------------------------------------------------------------------
-# -- Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC)
-garage-workflows-artifact-storage:
-  fullnameOverride: garage
-  enabled: false
-  deployment:
-    # -- Only statefulset is supported for Codefresh gitops runtime. Do not change this
-    kind: StatefulSet
-    replicaCount: 3
-  garage:
-    #-- Default to 3 replicas, see the replication_mode section at https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#replication-mode
-    replicationMode: 3
-  persistence:
-    enabled: true
-    # -- Volume that stores cluster metadata
-    meta:
-      # -- When empty value empty the default storage class for the cluster will be used
-      storageClass: ""
-      size: 100Mi
-    # -- Volume that stores artifacts and logs for workflows
-    data:
-      # -- When empty value empty the default storage class for the cluster will be used
-      storageClass: ""
-      size: 100Mi
-  # -- Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size.
-  resources: {}
-  # -- Helm tests
-  tests:
-    enabled: false
 
 #-----------------------------------------------------------------------------------------------------------------------
 # cf-argocd-extras
