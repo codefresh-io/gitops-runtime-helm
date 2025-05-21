@@ -57,8 +57,6 @@ spec:
         ports:
         - name: http
           containerPort: 8080
-        - name: http-metrics
-          containerPort: 9100
         readinessProbe:
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}

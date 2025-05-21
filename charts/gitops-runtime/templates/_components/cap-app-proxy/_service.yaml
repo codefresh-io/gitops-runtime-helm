@@ -13,7 +13,7 @@ spec:
       protocol: TCP
       name: http
     - port: 9100
-      targetPort: http-metrics
+      targetPort: http
       protocol: TCP
       name: http-metrics
   selector:
