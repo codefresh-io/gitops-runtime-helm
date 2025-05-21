@@ -1,0 +1,67 @@
+suite: codefresh-workflow-logs-store tests
+templates:
+  - codefresh-workflow-log-store.yaml
+tests:
+
+- it: Should only create the configmap when enabled
+  template: 'codefresh-workflow-log-store.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    codefreshWorkflowLogStoreCM.enabled: false
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: Should only create the configmap when enabled
+  template: 'codefresh-workflow-log-store.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    codefreshWorkflowLogStoreCM.enabled: true
+  asserts:
+  - hasDocuments:
+      count: 1
+
+- it: Should fail if the accountId is not set
+  template: 'codefresh-workflow-log-store.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    codefreshWorkflowLogStoreCM.enabled: true
+    global.codefresh.accountId: ""
+  asserts:
+  - failedTemplate:
+      errorMessage: 'global.codefresh.accountId is required if codefreshWorkflowLogStoreCM is enabled'
+
+- it: ConfigMap data populated with the correct values
+  template: 'codefresh-workflow-log-store.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global:
+      runtime:
+        name: test-runtime
+    codefreshWorkflowLogStoreCM.enabled: true
+    global.codefresh.accountId: "test-account"
+    codefreshWorkflowLogStoreCM:
+      enabled: true
+      endpoint: test.codefresh.io
+      insecure: true
+  asserts:
+  - equal:
+      path: data
+      value:
+        codefresh-workflows-log-store: |
+          archiveLogs: true
+          s3:
+            bucket: test-account
+            endpoint: test.codefresh.io
+            insecure: true
+            keyFormat: test-runtime/{{workflow.name}}/{{pod.name}}
+            accessKeySecret:
+              name: codefresh-token
+              key: token
+            secretKeySecret:
+              name: codefresh-token
+              key: token
