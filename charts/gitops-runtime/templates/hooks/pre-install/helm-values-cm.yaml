@@ -1,0 +1,13 @@
+{{- if not (and .Values.installer.skipValidation .Values.installer.skipUsageValidation) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: helm-values-config
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
+    helm.sh/hook-weight: "-10"
+data:
+  values.yaml: |
+{{ .Values | toYaml | indent 4 }}
+{{- end }}
