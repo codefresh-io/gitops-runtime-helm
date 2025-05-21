@@ -25,6 +25,7 @@ argo-workflows:
   controller:
     workflowDefaults:
       spec:
+        archiveLogs: true
         artifactRepository:
           configMap: codefresh-workflows-log-store
           key: codefresh-workflows-log-store
@@ -282,7 +283,6 @@ sealed-secrets:
 | argo-rollouts.enabled | bool | `true` |  |
 | argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
 | argo-rollouts.installCRDs | bool | `true` |  |
-| argo-workflows.controller.workflowDefaults.spec.archiveLogs | bool | `true` |  |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.executor.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
