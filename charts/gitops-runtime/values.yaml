@@ -315,10 +315,6 @@ argo-workflows:
     resources:
       requests:
         ephemeral-storage: 10Mi
-  controller:
-    workflowDefaults:
-      spec:
-        archiveLogs: true
 
 # -- Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support.
 codefreshWorkflowLogStoreCM:
