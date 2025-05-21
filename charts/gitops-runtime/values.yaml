@@ -496,6 +496,7 @@ tunnel-client:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
 #-----------------------------------------------------------------------------------------------------------------------
 # app-proxy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -546,7 +547,7 @@ app-proxy:
           tag: 1.1.13-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3470.0
+    tag: 1.3514.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -554,7 +555,7 @@ app-proxy:
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3470.0
+      tag: 1.3514.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -683,9 +684,18 @@ gitops-operator:
     # -- Additional labels for gitops operator CRDs
     additionalLabels: {}
 
-  env: {
-    TASK_PULLING_INTERVAL: 10s
-  }
+  config:
+    # -- Task polling interval
+    taskPollingInterval: 10s
+    # -- Commit status polling interval
+    commitStatusPollingInterval: 10s
+    # -- Workflow monitor polling interval
+    workflowMonitorPollingInterval: 10s
+    # -- Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime)
+    maxConcurrentReleases: 100
+    # -- An optional template for the promotion wrapper (empty default will use the embedded one)
+    promotionWrapperTemplate: ''
+
   image: {}
     # -- defaults
     # repository: quay.io/codefresh/codefresh-gitops-operator
@@ -712,6 +722,7 @@ gitops-operator:
     requests:
       cpu: 100m
       memory: 128Mi
+
 #-----------------------------------------------------------------------------------------------------------------------
 # cf-argocd-extras
 #-----------------------------------------------------------------------------------------------------------------------
@@ -724,9 +735,19 @@ cf-argocd-extras:
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    pdb:
+      # -- Enable PDB for event reporter
+      enabled: false
+    serviceMonitor:
+      main:
+        # -- Enable ServiceMonitor for event reporter
+        enabled: false
   # -- Sources server configuration
   sourcesServer:
     enabled: true
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    hpa:
+      # -- Enable HPA for sources server
+      enabled: true
