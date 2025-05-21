@@ -593,7 +593,7 @@ app-proxy:
     name: "cap-app-proxy"
 
   serviceMonitor:
-    create: true
+    enabled: false
     name: ''
     labels: {}
 

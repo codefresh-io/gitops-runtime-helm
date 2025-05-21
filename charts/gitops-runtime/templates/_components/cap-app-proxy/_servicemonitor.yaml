@@ -1,5 +1,5 @@
 {{- define "cap-app-proxy.resources.serviceMonitor" }}
-  {{- if .Values.serviceMonitor.create }}
+  {{- if .Values.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
