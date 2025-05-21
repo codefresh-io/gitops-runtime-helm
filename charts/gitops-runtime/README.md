@@ -25,6 +25,7 @@ argo-workflows:
   controller:
     workflowDefaults:
       spec:
+        archiveLogs: true
         artifactRepository:
           configMap: codefresh-workflows-log-store
           key: codefresh-workflows-log-store
