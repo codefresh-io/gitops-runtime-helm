@@ -1,0 +1,4 @@
+{{- $appProxyContext := deepCopy . }}
+{{- $_ := set $appProxyContext "Values" (deepCopy (get .Values "app-proxy")) }}
+{{- $_ := set $appProxyContext.Values "global" (deepCopy (get .Values "global")) }}
+{{- include "cap-app-proxy.resources.serviceMonitor" $appProxyContext }}
