@@ -16,6 +16,25 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
+## Argo-workflows artifact and log storage
+Codefresh provides a SaaS object storage based solution for Argo workflows logs storage. The chart deploys a configmap named `codefresh-workflows-log-store` with the repository configuration.
+If you want to utilize the Codefresh SaaS solution for log storage for all workflows in the runtime please set the following values:
+
+```yaml
+argo-workflows:
+  controller:
+    workflowDefaults:
+      spec:
+        artifactRepository:
+          configMap: codefresh-workflows-log-store
+          key: codefresh-workflows-log-store
+```
+
+> [!WARNING]
+> It's highly recommended to use your own artifact storage for data privacy reasons.
+> Codefresh provided storage has a retention policy of 14 days and limitations on uploaded file sizes.
+> Please refer to the official documentation for more details.
+
 ## Installation with External ArgoCD
 
 If you want to use an existing ArgoCD installation, you can disable the built-in ArgoCD and configure the GitOps Runtime to use the external ArgoCD.
@@ -260,6 +279,7 @@ sealed-secrets:
 | argo-rollouts.enabled | bool | `true` |  |
 | argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
 | argo-rollouts.installCRDs | bool | `true` |  |
+| argo-workflows.controller.workflowDefaults.spec.archiveLogs | bool | `true` |  |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.executor.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
@@ -270,6 +290,7 @@ sealed-secrets:
 | cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"enabled":true,"nodeSelector":{},"tolerations":[]},"libraryMode":true,"sourcesServer":{"affinity":{},"enabled":true,"nodeSelector":{},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
 | cf-argocd-extras.libraryMode | bool | `true` | Library mode for the chart. Allows to inject values from gitops runtime chart |
 | cf-argocd-extras.sourcesServer | object | `{"affinity":{},"enabled":true,"nodeSelector":{},"tolerations":[]}` | Sources server configuration |
+| codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
 | event-reporters.rollout.eventSource.affinity | object | `{}` |  |
 | event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
 | event-reporters.rollout.eventSource.replicas | int | `1` |  |
@@ -306,14 +327,6 @@ sealed-secrets:
 | event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
 | event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| garage-workflows-artifact-storage | object | `{"deployment":{"kind":"StatefulSet","replicaCount":3},"enabled":false,"fullnameOverride":"garage","garage":{"replicationMode":3},"persistence":{"data":{"size":"100Mi","storageClass":""},"enabled":true,"meta":{"size":"100Mi","storageClass":""}},"resources":{},"tests":{"enabled":false}}` | Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC) |
-| garage-workflows-artifact-storage.deployment.kind | string | `"StatefulSet"` | Only statefulset is supported for Codefresh gitops runtime. Do not change this |
-| garage-workflows-artifact-storage.persistence.data | object | `{"size":"100Mi","storageClass":""}` | Volume that stores artifacts and logs for workflows |
-| garage-workflows-artifact-storage.persistence.data.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
-| garage-workflows-artifact-storage.persistence.meta | object | `{"size":"100Mi","storageClass":""}` | Volume that stores cluster metadata |
-| garage-workflows-artifact-storage.persistence.meta.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
-| garage-workflows-artifact-storage.resources | object | `{}` | Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size. |
-| garage-workflows-artifact-storage.tests | object | `{"enabled":false}` | Helm tests |
 | gitops-operator.affinity | object | `{}` |  |
 | gitops-operator.crds | object | `{"additionalLabels":{},"annotations":{},"install":true,"keep":false}` | Codefresh gitops operator crds |
 | gitops-operator.crds.additionalLabels | object | `{}` | Additional labels for gitops operator CRDs |

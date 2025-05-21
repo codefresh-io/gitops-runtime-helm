@@ -1,0 +1,46 @@
+{{- if  not .Values.installer.skipUsageValidation }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: validate-usage
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+    helm.sh/hook-weight: "10"
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      serviceAccountName: validate-usage-sa
+      restartPolicy: Never
+      containers:
+      - name: validate-usage
+        image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
+        imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        command: ["sh", "-c"]
+        args:
+        - |
+          cf account validate-usage --fail-condition=reached --subject=clusters --values /job_tmp/values.yaml --namespace ${NAMESPACE} --hook --log-level debug
+        volumeMounts:
+          - name: validate-usage-volume
+            mountPath: "/job_tmp"
+      volumes:
+        - name: validate-usage-volume
+          configMap:
+            name: helm-values-config
+      {{- with .Values.installer.nodeSelector | default .Values.global.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.installer.tolerations | default .Values.global.tolerations}}
+      tolerations: {{ toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.installer.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
