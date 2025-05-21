@@ -1,0 +1,23 @@
+{{- if .Values.codefreshWorkflowLogStoreCM.enabled }}
+    {{- $_ := required "global.codefresh.accountId is required if codefreshWorkflowLogStoreCM is enabled" .Values.global.codefresh.accountId }}
+apiVersion: v1
+data:
+  codefresh-workflows-log-store: |
+    archiveLogs: true
+    s3:
+      bucket: {{ .Values.global.codefresh.accountId }}
+      endpoint: {{ .Values.codefreshWorkflowLogStoreCM.endpoint }}
+      insecure: {{ .Values.codefreshWorkflowLogStoreCM.insecure }}
+      keyFormat: {{ .Values.global.runtime.name }}/{{ "{{" }}workflow.name{{ "}}" }}/{{ "{{" }}pod.name{{ "}}" }}
+      accessKeySecret:
+        name: codefresh-token
+        key: token
+      secretKeySecret:
+        name: codefresh-token
+        key: token
+kind: ConfigMap
+metadata:
+  annotations:
+    workflows.argoproj.io/default-artifact-repository: codefresh-workflows-log-store
+  name: codefresh-workflows-log-store
+{{- end }}
