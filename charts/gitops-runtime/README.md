@@ -25,6 +25,7 @@ argo-workflows:
   controller:
     workflowDefaults:
       spec:
+        archiveLogs: true
         artifactRepository:
           configMap: codefresh-workflows-log-store
           key: codefresh-workflows-log-store
@@ -186,6 +187,7 @@ sealed-secrets:
 | app-proxy.config.argoWorkflowsInsecure | string | `"true"` |  |
 | app-proxy.config.argoWorkflowsUrl | string | `nil` | Workflows server url. Determined by chart logic. Do not change unless you are certain you need to |
 | app-proxy.config.clusterChunkSize | int | `50` | define cluster list size per request to report the cluster state to platform, e.g. if you have 90 clusters and set clusterChunkSize: 40, it means cron job will report cluster state to platform in 3 iterations (40,40,10) - reduce this value if you have a lot of clusters and the cron job is failing with payload too large error - use 0 to sync all clusters at once |
+| app-proxy.config.cors | string | `"https://g.codefresh.io"` | Cors settings for app-proxy. This is the list of allowed domains for platform. |
 | app-proxy.config.env | string | `"production"` |  |
 | app-proxy.config.logLevel | string | `"info"` | Log Level |
 | app-proxy.config.skipGitPermissionValidation | string | `"false"` | Skit git permissions validation |
@@ -210,14 +212,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3470.0"` |  |
+| app-proxy.image.tag | string | `"1.3514.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3470.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3514.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -252,6 +254,9 @@ sealed-secrets:
 | app-proxy.serviceAccount.annotations | object | `{}` |  |
 | app-proxy.serviceAccount.create | bool | `true` |  |
 | app-proxy.serviceAccount.name | string | `"cap-app-proxy"` |  |
+| app-proxy.serviceMonitor.enabled | bool | `false` |  |
+| app-proxy.serviceMonitor.labels | object | `{}` |  |
+| app-proxy.serviceMonitor.name | string | `""` |  |
 | app-proxy.tolerations | list | `[]` |  |
 | argo-cd.applicationVersioning.enabled | bool | `true` | Enable application versioning |
 | argo-cd.applicationVersioning.useApplicationConfiguration | bool | `true` | Extract application version based on ApplicationConfiguration CRD |
@@ -278,7 +283,6 @@ sealed-secrets:
 | argo-rollouts.enabled | bool | `true` |  |
 | argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
 | argo-rollouts.installCRDs | bool | `true` |  |
-| argo-workflows.controller.workflowDefaults.spec.archiveLogs | bool | `true` |  |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.executor.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
@@ -286,9 +290,12 @@ sealed-secrets:
 | argo-workflows.mainContainer.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
-| cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"enabled":true,"nodeSelector":{},"tolerations":[]},"libraryMode":true,"sourcesServer":{"affinity":{},"enabled":true,"nodeSelector":{},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
+| cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"enabled":true,"nodeSelector":{},"pdb":{"enabled":false},"serviceMonitor":{"main":{"enabled":false}},"tolerations":[]},"libraryMode":true,"sourcesServer":{"affinity":{},"enabled":true,"hpa":{"enabled":true},"nodeSelector":{},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
+| cf-argocd-extras.eventReporter.pdb.enabled | bool | `false` | Enable PDB for event reporter |
+| cf-argocd-extras.eventReporter.serviceMonitor.main.enabled | bool | `false` | Enable ServiceMonitor for event reporter |
 | cf-argocd-extras.libraryMode | bool | `true` | Library mode for the chart. Allows to inject values from gitops runtime chart |
-| cf-argocd-extras.sourcesServer | object | `{"affinity":{},"enabled":true,"nodeSelector":{},"tolerations":[]}` | Sources server configuration |
+| cf-argocd-extras.sourcesServer | object | `{"affinity":{},"enabled":true,"hpa":{"enabled":true},"nodeSelector":{},"tolerations":[]}` | Sources server configuration |
+| cf-argocd-extras.sourcesServer.hpa.enabled | bool | `true` | Enable HPA for sources server |
 | codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
 | event-reporters.rollout.eventSource.affinity | object | `{}` |  |
 | event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
@@ -327,13 +334,17 @@ sealed-secrets:
 | event-reporters.workflow.sensor.tolerations | list | `[]` |  |
 | event-reporters.workflow.serviceAccount.create | bool | `true` |  |
 | gitops-operator.affinity | object | `{}` |  |
+| gitops-operator.config.commitStatusPollingInterval | string | `"10s"` | Commit status polling interval |
+| gitops-operator.config.maxConcurrentReleases | int | `100` | Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime) |
+| gitops-operator.config.promotionWrapperTemplate | string | `""` | An optional template for the promotion wrapper (empty default will use the embedded one) |
+| gitops-operator.config.taskPollingInterval | string | `"10s"` | Task polling interval |
+| gitops-operator.config.workflowMonitorPollingInterval | string | `"10s"` | Workflow monitor polling interval |
 | gitops-operator.crds | object | `{"additionalLabels":{},"annotations":{},"install":true,"keep":false}` | Codefresh gitops operator crds |
 | gitops-operator.crds.additionalLabels | object | `{}` | Additional labels for gitops operator CRDs |
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
 | gitops-operator.enabled | bool | `true` |  |
-| gitops-operator.env.TASK_PULLING_INTERVAL | string | `"10s"` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image | object | `{}` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
@@ -405,7 +416,8 @@ sealed-secrets:
 | global.runtime.isConfigurationRuntime | bool | `false` | is the runtime set as a "configuration runtime". |
 | global.runtime.name | string | `nil` | Runtime name. Must be unique per platform account. |
 | global.tolerations | list | `[]` | Global tolerations for all components |
-| installer | object | `{"affinity":{},"argoCdVersionCheck":{"argoServerLabels":{"app.kubernetes.io/component":"server","app.kubernetes.io/part-of":"argocd"}},"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""},"nodeSelector":{},"skipValidation":false,"tolerations":[]}` | Runtime installer used for running hooks and checks on the release |
+| installer | object | `{"affinity":{},"argoCdVersionCheck":{"argoServerLabels":{"app.kubernetes.io/component":"server","app.kubernetes.io/part-of":"argocd"}},"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""},"nodeSelector":{},"skipUsageValidation":false,"skipValidation":false,"tolerations":[]}` | Runtime installer used for running hooks and checks on the release |
+| installer.skipUsageValidation | bool | `false` | if set to true, pre-install hook will *not* run |
 | installer.skipValidation | bool | `false` | if set to true, pre-install hook will *not* run |
 | internal-router.affinity | object | `{}` |  |
 | internal-router.clusterDomain | string | `"cluster.local"` |  |
