@@ -12,6 +12,6 @@ output
 .devcontainer
 
 # ignore local dev
-values-dev.yaml
+values-dev*
 dry-run.yaml
 .debug
