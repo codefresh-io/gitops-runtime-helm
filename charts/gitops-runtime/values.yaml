@@ -661,6 +661,18 @@ gitops-operator:
       memory: 128Mi
 
 #-----------------------------------------------------------------------------------------------------------------------
+# event-reporters (backward compatibility)
+#-----------------------------------------------------------------------------------------------------------------------
+# -- Event reporters configuration for backward compatibility
+event-reporters:
+  workflow:
+    serviceAccount:
+      # -- Create service account for workflow reporter
+      create: true
+      # -- Service account name (defaults to codefresh-sa if not specified)
+      name: ""
+
+#-----------------------------------------------------------------------------------------------------------------------
 # cf-argocd-extras
 #-----------------------------------------------------------------------------------------------------------------------
 # -- Codefresh extra services for ArgoCD
