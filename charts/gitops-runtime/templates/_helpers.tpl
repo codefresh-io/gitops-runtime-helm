@@ -507,3 +507,32 @@ valueFrom:
     optional: true
 {{- end }}
 # ------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------------------------------
+# event-reporters workflow reporter helpers (backward compatibility)
+# ------------------------------------------------------------------------------------------------------------
+{{/*
+Create the name of the service account to use for workflow reporter
+*/}}
+{{- define "event-reporters.workflow-reporter.serviceAccountName" -}}
+  {{- if (index .Values "event-reporters" "workflow" "serviceAccount" "create") }}
+    {{- default "codefresh-sa" (index .Values "event-reporters" "workflow" "serviceAccount" "name") }}
+  {{- else }}
+    {{- default "default" (index .Values "event-reporters" "workflow" "serviceAccount" "name") }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Common labels for workflow reporter
+*/}}
+{{- define "event-reporters.workflow-reporter.labels" -}}
+helm.sh/chart: {{ include "codefresh-gitops-runtime.chart" . }}
+app.kubernetes.io/name: workflow-reporter
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: Helm
+codefresh.io/internal: "true"
+{{- end }}
+# ------------------------------------------------------------------------------------------------------------
