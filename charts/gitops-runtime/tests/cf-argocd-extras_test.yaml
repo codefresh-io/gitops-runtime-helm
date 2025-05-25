@@ -138,3 +138,19 @@ tests:
       - equal:
           path: data["redis.server"]
           value: RELEASE-NAME-redis-ha-haproxy:6379
+
+  - it: Event-Reporter ConfigMap should have valid redis-ha url
+    template: event-reporter.yaml
+    documentSelector:
+      path: kind
+      value: ConfigMap
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      argo-cd:
+        redis-ha:
+          enabled: true
+    asserts:
+      - equal:
+          path: data["redis.server"]
+          value: RELEASE-NAME-redis-ha-haproxy:6379
