@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![AppVersion: 0.1.71](https://img.shields.io/badge/AppVersion-0.1.71-informational?style=flat-square)
+![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![AppVersion: 0.1.71](https://img.shields.io/badge/AppVersion-0.1.71-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -132,7 +132,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.0.0 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:1.0.0 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -145,7 +145,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.0.0 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:1.0.0 <local_registry>
 ```
 
 ## Openshift
@@ -212,14 +212,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3514.0"` |  |
+| app-proxy.image.tag | string | `"1.3523.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3514.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3523.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -258,36 +258,13 @@ sealed-secrets:
 | app-proxy.serviceMonitor.labels | object | `{}` |  |
 | app-proxy.serviceMonitor.name | string | `""` |  |
 | app-proxy.tolerations | list | `[]` |  |
+| argo-cd | object | `{"applicationVersioning":{"enabled":true,"useApplicationConfiguration":true},"configs":{"cm":{"accounts.admin":"apiKey,login","application.resourceTrackingMethod":"annotation+label","resource.customizations.actions.argoproj.io_Rollout":"mergeBuiltinActions: true\ndiscovery.lua: |\n  actions = {}\n  local fullyPromoted = obj.status.currentPodHash == obj.status.stableRS\n  actions[\"pause\"] = {[\"disabled\"] = fullyPromoted or obj.spec.paused == true}\n  actions[\"skip-current-step\"] = {[\"disabled\"] = obj.spec.strategy.canary == nil or obj.spec.strategy.canary.steps == nil or obj.status.currentStepIndex == table.getn(obj.spec.strategy.canary.steps)}\n  return actions\ndefinitions:\n- name: pause\n  action.lua: |\n    obj.spec.paused = true\n    return obj\n- name: skip-current-step\n  action.lua: |\n    if obj.status ~= nil then\n        if obj.spec.strategy.canary ~= nil and obj.spec.strategy.canary.steps ~= nil and obj.status.currentStepIndex < table.getn(obj.spec.strategy.canary.steps) then\n            if obj.status.pauseConditions ~= nil and table.getn(obj.status.pauseConditions) > 0 then\n                obj.status.pauseConditions = nil\n            end\n            obj.status.currentStepIndex = obj.status.currentStepIndex + 1\n        end\n    end\n    return obj\n","timeout.reconciliation":"20s"},"params":{"application.namespaces":"cf-*","server.insecure":true}},"crds":{"install":true},"enabled":true,"fullnameOverride":"argo-cd"}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-cd.applicationVersioning.enabled | bool | `true` | Enable application versioning |
 | argo-cd.applicationVersioning.useApplicationConfiguration | bool | `true` | Extract application version based on ApplicationConfiguration CRD |
-| argo-cd.configs.cm."accounts.admin" | string | `"apiKey,login"` |  |
-| argo-cd.configs.cm."application.resourceTrackingMethod" | string | `"annotation+label"` |  |
-| argo-cd.configs.cm."resource.customizations.actions.argoproj.io_Rollout" | string | `"mergeBuiltinActions: true\ndiscovery.lua: |\n  actions = {}\n  local fullyPromoted = obj.status.currentPodHash == obj.status.stableRS\n  actions[\"pause\"] = {[\"disabled\"] = fullyPromoted or obj.spec.paused == true}\n  actions[\"skip-current-step\"] = {[\"disabled\"] = obj.spec.strategy.canary == nil or obj.spec.strategy.canary.steps == nil or obj.status.currentStepIndex == table.getn(obj.spec.strategy.canary.steps)}\n  return actions\ndefinitions:\n- name: pause\n  action.lua: |\n    obj.spec.paused = true\n    return obj\n- name: skip-current-step\n  action.lua: |\n    if obj.status ~= nil then\n        if obj.spec.strategy.canary ~= nil and obj.spec.strategy.canary.steps ~= nil and obj.status.currentStepIndex < table.getn(obj.spec.strategy.canary.steps) then\n            if obj.status.pauseConditions ~= nil and table.getn(obj.status.pauseConditions) > 0 then\n                obj.status.pauseConditions = nil\n            end\n            obj.status.currentStepIndex = obj.status.currentStepIndex + 1\n        end\n    end\n    return obj\n"` |  |
-| argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
-| argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
-| argo-cd.configs.params."server.insecure" | bool | `true` |  |
-| argo-cd.crds.install | bool | `true` |  |
-| argo-cd.enabled | bool | `true` |  |
-| argo-cd.fullnameOverride | string | `"argo-cd"` |  |
-| argo-events.configs.jetstream.versions[0].configReloaderImage | string | `"natsio/nats-server-config-reloader:0.16.0"` |  |
-| argo-events.configs.jetstream.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.15.0"` |  |
-| argo-events.configs.jetstream.versions[0].natsImage | string | `"nats:2.10.21"` |  |
-| argo-events.configs.jetstream.versions[0].startCommand | string | `"/nats-server"` |  |
-| argo-events.configs.jetstream.versions[0].version | string | `"latest"` |  |
-| argo-events.configs.nats.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.15.0"` |  |
-| argo-events.configs.nats.versions[0].natsStreamingImage | string | `"nats-streaming:0.25.6"` |  |
-| argo-events.configs.nats.versions[0].version | string | `"0.22.1"` |  |
-| argo-events.crds.install | bool | `false` |  |
-| argo-events.fullnameOverride | string | `"argo-events"` |  |
-| argo-rollouts.controller.replicas | int | `1` |  |
-| argo-rollouts.enabled | bool | `true` |  |
-| argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
-| argo-rollouts.installCRDs | bool | `true` |  |
+| argo-events | object | `{"configs":{"jetstream":{"versions":[{"configReloaderImage":"natsio/nats-server-config-reloader:0.16.0","metricsExporterImage":"natsio/prometheus-nats-exporter:0.15.0","natsImage":"nats:2.10.21","startCommand":"/nats-server","version":"latest"}]},"nats":{"versions":[{"metricsExporterImage":"natsio/prometheus-nats-exporter:0.15.0","natsStreamingImage":"nats-streaming:0.25.6","version":"0.22.1"}]}},"crds":{"install":false},"fullnameOverride":"argo-events"}` | ------------------------------------------------------------------------------------------------------------------- |
+| argo-rollouts | object | `{"controller":{"replicas":1},"enabled":true,"fullnameOverride":"argo-rollouts","installCRDs":true}` | ------------------------------------------------------------------------------------------------------------------- |
+| argo-workflows | object | `{"crds":{"install":true},"enabled":true,"executor":{"resources":{"requests":{"ephemeral-storage":"10Mi"}}},"fullnameOverride":"argo","mainContainer":{"resources":{"requests":{"ephemeral-storage":"10Mi"}}},"server":{"authModes":["client"],"baseHref":"/workflows/"}}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
-| argo-workflows.enabled | bool | `true` |  |
-| argo-workflows.executor.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
-| argo-workflows.fullnameOverride | string | `"argo"` |  |
-| argo-workflows.mainContainer.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
 | cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"enabled":true,"nodeSelector":{},"pdb":{"enabled":false},"serviceMonitor":{"main":{"enabled":false}},"tolerations":[]},"libraryMode":true,"sourcesServer":{"affinity":{},"enabled":true,"hpa":{"enabled":true},"nodeSelector":{},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
@@ -297,43 +274,10 @@ sealed-secrets:
 | cf-argocd-extras.sourcesServer | object | `{"affinity":{},"enabled":true,"hpa":{"enabled":true},"nodeSelector":{},"tolerations":[]}` | Sources server configuration |
 | cf-argocd-extras.sourcesServer.hpa.enabled | bool | `true` | Enable HPA for sources server |
 | codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
-| event-reporters.rollout.eventSource.affinity | object | `{}` |  |
-| event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
-| event-reporters.rollout.eventSource.replicas | int | `1` |  |
-| event-reporters.rollout.eventSource.resources | object | `{}` |  |
-| event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
-| event-reporters.rollout.sensor.affinity | object | `{}` |  |
-| event-reporters.rollout.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
-| event-reporters.rollout.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
-| event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
-| event-reporters.rollout.sensor.replicas | int | `1` |  |
-| event-reporters.rollout.sensor.resources | object | `{}` |  |
-| event-reporters.rollout.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
-| event-reporters.rollout.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
-| event-reporters.rollout.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
-| event-reporters.rollout.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
-| event-reporters.rollout.sensor.retryStrategy.steps | int | `3` | Number of retries |
-| event-reporters.rollout.sensor.tolerations | list | `[]` |  |
-| event-reporters.rollout.serviceAccount.create | bool | `true` |  |
-| event-reporters.workflow.eventSource.affinity | object | `{}` |  |
-| event-reporters.workflow.eventSource.nodeSelector | object | `{}` |  |
-| event-reporters.workflow.eventSource.replicas | int | `1` |  |
-| event-reporters.workflow.eventSource.resources | object | `{}` |  |
-| event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
-| event-reporters.workflow.sensor.affinity | object | `{}` |  |
-| event-reporters.workflow.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
-| event-reporters.workflow.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
-| event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
-| event-reporters.workflow.sensor.replicas | int | `1` |  |
-| event-reporters.workflow.sensor.resources | object | `{}` |  |
-| event-reporters.workflow.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
-| event-reporters.workflow.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
-| event-reporters.workflow.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
-| event-reporters.workflow.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
-| event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
-| event-reporters.workflow.sensor.tolerations | list | `[]` |  |
-| event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| gitops-operator.affinity | object | `{}` |  |
+| event-reporters | object | `{"workflow":{"serviceAccount":{"create":true,"name":""}}}` | Event reporters configuration for backward compatibility |
+| event-reporters.workflow.serviceAccount.create | bool | `true` | Create service account for workflow reporter |
+| event-reporters.workflow.serviceAccount.name | string | `""` | Service account name (defaults to codefresh-sa if not specified) |
+| gitops-operator | object | `{"affinity":{},"config":{"commitStatusPollingInterval":"10s","maxConcurrentReleases":100,"promotionWrapperTemplate":"","taskPollingInterval":"10s","workflowMonitorPollingInterval":"10s"},"crds":{"additionalLabels":{},"annotations":{},"install":true,"keep":false},"enabled":true,"fullnameOverride":"","image":{},"imagePullSecrets":[],"libraryMode":true,"nameOverride":"","nodeSelector":{},"podAnnotations":{},"podLabels":{},"replicaCount":1,"resources":{"limits":{},"requests":{"cpu":"100m","memory":"128Mi"}},"serviceAccount":{"annotations":{},"create":true,"name":"gitops-operator-controller-manager"},"tolerations":[]}` | ------------------------------------------------------------------------------------------------------------------- |
 | gitops-operator.config.commitStatusPollingInterval | string | `"10s"` | Commit status polling interval |
 | gitops-operator.config.maxConcurrentReleases | int | `100` | Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime) |
 | gitops-operator.config.promotionWrapperTemplate | string | `""` | An optional template for the promotion wrapper (empty default will use the embedded one) |
@@ -344,23 +288,7 @@ sealed-secrets:
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
-| gitops-operator.enabled | bool | `true` |  |
-| gitops-operator.fullnameOverride | string | `""` |  |
-| gitops-operator.image | object | `{}` |  |
-| gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.libraryMode | bool | `true` | Do not change unless instructed otherwise by Codefresh support |
-| gitops-operator.nameOverride | string | `""` |  |
-| gitops-operator.nodeSelector | object | `{}` |  |
-| gitops-operator.podAnnotations | object | `{}` |  |
-| gitops-operator.podLabels | object | `{}` |  |
-| gitops-operator.replicaCount | int | `1` |  |
-| gitops-operator.resources.limits | object | `{}` |  |
-| gitops-operator.resources.requests.cpu | string | `"100m"` |  |
-| gitops-operator.resources.requests.memory | string | `"128Mi"` |  |
-| gitops-operator.serviceAccount.annotations | object | `{}` |  |
-| gitops-operator.serviceAccount.create | bool | `true` |  |
-| gitops-operator.serviceAccount.name | string | `"gitops-operator-controller-manager"` |  |
-| gitops-operator.tolerations | list | `[]` |  |
 | global.codefresh | object | `{"accountId":"","apiEventsPath":"/2.0/api/events","tls":{"caCerts":{"secret":{"annotations":{},"content":"","create":false,"key":"ca-bundle.crt"},"secretKeyRef":{}},"workflowPipelinesGitWebhooks":{"annotations":{},"certificates":{}}},"url":"https://g.codefresh.io","userToken":{"secretKeyRef":{},"token":""}}` | Codefresh platform and account-related settings |
 | global.codefresh.accountId | string | `""` | Codefresh Account ID. |
 | global.codefresh.apiEventsPath | string | `"/2.0/api/events"` | Events API endpoint URL suffix. |
@@ -451,7 +379,7 @@ sealed-secrets:
 | internal-router.serviceAccount.create | bool | `true` |  |
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
-| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.29.0"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
-| tunnel-client | object | `{"affinity":{},"enabled":true,"libraryMode":true,"nodeSelector":{},"tolerations":[],"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes. |
+| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.29.0"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | ------------------------------------------------------------------------------------------------------------------- |
+| tunnel-client | object | `{"affinity":{},"enabled":true,"libraryMode":true,"nodeSelector":{},"tolerations":[],"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | ------------------------------------------------------------------------------------------------------------------- |
 | tunnel-client.enabled | bool | `true` | Will only be used if global.runtime.ingress.enabled = false |
 | tunnel-client.libraryMode | bool | `true` | Do not change this value! Breaks chart logic |
