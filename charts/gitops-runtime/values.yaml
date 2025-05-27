@@ -503,7 +503,7 @@ app-proxy:
           tag: 1.1.13-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3430.2
+    tag: 1.3430.2-fix-github-push
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
