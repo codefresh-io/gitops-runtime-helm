@@ -70,8 +70,8 @@ spec:
           get_argocd_root_path() {
             local root_path
 
-            echo "Fetching Argo CD root path from ConfigMap '$ARGOCD_CM_PARAMS_NAME' in namespace '$NAMESPACE'..."
-            root_path=$(kubectl get configmap "$ARGOCD_CM_PARAMS_NAME" -n "$NAMESPACE" -o jsonpath='{.data.server\.rootpath}' 2>/dev/null || echo "")
+            echo "Fetching Argo CD root path from ConfigMap 'argocd-cmd-params-cm' in namespace '$NAMESPACE'..."
+            root_path=$(kubectl get configmap "argocd-cmd-params-cm" -n "$NAMESPACE" -o jsonpath='{.data.server\.rootpath}' 2>/dev/null || echo "")
 
             if [ -n "$root_path" ] && [ "$root_path" != "/" ]; then
               root_path=$(echo "$root_path" | sed 's:/*$::') # Remove trailing slash
@@ -79,7 +79,7 @@ spec:
             elif [ "$root_path" = "/" ]; then
               root_path="" # Treat as empty for URL construction
             else
-              echo "Warning: 'server.rootpath' not found in ConfigMap '$ARGOCD_CM_PARAMS_NAME' or ConfigMap not found. Assuming default root path '/'. "
+              echo "Warning: 'server.rootpath' not found in ConfigMap 'argocd-cmd-params-cm' or ConfigMap not found. Assuming default root path '/'. "
               root_path="" # Default to empty string
             fi
 
