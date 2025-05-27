@@ -15,13 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: updated csdp, gitops-operator (#467)
-    - kind: changed
-      description: updated nginx (#465)
-    - kind: changed
-      description: 'feat: security fixes for Argo Rollouts 1.7.2 (#460)'
-    - kind: changed
-      description: updated sealed-secrets (#464)
+      description: update app-proxy to correctly push to github
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
