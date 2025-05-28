@@ -19,8 +19,10 @@
 {{- end }}
 
 {{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
-  {{- $key := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
-  {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "CODEFRESH_SSL_CERT_PATH" (printf "/app/config/codefresh-tls-certs/%s" $key ) }}
+  {{- $secretName := .Values.global.codefresh.tls.caCerts.secretKeyRef.name | default "codefresh-tls-certs" }}
+  {{- $secretKey := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+  {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "CODEFRESH_SSL_CERT_PATH" (printf "/app/config/codefresh-tls-certs/%s" $secretKey ) }}
+  {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.volumes "codefresh-tls-certs") "nameOverride" $secretName }}
 {{- end }}
 
 {{ include "cf-argocd-extras.event-reporter.resources" $cfArgoCdExtrasContext }}
