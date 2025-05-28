@@ -18,4 +18,9 @@
   {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGOCD_SERVER_ROOTPATH" (index .Values "global" "external-argo-cd" "server" "rootpath") }}
 {{- end }}
 
+{{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
+  {{- $key := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+  {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "CODEFRESH_SSL_CERT_PATH" (printf "/app/config/codefresh-tls-certs/%s" $key ) }}
+{{- end }}
+
 {{ include "cf-argocd-extras.event-reporter.resources" $cfArgoCdExtrasContext }}
