@@ -44,4 +44,4 @@ dependencies:
   condition: gitops-operator.enabled
 - name: cf-argocd-extras
   repository: oci://quay.io/codefresh/charts/dev
-  version: 0.5.3-feat-platform-custom-tls-certs
+  version: 0.5.4-feat-platform-custom-tls-certs
