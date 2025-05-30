@@ -101,6 +101,24 @@ argo-cd:
   enabled: false
 ```
 
+⚠️ If `auth.type=password` is set, ArgoCD user must have `apiKey` capability enabled.
+
+`argocd-cm` ConfigMap
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  accounts.admin: apiKey, login
+  admin.enabled: "true"
+```
+
 ## Installation with External Argo Rollouts
 
 If you want to use an existing Argo Rollouts installation, you can disable the built-in Argo Rollouts and configure the GitOps Runtime to use the external Argo Rollouts.
@@ -212,14 +230,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3514.0"` |  |
+| app-proxy.image.tag | string | `"1.3534.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3514.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3534.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -297,42 +315,9 @@ sealed-secrets:
 | cf-argocd-extras.sourcesServer | object | `{"affinity":{},"enabled":true,"hpa":{"enabled":true},"nodeSelector":{},"tolerations":[]}` | Sources server configuration |
 | cf-argocd-extras.sourcesServer.hpa.enabled | bool | `true` | Enable HPA for sources server |
 | codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
-| event-reporters.rollout.eventSource.affinity | object | `{}` |  |
-| event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
-| event-reporters.rollout.eventSource.replicas | int | `1` |  |
-| event-reporters.rollout.eventSource.resources | object | `{}` |  |
-| event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
-| event-reporters.rollout.sensor.affinity | object | `{}` |  |
-| event-reporters.rollout.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
-| event-reporters.rollout.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
-| event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
-| event-reporters.rollout.sensor.replicas | int | `1` |  |
-| event-reporters.rollout.sensor.resources | object | `{}` |  |
-| event-reporters.rollout.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
-| event-reporters.rollout.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
-| event-reporters.rollout.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
-| event-reporters.rollout.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
-| event-reporters.rollout.sensor.retryStrategy.steps | int | `3` | Number of retries |
-| event-reporters.rollout.sensor.tolerations | list | `[]` |  |
-| event-reporters.rollout.serviceAccount.create | bool | `true` |  |
-| event-reporters.workflow.eventSource.affinity | object | `{}` |  |
-| event-reporters.workflow.eventSource.nodeSelector | object | `{}` |  |
-| event-reporters.workflow.eventSource.replicas | int | `1` |  |
-| event-reporters.workflow.eventSource.resources | object | `{}` |  |
-| event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
-| event-reporters.workflow.sensor.affinity | object | `{}` |  |
-| event-reporters.workflow.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
-| event-reporters.workflow.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
-| event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
-| event-reporters.workflow.sensor.replicas | int | `1` |  |
-| event-reporters.workflow.sensor.resources | object | `{}` |  |
-| event-reporters.workflow.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
-| event-reporters.workflow.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
-| event-reporters.workflow.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
-| event-reporters.workflow.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
-| event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
-| event-reporters.workflow.sensor.tolerations | list | `[]` |  |
-| event-reporters.workflow.serviceAccount.create | bool | `true` |  |
+| event-reporters | object | `{"workflow":{"serviceAccount":{"create":true,"name":""}}}` | Event reporters configuration for backward compatibility |
+| event-reporters.workflow.serviceAccount.create | bool | `true` | Create service account for workflow reporter |
+| event-reporters.workflow.serviceAccount.name | string | `""` | Service account name (defaults to codefresh-sa if not specified) |
 | gitops-operator.affinity | object | `{}` |  |
 | gitops-operator.config.commitStatusPollingInterval | string | `"10s"` | Commit status polling interval |
 | gitops-operator.config.maxConcurrentReleases | int | `100` | Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime) |
