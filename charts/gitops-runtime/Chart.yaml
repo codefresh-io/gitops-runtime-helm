@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'feat: sync Argo Workflows 3.6.7 (#517)'
+      description: 'feat: update argo workflow to 0.45.15-v3.6.7-cap-CR-28355 (#517)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
