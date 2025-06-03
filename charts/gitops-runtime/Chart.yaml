@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'feat: security fixes for Argo Workflows 3.6.7 (#517)'
+      description: 'feat: sync Argo Workflows 3.6.7 (#517)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
