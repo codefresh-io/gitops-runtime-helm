@@ -103,6 +103,24 @@ argo-cd:
   enabled: false
 ```
 
+⚠️ If `auth.type=password` is set, ArgoCd user must have `apiKey` capability enabled.
+
+`argocd-cm` ConfigMap
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  accounts.admin: apiKey, login
+  admin.enabled: "true"
+```
+
 ## Installation with External Argo Rollouts
 
 If you want to use an existing Argo Rollouts installation, you can disable the built-in Argo Rollouts and configure the GitOps Runtime to use the external Argo Rollouts.
