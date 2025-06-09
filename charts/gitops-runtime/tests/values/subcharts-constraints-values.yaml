@@ -25,6 +25,22 @@ internal-router:
   nodeSelector: *nodeSelector
   tolerations: *tolerations
 
+event-reporters:
+  rollout:
+    eventSource:
+      nodeSelector: *nodeSelector
+      tolerations: *tolerations
+    sensor:
+      nodeSelector: *nodeSelector
+      tolerations: *tolerations
+  workflow:
+    eventSource:
+      nodeSelector: *nodeSelector
+      tolerations: *tolerations
+    sensor:
+      nodeSelector: *nodeSelector
+      tolerations: *tolerations
+
 installer:
   nodeSelector: *nodeSelector
   tolerations: *tolerations

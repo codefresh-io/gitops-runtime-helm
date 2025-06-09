@@ -1,0 +1,62 @@
+{{- define "event-reporters.rollout-reporter.eventsource"}}
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: rollout-reporter
+  labels:
+    {{- include "event-reporters.rollout-reporter.labels" . | nindent 4}}
+spec:
+  replicas: {{ .Values.rollout.eventSource.replicas }}
+  eventBusName: {{ default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
+  resource:
+    analysisruns:
+      eventTypes:
+        - ADD
+        - UPDATE
+        - DELETE
+      filter:
+        createdBy: null
+      group: argoproj.io
+      resource: analysisruns
+      version: v1alpha1
+    replicasets:
+      eventTypes:
+        - ADD
+        - UPDATE
+        - DELETE
+      filter:
+        createdBy: null
+      group: apps
+      resource: replicasets
+      version: v1
+    rollouts:
+      eventTypes:
+        - ADD
+        - UPDATE
+        - DELETE
+      filter:
+        createdBy: null
+      group: argoproj.io
+      resource: rollouts
+      version: v1alpha1
+  template:
+    container:
+      name: ""
+      resources:
+      {{- with .Values.rollout.eventSource.resources  }}
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
+    serviceAccountName: {{ include "event-reporters.rollout-reporter.serviceAccountName" .}}
+    tolerations:
+    {{- with .Values.rollout.eventSource.tolerations | default .Values.global.tolerations }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    nodeSelector:
+    {{- with .Values.rollout.eventSource.nodeSelector | default .Values.global.nodeSelector }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    affinity:
+    {{- with .Values.affinity }}
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+{{- end }}
