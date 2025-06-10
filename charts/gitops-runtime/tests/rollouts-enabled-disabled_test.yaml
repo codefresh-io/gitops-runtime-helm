@@ -1,0 +1,26 @@
+suite: Enabling/disabling argo-rollouts should accordingly enable/disable the event reporter
+templates:
+  - event-reporters/rollout-reporter/eventsource.yaml
+  - event-reporters/rollout-reporter/sensor.yaml
+tests:
+
+- it: event reporter not generated when rollouts disabled
+  template: 'event-reporters/rollout-reporter/eventsource.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-rollouts.enabled: false
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: event reporter generated when rollouts enabled
+  template: 'event-reporters/rollout-reporter/eventsource.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    argo-rollouts.enabled: true
+  asserts:
+  - containsDocument:
+      apiVersion: argoproj.io/v1alpha1
+      kind: EventSource

@@ -310,6 +310,74 @@ argo-rollouts:
   controller:
     replicas: 1
   installCRDs: true
+
+#-----------------------------------------------------------------------------------------------------------------------
+# Event reporters
+#-----------------------------------------------------------------------------------------------------------------------
+event-reporters:
+  rollout:
+    serviceAccount:
+      create: true
+    eventSource:
+      replicas: 1
+      resources: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
+    sensor:
+      # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
+      logging:
+        enabled: false
+        intervalSeconds: 0
+      # -- Retry strategy for events sent to Codefresh
+      retryStrategy:
+        # -- Number of retries
+        steps: 3
+        # -- The initial duration, use strings like "2s", "1m"
+        duration: 0
+        # -- Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative
+        factor: 1.0
+        # -- The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`.
+        jitter: 1
+      replicas: 1
+      resources: {}
+      # -- Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs
+      env: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
+  workflow:
+    serviceAccount:
+      create: true
+    eventSource:
+      replicas: 1
+      resources: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
+    sensor:
+      # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
+      logging:
+        enabled: false
+        intervalSeconds: 0
+      # -- Retry strategy for events sent to Codefresh
+      retryStrategy:
+        # -- Number of retries
+        steps: 3
+        # -- The initial duration, use strings like "2s", "1m"
+        duration: 0
+        # -- Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative
+        factor: 1.0
+        # -- The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`.
+        jitter: 1
+      replicas: 1
+      resources: {}
+      # -- Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs
+      env: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Internal router
 #-----------------------------------------------------------------------------------------------------------------------
@@ -606,17 +674,6 @@ gitops-operator:
     requests:
       cpu: 100m
       memory: 128Mi
-#-----------------------------------------------------------------------------------------------------------------------
-# event-reporters (backward compatibility)
-#-----------------------------------------------------------------------------------------------------------------------
-# -- Event reporters configuration for backward compatibility
-event-reporters:
-  workflow:
-    serviceAccount:
-      # -- Create service account for workflow reporter
-      create: true
-      # -- Service account name (defaults to codefresh-sa if not specified)
-      name: ""
 #-----------------------------------------------------------------------------------------------------------------------
 # cf-argocd-extras
 #-----------------------------------------------------------------------------------------------------------------------
