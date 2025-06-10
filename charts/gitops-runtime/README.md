@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 0.20.0](https://img.shields.io/badge/Version-0.20.0-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -132,7 +132,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:1.0.0 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.20.0 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -145,7 +145,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:1.0.0 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.20.0 <local_registry>
 ```
 
 ## Openshift
@@ -274,9 +274,42 @@ sealed-secrets:
 | cf-argocd-extras.sourcesServer | object | `{"affinity":{},"enabled":true,"hpa":{"enabled":true},"nodeSelector":{},"tolerations":[]}` | Sources server configuration |
 | cf-argocd-extras.sourcesServer.hpa.enabled | bool | `true` | Enable HPA for sources server |
 | codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
-| event-reporters | object | `{"workflow":{"serviceAccount":{"create":true,"name":""}}}` | Event reporters configuration for backward compatibility |
-| event-reporters.workflow.serviceAccount.create | bool | `true` | Create service account for workflow reporter |
-| event-reporters.workflow.serviceAccount.name | string | `""` | Service account name (defaults to codefresh-sa if not specified) |
+| event-reporters.rollout.eventSource.affinity | object | `{}` |  |
+| event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
+| event-reporters.rollout.eventSource.replicas | int | `1` |  |
+| event-reporters.rollout.eventSource.resources | object | `{}` |  |
+| event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
+| event-reporters.rollout.sensor.affinity | object | `{}` |  |
+| event-reporters.rollout.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
+| event-reporters.rollout.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
+| event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
+| event-reporters.rollout.sensor.replicas | int | `1` |  |
+| event-reporters.rollout.sensor.resources | object | `{}` |  |
+| event-reporters.rollout.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
+| event-reporters.rollout.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
+| event-reporters.rollout.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
+| event-reporters.rollout.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
+| event-reporters.rollout.sensor.retryStrategy.steps | int | `3` | Number of retries |
+| event-reporters.rollout.sensor.tolerations | list | `[]` |  |
+| event-reporters.rollout.serviceAccount.create | bool | `true` |  |
+| event-reporters.workflow.eventSource.affinity | object | `{}` |  |
+| event-reporters.workflow.eventSource.nodeSelector | object | `{}` |  |
+| event-reporters.workflow.eventSource.replicas | int | `1` |  |
+| event-reporters.workflow.eventSource.resources | object | `{}` |  |
+| event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
+| event-reporters.workflow.sensor.affinity | object | `{}` |  |
+| event-reporters.workflow.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
+| event-reporters.workflow.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
+| event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
+| event-reporters.workflow.sensor.replicas | int | `1` |  |
+| event-reporters.workflow.sensor.resources | object | `{}` |  |
+| event-reporters.workflow.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
+| event-reporters.workflow.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
+| event-reporters.workflow.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
+| event-reporters.workflow.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
+| event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
+| event-reporters.workflow.sensor.tolerations | list | `[]` |  |
+| event-reporters.workflow.serviceAccount.create | bool | `true` |  |
 | gitops-operator | object | `{"affinity":{},"config":{"commitStatusPollingInterval":"10s","maxConcurrentReleases":100,"promotionWrapperTemplate":"","taskPollingInterval":"10s","workflowMonitorPollingInterval":"10s"},"crds":{"additionalLabels":{},"annotations":{},"install":true,"keep":false},"enabled":true,"fullnameOverride":"","image":{},"imagePullSecrets":[],"libraryMode":true,"nameOverride":"","nodeSelector":{},"podAnnotations":{},"podLabels":{},"replicaCount":1,"resources":{"limits":{},"requests":{"cpu":"100m","memory":"128Mi"}},"serviceAccount":{"annotations":{},"create":true,"name":"gitops-operator-controller-manager"},"tolerations":[]}` | ------------------------------------------------------------------------------------------------------------------- |
 | gitops-operator.config.commitStatusPollingInterval | string | `"10s"` | Commit status polling interval |
 | gitops-operator.config.maxConcurrentReleases | int | `100` | Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime) |
