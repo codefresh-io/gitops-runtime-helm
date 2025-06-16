@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.72
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.20.0
+version: 0.20.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,97 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'feat: update argo workflow to 0.45.15-v3.6.7-cap-CR-28355 (#517)'
+      description: 'fix: bump gitops operator chart to fix promotion retries (#537)'
     - kind: changed
-      description: bump gitops operator version to 0.7.12 (#528)
-    - kind: changed
-      description: 'fix: empty sha from previous commit'
-    - kind: changed
-      description: 'feat: add support for custom TLS certificates from the platform (#519)'
-    - kind: changed
-      description: 'fix: update ConfigMap name in Argo CD root path retrieval script (#514)'
-    - kind: changed
-      description: 'fix(event-reporter): service labels (#515)'
-    - kind: changed
-      description: 'feat: updated argo cd helm to 7.8.23-5-cap-v2.14.9-2025-05-20-9356e64a (#508)'
-    - kind: changed
-      description: 'chore: bump gitops-operator v0.7.11 (#509)'
-    - kind: changed
-      description: 'fix: event-reporter invalid redis-ha url (#512)'
-    - kind: changed
-      description: 'fix: cache in CI (#511)'
-    - kind: changed
-      description: 'fix: update app-proxy to 1.3523.0 - fixed no_changes error (#510)'
-    - kind: changed
-      description: 'chore(CR-29092): updated kubectl for installer (#504)'
-    - kind: changed
-      description: 'feat: enhance error handling for app-proxy with CORS support in internal router configmap (#485)'
-    - kind: changed
-      description: updated app-proxy with security fixes (#506)
-    - kind: changed
-      description: fix - remove archiveLogs=true as it breaks workflow execution with no configured artifact storage (#507)
-    - kind: changed
-      description: 'feat: limits enforcement in runtime installation (#495)'
-    - kind: changed
-      description: 'feat: Use Codefresh provided storage for workflow logs (#428)'
-    - kind: changed
-      description: 'chore(app-proxy): add ServiceMonitor configuration for metrics monitoring (#503)'
-    - kind: changed
-      description: 'feat: update codefresh-gitops-operator to 0.7.9 - improve task handling efficiency (#487)'
-    - kind: changed
-      description: 'feat(app-proxy): update image tags to 1.3514.0 - fix PromotionFlow saving location in shared-config repo (#501)'
-    - kind: changed
-      description: 'feat(event-reporter): add pdb and serviceMonitor templates (#494)'
-    - kind: changed
-      description: 'chore: bump gitops-operator 0.7.8 (#496)'
-    - kind: changed
-      description: 'feat: update app-proxy to 1.3498.0 - improved error messages if they contain cause (#481)'
-    - kind: changed
-      description: 'feat: cf-argocd-extras 0.4.0 with health status enrichment to support argo cd 3.0 (#480)'
-    - kind: changed
-      description: 'feat: update app-proxy image tags to 1.3497.0 - create default-git-source in new runtimes (#479)'
-    - kind: changed
-      description: 'chore: update codefresh-gitops-operator version to 0.7.3 (#476)'
-    - kind: changed
-      description: 'feat: add gzip configuration to internal router configmap (CR-24650) (#475)'
-    - kind: changed
-      description: Feat/revert cr 28342 usage (#474)
-    - kind: changed
-      description: 'feat: cf-argocd-extras v0.3.22 with payloadVersion reported (#472)'
-    - kind: changed
-      description: bump codefresh gitops operator version (#470)
-    - kind: changed
-      description: 'feat: global constraints (#469)'
-    - kind: changed
-      description: 'feat: limits enforcement in runtime installation (#457)'
-    - kind: changed
-      description: 'feat: removal of event-reporter from cf argo-cd fork (#466)'
-    - kind: changed
-      description: 'fix: update app-proxy image tags to 1.3470.0 - fix file revision validation (#468)'
-    - kind: changed
-      description: updated csdp, gitops-operator (#467)
-    - kind: changed
-      description: 'feat: add Argo CD version check and validation in pre-install hook (#462)'
-    - kind: changed
-      description: updated nginx (#465)
-    - kind: changed
-      description: 'feat: security fixes for Argo Rollouts 1.7.2 (#460)'
-    - kind: changed
-      description: updated sealed-secrets (#464)
-    - kind: changed
-      description: app-proxy 1.3451.0 with app resource tree with annotations & labels in response (#463)
-    - kind: changed
-      description: bumped version to 7.8.23-2-cap-v2.14.9-2025-04-23-4de04dd8 (#461)
-    - kind: changed
-      description: 'eat: cf-argocd-extras (0.3.17) - events with change revision data (#459)'
-    - kind: changed
-      description: 'feat: cf-argocd-extras (0.3.16) - event-reporter with git-source data (#458)'
-    - kind: changed
-      description: 'feat: update setup URL in NOTES.txt to use dynamic values  (#449)'
-    - kind: changed
-      description: 'feat: add gitops-operator-default pulling interval (#456)'
-    - kind: changed
-      description: updated debian, cf-cli, kubectl (#454)
+      description: bumped gitops-operator and app-proxy version to make github enterprise promotions work (#535)
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm

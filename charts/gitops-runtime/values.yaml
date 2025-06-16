@@ -622,7 +622,7 @@ app-proxy:
     maxUnavailable: ""
 
 # ---------------------------------------------------------------------------------------------------------------------
-# DOCS: https://github.com/codefresh-io/codefresh-gitops-operator/tree/codefresh-gitops-operator-0.7.12-helm/charts/codefresh-gitops-operator
+# DOCS: https://github.com/codefresh-io/codefresh-gitops-operator/tree/codefresh-gitops-operator-0.7.16-helm/charts/codefresh-gitops-operator
 # ---------------------------------------------------------------------------------------------------------------------
 gitops-operator:
   # -- Do not change unless instructed otherwise by Codefresh support
