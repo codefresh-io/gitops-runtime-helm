@@ -16,6 +16,26 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
+## Argo-workflows artifact and log storage
+Codefresh provides a SaaS object storage based solution for Argo workflows logs storage. The chart deploys a configmap named `codefresh-workflows-log-store` with the repository configuration.
+If you want to utilize the Codefresh SaaS solution for log storage for all workflows in the runtime please set the following values:
+
+```yaml
+argo-workflows:
+  controller:
+    workflowDefaults:
+      spec:
+        archiveLogs: true
+        artifactRepository:
+          configMap: codefresh-workflows-log-store
+          key: codefresh-workflows-log-store
+```
+
+> [!WARNING]
+> It's highly recommended to use your own artifact storage for data privacy reasons.
+> Codefresh provided storage has a retention policy of 14 days and limitations on uploaded file sizes.
+> Please refer to the official documentation for more details.
+
 ## Installation with External ArgoCD
 
 If you want to use an existing ArgoCD installation, you can disable the built-in ArgoCD and configure the GitOps Runtime to use the external ArgoCD.
@@ -79,6 +99,24 @@ global:
 argo-cd:
   # -- Disable built-in ArgoCD
   enabled: false
+```
+
+⚠️ If `auth.type=password` is set, ArgoCD user must have `apiKey` capability enabled.
+
+`argocd-cm` ConfigMap
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  accounts.admin: apiKey, login
+  admin.enabled: "true"
 ```
 
 ## Installation with External Argo Rollouts
@@ -167,6 +205,7 @@ sealed-secrets:
 | app-proxy.config.argoWorkflowsInsecure | string | `"true"` |  |
 | app-proxy.config.argoWorkflowsUrl | string | `nil` | Workflows server url. Determined by chart logic. Do not change unless you are certain you need to |
 | app-proxy.config.clusterChunkSize | int | `50` | define cluster list size per request to report the cluster state to platform, e.g. if you have 90 clusters and set clusterChunkSize: 40, it means cron job will report cluster state to platform in 3 iterations (40,40,10) - reduce this value if you have a lot of clusters and the cron job is failing with payload too large error - use 0 to sync all clusters at once |
+| app-proxy.config.cors | string | `"https://g.codefresh.io"` | Cors settings for app-proxy. This is the list of allowed domains for platform. |
 | app-proxy.config.env | string | `"production"` |  |
 | app-proxy.config.logLevel | string | `"info"` | Log Level |
 | app-proxy.config.skipGitPermissionValidation | string | `"false"` | Skit git permissions validation |
@@ -191,14 +230,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3470.0"` |  |
+| app-proxy.image.tag | string | `"1.3534.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3470.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3534.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -233,6 +272,9 @@ sealed-secrets:
 | app-proxy.serviceAccount.annotations | object | `{}` |  |
 | app-proxy.serviceAccount.create | bool | `true` |  |
 | app-proxy.serviceAccount.name | string | `"cap-app-proxy"` |  |
+| app-proxy.serviceMonitor.enabled | bool | `false` |  |
+| app-proxy.serviceMonitor.labels | object | `{}` |  |
+| app-proxy.serviceMonitor.name | string | `""` |  |
 | app-proxy.tolerations | list | `[]` |  |
 | argo-cd.applicationVersioning.enabled | bool | `true` | Enable application versioning |
 | argo-cd.applicationVersioning.useApplicationConfiguration | bool | `true` | Extract application version based on ApplicationConfiguration CRD |
@@ -266,60 +308,28 @@ sealed-secrets:
 | argo-workflows.mainContainer.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
-| cf-argocd-extras | object | `{"libraryMode":true}` | Codefresh extra services for ArgoCD |
+| cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"enabled":true,"nodeSelector":{},"pdb":{"enabled":false},"serviceMonitor":{"main":{"enabled":false}},"tolerations":[]},"libraryMode":true,"sourcesServer":{"affinity":{},"enabled":true,"hpa":{"enabled":true},"nodeSelector":{},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
+| cf-argocd-extras.eventReporter.pdb.enabled | bool | `false` | Enable PDB for event reporter |
+| cf-argocd-extras.eventReporter.serviceMonitor.main.enabled | bool | `false` | Enable ServiceMonitor for event reporter |
 | cf-argocd-extras.libraryMode | bool | `true` | Library mode for the chart. Allows to inject values from gitops runtime chart |
-| event-reporters.rollout.eventSource.affinity | object | `{}` |  |
-| event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
-| event-reporters.rollout.eventSource.replicas | int | `1` |  |
-| event-reporters.rollout.eventSource.resources | object | `{}` |  |
-| event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
-| event-reporters.rollout.sensor.affinity | object | `{}` |  |
-| event-reporters.rollout.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
-| event-reporters.rollout.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
-| event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
-| event-reporters.rollout.sensor.replicas | int | `1` |  |
-| event-reporters.rollout.sensor.resources | object | `{}` |  |
-| event-reporters.rollout.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
-| event-reporters.rollout.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
-| event-reporters.rollout.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
-| event-reporters.rollout.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
-| event-reporters.rollout.sensor.retryStrategy.steps | int | `3` | Number of retries |
-| event-reporters.rollout.sensor.tolerations | list | `[]` |  |
-| event-reporters.rollout.serviceAccount.create | bool | `true` |  |
-| event-reporters.workflow.eventSource.affinity | object | `{}` |  |
-| event-reporters.workflow.eventSource.nodeSelector | object | `{}` |  |
-| event-reporters.workflow.eventSource.replicas | int | `1` |  |
-| event-reporters.workflow.eventSource.resources | object | `{}` |  |
-| event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
-| event-reporters.workflow.sensor.affinity | object | `{}` |  |
-| event-reporters.workflow.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
-| event-reporters.workflow.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
-| event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
-| event-reporters.workflow.sensor.replicas | int | `1` |  |
-| event-reporters.workflow.sensor.resources | object | `{}` |  |
-| event-reporters.workflow.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
-| event-reporters.workflow.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
-| event-reporters.workflow.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
-| event-reporters.workflow.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
-| event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
-| event-reporters.workflow.sensor.tolerations | list | `[]` |  |
-| event-reporters.workflow.serviceAccount.create | bool | `true` |  |
-| garage-workflows-artifact-storage | object | `{"deployment":{"kind":"StatefulSet","replicaCount":3},"enabled":false,"fullnameOverride":"garage","garage":{"replicationMode":3},"persistence":{"data":{"size":"100Mi","storageClass":""},"enabled":true,"meta":{"size":"100Mi","storageClass":""}},"resources":{},"tests":{"enabled":false}}` | Builtin Workflows artifacts storage solution. Local S3 backed by local persistence with (PV and PVC) |
-| garage-workflows-artifact-storage.deployment.kind | string | `"StatefulSet"` | Only statefulset is supported for Codefresh gitops runtime. Do not change this |
-| garage-workflows-artifact-storage.persistence.data | object | `{"size":"100Mi","storageClass":""}` | Volume that stores artifacts and logs for workflows |
-| garage-workflows-artifact-storage.persistence.data.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
-| garage-workflows-artifact-storage.persistence.meta | object | `{"size":"100Mi","storageClass":""}` | Volume that stores cluster metadata |
-| garage-workflows-artifact-storage.persistence.meta.storageClass | string | `""` | When empty value empty the default storage class for the cluster will be used |
-| garage-workflows-artifact-storage.resources | object | `{}` | Resources for garage pods. For smaller deployments at least 100m CPU and 1024Mi memory is reccommended. For larger deployments double this size. |
-| garage-workflows-artifact-storage.tests | object | `{"enabled":false}` | Helm tests |
+| cf-argocd-extras.sourcesServer | object | `{"affinity":{},"enabled":true,"hpa":{"enabled":true},"nodeSelector":{},"tolerations":[]}` | Sources server configuration |
+| cf-argocd-extras.sourcesServer.hpa.enabled | bool | `true` | Enable HPA for sources server |
+| codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
+| event-reporters | object | `{"workflow":{"serviceAccount":{"create":true,"name":""}}}` | Event reporters configuration for backward compatibility |
+| event-reporters.workflow.serviceAccount.create | bool | `true` | Create service account for workflow reporter |
+| event-reporters.workflow.serviceAccount.name | string | `""` | Service account name (defaults to codefresh-sa if not specified) |
 | gitops-operator.affinity | object | `{}` |  |
+| gitops-operator.config.commitStatusPollingInterval | string | `"10s"` | Commit status polling interval |
+| gitops-operator.config.maxConcurrentReleases | int | `100` | Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime) |
+| gitops-operator.config.promotionWrapperTemplate | string | `""` | An optional template for the promotion wrapper (empty default will use the embedded one) |
+| gitops-operator.config.taskPollingInterval | string | `"10s"` | Task polling interval |
+| gitops-operator.config.workflowMonitorPollingInterval | string | `"10s"` | Workflow monitor polling interval |
 | gitops-operator.crds | object | `{"additionalLabels":{},"annotations":{},"install":true,"keep":false}` | Codefresh gitops operator crds |
 | gitops-operator.crds.additionalLabels | object | `{}` | Additional labels for gitops operator CRDs |
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
 | gitops-operator.enabled | bool | `true` |  |
-| gitops-operator.env.TASK_PULLING_INTERVAL | string | `"10s"` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image | object | `{}` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
@@ -369,7 +379,8 @@ sealed-secrets:
 | global.external-argo-rollouts | object | `{"rollout-reporter":{"enabled":false}}` | Configuration for external Argo Rollouts |
 | global.external-argo-rollouts.rollout-reporter | object | `{"enabled":false}` | Rollout reporter settings |
 | global.external-argo-rollouts.rollout-reporter.enabled | bool | `false` | Enable or disable rollout reporter Configuration is defined at .Values.event-reporters.rollout |
-| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","replicas":3}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
+| global.nodeSelector | object | `{}` | Global nodeSelector for all components |
+| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"affinity":{},"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","nodeSelector":{},"replicas":3,"tolerations":[]}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
 | global.runtime.eventBus.annotations | object | `{}` | Annotations on EventBus resource |
@@ -381,7 +392,7 @@ sealed-secrets:
 | global.runtime.gitCredentials.password.secretKeyRef | object | `{}` | secretKeyReference for Git credentials password. Provide name and key fields. |
 | global.runtime.gitCredentials.password.value | string | `nil` | Plain text password |
 | global.runtime.gitCredentials.username | string | `"username"` | Username. Optional when using token in password. |
-| global.runtime.ingress | object | `{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"protocol":"https","skipValidation":false,"tls":[]}` | Ingress settings |
+| global.runtime.ingress | object | `{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]}` | Ingress settings |
 | global.runtime.ingress.enabled | bool | `false` | Defines if ingress-based access mode is enabled for runtime. To use tunnel-based (ingressless) access mode, set to false. |
 | global.runtime.ingress.hosts | list | `[]` | Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime. |
 | global.runtime.ingress.protocol | string | `"https"` | The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https. |
@@ -389,7 +400,9 @@ sealed-secrets:
 | global.runtime.ingressUrl | string | `""` | Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false) |
 | global.runtime.isConfigurationRuntime | bool | `false` | is the runtime set as a "configuration runtime". |
 | global.runtime.name | string | `nil` | Runtime name. Must be unique per platform account. |
-| installer | object | `{"argoCdVersionCheck":{"argoServerLabels":{"app.kubernetes.io/component":"server","app.kubernetes.io/part-of":"argocd"}},"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""},"skipValidation":false}` | Runtime installer used for running hooks and checks on the release |
+| global.tolerations | list | `[]` | Global tolerations for all components |
+| installer | object | `{"affinity":{},"argoCdVersionCheck":{"argoServerLabels":{"app.kubernetes.io/component":"server","app.kubernetes.io/part-of":"argocd"}},"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""},"nodeSelector":{},"skipUsageValidation":false,"skipValidation":false,"tolerations":[]}` | Runtime installer used for running hooks and checks on the release |
+| installer.skipUsageValidation | bool | `false` | if set to true, pre-install hook will *not* run |
 | installer.skipValidation | bool | `false` | if set to true, pre-install hook will *not* run |
 | internal-router.affinity | object | `{}` |  |
 | internal-router.clusterDomain | string | `"cluster.local"` |  |
@@ -424,6 +437,6 @@ sealed-secrets:
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
 | sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.29.0"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
-| tunnel-client | object | `{"enabled":true,"libraryMode":true,"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes. |
+| tunnel-client | object | `{"affinity":{},"enabled":true,"libraryMode":true,"nodeSelector":{},"tolerations":[],"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes. |
 | tunnel-client.enabled | bool | `true` | Will only be used if global.runtime.ingress.enabled = false |
 | tunnel-client.libraryMode | bool | `true` | Do not change this value! Breaks chart logic |

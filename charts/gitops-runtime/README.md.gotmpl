@@ -16,6 +16,28 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
+## Argo-workflows artifact and log storage
+Codefresh provides a SaaS object storage based solution for Argo workflows logs storage. The chart deploys a configmap named `codefresh-workflows-log-store` with the repository configuration.
+If you want to utilize the Codefresh SaaS solution for log storage for all workflows in the runtime please set the following values:
+
+```yaml
+argo-workflows:
+  controller:
+    workflowDefaults:
+      spec:
+        archiveLogs: true
+        artifactRepository:
+          configMap: codefresh-workflows-log-store
+          key: codefresh-workflows-log-store
+```
+
+
+> [!WARNING]
+> It's highly recommended to use your own artifact storage for data privacy reasons.
+> Codefresh provided storage has a retention policy of 14 days and limitations on uploaded file sizes.
+> Please refer to the official documentation for more details.
+
+
 ## Installation with External ArgoCD
 
 If you want to use an existing ArgoCD installation, you can disable the built-in ArgoCD and configure the GitOps Runtime to use the external ArgoCD.
@@ -79,6 +101,24 @@ global:
 argo-cd:
   # -- Disable built-in ArgoCD
   enabled: false
+```
+
+⚠️ If `auth.type=password` is set, ArgoCd user must have `apiKey` capability enabled.
+
+`argocd-cm` ConfigMap
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  accounts.admin: apiKey, login
+  admin.enabled: "true"
 ```
 
 ## Installation with External Argo Rollouts

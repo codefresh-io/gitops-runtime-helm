@@ -138,3 +138,203 @@ tests:
       - equal:
           path: data["redis.server"]
           value: RELEASE-NAME-redis-ha-haproxy:6379
+
+  - it: Event-Reporter ConfigMap should have valid redis-ha url
+    template: event-reporter.yaml
+    documentSelector:
+      path: kind
+      value: ConfigMap
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      argo-cd:
+        redis-ha:
+          enabled: true
+    asserts:
+      - equal:
+          path: data["redis.server"]
+          value: RELEASE-NAME-redis-ha-haproxy:6379
+
+  - it: Sources-Server should have an OPTIONAL codefresh-tls-certs volume and volumeMount by default
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: Deployment
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: codefresh-tls-certs
+            secret:
+              secretName: codefresh-tls-certs
+              optional: true
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: codefresh-tls-certs
+            mountPath: /app/config/codefresh-tls-certs
+            readOnly: true
+
+  - it: Sources-Server should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secret.create is true
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: Deployment
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        codefresh:
+          tls:
+            caCerts:
+              secret:
+                create: true
+                key: ca-bundle.crt
+                content: |
+                  -----BEGIN CERTIFICATE-----
+                  MIID...
+                  -----END CERTIFICATE-----
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name == 'CODEFRESH_SSL_CERT_PATH')].value
+          value: /app/config/codefresh-tls-certs/ca-bundle.crt
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: codefresh-tls-certs
+            secret:
+              secretName: codefresh-tls-certs
+              optional: true
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: codefresh-tls-certs
+            mountPath: /app/config/codefresh-tls-certs
+            readOnly: true
+
+  - it: Sources-Server should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secretKeyRef is set
+    template: sources-server.yaml
+    documentSelector:
+      path: kind
+      value: Deployment
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        codefresh:
+          tls:
+            caCerts:
+              secretKeyRef:
+                name: my-codefresh-tls-certs
+                key: my-ca-bundle.crt
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name == 'CODEFRESH_SSL_CERT_PATH')].value
+          value: /app/config/codefresh-tls-certs/my-ca-bundle.crt
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: codefresh-tls-certs
+            secret:
+              secretName: my-codefresh-tls-certs
+              optional: true
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: codefresh-tls-certs
+            mountPath: /app/config/codefresh-tls-certs
+            readOnly: true
+
+  - it: Event-Reporter should have an OPTIONAL codefresh-tls-certs volume and volumeMount by default
+    template: event-reporter.yaml
+    documentSelector:
+      path: kind
+      value: StatefulSet
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: codefresh-tls-certs
+            secret:
+              secretName: codefresh-tls-certs
+              optional: true
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: codefresh-tls-certs
+            mountPath: /app/config/codefresh-tls-certs
+            readOnly: true
+
+  - it: Event-Reporter should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secret.create is true
+    template: event-reporter.yaml
+    documentSelector:
+      path: kind
+      value: StatefulSet
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        codefresh:
+          tls:
+            caCerts:
+              secret:
+                create: true
+                key: ca-bundle.crt
+                content: |
+                  -----BEGIN CERTIFICATE-----
+                  MIID...
+                  -----END CERTIFICATE-----
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name == 'CODEFRESH_SSL_CERT_PATH')].value
+          value: /app/config/codefresh-tls-certs/ca-bundle.crt
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: codefresh-tls-certs
+            secret:
+              secretName: codefresh-tls-certs
+              optional: true
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: codefresh-tls-certs
+            mountPath: /app/config/codefresh-tls-certs
+            readOnly: true
+
+  - it: Event-Reporter should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secretKeyRef is set
+    template: event-reporter.yaml
+    documentSelector:
+      path: kind
+      value: StatefulSet
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        codefresh:
+          tls:
+            caCerts:
+              secretKeyRef:
+                name: my-codefresh-tls-certs
+                key: my-ca-bundle.crt
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name == 'CODEFRESH_SSL_CERT_PATH')].value
+          value: /app/config/codefresh-tls-certs/my-ca-bundle.crt
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: codefresh-tls-certs
+            secret:
+              secretName: my-codefresh-tls-certs
+              optional: true
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: codefresh-tls-certs
+            mountPath: /app/config/codefresh-tls-certs
+            readOnly: true

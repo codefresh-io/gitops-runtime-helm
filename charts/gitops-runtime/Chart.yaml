@@ -23,7 +23,7 @@ dependencies:
   version: 2.4.7-2-cap-CR-28072
 - name: argo-workflows
   repository: https://codefresh-io.github.io/argo-helm
-  version: 0.45.4-v3.6.4-cap-CR-27392
+  version: 0.45.15-v3.6.7-cap-CR-28355
   condition: argo-workflows.enabled
 - name: argo-rollouts
   repository: https://codefresh-io.github.io/argo-helm
@@ -39,14 +39,9 @@ dependencies:
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
   repository: oci://quay.io/codefresh/charts
-  version: 0.7.9
+  version: 0.7.16
   alias: gitops-operator
   condition: gitops-operator.enabled
-- name: garage
-  repository: https://codefresh-io.github.io/garage
-  alias: garage-workflows-artifact-storage
-  version: 0.5.0-cf.3
-  condition: garage-workflows-artifact-storage.enabled
 - name: cf-argocd-extras
   repository: oci://quay.io/codefresh/charts
-  version: 0.5.1
+  version: 0.5.5

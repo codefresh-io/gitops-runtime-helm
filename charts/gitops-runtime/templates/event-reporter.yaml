@@ -1,23 +1,28 @@
 {{- $cfArgoCdExtrasContext := (index .Subcharts "cf-argocd-extras")}}
-{{- if not (index .Values "argo-cd" "enabled") }}
 
-  {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "argocd.server" (include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . ) }}
-  {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "redis.server" (include "codefresh-gitops-runtime.argocd.redis.url" . ) }}
-  {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "repo.server" (include "codefresh-gitops-runtime.argocd.reposerver.url" . ) }}
+{{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "argocd.server" (include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . ) }}
+{{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "redis.server" (include "codefresh-gitops-runtime.argocd.redis.url" . ) }}
+{{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.configMaps "cmd-params-cm" "data") "repo.server" (include "codefresh-gitops-runtime.argocd.reposerver.url" . ) }}
 
-  {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
-    {{- if not (index .Values "global" "external-argo-cd" "auth" "token") }}
-        {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name")) }}
-        {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "key" )) }}
-    {{- else }}
-        {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_NAME" "gitops-runtime-argo-cd-token" }}
-        {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_KEY" "token" }}
-    {{- end }}
+{{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
+  {{- if not (index .Values "global" "external-argo-cd" "auth" "token") }}
+      {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name")) }}
+      {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "key" )) }}
+  {{- else }}
+      {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_NAME" "gitops-runtime-argo-cd-token" }}
+      {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGO_CD_TOKEN_SECRET_KEY" "token" }}
   {{- end }}
-
-  {{- if and (index .Values "global" "external-argo-cd" "server" "rootpath") }}
-    {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGOCD_SERVER_ROOTPATH" (index .Values "global" "external-argo-cd" "server" "rootpath") }}
-  {{- end }}
-
 {{- end }}
+
+{{- if and (index .Values "global" "external-argo-cd" "server" "rootpath") }}
+  {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGOCD_SERVER_ROOTPATH" (index .Values "global" "external-argo-cd" "server" "rootpath") }}
+{{- end }}
+
+{{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
+  {{- $secretName := .Values.global.codefresh.tls.caCerts.secretKeyRef.name | default "codefresh-tls-certs" }}
+  {{- $secretKey := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+  {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "CODEFRESH_SSL_CERT_PATH" (printf "/app/config/codefresh-tls-certs/%s" $secretKey ) }}
+  {{- $_ := set (index $cfArgoCdExtrasContext.Values.eventReporter.volumes "codefresh-tls-certs") "nameOverride" $secretName }}
+{{- end }}
+
 {{ include "cf-argocd-extras.event-reporter.resources" $cfArgoCdExtrasContext }}
