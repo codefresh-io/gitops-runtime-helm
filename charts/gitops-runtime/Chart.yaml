@@ -20,7 +20,7 @@ dependencies:
   version: 8.0.6-0-cap-v3.0.2-2025-05-20-6e4ca196
 - name: argo-events
   repository: https://codefresh-io.github.io/argo-helm
-  version: 2.4.7-2-cap-CR-28072
+  version: 2.4.8-cap-CR-29689
 - name: argo-workflows
   repository: https://codefresh-io.github.io/argo-helm
   version: 0.45.15-v3.6.7-cap-CR-28355
