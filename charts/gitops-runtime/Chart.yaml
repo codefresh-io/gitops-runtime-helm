@@ -38,8 +38,8 @@ dependencies:
   alias: tunnel-client
   condition: tunnel-client.enabled
 - name: codefresh-gitops-operator
-  repository: oci://quay.io/codefresh/charts/dev
-  version: 0.0.0-cr-29567-0eafb14
+  repository: oci://quay.io/codefresh/charts
+  version: v0.7.18
   alias: gitops-operator
   condition: gitops-operator.enabled
 - name: cf-argocd-extras
