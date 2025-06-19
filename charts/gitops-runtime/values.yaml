@@ -281,12 +281,12 @@ argo-events:
       versions:
         - version: 0.22.1
           natsStreamingImage: nats-streaming:0.25.6
-          metricsExporterImage: natsio/prometheus-nats-exporter:0.17.2
+          metricsExporterImage: natsio/prometheus-nats-exporter:0.17.3
     jetstream:
       versions:
         - version: latest
-          natsImage: nats:2.10.21
-          metricsExporterImage: natsio/prometheus-nats-exporter:0.17.2
+          natsImage: nats:2.11.4
+          metricsExporterImage: natsio/prometheus-nats-exporter:0.17.3
           configReloaderImage: natsio/nats-server-config-reloader:0.18.2
           startCommand: /nats-server
 
