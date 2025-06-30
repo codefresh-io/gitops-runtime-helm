@@ -35,6 +35,8 @@ spec:
         command: ["sh", "-c"]
         args:
         - | # shell
+          set -x
+
           # Function to find Argo CD service and export its name and port
           get_argocd_service_info() {
             local service_info
