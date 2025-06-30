@@ -32,6 +32,8 @@ spec:
           value: "/api/version"
         - name: REQUIRED_VERSION_CONSTRAINT
           value: ">=2.12 <3"
+        - name: ARGOCD_ROOT_PATH
+          value: {{ index .Values "global" "external-argo-cd" "server" "rootpath" | default "" }}
         command: ["sh", "-c"]
         args:
         - | # shell
@@ -73,8 +75,13 @@ spec:
           get_argocd_root_path() {
             local root_path
 
-            echo "Fetching Argo CD root path from ConfigMap 'argocd-cmd-params-cm' in namespace '$NAMESPACE'..."
-            root_path=$(kubectl get configmap "argocd-cmd-params-cm" -n "$NAMESPACE" -o jsonpath='{.data.server\.rootpath}' 2>/dev/null || echo "")
+            if [ -z "$ARGOCD_ROOT_PATH" ]; then
+              echo "Fetching Argo CD root path from ConfigMap 'argocd-cmd-params-cm' in namespace '$NAMESPACE'..."
+              root_path=$(kubectl get configmap "argocd-cmd-params-cm" -n "$NAMESPACE" -o jsonpath='{.data.server\.rootpath}' 2>/dev/null || echo "")
+            else
+              echo "Using provided Argo CD root path: '$ARGOCD_ROOT_PATH'"
+              root_path="$ARGOCD_ROOT_PATH"
+            fi
 
             if [ -n "$root_path" ] && [ "$root_path" != "/" ]; then
               root_path=$(echo "$root_path" | sed 's:/*$::') # Remove trailing slash
