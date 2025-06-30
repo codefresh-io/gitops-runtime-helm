@@ -44,8 +44,9 @@ spec:
             CLEAN_LABELS=$(echo "$ARGOCD_LABELS" | sed 's/,$//')
 
             echo "Searching for Argo CD service in namespace '$NAMESPACE' with labels '$CLEAN_LABELS'"
-            service_info=$(kubectl get svc -n "$NAMESPACE" -l "$CLEAN_LABELS" -o json)
-            service_count=$(echo "$service_info" | jq '.items | length')
+            service_info_file_path="/tmp/argocd_service_info.json"
+            kubectl get svc -n "$NAMESPACE" -l "$CLEAN_LABELS" -o json > $service_info_file_path 2>/dev/null
+            service_count=$(cat "$service_info_file_path" | jq '.items | length')
 
             if [ "$service_count" -eq 0 ]; then
               echo "Error: No Argo CD service found matching labels '$CLEAN_LABELS' in namespace '$NAMESPACE'."
