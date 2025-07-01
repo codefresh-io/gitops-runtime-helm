@@ -14,79 +14,38 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'chore: bump codefresh-gitops-operator to v0.7.20 (#551)'
-    - kind: changed
-      description: 'fix: Argo Workflows artifact and log storage (#547)'
-    - kind: changed
-      description: 'chore: bump codefresh-gitops-operator to v0.7.19 (#550)'
-    - kind: changed
-      description: 'chore: bump app-proxy to v1.3591.0 - improve memory consumption and performance in git operations (#549)'
-    - kind: changed
-      description: 'feat: app-proxy v1.3584.0 - sources-server integration for git manifest validation to support v2 events (#545)'
-    - kind: changed
-      description: 'chore: upgrade argo-events to fix multiple security vulnerabilities (#541)'
-    - kind: changed
-      description: 'fix: promotion retries in gitops-operator (#537)'
-    - kind: changed
-      description: 'feat: GitHub Enterprise promotion support via updated gitops-operator and app-proxy (#535)'
-    - kind: changed
-      description: 'feat: app-proxy apply integration fix (#534)'
-    - kind: changed
-      description: 'chore: revert event reporter changes for stability (#533)'
-    - kind: changed
-      description: 'chore: bump Argo CD chart to 7.8.23-9-cap-v2.14.9-2025-06-08-8821b48e (#531)'
-    - kind: changed
-      description: 'chore: bump codefresh-gitops-operator to v0.7.12 (#528)'
-    - kind: changed
-      description: 'feat: app-proxy v1.3546.0 - improved git source creation/deletion in event reporting (#524)'
-    - kind: changed
-      description: 'chore: upgrade argo-workflows to 0.45.15-v3.6.7-cap-CR-28355 (#517)'
-    - kind: changed
-      description: 'chore: bump Argo CD chart to 7.8.23-7-cap-v2.14.9-2025-05-29-397c4f0d (#521)'
-    - kind: changed
-      description: 'feat: support for custom TLS certificates from the platform (#519)'
-    - kind: changed
-      description: 'fix: endless recursion in git-source detection (#520)'
-    - kind: changed
-      description: 'chore: bump Argo CD chart to 7.8.23-6-cap-v2.14.9-2025-05-20-9356e64a (#513)'
-    - kind: changed
-      description: 'feat: app-proxy v1.3534.0 - fixed OAuth2 flow for GitHub (#516)'
-    - kind: changed
-      description: 'fix: update ConfigMap name in Argo CD root path script (#514)'
-    - kind: changed
-      description: 'fix: update service labels in event-reporter (#515)'
-    - kind: changed
-      description: 'chore: update README.md'
+    - kind: security
+      description: 'bump Argo-Rollouts with security fixes'
+
 dependencies:
-  - name: argo-cd
-    repository: https://codefresh-io.github.io/argo-helm
-    condition: argo-cd.enabled
-    version: 7.8.23-9-cap-v2.14.9-2025-06-08-8821b48e
-  - name: argo-events
-    repository: https://codefresh-io.github.io/argo-helm
-    version: 2.4.8-cap-CR-29689
-  - name: argo-workflows
-    repository: https://codefresh-io.github.io/argo-helm
-    version: 0.45.15-v3.6.7-cap-CR-28355
-    condition: argo-workflows.enabled
-  - name: argo-rollouts
-    repository: https://codefresh-io.github.io/argo-helm
-    version: 2.37.3-4-v1.7.2-cap-CR-28008
-    condition: argo-rollouts.enabled
-  - name: sealed-secrets
-    repository: https://bitnami-labs.github.io/sealed-secrets/
-    version: 2.17.2
-  - name: codefresh-tunnel-client
-    repository: oci://quay.io/codefresh/charts
-    version: 0.1.21
-    alias: tunnel-client
-    condition: tunnel-client.enabled
-  - name: codefresh-gitops-operator
-    repository: oci://quay.io/codefresh/charts
-    version: 0.7.24
-    alias: gitops-operator
-    condition: gitops-operator.enabled
-  - name: cf-argocd-extras
-    repository: oci://quay.io/codefresh/charts
-    version: 0.5.5
+- name: argo-cd
+  repository: https://codefresh-io.github.io/argo-helm
+  condition: argo-cd.enabled
+  version: 7.8.23-9-cap-v2.14.9-2025-06-08-8821b48e
+- name: argo-events
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 2.4.8-cap-CR-29689
+- name: argo-workflows
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 0.45.15-v3.6.7-cap-CR-28355
+  condition: argo-workflows.enabled
+- name: argo-rollouts
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 2.37.3-5-v1.7.2-cap-CR-29629
+  condition: argo-rollouts.enabled
+- name: sealed-secrets
+  repository: https://bitnami-labs.github.io/sealed-secrets/
+  version: 2.17.2
+- name: codefresh-tunnel-client
+  repository: oci://quay.io/codefresh/charts
+  version: 0.1.21
+  alias: tunnel-client
+  condition: tunnel-client.enabled
+- name: codefresh-gitops-operator
+  repository: oci://quay.io/codefresh/charts
+  version: 0.7.24
+  alias: gitops-operator
+  condition: gitops-operator.enabled
+- name: cf-argocd-extras
+  repository: oci://quay.io/codefresh/charts
+  version: 0.5.6
