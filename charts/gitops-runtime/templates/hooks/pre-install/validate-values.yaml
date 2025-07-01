@@ -32,20 +32,25 @@ spec:
           value: "/api/version"
         - name: REQUIRED_VERSION_CONSTRAINT
           value: ">=2.12 <3"
+        - name: ARGOCD_ROOT_PATH
+          value: {{ index .Values "global" "external-argo-cd" "server" "rootpath" | default "" }}
         command: ["sh", "-c"]
         args:
         - | # shell
+          set -x
+
           # Function to find Argo CD service and export its name and port
           get_argocd_service_info() {
             local service_info
             local service_count
+            local service_info_file_path="/tmp/argocd_service_info.json"
 
             # Clean labels
             CLEAN_LABELS=$(echo "$ARGOCD_LABELS" | sed 's/,$//')
 
             echo "Searching for Argo CD service in namespace '$NAMESPACE' with labels '$CLEAN_LABELS'"
-            service_info=$(kubectl get svc -n "$NAMESPACE" -l "$CLEAN_LABELS" -o json)
-            service_count=$(echo "$service_info" | jq '.items | length')
+            kubectl get svc -n "$NAMESPACE" -l "$CLEAN_LABELS" -o json > $service_info_file_path 2>/dev/null
+            service_count=$(cat "$service_info_file_path" | jq '.items | length')
 
             if [ "$service_count" -eq 0 ]; then
               echo "Error: No Argo CD service found matching labels '$CLEAN_LABELS' in namespace '$NAMESPACE'."
@@ -55,8 +60,8 @@ spec:
             fi
 
             # Set global variables
-            SERVICE_NAME=$(echo "$service_info" | jq -r '.items[0].metadata.name')
-            SERVICE_PORT=$(echo "$service_info" | jq -r '.items[0].spec.ports[0].port')
+            SERVICE_NAME=$(cat "$service_info_file_path" | jq -r '.items[0].metadata.name')
+            SERVICE_PORT=$(cat "$service_info_file_path" | jq -r '.items[0].spec.ports[0].port')
 
             if [ -z "$SERVICE_NAME" ] || [ "$SERVICE_NAME" = "null" ] || [ -z "$SERVICE_PORT" ] || [ "$SERVICE_PORT" = "null" ]; then
               echo "Error: Could not extract service name or port from the found service."
@@ -70,8 +75,13 @@ spec:
           get_argocd_root_path() {
             local root_path
 
-            echo "Fetching Argo CD root path from ConfigMap 'argocd-cmd-params-cm' in namespace '$NAMESPACE'..."
-            root_path=$(kubectl get configmap "argocd-cmd-params-cm" -n "$NAMESPACE" -o jsonpath='{.data.server\.rootpath}' 2>/dev/null || echo "")
+            if [ -z "$ARGOCD_ROOT_PATH" ]; then
+              echo "Fetching Argo CD root path from ConfigMap 'argocd-cmd-params-cm' in namespace '$NAMESPACE'..."
+              root_path=$(kubectl get configmap "argocd-cmd-params-cm" -n "$NAMESPACE" -o jsonpath='{.data.server\.rootpath}' 2>/dev/null || echo "")
+            else
+              echo "Using provided Argo CD root path: '$ARGOCD_ROOT_PATH'"
+              root_path="$ARGOCD_ROOT_PATH"
+            fi
 
             if [ -n "$root_path" ] && [ "$root_path" != "/" ]; then
               root_path=$(echo "$root_path" | sed 's:/*$::') # Remove trailing slash
