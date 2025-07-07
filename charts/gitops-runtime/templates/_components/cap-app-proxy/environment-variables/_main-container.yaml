@@ -211,6 +211,7 @@ IRW_JIRA_ENRICHMENT_TASK_IMAGE:
       key: enrichmentJiraEnrichmentImage
       optional: true
 NODE_EXTRA_CA_CERTS: /app/config/all/all.cer
+GIT_SSL_CAINFO: /app/config/all/all.cer
 {{- end -}}
 
 {{/*
