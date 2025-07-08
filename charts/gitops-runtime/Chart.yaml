@@ -48,4 +48,4 @@ dependencies:
   condition: gitops-operator.enabled
 - name: cf-argocd-extras
   repository: oci://quay.io/codefresh/charts
-  version: 0.5.6
+  version: 0.5.7
