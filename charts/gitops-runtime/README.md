@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.21.0](https://img.shields.io/badge/Version-0.21.0-informational?style=flat-square) ![AppVersion: 0.1.71](https://img.shields.io/badge/AppVersion-0.1.71-informational?style=flat-square)
+![Version: 0.21.1](https://img.shields.io/badge/Version-0.21.1-informational?style=flat-square) ![AppVersion: 0.1.73](https://img.shields.io/badge/AppVersion-0.1.73-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -149,7 +149,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.21.0 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.21.1 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -162,7 +162,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.21.0 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.21.1 <local_registry>
 ```
 
 ## Openshift
@@ -212,13 +212,13 @@ sealed-secrets:
 | app-proxy.extraVolumeMounts | list | `[]` | Extra volume mounts for main container |
 | app-proxy.extraVolumes | list | `[]` | extra volumes |
 | app-proxy.fullnameOverride | string | `"cap-app-proxy"` |  |
-| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.13-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.13-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.13-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
-| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.13-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.13-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.13-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
+| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.14-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.14-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
+| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.14-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.14-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
 | app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds | int | `5` | Client heartbeat interval in seconds for image enrichemnt workflow |
 | app-proxy.image-enrichment.config.concurrencyCmKey | string | `"imageReportExecutor"` | The name of the key in the configmap to use as synchronization semaphore |
 | app-proxy.image-enrichment.config.concurrencyCmName | string | `"workflow-synchronization-semaphores"` | The name of the configmap to use as synchronization semaphore, see https://argoproj.github.io/argo-workflows/synchronization/ |
-| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.13-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.13-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.13-main"}}` | Enrichemnt images |
-| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.13-main"}` | Report image enrichment task image |
+| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.14-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.14-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}}` | Enrichemnt images |
+| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}` | Report image enrichment task image |
 | app-proxy.image-enrichment.config.podGcStrategy | string | `"OnWorkflowCompletion"` | Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes. |
 | app-proxy.image-enrichment.config.ttlActiveInSeconds | int | `900` | Maximum allowed runtime for the enrichment workflow |
 | app-proxy.image-enrichment.config.ttlAfterCompletionInSeconds | int | `86400` | Number of seconds to live after completion |
@@ -229,14 +229,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3591.0"` |  |
+| app-proxy.image.tag | string | `"1.3600.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3591.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3600.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -278,7 +278,7 @@ sealed-secrets:
 | argo-cd | object | `{"applicationVersioning":{"enabled":true,"useApplicationConfiguration":true},"configs":{"cm":{"accounts.admin":"apiKey,login","application.resourceTrackingMethod":"annotation+label","resource.customizations.actions.argoproj.io_Rollout":"mergeBuiltinActions: true\ndiscovery.lua: |\n  actions = {}\n  local fullyPromoted = obj.status.currentPodHash == obj.status.stableRS\n  actions[\"pause\"] = {[\"disabled\"] = fullyPromoted or obj.spec.paused == true}\n  actions[\"skip-current-step\"] = {[\"disabled\"] = obj.spec.strategy.canary == nil or obj.spec.strategy.canary.steps == nil or obj.status.currentStepIndex == table.getn(obj.spec.strategy.canary.steps)}\n  return actions\ndefinitions:\n- name: pause\n  action.lua: |\n    obj.spec.paused = true\n    return obj\n- name: skip-current-step\n  action.lua: |\n    if obj.status ~= nil then\n        if obj.spec.strategy.canary ~= nil and obj.spec.strategy.canary.steps ~= nil and obj.status.currentStepIndex < table.getn(obj.spec.strategy.canary.steps) then\n            if obj.status.pauseConditions ~= nil and table.getn(obj.status.pauseConditions) > 0 then\n                obj.status.pauseConditions = nil\n            end\n            obj.status.currentStepIndex = obj.status.currentStepIndex + 1\n        end\n    end\n    return obj\n","timeout.reconciliation":"20s"},"params":{"application.namespaces":"cf-*","server.insecure":true}},"crds":{"install":true},"enabled":true,"fullnameOverride":"argo-cd"}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-cd.applicationVersioning.enabled | bool | `true` | Enable application versioning |
 | argo-cd.applicationVersioning.useApplicationConfiguration | bool | `true` | Extract application version based on ApplicationConfiguration CRD |
-| argo-events | object | `{"configs":{"jetstream":{"versions":[{"configReloaderImage":"natsio/nats-server-config-reloader:0.16.0","metricsExporterImage":"natsio/prometheus-nats-exporter:0.15.0","natsImage":"nats:2.10.21","startCommand":"/nats-server","version":"latest"}]},"nats":{"versions":[{"metricsExporterImage":"natsio/prometheus-nats-exporter:0.15.0","natsStreamingImage":"nats-streaming:0.25.6","version":"0.22.1"}]}},"crds":{"install":false},"fullnameOverride":"argo-events"}` | ------------------------------------------------------------------------------------------------------------------- |
+| argo-events | object | `{"configs":{"jetstream":{"versions":[{"configReloaderImage":"natsio/nats-server-config-reloader:0.18.2","metricsExporterImage":"natsio/prometheus-nats-exporter:0.16.0","natsImage":"nats:2.11.4","startCommand":"/nats-server","version":"latest"}]},"nats":{"versions":[{"metricsExporterImage":"natsio/prometheus-nats-exporter:0.16.0","natsStreamingImage":"nats-streaming:0.25.6","version":"0.22.1"}]}},"crds":{"install":false},"fullnameOverride":"argo-events"}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-rollouts | object | `{"controller":{"replicas":1},"enabled":true,"fullnameOverride":"argo-rollouts","installCRDs":true}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-workflows | object | `{"crds":{"install":true},"enabled":true,"executor":{"resources":{"requests":{"ephemeral-storage":"10Mi"}}},"fullnameOverride":"argo","mainContainer":{"resources":{"requests":{"ephemeral-storage":"10Mi"}}},"server":{"authModes":["client"],"baseHref":"/workflows/"}}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
