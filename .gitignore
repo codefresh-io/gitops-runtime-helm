@@ -15,3 +15,11 @@ output
 values-dev*
 dry-run.yaml
 .debug
+bin
+# Test
+cmd/__debug_*
+/test/component-tests/setup/simple-app
+/test/component-tests/setup/codefresh-isc
+**/test/component-tests/setup/values/runtime.values.yaml
+**/test/component-tests/promotion/01-gitCommit/commit.json
+**/test/component-tests/kubeconfig

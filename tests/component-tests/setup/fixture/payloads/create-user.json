@@ -1,0 +1,9 @@
+{
+    "email": "test.owner@gmail.com",
+    "full_name": "New User",
+    "login_name": "test-owner",
+    "username": "test-owner",
+    "password": "password",
+    "must_change_password": false,
+    "send_notify": true
+}

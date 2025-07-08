@@ -1,0 +1,18 @@
+# -----------------------------------------------------------------------------
+# 00-drag-and-drop-task.yaml - KUTTL TestStep for drag-and-drop mock setup
+#
+# This TestStep runs the dragAndDrop.sh script to load drag-and-drop mock
+# expectations into Mockserver for the Codefresh GitOps Operator component tests.
+#
+# Usage:
+#   This step is executed as part of the KUTTL test suite.
+#
+# Steps performed:
+#   - Executes the dragAndDrop.sh script to configure Mockserver.
+# -----------------------------------------------------------------------------
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+commands:
+   - script: ./dragAndDrop.sh
+timeout: 30
