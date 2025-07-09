@@ -4,11 +4,11 @@ RUN go install github.com/davidrjonas/semver-cli@latest \
   && cp $GOPATH/bin/semver-cli /usr/local/bin/
 
 #bookworm-slim
-FROM debian:12.10-slim
+FROM debian:12.11-slim
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
-ARG CF_CLI_VERSION=v0.2.8
+ARG CF_CLI_VERSION=v0.2.9
 ARG TARGETARCH
 
 RUN apt-get update && apt-get install curl jq -y
