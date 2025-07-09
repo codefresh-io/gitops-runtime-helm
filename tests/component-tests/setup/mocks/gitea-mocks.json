@@ -1,0 +1,44 @@
+[
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/api/v3/repos/test-owner/simple-app"
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "id": "1234",
+                "clone_url": "http://gitea-http.gitea:3000/test-owner/simple-app.git",
+                "default_branch": "main"
+            }
+        }
+    },
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/api/v3/repos/test-owner/codefresh-isc"
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "id": "1234",
+                "clone_url": "http://gitea-http.gitea:3000/test-owner/codefresh-isc.git",
+                "default_branch": "main"
+            }
+        }
+    },
+    {
+        "httpRequest": {
+            "method": "GET",
+            "path": "/api/v3/user"
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "id": "1234",
+                "login": "test-owner",
+                "email": "test.owner@gmail.com"
+            }
+        }
+    }
+]

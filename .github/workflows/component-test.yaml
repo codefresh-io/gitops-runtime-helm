@@ -1,0 +1,74 @@
+# File: .github/workflows/docker-go-build.yml
+name: gitops-runtime-helm
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "*.md"
+      - charts/**
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "*.md"
+      - charts/**
+
+jobs:
+  component-test:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKER_CLI_EXPERIMENTAL: enabled
+      # Enable BuildKit
+      DOCKER_BUILDKIT: 1
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.29.0'
+      - name: Install K3d
+        run: |
+          curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+          k3d --version
+
+      - name: Create K3d cluster
+        run: |
+          k3d cluster create test-cluster --wait
+          kubectl get nodes
+
+      - name: install kuttl
+        run: |
+          mkdir -p ./bin
+          curl -L https://github.com/kudobuilder/kuttl/releases/download/v0.22.0/kubectl-kuttl_0.22.0_linux_x86_64 -o ./bin/kuttl;
+
+          chmod +x ./bin/kuttl;
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+      - name: install helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+
+          chmod 700 get_helm.sh
+
+          ./get_helm.sh
+          helm repo add gitea-charts https://dl.gitea.com/charts/
+          helm repo add mockserver https://www.mock-server.com
+
+      
+      - name: Run KUTTL tests
+        run: |
+          cd tests/component-tests && ./../../bin/kuttl test --parallel 1 --start-kind=false --namespace e2e-test --config startup.yaml

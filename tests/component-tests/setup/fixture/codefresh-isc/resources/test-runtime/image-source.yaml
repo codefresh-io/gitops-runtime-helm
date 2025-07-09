@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: image-source
+  labels:
+    codefresh.io/entity: 'git-source'
+    codefresh.io/internal: 'false'
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: cf-git-sources
+  sources:
+    - repoURL: https://github.com/test-owner/main-source.git
+      path: .
+      targetRevision: HEAD
+      directory:
+        include: '*'
+        exclude: ''
+        recurse: true
+  destination:
+    namespace: codefresh
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true

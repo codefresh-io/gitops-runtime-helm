@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: simple-dev
+  namespace: codefresh
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/foreground
+  annotations:
+    codefresh.io/product: simple-app
+spec:
+  project: default
+  destination:
+    name: in-cluster
+    namespace: dev
+  source:
+    path: .
+    repoURL: http://gitea-http.gitea:3000/test-owner/simple-app.git
+    targetRevision: dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: true
+    syncOptions:
+      - PrunePropagationPolicy=foreground
+      - Replace=false
+      - PruneLast=false
+      - Validate=true
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=false
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=false

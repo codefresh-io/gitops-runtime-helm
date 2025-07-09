@@ -1,0 +1,27 @@
+# -----------------------------------------------------------------------------
+# 01-assert.yaml - KUTTL TestAssert for app promotion workflow status
+#
+# This TestAssert script checks the status of the workflow created by the
+# app promotion test in the Codefresh GitOps Operator component tests.
+#
+# Usage:
+#   This assertion is executed as part of the KUTTL test suite.
+#
+# Steps performed:
+#   - Queries the workflow status for the specific release.
+#   - Asserts that the workflow status is 'Succeeded'.
+# -----------------------------------------------------------------------------
+---
+apiVersion: kuttl.dev/v1beta1
+commands:
+  - script: >
+      STATUS="$(kubectl get workflow -n codefresh -l codefresh.io/release=68218f613623801deee005c0 -o jsonpath="{.items[*].status.phase}")"
+            
+      if [ $STATUS = 'Succeeded' ]; then
+          echo "workflow status for release '68218f613623801deee005c0' has succeeded"
+      else
+          echo "workflow status ($STATUS) for release '68218f613623801deee005c0' should be succeeded"
+          exit 1
+      fi
+kind: TestAssert
+timeout: 240

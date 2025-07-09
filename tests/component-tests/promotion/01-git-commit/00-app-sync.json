@@ -1,0 +1,159 @@
+[
+    {
+        "httpRequest": {
+            "method": "POST",
+            "path": "/2.0/api/graphql",
+            "body": {
+                "query": "\nquery productReleaseTasks {\n\tproductReleaseTasks {\n\t\ttype\n\t\tlabels\n\t\tcommitInfo {\n\t\t\tsha\n\t\t\tcommitter\n\t\t\tdate\n\t\t\tmessage\n\t\t}\n\t\tappNamespace\n\t\tappName\n\t\trepoUrl\n\t\tbranch\n\t\tpath\n\t\tpostActionOnly\n\t\tpreAction\n\t\tactionUrl\n\t\tactionBody\n\t\tpostAction\n\t\tworkflowNamespace\n\t\tworkflowName\n\t}\n}",
+                "variables": {}
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "data": {
+                    "productReleaseTasks": [
+                        {
+                            "type": "CreateProductReleaseTask",
+                            "labels": {
+                                "codefresh.io/app-name": "simple-dev",
+                                "codefresh.io/app-namespace": "codefresh",
+                                "codefresh.io/env": "dev",
+                                "codefresh.io/product": "simple",
+                                "codefresh.io/promotion-flow": "stam",
+                                "codefresh.io/release": "684040897b3903d3764e1f73",
+                                "codefresh.io/release-name": "50575377c"
+                            },
+                            "appNamespace": "codefresh",
+                            "appName": "simple-dev",
+                            "repoUrl": "http://gitea-http.gitea:3000/test-owner/simple-app.git",
+                            "branch": "dev",
+                            "path": ".",
+                            "postActionOnly": true,
+                            "commitInfo": {
+                                "sha": "source-commit-sha",
+                                "committer": "testowner <test.owner@gmail.com>",
+                                "date": "2025-05-12T05:49:00Z",
+                                "message": "Update values.yaml"
+                            },
+                            "actionUrl": "",
+                            "actionBody": ""
+                        }
+                    ]
+                }
+            }
+        },
+        "times": {
+            "remainingTimes": 1,
+            "unlimited": false
+        }
+    },
+    {
+        "httpRequest": {
+            "method": "POST",
+            "path": "/2.0/api/graphql",
+            "body": {
+                "query": "\nquery productReleaseRunHooksTasks {\n\tproductReleaseRunHooksTasks {\n\t\ttype\n\t\tlabels\n\t\tworkflowTemplateName\n\t\tworkflowNamespace\n\t\tworkflowName\n\t\tparameters\n\t}\n}",
+                "variables": {}
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "data": {
+                    "productReleaseRunHooksTasks": []
+                }
+            }
+        }
+    },
+    {
+        "httpRequest": {
+            "method": "POST",
+            "path": "/2.0/api/graphql",
+            "body": {
+                "query": "\nquery productReleaseCommitStatuses {\n\tproductReleaseCommitStatuses {\n\t\tsha\n\t\trepoURL\n\t\tstatus\n\t\tdescription\n\t\tcontext\n\t\ttargetUrl\n\t}\n}",
+                "variables": {}
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "data": {
+                    "productReleaseCommitStatuses": []
+                }
+            }
+        }
+    },
+    {
+        "httpRequest": {
+            "method": "POST",
+            "path": "/2.0/api/graphql",
+            "body": {
+                "type": "REGEX",
+                "regex": ".*createProductRelease.*"
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "data": {
+                    "labels": {
+                        "aaa": "bbb"
+                    }
+                }
+            }
+        },
+        "times": {
+            "remainingTimes": 1,
+            "unlimited": false
+        }
+    },
+    {
+        "httpRequest": {
+            "method": "POST",
+            "path": "/2.0/api/graphql",
+            "body": {
+                "type": "REGEX",
+                "regex": ".*PromotionData.*"
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "data": {
+                    "srcApp": {
+                        "metadata": {
+                            "name": "simple-dev",
+                            "cluster": "https://kubernetes.default.svc",
+                            "namespace": "codefresh"
+                        },
+                        "specSource": {
+                            "repoURL": "http://gitea-http.gitea:3000/test-owner/simple-app.git",
+                            "targetRevision": "dev",
+                            "path": "."
+                        }
+                    },
+                    "destApp": {
+                        "metadata": {
+                            "name": "simple-prod",
+                            "cluster": "https://kubernetes.default.svc",
+                            "namespace": "codefresh"
+                        },
+                        "specSource": {
+                            "repoURL": "http://gitea-http.gitea:3000/test-owner/simple-app.git",
+                            "targetRevision": "HEAD",
+                            "path": "."
+                        }
+                    },
+                    "promotionTemplate": {
+                        "promotion": [],
+                        "versionSource": {
+                            "file": "",
+                            "jsonPath": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+]

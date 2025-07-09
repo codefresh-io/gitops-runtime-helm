@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "simple-app.fullname" . }}
+  labels:
+    {{- include "simple-app.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "simple-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      labels:
+        {{- include "simple-app.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "simple-app.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+          - configMapRef:
+              name: {{ .Release.Name }}-configmap
+          {{- if .Values.app.secrets }}
+          - secretRef:
+              name: {{ .Release.Name }}-secrets
+          {{- end }}
+          {{- if .Values.app.command }}
+          command:
+            {{- toYaml .Values.app.command | nindent 12 }}
+          {{- end }}
+          {{- if .Values.service.enabled }}
+          ports:
+          {{- if .Values.app.port }}
+            - name: http
+              containerPort: {{ .Values.app.port }}
+              protocol: TCP
+          {{- end }}
+          {{- if .Values.app.ports }}
+            {{- toYaml .Values.app.ports | nindent 12 }}
+          {{- end }}
+          {{- if .Values.app.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.app.livenessProbe | nindent 12}}
+          {{- else }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          {{- if .Values.app.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.app.readinessProbe | nindent 12}}
+          {{- else }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.app.volumeMounts }}
+          volumeMounts:
+            {{- toYaml .Values.app.volumeMounts | nindent 12 }}
+          {{- end }}
+        {{- if .Values.sidecar.enabled }}
+        - name: {{ .Values.sidecar.name }}
+          image: "{{ .Values.sidecar.image.repository }}:{{ .Values.sidecar.image.tag }}"
+          imagePullPolicy: {{ .Values.sidecar.image.pullPolicy }}
+          command:
+            {{- toYaml .Values.sidecar.command | nindent 12 }}
+          ports:
+            - name: sidecar-port
+              containerPort: {{ .Values.sidecar.port }}
+              protocol: TCP
+          {{- if .Values.sidecar.volumeMounts }}
+          volumeMounts:
+            {{- toYaml .Values.sidecar.volumeMounts | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.sidecar.resources | nindent 12 }}
+        {{- end }}
+      {{- if .Values.volumes }}
+      volumes:
+        {{- toYaml .Values.volumes | nindent 8}}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
