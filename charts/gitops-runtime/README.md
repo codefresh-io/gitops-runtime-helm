@@ -1,10 +1,9 @@
 ## Codefresh gitops runtime
-![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![AppVersion: 0.1.71](https://img.shields.io/badge/AppVersion-0.1.71-informational?style=flat-square)
+![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
 
 ## Prerequisites
 
-- Kubernetes **1.23+**
-- Helm **3.8.0+**
+- Helm **3.11.0+**
 
 ## Get Chart Info
 
@@ -100,7 +99,7 @@ argo-cd:
   enabled: false
 ```
 
-⚠️ If `auth.type=password` is set, ArgoCD user must have `apiKey` capability enabled.
+⚠️ If `auth.type=password` is set, ArgoCd user must have `apiKey` capability enabled.
 
 `argocd-cm` ConfigMap
 
@@ -212,13 +211,13 @@ sealed-secrets:
 | app-proxy.extraVolumeMounts | list | `[]` | Extra volume mounts for main container |
 | app-proxy.extraVolumes | list | `[]` | extra volumes |
 | app-proxy.fullnameOverride | string | `"cap-app-proxy"` |  |
-| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.13-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.13-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.13-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
-| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.13-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.13-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.13-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
+| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.14-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.14-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
+| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.14-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.14-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
 | app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds | int | `5` | Client heartbeat interval in seconds for image enrichemnt workflow |
 | app-proxy.image-enrichment.config.concurrencyCmKey | string | `"imageReportExecutor"` | The name of the key in the configmap to use as synchronization semaphore |
 | app-proxy.image-enrichment.config.concurrencyCmName | string | `"workflow-synchronization-semaphores"` | The name of the configmap to use as synchronization semaphore, see https://argoproj.github.io/argo-workflows/synchronization/ |
-| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.13-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.13-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.13-main"}}` | Enrichemnt images |
-| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.13-main"}` | Report image enrichment task image |
+| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.14-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.14-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}}` | Enrichemnt images |
+| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}` | Report image enrichment task image |
 | app-proxy.image-enrichment.config.podGcStrategy | string | `"OnWorkflowCompletion"` | Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes. |
 | app-proxy.image-enrichment.config.ttlActiveInSeconds | int | `900` | Maximum allowed runtime for the enrichment workflow |
 | app-proxy.image-enrichment.config.ttlAfterCompletionInSeconds | int | `86400` | Number of seconds to live after completion |
@@ -229,14 +228,14 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3534.0"` |  |
+| app-proxy.image.tag | string | `"1.3628.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3534.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3628.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -286,12 +285,12 @@ sealed-secrets:
 | argo-cd.crds.install | bool | `true` |  |
 | argo-cd.enabled | bool | `true` |  |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
-| argo-events.configs.jetstream.versions[0].configReloaderImage | string | `"natsio/nats-server-config-reloader:0.16.0"` |  |
-| argo-events.configs.jetstream.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.15.0"` |  |
-| argo-events.configs.jetstream.versions[0].natsImage | string | `"nats:2.10.21"` |  |
+| argo-events.configs.jetstream.versions[0].configReloaderImage | string | `"natsio/nats-server-config-reloader:0.18.2"` |  |
+| argo-events.configs.jetstream.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.16.0"` |  |
+| argo-events.configs.jetstream.versions[0].natsImage | string | `"nats:2.11.4"` |  |
 | argo-events.configs.jetstream.versions[0].startCommand | string | `"/nats-server"` |  |
 | argo-events.configs.jetstream.versions[0].version | string | `"latest"` |  |
-| argo-events.configs.nats.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.15.0"` |  |
+| argo-events.configs.nats.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.16.0"` |  |
 | argo-events.configs.nats.versions[0].natsStreamingImage | string | `"nats-streaming:0.25.6"` |  |
 | argo-events.configs.nats.versions[0].version | string | `"0.22.1"` |  |
 | argo-events.crds.install | bool | `false` |  |
@@ -314,9 +313,42 @@ sealed-secrets:
 | cf-argocd-extras.sourcesServer | object | `{"affinity":{},"enabled":true,"hpa":{"enabled":true},"nodeSelector":{},"tolerations":[]}` | Sources server configuration |
 | cf-argocd-extras.sourcesServer.hpa.enabled | bool | `true` | Enable HPA for sources server |
 | codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
-| event-reporters | object | `{"workflow":{"serviceAccount":{"create":true,"name":""}}}` | Event reporters configuration for backward compatibility |
-| event-reporters.workflow.serviceAccount.create | bool | `true` | Create service account for workflow reporter |
-| event-reporters.workflow.serviceAccount.name | string | `""` | Service account name (defaults to codefresh-sa if not specified) |
+| event-reporters.rollout.eventSource.affinity | object | `{}` |  |
+| event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
+| event-reporters.rollout.eventSource.replicas | int | `1` |  |
+| event-reporters.rollout.eventSource.resources | object | `{}` |  |
+| event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
+| event-reporters.rollout.sensor.affinity | object | `{}` |  |
+| event-reporters.rollout.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
+| event-reporters.rollout.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
+| event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
+| event-reporters.rollout.sensor.replicas | int | `1` |  |
+| event-reporters.rollout.sensor.resources | object | `{}` |  |
+| event-reporters.rollout.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
+| event-reporters.rollout.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
+| event-reporters.rollout.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
+| event-reporters.rollout.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
+| event-reporters.rollout.sensor.retryStrategy.steps | int | `3` | Number of retries |
+| event-reporters.rollout.sensor.tolerations | list | `[]` |  |
+| event-reporters.rollout.serviceAccount.create | bool | `true` |  |
+| event-reporters.workflow.eventSource.affinity | object | `{}` |  |
+| event-reporters.workflow.eventSource.nodeSelector | object | `{}` |  |
+| event-reporters.workflow.eventSource.replicas | int | `1` |  |
+| event-reporters.workflow.eventSource.resources | object | `{}` |  |
+| event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
+| event-reporters.workflow.sensor.affinity | object | `{}` |  |
+| event-reporters.workflow.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
+| event-reporters.workflow.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
+| event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
+| event-reporters.workflow.sensor.replicas | int | `1` |  |
+| event-reporters.workflow.sensor.resources | object | `{}` |  |
+| event-reporters.workflow.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
+| event-reporters.workflow.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
+| event-reporters.workflow.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
+| event-reporters.workflow.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
+| event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
+| event-reporters.workflow.sensor.tolerations | list | `[]` |  |
+| event-reporters.workflow.serviceAccount.create | bool | `true` |  |
 | gitops-operator.affinity | object | `{}` |  |
 | gitops-operator.config.commitStatusPollingInterval | string | `"10s"` | Commit status polling interval |
 | gitops-operator.config.maxConcurrentReleases | int | `100` | Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime) |
