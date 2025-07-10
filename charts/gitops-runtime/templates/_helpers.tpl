@@ -506,19 +506,3 @@ valueFrom:
     key: {{ include "codefresh-gitops-runtime.runtime-gitcreds.password.secretkey" . }}
     optional: true
 {{- end }}
-
-# ------------------------------------------------------------------------------------------------------------
-# proxy environment variables
-# ------------------------------------------------------------------------------------------------------------
-{{- define "codefresh-gitops-runtime.proxy-env-vars" -}}
-  {{- if .Values.global.httpProxy }}
-HTTP_PROXY: {{ .Values.global.httpProxy | quote }}
-  {{- end }}
-  {{- if .Values.global.httpsProxy }}
-HTTPS_PROXY: {{ .Values.global.httpsProxy | quote }}
-  {{- end }}
-  {{- if .Values.global.noProxy }}
-NO_PROXY: {{ .Values.global.noProxy | quote }}
-  {{- end }}
-{{- end -}}
-
