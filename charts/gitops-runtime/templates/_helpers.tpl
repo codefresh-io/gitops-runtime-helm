@@ -506,3 +506,4 @@ valueFrom:
     key: {{ include "codefresh-gitops-runtime.runtime-gitcreds.password.secretkey" . }}
     optional: true
 {{- end }}
+# ------------------------------------------------------------------------------------------------------------
