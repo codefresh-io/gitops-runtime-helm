@@ -3,16 +3,25 @@ Some app-proxy environment variables are determined by values provided in other 
 to keep the separation of components as pseudo library charts, they are defined here to be merged when
 app-proxy components are generated.
 */}}
-{{- define "codefresh-gitops-runtime.app-proxy.calculated-env-vars"}}
+{{- define "codefresh-gitops-runtime.app-proxy.calculated-env-vars" }}
+  {{- if .Values.global.httpProxy }}
+HTTP_PROXY: {{ .Values.global.httpProxy | quote }}
+  {{- end }}
+  {{- if .Values.global.httpsProxy }}
+HTTPS_PROXY: {{ .Values.global.httpsProxy | quote }}
+  {{- end }}
+  {{- if .Values.global.noProxy }}
+NO_PROXY: {{ .Values.global.noProxy | quote }}
+  {{- end }}
 HELM_RELEASE_NAME: {{ .Release.Name }}
 USER_TOKEN:
   {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 2 }}
   {{- if or .Values.global.runtime.gitCredentials.password.value .Values.global.runtime.gitCredentials.password.secretKeyRef }}
 GIT_USERNAME: {{ .Values.global.runtime.gitCredentials.username }}
 GIT_PASSWORD:
-  {{- include "codefresh-gitops-runtime.runtime-gitcreds.password.env-var-value" . | nindent 2 }}
+    {{- include "codefresh-gitops-runtime.runtime-gitcreds.password.env-var-value" . | nindent 2 }}
   {{- end }}
-{{- /* Target account id, used for hosted runtimes registration. Not used in hybrid */}}
+  {{- /* Target account id, used for hosted runtimes registration. Not used in hybrid */}}
   {{- if .Values.global.runtime.codefreshHosted }}
 INSTALLATION_TYPE: HELM_HOSTED
 CODEFRESH_ADMIN_TOKEN:
@@ -23,14 +32,14 @@ TARGET_RUNTIME_ACCOUNT_ID: {{ .Values.global.codefresh.accountId }}
       {{- fail "global.codefresh.accountId must be provided for hosted runtimes"}}
     {{- end }}
   {{- end }}
-{{/*
-This will promote argo-rollouts dependency version to app-proxy.
-This will be used when installing argo-rollouts using button.
-*/}}
-{{- range $d := .Chart.Dependencies }}
-{{- if eq $d.Name "argo-rollouts" }}
+  {{/*
+  This will promote argo-rollouts dependency version to app-proxy.
+  This will be used when installing argo-rollouts using button.
+  */}}
+  {{- range $d := .Chart.Dependencies }}
+    {{- if eq $d.Name "argo-rollouts" }}
 ROLLOUTS_HELM_REPOSITORY: {{ $d.Repository | quote }}
 ROLLOUTS_HELM_VERSION: {{ $d.Version | quote }}
-{{- end }}
-{{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}

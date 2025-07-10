@@ -129,11 +129,13 @@ global:
       # e.g.
       # rootpath: '/argocd'
       rootpath: ''
+
     redis:
       # -- Service name of the ArgoCD Redis
       svc: argocd-redis
       # -- Port of the ArgoCD Redis
       port: 6379
+
     repoServer:
       # -- Service name of the ArgoCD repo server
       svc: argocd-repo-server
@@ -161,10 +163,10 @@ global:
       token: ""
       # -- ArgoCD token referenced by an existing secret
       tokenSecretKeyRef: {}
-      # e.g:
-      # tokenSecretKeyRef:
-      #   name: argocd-token
-      #   key: token
+        # e.g:
+        # tokenSecretKeyRef:
+        #   name: argocd-token
+        #   key: token
 
   # -- Configuration for external Argo Rollouts
   external-argo-rollouts:
@@ -178,6 +180,13 @@ global:
   nodeSelector: {}
   # -- Global tolerations for all components
   tolerations: []
+
+  # -- global HTTP_PROXY fpr all components
+  httpProxy: ''
+  # -- global HTTPS_PROXY fpr all components
+  httpsProxy: ''
+  # -- global NO_PROXY fpr all components
+  noProxy: ''
 
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
@@ -321,6 +330,7 @@ codefreshWorkflowLogStoreCM:
   enabled: true
   endpoint: gitops-workflow-logs.codefresh.io
   insecure: false
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo rollouts
 #-----------------------------------------------------------------------------------------------------------------------
