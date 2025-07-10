@@ -18,6 +18,18 @@
   {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGOCD_SERVER_ROOTPATH" (index .Values "global" "external-argo-cd" "server" "rootpath") }}
 {{- end }}
 
+{{/* Proxy environment variables */}}
+{{- if .Values.global.httpProxy }}
+  {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "HTTP_PROXY" .Values.global.httpProxy }}
+{{- end }}
+{{- if .Values.global.httpsProxy }}
+  {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "HTTPS_PROXY" .Values.global.httpsProxy }}
+{{- end }}
+{{- if .Values.global.noProxy }}
+  {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "NO_PROXY" .Values.global.noProxy }}
+{{- end }}
+
+
 {{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
   {{- $secretName := .Values.global.codefresh.tls.caCerts.secretKeyRef.name | default "codefresh-tls-certs" }}
   {{- $secretKey := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}

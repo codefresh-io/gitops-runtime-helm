@@ -14,6 +14,17 @@
   {{- end }}
 {{- end }}
 
+{{/* Proxy environment variables */}}
+{{- if .Values.global.httpProxy }}
+  {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container.env "HTTP_PROXY" .Values.global.httpProxy }}
+{{- end }}
+{{- if .Values.global.httpsProxy }}
+  {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container.env "HTTPS_PROXY" .Values.global.httpsProxy }}
+{{- end }}
+{{- if .Values.global.noProxy }}
+  {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container.env "NO_PROXY" .Values.global.noProxy }}
+{{- end }}
+
 {{- if and (index .Values "global" "external-argo-cd" "server" "rootpath") }}
   {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container.env "ARGOCD_SERVER_ROOTPATH" (index .Values "global" "external-argo-cd" "server" "rootpath") }}
 {{- end }}
