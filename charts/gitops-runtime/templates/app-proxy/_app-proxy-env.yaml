@@ -19,9 +19,9 @@ USER_TOKEN:
   {{- if or .Values.global.runtime.gitCredentials.password.value .Values.global.runtime.gitCredentials.password.secretKeyRef }}
 GIT_USERNAME: {{ .Values.global.runtime.gitCredentials.username }}
 GIT_PASSWORD:
-    {{- include "codefresh-gitops-runtime.runtime-gitcreds.password.env-var-value" . | nindent 2 }}
+  {{- include "codefresh-gitops-runtime.runtime-gitcreds.password.env-var-value" . | nindent 2 }}
   {{- end }}
-  {{- /* Target account id, used for hosted runtimes registration. Not used in hybrid */}}
+{{- /* Target account id, used for hosted runtimes registration. Not used in hybrid */}}
   {{- if .Values.global.runtime.codefreshHosted }}
 INSTALLATION_TYPE: HELM_HOSTED
 CODEFRESH_ADMIN_TOKEN:
@@ -32,14 +32,14 @@ TARGET_RUNTIME_ACCOUNT_ID: {{ .Values.global.codefresh.accountId }}
       {{- fail "global.codefresh.accountId must be provided for hosted runtimes"}}
     {{- end }}
   {{- end }}
-  {{/*
-  This will promote argo-rollouts dependency version to app-proxy.
-  This will be used when installing argo-rollouts using button.
-  */}}
-  {{- range $d := .Chart.Dependencies }}
-    {{- if eq $d.Name "argo-rollouts" }}
+{{/*
+This will promote argo-rollouts dependency version to app-proxy.
+This will be used when installing argo-rollouts using button.
+*/}}
+{{- range $d := .Chart.Dependencies }}
+{{- if eq $d.Name "argo-rollouts" }}
 ROLLOUTS_HELM_REPOSITORY: {{ $d.Repository | quote }}
 ROLLOUTS_HELM_VERSION: {{ $d.Version | quote }}
-    {{- end }}
-  {{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
