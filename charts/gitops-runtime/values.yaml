@@ -179,6 +179,13 @@ global:
   # -- Global tolerations for all components
   tolerations: []
 
+  # -- global HTTP_PROXY for all components
+  httpProxy: ''
+  # -- global HTTPS_PROXY for all components
+  httpsProxy: ''
+  # -- global NO_PROXY for all components
+  noProxy: ''
+
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
