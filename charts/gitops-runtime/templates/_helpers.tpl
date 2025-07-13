@@ -509,7 +509,7 @@ valueFrom:
 # ------------------------------------------------------------------------------------------------------------
 
 {{/*
-Set proxy environment variables on a dictionary
+Print proxy environment variables
 */}}
 {{- define "codefresh-gitops-runtime.get-proxy-env-vars" -}}
   {{- if .Values.global.httpProxy }}
