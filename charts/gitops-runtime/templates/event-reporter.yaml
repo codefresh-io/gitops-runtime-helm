@@ -18,10 +18,6 @@
   {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGOCD_SERVER_ROOTPATH" (index .Values "global" "external-argo-cd" "server" "rootpath") }}
 {{- end }}
 
-{{- $globalProxyEnv := (include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml) }}
-{{- $mergedEnv := mergeOverwrite $globalProxyEnv $cfArgoCdExtrasContext.Values.eventReporter.container.env }}
-{{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container "env" $mergedEnv }}
-
 {{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
   {{- $secretName := .Values.global.codefresh.tls.caCerts.secretKeyRef.name | default "codefresh-tls-certs" }}
   {{- $secretKey := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
