@@ -211,6 +211,7 @@ IRW_JIRA_ENRICHMENT_TASK_IMAGE:
       key: enrichmentJiraEnrichmentImage
       optional: true
 NODE_EXTRA_CA_CERTS: /app/config/all/all.cer
+{{ include "codefresh-gitops-runtime.get-proxy-env-vars" . }}
 {{- end -}}
 
 {{/*
@@ -218,8 +219,7 @@ Read defaults from the template above and merge with the values provided in valu
 */}}
 {{- define "cap-app-proxy.environment-variables" -}}
 {{- $defaults := (include "cap-app-proxy.environment-variables.defaults" . | fromYaml) }}
-{{- $globalProxyEnv := (include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml) }}
 {{- $overrides := .Values.env }}
-{{- $mergedValues := mergeOverwrite $defaults $globalProxyEnv $overrides }}
+{{- $mergedValues := mergeOverwrite $defaults $overrides }}
 {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" $mergedValues }}
 {{- end -}}
