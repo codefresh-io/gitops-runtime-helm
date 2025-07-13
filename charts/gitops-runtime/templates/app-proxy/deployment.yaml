@@ -4,6 +4,10 @@
 {{- $_ := set $appProxyContext.Values "global" (deepCopy (get .Values "global")) }}
 {{- $_ := set $appProxyContext.Values "argo-cd" (get .Values "argo-cd") }}
 
+{{/* Merge environment variables with the ones in _app-proxy-env.yaml */}}
+{{- $mainContainerMergedValues := mergeOverwrite $appProxyContext.Values.env (include "codefresh-gitops-runtime.app-proxy.calculated-env-vars" . | fromYaml) }}
+{{- $_ := set $appProxyContext.Values "env" $mainContainerMergedValues }}
+
 {{/* Add extra volumes (used for cutom tls) */}}
 {{- $calculatedVolumes := include "codefresh-gitops-runtime.app-proxy.extra-volumes" . | fromYaml }}
 {{- if $calculatedVolumes.extraVolumes }}
