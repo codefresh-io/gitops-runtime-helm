@@ -15,6 +15,7 @@ spec:
       - name: cleanup-runtime-resources
         image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
         imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
+        {{- include "installer.cleanup-resources.environment-variables" . | nindent 8}}
         command: ["sh", "-c"]
         args:
         - |

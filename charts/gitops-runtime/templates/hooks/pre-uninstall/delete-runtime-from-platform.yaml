@@ -1,8 +1,6 @@
 {{- $customCASecretName := ""}}
-{{- $customCASecretKey := ""}}
 {{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
   {{- $customCASecretName = .Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
-  {{- $customCASecretKey = .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
 {{- end }}
 ---
 apiVersion: batch/v1
@@ -21,17 +19,7 @@ spec:
       - name: delete-runtime-from-platform
         image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
         imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
-        env:
-        - name: RUNTIME_NAME
-          value: {{ .Values.global.runtime.name }}
-        - name: PLATFORM_URL
-          value: {{ .Values.global.codefresh.url }}
-        - name: USER_TOKEN
-          {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 10 }}
-{{- if $customCASecretName }}
-        - name: SSL_CERT_FILE
-          value: /app/config/codefresh-tls-certs/{{ $customCASecretKey }}
-{{- end }}
+        {{- include "installer.delete-runtime-from-platform.environment-variables" . | nindent 8}}
 {{- if $customCASecretName }}
         volumeMounts:
         - mountPath: /app/config/codefresh-tls-certs

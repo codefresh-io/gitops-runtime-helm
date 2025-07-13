@@ -3,7 +3,7 @@
   {{- $_ := set $eventReporterContext "Values" (deepCopy (get .Values "event-reporters")) }}
   {{- $_ := set $eventReporterContext.Values "global" (deepCopy (get .Values "global")) }}
 
-  {{- $globalProxyEnv := include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml }}
+  {{- $globalProxyEnv := (include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml) }}
   {{- $mergedEnv := mergeOverwrite $globalProxyEnv $eventReporterContext.Values.rollout.sensor.env }}
   {{- $_ := set $eventReporterContext.Values.rollout.sensor "env" $mergedEnv }}
 

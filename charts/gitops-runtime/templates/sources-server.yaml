@@ -14,7 +14,7 @@
   {{- end }}
 {{- end }}
 
-{{- $globalProxyEnv := include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml }}
+{{- $globalProxyEnv := (include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml) }}
 {{- $mergedEnv := mergeOverwrite $globalProxyEnv $cfArgoCdExtrasContext.Values.sourcesServer.container.env }}
 {{- $_ := set $cfArgoCdExtrasContext.Values.sourcesServer.container "env" $mergedEnv }}
 

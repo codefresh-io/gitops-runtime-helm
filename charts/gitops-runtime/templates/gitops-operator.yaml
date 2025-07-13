@@ -37,7 +37,7 @@
     {{- $_ := set $gitopsOperatorContext.Values.global.codefresh.tls.caCerts.secretKeyRef "key" (.Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key) }}
   {{- end }}
 
-  {{- $globalProxyEnv := include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml }}
+  {{- $globalProxyEnv := (include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml) }}
   {{- $mergedEnv := mergeOverwrite $globalProxyEnv $gitopsOperatorContext.Values.env }}
   {{- $_ := set $gitopsOperatorContext.Values "env" $mergedEnv }}
 

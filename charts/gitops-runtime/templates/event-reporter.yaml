@@ -18,7 +18,7 @@
   {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container.env "ARGOCD_SERVER_ROOTPATH" (index .Values "global" "external-argo-cd" "server" "rootpath") }}
 {{- end }}
 
-{{- $globalProxyEnv := include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml }}
+{{- $globalProxyEnv := (include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml) }}
 {{- $mergedEnv := mergeOverwrite $globalProxyEnv $cfArgoCdExtrasContext.Values.eventReporter.container.env }}
 {{- $_ := set $cfArgoCdExtrasContext.Values.eventReporter.container "env" $mergedEnv }}
 

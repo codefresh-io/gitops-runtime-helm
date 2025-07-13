@@ -17,23 +17,7 @@ spec:
       - name: validate-values
         image: "{{ .Values.installer.image.repository }}:{{ .Values.installer.image.tag | default .Chart.Version }}"
         imagePullPolicy: {{ .Values.installer.image.pullPolicy }}
-        env:
-        - name: NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: CHART_VERSION
-          value: {{ .Chart.Version }}
-        - name: ARGOCD_CHECK_VERSION
-          value: {{ not (get .Values "argo-cd").enabled | quote }}
-        - name: ARGOCD_LABELS
-          value: "{{ range $k, $v := .Values.installer.argoCdVersionCheck.argoServerLabels }}{{ $k }}={{ $v }},{{ end }}"
-        - name: ARGOCD_VERSION_PATH
-          value: "/api/version"
-        - name: REQUIRED_VERSION_CONSTRAINT
-          value: ">=2.12 <3"
-        - name: ARGOCD_ROOT_PATH
-          value: {{ index .Values "global" "external-argo-cd" "server" "rootpath" | default "" }}
+        {{- include "installer.validate-values.environment-variables" . | nindent 8}}
         command: ["sh", "-c"]
         args:
         - | # shell

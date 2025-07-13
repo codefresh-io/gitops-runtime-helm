@@ -1,0 +1,25 @@
+{{- define "installer.cleanup-resources.environment-variables" -}}
+  {{- $globalProxyEnv := (include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml) }}
+  {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" $globalProxyEnv }}
+{{- end -}}
+
+{{- define "installer.delete-runtime-from-platform.environment-variables.defaults" -}}
+{{- $customCASecretKey := ""}}
+{{- if or .Values.global.codefresh.tls.caCerts.secret.create .Values.global.codefresh.tls.caCerts.secretKeyRef }}
+  {{- $customCASecretKey = .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+{{- end }}
+PLATFORM_URL: {{ .Values.global.codefresh.url }}
+RUNTIME_NAME: {{ .Values.global.runtime.name }}
+  {{- if $customCASecretKey }}
+SSL_CERT_FILE: /app/config/codefresh-tls-certs/{{ $customCASecretKey }}
+  {{- end }}
+USER_TOKEN:
+  {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 2 }}
+{{- end -}}
+
+{{- define "installer.delete-runtime-from-platform.environment-variables" -}}
+  {{- $defaults := (include "installer.delete-runtime-from-platform.environment-variables.defaults" . | fromYaml) }}
+  {{- $globalProxyEnv := (include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml) }}
+  {{- $mergedValues := mergeOverwrite $defaults $globalProxyEnv }}
+  {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" $mergedValues }}
+{{- end -}}
