@@ -4,16 +4,9 @@
   {{- $_ := set $eventReporterContext "Values" (deepCopy (get .Values "event-reporters")) }}
   {{- $_ := set $eventReporterContext.Values "global" (deepCopy (get .Values "global")) }}
 
-  {{/* Proxy environment variables */}}
-  {{- if .Values.global.httpProxy }}
-    {{- $_ := set $eventReporterContext.Values.workflow.sensor.env "HTTP_PROXY" .Values.global.httpProxy }}
-  {{- end }}
-  {{- if .Values.global.httpsProxy }}
-    {{- $_ := set $eventReporterContext.Values.workflow.sensor.env "HTTPS_PROXY" .Values.global.httpsProxy }}
-  {{- end }}
-  {{- if .Values.global.noProxy }}
-    {{- $_ := set $eventReporterContext.Values.workflow.sensor.env "NO_PROXY" .Values.global.noProxy }}
-  {{- end }}
+  {{- $globalProxyEnv := include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml }}
+  {{- $mergedEnv := mergeOverwrite $globalProxyEnv $eventReporterContext.Values.workflow.sensor.env }}
+  {{- $_ := set $eventReporterContext.Values.workflow.sensor "env" $mergedEnv }}
 
   {{- include "event-reporters.workflow-reporter.sensor" $eventReporterContext }}
 {{- end }}

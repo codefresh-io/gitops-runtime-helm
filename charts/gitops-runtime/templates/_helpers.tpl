@@ -507,3 +507,21 @@ valueFrom:
     optional: true
 {{- end }}
 # ------------------------------------------------------------------------------------------------------------
+
+{{/*
+Set proxy environment variables on a dictionary
+*/}}
+{{- define "codefresh-gitops-runtime.get-proxy-env-vars" -}}
+  {{- $envDict := dict -}}
+  {{- $global := .Values.global -}}
+  {{- if $global.httpProxy }}
+    {{- $_ := set $envDict "HTTP_PROXY" $global.httpProxy }}
+  {{- end }}
+  {{- if $global.httpsProxy }}
+    {{- $_ := set $envDict "HTTPS_PROXY" $global.httpsProxy }}
+  {{- end }}
+  {{- if $global.noProxy }}
+    {{- $_ := set $envDict "NO_PROXY" $global.noProxy }}
+  {{- end }}
+  {{- $envDict | toYaml }}
+{{- end -}}

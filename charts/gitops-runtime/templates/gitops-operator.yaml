@@ -37,16 +37,9 @@
     {{- $_ := set $gitopsOperatorContext.Values.global.codefresh.tls.caCerts.secretKeyRef "key" (.Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key) }}
   {{- end }}
 
-  {{/* Proxy environment variables */}}
-  {{- if .Values.global.httpProxy }}
-    {{- $_ := set $gitopsOperatorContext.Values.env "HTTP_PROXY" .Values.global.httpProxy }}
-  {{- end }}
-  {{- if .Values.global.httpsProxy }}
-    {{- $_ := set $gitopsOperatorContext.Values.env "HTTPS_PROXY" .Values.global.httpsProxy }}
-  {{- end }}
-  {{- if .Values.global.noProxy }}
-    {{- $_ := set $gitopsOperatorContext.Values.env "NO_PROXY" .Values.global.noProxy }}
-  {{- end }}
+  {{- $globalProxyEnv := include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml }}
+  {{- $mergedEnv := mergeOverwrite $globalProxyEnv $gitopsOperatorContext.Values.env }}
+  {{- $_ := set $gitopsOperatorContext.Values "env" $mergedEnv }}
 
   {{- if and (gt (int $gitopsOperatorContext.Values.replicaCount) 1 ) }}
     {{- $_ := set $gitopsOperatorContext.Values.env "LEADER_ELECT" "true" }}
