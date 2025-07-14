@@ -3,5 +3,10 @@
   {{- $eventReporterContext := deepCopy . }}
   {{- $_ := set $eventReporterContext "Values" (deepCopy (get .Values "event-reporters")) }}
   {{- $_ := set $eventReporterContext.Values "global" (deepCopy (get .Values "global")) }}
+
+  {{- $globalProxyEnv := (include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml) }}
+  {{- $mergedEnv := mergeOverwrite $globalProxyEnv $eventReporterContext.Values.workflow.sensor.env }}
+  {{- $_ := set $eventReporterContext.Values.workflow.sensor "env" $mergedEnv }}
+
   {{- include "event-reporters.workflow-reporter.sensor" $eventReporterContext }}
 {{- end }}

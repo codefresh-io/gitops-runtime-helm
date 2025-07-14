@@ -225,7 +225,7 @@ tests:
   set:
     global.codefresh.userToken.token: dummy
     global.codefresh.accountId: asddd
-    global.runtime.ingress.enabled: true 
+    global.runtime.ingress.enabled: true
     global.runtime.ingress.hosts[0]: asddd
   asserts:
   - failedTemplate:
@@ -242,3 +242,27 @@ tests:
       path: data.runtimeName
       value: "test1"
 
+- it: proxy correctly set in app-proxy env
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.httpProxy: "proxy.example.com"
+    global.httpsProxy: "proxys.example.com"
+    global.noProxy: "localhost"
+  asserts:
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: HTTP_PROXY
+        value: proxy.example.com
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: NO_PROXY
+        value: localhost
+  - contains:
+      path: spec.template.spec.containers[0].env
+      content:
+        name: HTTPS_PROXY
+        value: proxys.example.com

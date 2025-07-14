@@ -507,3 +507,18 @@ valueFrom:
     optional: true
 {{- end }}
 # ------------------------------------------------------------------------------------------------------------
+
+{{/*
+Print proxy environment variables
+*/}}
+{{- define "codefresh-gitops-runtime.get-proxy-env-vars" -}}
+  {{- if .Values.global.httpProxy }}
+HTTP_PROXY: {{ .Values.global.httpProxy }}
+  {{- end }}
+  {{- if .Values.global.httpsProxy }}
+HTTPS_PROXY: {{ .Values.global.httpsProxy }}
+  {{- end }}
+  {{- if .Values.global.noProxy }}
+NO_PROXY: {{ .Values.global.noProxy }}
+  {{- end }}
+{{- end -}}

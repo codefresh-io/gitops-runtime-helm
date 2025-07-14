@@ -3,7 +3,7 @@ Some app-proxy environment variables are determined by values provided in other 
 to keep the separation of components as pseudo library charts, they are defined here to be merged when
 app-proxy components are generated.
 */}}
-{{- define "codefresh-gitops-runtime.app-proxy.calculated-env-vars"}}
+{{- define "codefresh-gitops-runtime.app-proxy.calculated-env-vars" }}
 HELM_RELEASE_NAME: {{ .Release.Name }}
 USER_TOKEN:
   {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 2 }}

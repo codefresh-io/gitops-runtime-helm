@@ -1,0 +1,33 @@
+{{- define "installer.validate-usage.environment-variables.defaults" -}}
+NAMESPACE:
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+{{- end -}}
+
+{{- define "installer.validate-usage.environment-variables" -}}
+  {{- $defaults := (include "installer.validate-usage.environment-variables.defaults" . | fromYaml) }}
+  {{- $globalProxyEnv := (include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml) }}
+  {{- $mergedValues := mergeOverwrite $defaults $globalProxyEnv }}
+  {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" $mergedValues }}
+{{- end -}}
+
+{{- define "installer.validate-values.environment-variables.defaults" -}}
+ARGOCD_CHECK_VERSION: {{ not (get .Values "argo-cd").enabled | quote }}
+ARGOCD_LABELS: "{{ range $k, $v := .Values.installer.argoCdVersionCheck.argoServerLabels }}{{ $k }}={{ $v }},{{ end }}"
+ARGOCD_ROOT_PATH: {{ index .Values "global" "external-argo-cd" "server" "rootpath" | quote }}
+ARGOCD_VERSION_PATH: "/api/version"
+CHART_VERSION: {{ .Chart.Version }}
+NAMESPACE:
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+REQUIRED_VERSION_CONSTRAINT: ">=2.12 <3"
+{{- end -}}
+
+{{- define "installer.validate-values.environment-variables" -}}
+  {{- $defaults := (include "installer.validate-values.environment-variables.defaults" . | fromYaml) }}
+  {{- $globalProxyEnv := (include "codefresh-gitops-runtime.get-proxy-env-vars" . | fromYaml) }}
+  {{- $mergedValues := mergeOverwrite $defaults $globalProxyEnv }}
+  {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" $mergedValues }}
+{{- end -}}
