@@ -22,7 +22,7 @@ NAMESPACE:
   valueFrom:
     fieldRef:
       fieldPath: metadata.namespace
-REQUIRED_VERSION_CONSTRAINT: ">=2.12 <3"
+REQUIRED_VERSION_CONSTRAINT: ">=2.12 <3.1"
 {{- end -}}
 
 {{- define "installer.validate-values.environment-variables" -}}
