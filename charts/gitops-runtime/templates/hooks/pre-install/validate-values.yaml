@@ -31,7 +31,7 @@ spec:
         - name: ARGOCD_VERSION_PATH
           value: "/api/version"
         - name: REQUIRED_VERSION_CONSTRAINT
-          value: ">=2.12 <3"
+          value: ">=2.12 <3.1"
         - name: ARGOCD_ROOT_PATH
           value: {{ index .Values "global" "external-argo-cd" "server" "rootpath" | default "" }}
         command: ["sh", "-c"]
