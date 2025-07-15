@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: update codefresh-gitops-operator subchart to 0.8.0 (#575) - update ClusterRole, improve app reconciliation, fixed wrapper wait for child-workflows'
+      description: 'chore: update codefresh-gitops-operator subchart to 0.8.4 (#575) - update ClusterRole, improve app reconciliation, fixed wrapper wait for child-workflows, do not try to resume a terminated workflow'
     - kind: changed
       description: 'chore: update cap-app-proxy to 1.3636.0 - reduce openHandlers, add git-related metrics, support argo-cd 3.1, cache git operations, use certs for git providers, add argo-cd log filters, optimize github api requests, '
     - kind: changed
