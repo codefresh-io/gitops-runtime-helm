@@ -14,60 +14,30 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
+    - kind: added
+      description: Expose GitHub API metrics and upgrade base Ubuntu image (#553)
+    - kind: added
+      description: Initial component tests for chart validation (#567)
     - kind: changed
-      description: bump gitops operator chart version to 0.8.5 (#586)
+      description: Bumped **codefresh‑gitops‑operator** to v0.8.5 (includes workflow‑resume fix, relative‑files promotion support) (#586, #584, #582, #575, #574)
     - kind: changed
-      description: updated chart "changes"
+      description: Upgraded **argo‑cd** dependency to `8.0.6‑4‑cap‑v3.0.2‑2025‑07‑06‑e9fc72a9` for Argo CD 3.0 compatibility (#563)
     - kind: changed
-      description: 'chore: update codefresh-gitops-operator version to 0.8.4 - stop attempting to resume a non-running workflow (#584)'
+      description: Updated **app‑proxy** images (`1.3624.0 → 1.3633.0`) – adds *applicationLogs* filter/follow and prevents GitHub rate‑limit errors (#564, #566, #570)
     - kind: changed
-      description: 'chore: bump gitops operator to revert relative path (#579) (#582)'
+      description: Updated `REQUIRED_VERSION_CONSTRAINT` logic for Argo CD 3.1+ runResourceAction adoption (#576)
     - kind: changed
-      description: update changes in Chart.yaml
+      description: Upgraded **cf‑argocd‑extras** to `0.5.7` (#561)
     - kind: changed
-      description: 'fix: update REQUIRED_VERSION_CONSTRAINT for Argo CD compatibility (#576)'
-    - kind: changed
-      description: create release 0.22 draft
-    - kind: changed
-      description: 'fix: update gitops operator subchart to 0.8.0 (#575)'
-    - kind: changed
-      description: bump gitops-operator and app-proxy to support relative files promotions (#574)
-    - kind: changed
-      description: bump operator subchart to 0.7.26 (#572)
-    - kind: changed
-      description: 'chore: removed unused env var in app-proxy (#565)'
-    - kind: changed
-      description: 'chore: update app-proxy image tags to 1.3633.0 to reduce github rate limit (#570)'
-    - kind: changed
-      description: 'chore: bump codefresh-gitops-operator version to 0.7.25 (#571)'
-    - kind: changed
-      description: 'test: add component test (#567)'
-    - kind: changed
-      description: 'chore(CR-29827): upd cli-v2 for installer (#568)'
-    - kind: changed
-      description: 'chore: app-proxy 1.3628.0 with applicationLogs query filter / follow options (#566)'
-    - kind: changed
-      description: 'fix: bump cf-argocd-extras to 0.5.7 (#561)'
-    - kind: changed
-      description: 'chore: app-proxy 1.3624.0 with runResourceAction adoption for 3.1+ argocd (#564)'
-    - kind: changed
-      description: updated argo cd helm chart to argo-cd-8.0.6-4-cap-v3.0.2-2025-07-06-e9fc72a9 (#563)
-    - kind: changed
-      description: 'feat: security fixes for Argo Rollouts 1.7.2 (#562)'
-    - kind: changed
-      description: 'fix: validate-values script (#560)'
-    - kind: changed
-      description: bump gitops operator to v0.7.24 (#559)
-    - kind: changed
-      description: 'chore: update image enrichment images to 1.1.14 (#558)'
-    - kind: changed
-      description: 'chore: bump codefresh-gitops-operator version to 0.7.22 (#556)'
-    - kind: changed
-      description: 'chore: update app-proxy image tags to 1.3600.0 - fix check for pull-merge (#557)'
-    - kind: changed
-      description: Feat/add GitHub api metrics and update ubuntu base image (#553)
-    - kind: changed
-      description: 'chore(CR-29160): security upd nats exporter (#543)'
+      description: Updated image‑enrichment service to `1.1.14` (#558)
+    - kind: fixed
+      description: `validate-values` script no longer fails when custom values are omitted (#560)
+    - kind: removed
+      description: Dropped unused environment variable from **app‑proxy** (#565)
+    - kind: security
+      description: Patched critical vulnerabilities in **Argo Rollouts** v1.7.2 (#562)
+    - kind: security
+      description: Updated **nats‑exporter** to resolve CVE‑2025‑30160 (#543)
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
