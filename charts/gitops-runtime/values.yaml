@@ -680,10 +680,9 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
-  # -- Do not change unless instructed otherwise by Codefresh support
-  libraryMode: true
   enabled: true
   replicaCount: 1
+
 
   # -- Codefresh gitops operator crds
   crds:
@@ -708,10 +707,10 @@ gitops-operator:
     # -- An optional template for the promotion wrapper (empty default will use the embedded one)
     promotionWrapperTemplate: ''
 
-  image: {}
+  image:
     # -- defaults
     # repository: quay.io/codefresh/codefresh-gitops-operator
-    # tag: 'v{{ .Chart.AppVersion }}'
+    tag: v0.8.4
 
   serviceAccount:
     create: true
@@ -740,16 +739,14 @@ gitops-operator:
 #-----------------------------------------------------------------------------------------------------------------------
 # -- Codefresh extra services for ArgoCD
 cf-argocd-extras:
-  # -- Library mode for the chart. Allows to inject values from gitops runtime chart
-  libraryMode: true
   eventReporter:
     enabled: true
+    container:
+      image:
+        tag: 0.5.8
     nodeSelector: {}
     tolerations: []
     affinity: {}
-    pdb:
-      # -- Enable PDB for event reporter
-      enabled: false
     serviceMonitor:
       main:
         # -- Enable ServiceMonitor for event reporter
@@ -757,9 +754,9 @@ cf-argocd-extras:
   # -- Sources server configuration
   sourcesServer:
     enabled: true
+    container:
+      image:
+        tag: 0.5.8
     nodeSelector: {}
     tolerations: []
     affinity: {}
-    hpa:
-      # -- Enable HPA for sources server
-      enabled: true

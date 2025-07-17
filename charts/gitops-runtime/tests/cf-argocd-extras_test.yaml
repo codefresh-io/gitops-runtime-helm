@@ -1,14 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
 suite: cf-argocd-extras tests
 templates:
-  - sources-server.yaml
-  - event-reporter.yaml
-  - charts/cf-argocd-extras/*
+  - cf-argocd-extras/**/*.yaml
+  - _components/cf-argocd-extras/**
 tests:
   - it: Sources Server ConfigMap should have valid data
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: ConfigMap
+    template: cf-argocd-extras/sources-server/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
@@ -23,111 +20,106 @@ tests:
           value: argo-cd-repo-server:8081
 
   - it: Sources Server Deployment should have valid matchLabel selectors
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
+    template: cf-argocd-extras/sources-server/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
       - equal:
           path: spec.selector.matchLabels
           value:
-            app.kubernetes.io/name: cf-argocd-extras
+            app.kubernetes.io/name: gitops-runtime
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/component: sources-server
       - equal:
           path: spec.template.metadata.labels
           value:
-            app.kubernetes.io/name: cf-argocd-extras
+            app.kubernetes.io/name: gitops-runtime
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/component: sources-server
 
   - it: Sources Server Service should have valid matchLabel selectors
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: Service
+    template: cf-argocd-extras/sources-server/service.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
       - equal:
           path: spec.selector
           value:
-            app.kubernetes.io/name: cf-argocd-extras
+            app.kubernetes.io/name: gitops-runtime
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/component: sources-server
 
   - it: New Event-Reporter should be deployed with forked ArgoCD
-    template: event-reporter.yaml
+    template: cf-argocd-extras/event-reporter/statefulset.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
-      - containsDocument:
-          kind: StatefulSet
-          apiVersion: apps/v1
-          name: event-reporter
-        documentIndex: 4
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: StatefulSet
+      - equal:
+          path: metadata.name
+          value: event-reporter
 
   - it: New Event-Reporter should be deployed with forked ArgoCD even if it's disabled in extras values
-    template: event-reporter.yaml
+    template: cf-argocd-extras/event-reporter/statefulset.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
       cf-argocd-extras.eventReporter.enabled: false
     asserts:
-      - containsDocument:
-          kind: StatefulSet
-          apiVersion: apps/v1
-          name: event-reporter
-        documentIndex: 4
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: StatefulSet
+      - equal:
+          path: metadata.name
+          value: event-reporter
 
   - it: New Event-Reporter should be deployed with external OSS ArgoCD
-    template: event-reporter.yaml
-    documentSelector:
-      path: kind
-      value: StatefulSet
+    template: cf-argocd-extras/event-reporter/statefulset.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     asserts:
-      - containsDocument:
-          kind: StatefulSet
-          apiVersion: apps/v1
-          name: event-reporter
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: StatefulSet
+      - equal:
+          path: metadata.name
+          value: event-reporter
 
   - it: Sources-Server should be deployed with forked ArgoCD
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
+    template: cf-argocd-extras/sources-server/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
-      - containsDocument:
-          kind: Deployment
-          apiVersion: apps/v1
-          name: sources-server
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: metadata.name
+          value: sources-server
 
   - it: Sources-Server should be deployed with external OSS ArgoCD
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
+    template: cf-argocd-extras/sources-server/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     asserts:
-      - containsDocument:
-          kind: Deployment
-          apiVersion: apps/v1
-          name: sources-server
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: metadata.name
+          value: sources-server
 
   - it: Sources-Server ConfigMap should have valid redis-ha url
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: ConfigMap
+    template: cf-argocd-extras/sources-server/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -140,10 +132,7 @@ tests:
           value: RELEASE-NAME-redis-ha-haproxy:6379
 
   - it: Event-Reporter ConfigMap should have valid redis-ha url
-    template: event-reporter.yaml
-    documentSelector:
-      path: kind
-      value: ConfigMap
+    template: cf-argocd-extras/event-reporter/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -156,10 +145,7 @@ tests:
           value: RELEASE-NAME-redis-ha-haproxy:6379
 
   - it: Sources-Server should have an OPTIONAL codefresh-tls-certs volume and volumeMount by default
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
+    template: cf-argocd-extras/sources-server/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
@@ -178,10 +164,7 @@ tests:
             readOnly: true
 
   - it: Sources-Server should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secret.create is true
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
+    template: cf-argocd-extras/sources-server/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -215,10 +198,7 @@ tests:
             readOnly: true
 
   - it: Sources-Server should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secretKeyRef is set
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
+    template: cf-argocd-extras/sources-server/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -248,10 +228,7 @@ tests:
             readOnly: true
 
   - it: Event-Reporter should have an OPTIONAL codefresh-tls-certs volume and volumeMount by default
-    template: event-reporter.yaml
-    documentSelector:
-      path: kind
-      value: StatefulSet
+    template: cf-argocd-extras/event-reporter/statefulset.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
@@ -270,10 +247,7 @@ tests:
             readOnly: true
 
   - it: Event-Reporter should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secret.create is true
-    template: event-reporter.yaml
-    documentSelector:
-      path: kind
-      value: StatefulSet
+    template: cf-argocd-extras/event-reporter/statefulset.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -307,10 +281,7 @@ tests:
             readOnly: true
 
   - it: Event-Reporter should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secretKeyRef is set
-    template: event-reporter.yaml
-    documentSelector:
-      path: kind
-      value: StatefulSet
+    template: cf-argocd-extras/event-reporter/statefulset.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:

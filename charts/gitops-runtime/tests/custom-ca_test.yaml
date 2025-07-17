@@ -1,4 +1,4 @@
-# Test custom CA - affects app-proxy and event reporters
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
 suite: Test custom CA
 templates:
   - tls-custom-ca/codefresh-tls-certs.yaml
@@ -7,8 +7,8 @@ templates:
   - event-reporters/workflow-reporter/sensor.yaml
   - event-reporters/rollout-reporter/sensor.yaml
   - hooks/pre-uninstall/delete-runtime-from-platform.yaml
-  - "gitops-operator.yaml"
-  - charts/gitops-operator/*
+  - gitops-operator/*
+  - _components/gitops-operator/*
 tests:
 
 - it: test chart created secret contents - default secret key
@@ -154,9 +154,9 @@ tests:
   values:
   - ./values/mandatory-values.yaml
   asserts:
-  - isNull:
+  - notExists:
       path: spec.template.spec.volumes
-  - isNull:
+  - notExists:
       path: spec.template.spec.containers[0].volumeMounts
 
 - it: volume in pre-delete-hook - secret ref
@@ -382,10 +382,7 @@ tests:
             -----END CERTIFICATE-----
 
 - it: gitops operator chart created secret
-  template: gitops-operator.yaml
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -415,10 +412,7 @@ tests:
           secretName: codefresh-tls-certs
 
 - it: gitops operator existing secret
-  template: gitops-operator.yaml
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:

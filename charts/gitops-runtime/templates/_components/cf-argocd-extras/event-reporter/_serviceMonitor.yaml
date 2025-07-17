@@ -1,0 +1,14 @@
+{{- define "cf-argocd-extras.event-reporter.serviceMonitor" }}
+
+{{- $context := deepCopy . }}
+
+{{- $defaultVals := include "cf-argocd-extras.default-values" . | fromYaml }}
+{{- $vals := mergeOverwrite $defaultVals (get .Values "cf-argocd-extras") }}
+
+{{- $_ := set $context "Values" $vals.eventReporter }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+
+{{- $templateName := printf "cf-common-%s.serviceMonitor" (index .Subcharts "cf-common").Chart.Version }}
+{{- include $templateName $context }}
+
+{{- end }}

@@ -1,0 +1,128 @@
+{{- define "gitops-operator.crds.promotion-policy" }}
+  {{- if .Values.crds.install }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: promotionpolicies.codefresh.io
+  annotations:
+    {{- if .Values.crds.keep }}
+    "helm.sh/resource-policy": keep
+    {{- end }}
+    {{- with .Values.crds.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    app.kubernetes.io/name: promotionpolicies.codefresh.io
+    app.kubernetes.io/part-of: gitops-operator
+    {{- with .Values.crds.additionalLabels }}
+      {{- toYaml . | nindent 4}}
+    {{- end }}
+spec:
+  group: codefresh.io
+  names:
+    kind: PromotionPolicy
+    listKind: PromotionPolicyList
+    plural: promotionpolicies
+    shortNames:
+    - pp
+    singular: promotionpolicy
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: PromotionPolicy is the Schema for the promotionpolicies API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: PromotionPolicySpec defines the desired state of PromotionPolicy
+            properties:
+              policy:
+                description: Definition of the promotion policy enforcements
+                properties:
+                  action:
+                    description: Action to be performed on the promotion, possible
+                      values are 'commit', 'pr', 'none'
+                    type: string
+                  postAction:
+                    description: Promotion workflow name that are executed after the
+                      promotion is completed
+                    type: string
+                  preAction:
+                    description: Promotion workflow name that are executed before
+                      the promotion is completed
+                    type: string
+                type: object
+              priority:
+                description: Priority of the promotion policy, promotion policies
+                  with higher priority will be evaluated first
+                type: integer
+              selector:
+                description: Definition of the promotion policy selector
+                properties:
+                  product:
+                    description: Product selector. If not specified, the promotion
+                      policy will be applied to all products.
+                    properties:
+                      names:
+                        description: List of product names
+                        items:
+                          type: string
+                        type: array
+                      tags:
+                        description: List of product tags
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  targetEnvironment:
+                    description: Target environment selector. If not specified, the
+                      promotion policy will be applied to all target environments.
+                    properties:
+                      names:
+                        description: List of target environment names
+                        items:
+                          type: string
+                        type: array
+                      tags:
+                        description: List of target environment tags
+                        items:
+                          type: string
+                        type: array
+                      types:
+                        description: List of target environment types
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                type: object
+            required:
+            - policy
+            - priority
+            type: object
+          status:
+            description: PromotionPolicyStatus defines the observed state of PromotionPolicy
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+  {{- end }}
+{{- end }}

@@ -1,13 +1,10 @@
 suite: misc tests on gitops-operator templates generation
 templates:
-  - "gitops-operator.yaml"
-  - charts/gitops-operator/*
+  - gitops-operator/*
+  - _components/gitops-operator/*
 tests:
 - it: override both images works
-  template: gitops-operator.yaml
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -21,7 +18,7 @@ tests:
       value: example.com/repo:0.0.1
 
 - it: override service account name - sa object
-  template: gitops-operator.yaml
+  template: gitops-operator/serviceaccount.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -275,10 +272,7 @@ tests:
         any: true
 
 - it: argocd and workflows overrides for manager
-  template: gitops-operator.yaml
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -301,10 +295,7 @@ tests:
         value: myargocd-server:80/some-path
 
 - it: uses explicit ARGO_CD_URL instead of value defined by argo-cd settings
-  template: gitops-operator.yaml
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:

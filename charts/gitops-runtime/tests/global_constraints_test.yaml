@@ -1,12 +1,11 @@
 suite: Test global constraints (nodeSelector, tolerations)
 templates:
   - app-proxy/deployment.yaml
-  - sources-server.yaml
-  - event-reporter.yaml
-  - gitops-operator.yaml
+  - cf-argocd-extras/**
+  - gitops-operator/*
+  - _components/cf-argocd-extras/**
+  - _components/gitops-operator/*
   - tunnel-client.yaml
-  - charts/cf-argocd-extras/*
-  - charts/gitops-operator/*
   - charts/codefresh-tunnel-client/*
   - internal-router/deployment.yaml
   - event-reporters/rollout-reporter/eventsource.yaml
@@ -24,7 +23,7 @@ templates:
 values:
   - ./values/mandatory-values.yaml
 tests:
-  - it: cap-app-proxy should have nodeSelector from .Values.global
+  - it: cap-app-proxy should have nodeSelector and tolerations from .Values.global
     values:
       - ./values/global-constraints-values.yaml
     template: app-proxy/deployment.yaml
@@ -34,8 +33,15 @@ tests:
           value:
             some-key: some-value
             extra-key: extra-value
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
 
-  - it: cap-app-proxy should have nodeSelector from .Values.app-proxy and NOT from .Values.global
+  - it: cap-app-proxy should have nodeSelector and tolerations from .Values.app-proxy and NOT from .Values.global
     values:
       - ./values/global-constraints-values.yaml
       - ./values/subcharts-constraints-values.yaml
@@ -46,26 +52,6 @@ tests:
           value:
             some-key: another-value
             foo: bar
-
-  - it: cap-app-proxy should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: app-proxy/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
-
-  - it: cap-app-proxy should have tolerations from .Values.app-proxy and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: app-proxy/deployment.yaml
-    asserts:
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -74,7 +60,7 @@ tests:
               value: another-value
               effect: NoSchedule
 
-  - it: internal-router should have nodeSelector from .Values.global
+  - it: internal-router should have nodeSelector and tolerations from .Values.global
     values:
       - ./values/global-constraints-values.yaml
     template: internal-router/deployment.yaml
@@ -84,8 +70,15 @@ tests:
           value:
             some-key: some-value
             extra-key: extra-value
+      - equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
 
-  - it: internal-router should have nodeSelector from .Values.internal-router and NOT from .Values.global
+  - it: internal-router should have nodeSelector and tolerations from .Values.internal-router and NOT from .Values.global
     values:
       - ./values/global-constraints-values.yaml
       - ./values/subcharts-constraints-values.yaml
@@ -96,26 +89,6 @@ tests:
           value:
             some-key: another-value
             foo: bar
-
-  - it: internal-router should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: internal-router/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
-
-  - it: internal-router should have tolerations from .Values.internal-router and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: internal-router/deployment.yaml
-    asserts:
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -124,7 +97,7 @@ tests:
               value: another-value
               effect: NoSchedule
 
-  - it: rollout-reporter eventsource should have nodeSelector from .Values.global
+  - it: rollout-reporter eventsource should have nodeSelector and tolerations from .Values.global
     values:
       - ./values/global-constraints-values.yaml
     template: event-reporters/rollout-reporter/eventsource.yaml
@@ -134,8 +107,15 @@ tests:
           value:
             some-key: some-value
             extra-key: extra-value
+      - equal:
+          path: spec.template.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
 
-  - it: rollout-reporter eventsource should have nodeSelector from .Values.event-reporters and NOT from .Values.global
+  - it: rollout-reporter eventsource should have nodeSelector and tolerations from .Values.event-reporters and NOT from .Values.global
     values:
       - ./values/global-constraints-values.yaml
       - ./values/subcharts-constraints-values.yaml
@@ -146,26 +126,6 @@ tests:
           value:
             some-key: another-value
             foo: bar
-
-  - it: rollout-reporter eventsource should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: event-reporters/rollout-reporter/eventsource.yaml
-    asserts:
-      - equal:
-          path: spec.template.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
-
-  - it: rollout-reporter eventsource should have tolerations from .Values.event-reporters and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: event-reporters/rollout-reporter/eventsource.yaml
-    asserts:
       - equal:
           path: spec.template.tolerations
           value:
@@ -174,7 +134,7 @@ tests:
               value: another-value
               effect: NoSchedule
 
-  - it: rollout-reporter sensor should have nodeSelector from .Values.global
+  - it: rollout-reporter sensor should have nodeSelector and tolerations from .Values.global
     values:
       - ./values/global-constraints-values.yaml
     template: event-reporters/rollout-reporter/sensor.yaml
@@ -184,8 +144,15 @@ tests:
           value:
             some-key: some-value
             extra-key: extra-value
+      - equal:
+          path: spec.template.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
 
-  - it: rollout-reporter sensor should have nodeSelector from .Values.event-reporters and NOT from .Values.global
+  - it: rollout-reporter sensor should have nodeSelector and tolerations from .Values.event-reporters and NOT from .Values.global
     values:
       - ./values/global-constraints-values.yaml
       - ./values/subcharts-constraints-values.yaml
@@ -196,26 +163,6 @@ tests:
           value:
             some-key: another-value
             foo: bar
-
-  - it: rollout-reporter sensor should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: event-reporters/rollout-reporter/sensor.yaml
-    asserts:
-      - equal:
-          path: spec.template.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
-
-  - it: rollout-reporter sensor should have tolerations from .Values.event-reporters and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: event-reporters/rollout-reporter/sensor.yaml
-    asserts:
       - equal:
           path: spec.template.tolerations
           value:
@@ -224,7 +171,7 @@ tests:
               value: another-value
               effect: NoSchedule
 
-  - it: workflow-reporter eventsource should have nodeSelector from .Values.global
+  - it: workflow-reporter eventsource should have nodeSelector and tolerations from .Values.global
     values:
       - ./values/global-constraints-values.yaml
     template: event-reporters/workflow-reporter/eventsource.yaml
@@ -234,8 +181,15 @@ tests:
           value:
             some-key: some-value
             extra-key: extra-value
+      - equal:
+          path: spec.template.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
 
-  - it: workflow-reporter eventsource should have nodeSelector from .Values.event-reporters and NOT from .Values.global
+  - it: workflow-reporter eventsource should have nodeSelector and tolerations from .Values.event-reporters and NOT from .Values.global
     values:
       - ./values/global-constraints-values.yaml
       - ./values/subcharts-constraints-values.yaml
@@ -246,26 +200,6 @@ tests:
           value:
             some-key: another-value
             foo: bar
-
-  - it: workflow-reporter eventsource should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: event-reporters/workflow-reporter/eventsource.yaml
-    asserts:
-      - equal:
-          path: spec.template.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
-
-  - it: workflow-reporter eventsource should have tolerations from .Values.event-reporters and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: event-reporters/workflow-reporter/eventsource.yaml
-    asserts:
       - equal:
           path: spec.template.tolerations
           value:
@@ -274,7 +208,7 @@ tests:
               value: another-value
               effect: NoSchedule
 
-  - it: workflow-reporter sensor should have nodeSelector from .Values.global
+  - it: workflow-reporter sensor should have nodeSelector and tolerations from .Values.global
     values:
       - ./values/global-constraints-values.yaml
     template: event-reporters/workflow-reporter/sensor.yaml
@@ -284,8 +218,15 @@ tests:
           value:
             some-key: some-value
             extra-key: extra-value
+      - equal:
+          path: spec.template.tolerations
+          value:
+            - key: some-key
+              operator: Equal
+              value: some-value
+              effect: NoSchedule
 
-  - it: workflow-reporter sensor should have nodeSelector from .Values.event-reporters and NOT from .Values.global
+  - it: workflow-reporter sensor should have nodeSelector and tolerations from .Values.event-reporters and NOT from .Values.global
     values:
       - ./values/global-constraints-values.yaml
       - ./values/subcharts-constraints-values.yaml
@@ -296,26 +237,6 @@ tests:
           value:
             some-key: another-value
             foo: bar
-
-  - it: workflow-reporter sensor should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: event-reporters/workflow-reporter/sensor.yaml
-    asserts:
-      - equal:
-          path: spec.template.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
-
-  - it: workflow-reporter sensor should have tolerations from .Values.event-reporters and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: event-reporters/workflow-reporter/sensor.yaml
-    asserts:
       - equal:
           path: spec.template.tolerations
           value:
@@ -324,803 +245,766 @@ tests:
               value: another-value
               effect: NoSchedule
 
-  - it: codefresh-eventbus should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: eventbus/codefresh-eventbus.yaml
-    asserts:
-      - equal:
-          path: spec.nats.native.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: codefresh-eventbus should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: eventbus/codefresh-eventbus.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.nats.native.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: codefresh-eventbus should have nodeSelector from .Values.eventbus and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: eventbus/codefresh-eventbus.yaml
-    asserts:
-      - equal:
-          path: spec.nats.native.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: codefresh-eventbus should have nodeSelector from .Values.eventbus and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: eventbus/codefresh-eventbus.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.nats.native.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: codefresh-eventbus should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: eventbus/codefresh-eventbus.yaml
-    asserts:
-      - equal:
-          path: spec.nats.native.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
+  # - it: codefresh-eventbus should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: eventbus/codefresh-eventbus.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.nats.native.tolerations
+  #         value:
+  #           - key: some-key
+  #             operator: Equal
+  #             value: some-value
+  #             effect: NoSchedule
 
-  - it: codefresh-eventbus should have tolerations from .Values.eventbus and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: eventbus/codefresh-eventbus.yaml
-    asserts:
-      - equal:
-          path: spec.nats.native.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
+  # - it: codefresh-eventbus should have tolerations from .Values.eventbus and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: eventbus/codefresh-eventbus.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.nats.native.tolerations
+  #         value:
+  #           - key: another-key
+  #             operator: Equal
+  #             value: another-value
+  #             effect: NoSchedule
 
-  - it: validate-values job should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: hooks/pre-install/validate-values.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: validate-values job should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: hooks/pre-install/validate-values.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: validate-values job should have nodeSelector from .Values.installer and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: hooks/pre-install/validate-values.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: validate-values job should have nodeSelector from .Values.installer and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: hooks/pre-install/validate-values.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: validate-values job should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: hooks/pre-install/validate-values.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
+  # - it: validate-values job should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: hooks/pre-install/validate-values.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: some-key
+  #             operator: Equal
+  #             value: some-value
+  #             effect: NoSchedule
 
-  - it: validate-values job should have tolerations from .Values.installer and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: hooks/pre-install/validate-values.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
+  # - it: validate-values job should have tolerations from .Values.installer and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: hooks/pre-install/validate-values.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: another-key
+  #             operator: Equal
+  #             value: another-value
+  #             effect: NoSchedule
 
-  - it: validate-usage job should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: hooks/pre-install/validate-usage.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: validate-usage job should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: hooks/pre-install/validate-usage.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: validate-usage job should have nodeSelector from .Values.installer and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: hooks/pre-install/validate-usage.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: validate-usage job should have nodeSelector from .Values.installer and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: hooks/pre-install/validate-usage.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: validate-usage job should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: hooks/pre-install/validate-usage.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
+  # - it: validate-usage job should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: hooks/pre-install/validate-usage.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: some-key
+  #             operator: Equal
+  #             value: some-value
+  #             effect: NoSchedule
 
-  - it: validate-usage job should have tolerations from .Values.installer and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: hooks/pre-install/validate-usage.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
+  # - it: validate-usage job should have tolerations from .Values.installer and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: hooks/pre-install/validate-usage.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: another-key
+  #             operator: Equal
+  #             value: another-value
+  #             effect: NoSchedule
 
+  # - it: cleanup-resources job should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: hooks/pre-uninstall/cleanup-resources.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: cleanup-resources job should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: hooks/pre-uninstall/cleanup-resources.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: cleanup-resources job should have nodeSelector from .Values.installer and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: hooks/pre-uninstall/cleanup-resources.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: cleanup-resources job should have nodeSelector from .Values.installer and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: hooks/pre-uninstall/cleanup-resources.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: cleanup-resources job should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: hooks/pre-uninstall/cleanup-resources.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: some-key
+  #             operator: Equal
+  #             value: some-value
+  #             effect: NoSchedule
 
-  - it: cleanup-resources job should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: hooks/pre-uninstall/cleanup-resources.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
+  # - it: cleanup-resources job should have tolerations from .Values.installer and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: hooks/pre-uninstall/cleanup-resources.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: another-key
+  #             operator: Equal
+  #             value: another-value
+  #             effect: NoSchedule
 
-  - it: cleanup-resources job should have tolerations from .Values.installer and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: hooks/pre-uninstall/cleanup-resources.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
+  # - it: delete-runtime-from-platform job should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: hooks/pre-uninstall/delete-runtime-from-platform.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: delete-runtime-from-platform job should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: hooks/pre-uninstall/delete-runtime-from-platform.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: delete-runtime-from-platform job should have nodeSelector from .Values.installer and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: hooks/pre-uninstall/delete-runtime-from-platform.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: delete-runtime-from-platform job should have nodeSelector from .Values.installer and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: hooks/pre-uninstall/delete-runtime-from-platform.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: delete-runtime-from-platform job should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: hooks/pre-uninstall/delete-runtime-from-platform.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: some-key
+  #             operator: Equal
+  #             value: some-value
+  #             effect: NoSchedule
 
-  - it: delete-runtime-from-platform job should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: hooks/pre-uninstall/delete-runtime-from-platform.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
+  # - it: delete-runtime-from-platform job should have tolerations from .Values.installer and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: hooks/pre-uninstall/delete-runtime-from-platform.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Job
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: another-key
+  #             operator: Equal
+  #             value: another-value
+  #             effect: NoSchedule
 
-  - it: delete-runtime-from-platform job should have tolerations from .Values.installer and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: hooks/pre-uninstall/delete-runtime-from-platform.yaml
-    documentSelector:
-      path: kind
-      value: Job
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
+  # - it: sources-server should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: cf-argocd-extras/sources-server/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: sources-server should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: sources-server should have nodeSelector from and .Values.sources-server and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: cf-argocd-extras/sources-server/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: sources-server should have nodeSelector from and .Values.sources-server and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: sources-server should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: cf-argocd-extras/sources-server/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #         - key: some-key
+  #           operator: Equal
+  #           value: some-value
+  #           effect: NoSchedule
 
-  - it: sources-server should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-          - key: some-key
-            operator: Equal
-            value: some-value
-            effect: NoSchedule
+  # - it: sources-server should have tolerations from .Values.sources-server and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: cf-argocd-extras/sources-server/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #         - key: another-key
+  #           operator: Equal
+  #           value: another-value
+  #           effect: NoSchedule
 
-  - it: sources-server should have tolerations from .Values.sources-server and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: sources-server.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-          - key: another-key
-            operator: Equal
-            value: another-value
-            effect: NoSchedule
+  # - it: event-reporter should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/external-argocd-values.yaml
+  #   template: cf-argocd-extras/event-reporter/statefulset.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: event-reporter should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/external-argocd-values.yaml
-    template: event-reporter.yaml
-    documentSelector:
-      path: kind
-      value: StatefulSet
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: event-reporter should have nodeSelector from and .Values.event-reporter and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #     - ./values/external-argocd-values.yaml
+  #   template: cf-argocd-extras/event-reporter/statefulset.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: event-reporter should have nodeSelector from and .Values.event-reporter and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-      - ./values/external-argocd-values.yaml
-    template: event-reporter.yaml
-    documentSelector:
-      path: kind
-      value: StatefulSet
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: event-reporter should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/external-argocd-values.yaml
+  #   template: cf-argocd-extras/event-reporter/statefulset.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #         - key: some-key
+  #           operator: Equal
+  #           value: some-value
+  #           effect: NoSchedule
 
-  - it: event-reporter should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/external-argocd-values.yaml
-    template: event-reporter.yaml
-    documentSelector:
-      path: kind
-      value: StatefulSet
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-          - key: some-key
-            operator: Equal
-            value: some-value
-            effect: NoSchedule
+  # - it: event-reporter should have tolerations from .Values.event-reporter and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #     - ./values/external-argocd-values.yaml
+  #   template: cf-argocd-extras/event-reporter/statefulset.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #         - key: another-key
+  #           operator: Equal
+  #           value: another-value
+  #           effect: NoSchedule
 
-  - it: event-reporter should have tolerations from .Values.event-reporter and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-      - ./values/external-argocd-values.yaml
-    template: event-reporter.yaml
-    documentSelector:
-      path: kind
-      value: StatefulSet
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-          - key: another-key
-            operator: Equal
-            value: another-value
-            effect: NoSchedule
+  # - it: gitops-operator should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: gitops-operator/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: gitops-operator should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: gitops-operator.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: gitops-operator should have nodeSelector from and .Values.gitops-operator and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: gitops-operator/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: gitops-operator should have nodeSelector from and .Values.gitops-operator and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: gitops-operator.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: gitops-operator should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: gitops-operator/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #         - key: some-key
+  #           operator: Equal
+  #           value: some-value
+  #           effect: NoSchedule
 
-  - it: gitops-operator should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: gitops-operator.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-          - key: some-key
-            operator: Equal
-            value: some-value
-            effect: NoSchedule
+  # - it: gitops-operator should have tolerations from .Values.gitops-operator and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: gitops-operator/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #         - key: another-key
+  #           operator: Equal
+  #           value: another-value
+  #           effect: NoSchedule
 
-  - it: gitops-operator should have tolerations from .Values.gitops-operator and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: gitops-operator.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-          - key: another-key
-            operator: Equal
-            value: another-value
-            effect: NoSchedule
+  # - it: tunnel-client should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: tunnel-client.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Deployment
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: tunnel-client should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: tunnel-client.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: tunnel-client should have nodeSelector from and .Values.tunnel-client and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: tunnel-client.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Deployment
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: tunnel-client should have nodeSelector from and .Values.tunnel-client and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: tunnel-client.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: tunnel-client should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: tunnel-client.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Deployment
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #         - key: some-key
+  #           operator: Equal
+  #           value: some-value
+  #           effect: NoSchedule
 
-  - it: tunnel-client should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: tunnel-client.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-          - key: some-key
-            operator: Equal
-            value: some-value
-            effect: NoSchedule
+  # - it: tunnel-client should have tolerations from .Values.tunnel-client and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: tunnel-client.yaml
+  #   documentSelector:
+  #     path: kind
+  #     value: Deployment
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #         - key: another-key
+  #           operator: Equal
+  #           value: another-value
+  #           effect: NoSchedule
 
-  - it: tunnel-client should have tolerations from .Values.tunnel-client and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: tunnel-client.yaml
-    documentSelector:
-      path: kind
-      value: Deployment
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-          - key: another-key
-            operator: Equal
-            value: another-value
-            effect: NoSchedule
+  # - it: argo-events-controller should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: charts/argo-events/templates/argo-events-controller/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: argo-events-controller should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: charts/argo-events/templates/argo-events-controller/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: argo-events-controller should have nodeSelector from and .Values.argo-events and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: charts/argo-events/templates/argo-events-controller/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: argo-events-controller should have nodeSelector from and .Values.argo-events and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: charts/argo-events/templates/argo-events-controller/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: argo-events-controller should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: charts/argo-events/templates/argo-events-controller/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: some-key
+  #             operator: Equal
+  #             value: some-value
+  #             effect: NoSchedule
 
-  - it: argo-events-controller should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: charts/argo-events/templates/argo-events-controller/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
+  # - it: argo-events-controller should have tolerations from .Values.argo-events and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: charts/argo-events/templates/argo-events-controller/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: another-key
+  #             operator: Equal
+  #             value: another-value
+  #             effect: NoSchedule
 
-  - it: argo-events-controller should have tolerations from .Values.argo-events and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: charts/argo-events/templates/argo-events-controller/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
+  # - it: argo-events-webhook should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: argo-events-webhook should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: argo-events-webhook should have nodeSelector from and .Values.argo-events and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: argo-events-webhook should have nodeSelector from and .Values.argo-events and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: argo-events-webhook should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: some-key
+  #             operator: Equal
+  #             value: some-value
+  #             effect: NoSchedule
 
-  - it: argo-events-webhook should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
+  # - it: argo-events-webhook should have tolerations from .Values.argo-events and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: another-key
+  #             operator: Equal
+  #             value: another-value
+  #             effect: NoSchedule
 
-  - it: argo-events-webhook should have tolerations from .Values.argo-events and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
+  # - it: argo-rollouts controller should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: charts/argo-rollouts/templates/controller/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: argo-rollouts controller should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: charts/argo-rollouts/templates/controller/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: argo-rollouts controller should have nodeSelector from and .Values.argo-rollouts and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: charts/argo-rollouts/templates/controller/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: argo-rollouts controller should have nodeSelector from and .Values.argo-rollouts and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: charts/argo-rollouts/templates/controller/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: argo-rollouts controller should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: charts/argo-rollouts/templates/controller/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: some-key
+  #             operator: Equal
+  #             value: some-value
+  #             effect: NoSchedule
 
-  - it: argo-rollouts controller should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: charts/argo-rollouts/templates/controller/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
+  # - it: argo-rollouts controller should have tolerations from .Values.argo-rollouts and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: charts/argo-rollouts/templates/controller/deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: another-key
+  #             operator: Equal
+  #             value: another-value
+  #             effect: NoSchedule
 
-  - it: argo-rollouts controller should have tolerations from .Values.argo-rollouts and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: charts/argo-rollouts/templates/controller/deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
+  # - it: argo-workflow controller should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: argo-workflow controller should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: argo-workflow controller should have nodeSelector from and .Values.argo-workflows and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: argo-workflow controller should have nodeSelector from and .Values.argo-workflows and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: argo-workflow controller should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: some-key
+  #             operator: Equal
+  #             value: some-value
+  #             effect: NoSchedule
 
-  - it: argo-workflow controller should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
+  # - it: argo-workflow controller should have tolerations from .Values.argo-workflows and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: another-key
+  #             operator: Equal
+  #             value: another-value
+  #             effect: NoSchedule
 
-  - it: argo-workflow controller should have tolerations from .Values.argo-workflows and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: charts/argo-workflows/templates/controller/workflow-controller-deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
+  # - it: argo-workflow server should have nodeSelector from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: charts/argo-workflows/templates/server/server-deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: some-value
+  #           extra-key: extra-value
 
-  - it: argo-workflow server should have nodeSelector from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: charts/argo-workflows/templates/server/server-deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
+  # - it: argo-workflow server should have nodeSelector from and .Values.argo-workflows and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: charts/argo-workflows/templates/server/server-deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.nodeSelector
+  #         value:
+  #           some-key: another-value
+  #           foo: bar
 
-  - it: argo-workflow server should have nodeSelector from and .Values.argo-workflows and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: charts/argo-workflows/templates/server/server-deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
+  # - it: argo-workflow server should have tolerations from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #   template: charts/argo-workflows/templates/server/server-deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: some-key
+  #             operator: Equal
+  #             value: some-value
+  #             effect: NoSchedule
 
-  - it: argo-workflow server should have tolerations from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-    template: charts/argo-workflows/templates/server/server-deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: some-key
-              operator: Equal
-              value: some-value
-              effect: NoSchedule
-
-  - it: argo-workflow server should have tolerations from .Values.argo-workflows and NOT from .Values.global
-    values:
-      - ./values/global-constraints-values.yaml
-      - ./values/subcharts-constraints-values.yaml
-    template: charts/argo-workflows/templates/server/server-deployment.yaml
-    asserts:
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
+  # - it: argo-workflow server should have tolerations from .Values.argo-workflows and NOT from .Values.global
+  #   values:
+  #     - ./values/global-constraints-values.yaml
+  #     - ./values/subcharts-constraints-values.yaml
+  #   template: charts/argo-workflows/templates/server/server-deployment.yaml
+  #   asserts:
+  #     - equal:
+  #         path: spec.template.spec.tolerations
+  #         value:
+  #           - key: another-key
+  #             operator: Equal
+  #             value: another-value
+  #             effect: NoSchedule

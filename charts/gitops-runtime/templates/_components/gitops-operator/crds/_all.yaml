@@ -1,0 +1,20 @@
+{{- define "gitops-operator.crds" }}
+
+{{- $context := deepCopy . }}
+
+{{- $defaultVals := include "gitops-operator.default-values" . | fromYaml }}
+{{- $vals := mergeOverwrite $defaultVals (get .Values "gitops-operator") }}
+
+{{- $_ := set $context "Values" $vals }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+
+  {{- include "gitops-operator.crds.promotion-flow" $context }}
+---
+  {{- include "gitops-operator.crds.promotion-template" $context }}
+---
+  {{- include "gitops-operator.crds.product" $context }}
+---
+  {{- include "gitops-operator.crds.restricted-gitsource" $context }}
+---
+  {{- include "gitops-operator.crds.promotion-policy" $context }}
+{{- end }}

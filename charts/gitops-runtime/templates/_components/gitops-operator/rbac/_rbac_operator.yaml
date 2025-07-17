@@ -1,0 +1,103 @@
+
+{{- define "gitops-operator.resources.rbac-operator" }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
+  name: codefresh-gitops-operator
+rules:
+- apiGroups:
+    - ""
+  resources:
+    - pods
+  verbs:
+    - delete
+- apiGroups:
+  - argoproj.io
+  resources:
+  - applications
+  - appprojects
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - codefresh.io
+  resources:
+  - restrictedgitsources
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - codefresh.io
+  resources:
+  - restrictedgitsources/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - codefresh.io
+  resources:
+  - restrictedgitsources/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - secrets
+  verbs:
+  - create
+  - list
+  - watch
+- apiGroups:
+  - "codefresh.io"
+  resources:
+  - products
+  verbs:
+  - get
+  - list
+  - watch
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
+  name: codefresh-gitops-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: codefresh-gitops-operator
+subjects:
+- kind: ServiceAccount
+  name: {{ include "gitops-operator.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
+  name: codefresh-gitops-operator-workflows
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argo-edit
+subjects:
+- kind: ServiceAccount
+  name: {{ include "gitops-operator.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}

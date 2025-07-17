@@ -1,0 +1,125 @@
+{{- define "gitops-operator.resources.deployment" }}
+{{- $cfCommonTplSemver := printf "cf-common-%s" (index .Subcharts "cf-common").Chart.Version }}
+{{/* Merge environment variables from calculated, defaults and overwrites */}}
+{{- $defaults := (include "gitops-operator.resources.environment-variables.defaults" . | fromYaml) }}
+{{- $calculated := (include "gitops-operator.resources.environment-variables.calculated" . | fromYaml) }}
+{{- $overrides := .Values.env }}
+{{- $mergedValues := mergeOverwrite $defaults $calculated $overrides }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gitops-operator.fullname" . }}
+  labels:
+    {{- include "gitops-operator.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "gitops-operator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "gitops-operator.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "gitops-operator.serviceAccountName" . }}
+      securityContext:
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: manager
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        {{- $imageContext := deepCopy .Values.image }}
+        {{- if not (get $imageContext "tag") }}
+          {{- $_ := set $imageContext "tag" .Chart.AppVersion }}
+        {{- end }}
+        image: {{ include (printf "%s.image.name" $cfCommonTplSemver ) (dict "image" $imageContext "context" .) }}
+        env: {{- include (printf "%s.env-vars" $cfCommonTplSemver ) (dict "Values" $mergedValues "context" .) | nindent 8 }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- if .Values.command }}
+        command:
+        {{- .Values.command | toYaml | nindent 8 }}
+        {{- else }}
+        command:
+        - /manager
+        {{- end }}
+        {{- with .Values.extraArgs }}
+        args:
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
+        ports:
+        - name: http-metrics
+          containerPort: 8080
+        - name: http-health
+          containerPort: 8081
+        readinessProbe:
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          httpGet:
+            port: http-health
+            path: /readyz
+        livenessProbe:
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          httpGet:
+            port: http-health
+            path: /healthz
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+        volumeMounts:
+        {{- if .Values.global.codefresh.tls.caCerts.secretKeyRef }}
+        - name: codefresh-tls
+          mountPath: /app/config/codefresh-tls
+        {{- end }}
+        {{- with .Values.extraVolumeMounts }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector | default .Values.global.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations | default .Values.global.tolerations }}
+      tolerations: {{ toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+       - name: tls-certs
+         configMap:
+           name: argocd-tls-certs-cm
+       - name: argocd-repo-server-tls
+         secret:
+           secretName: argocd-repo-server-tls
+           optional: true
+           items:
+           - key: tls.crt
+             path: tls.crt
+           - key: tls.key
+             path: tls.key
+           - key: ca.crt
+             path: ca.crt
+       {{- if .Values.global.codefresh.tls.caCerts.secretKeyRef }}
+       - name: codefresh-tls
+         secret:
+           secretName: {{ .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
+       {{- end }}
+       {{- with .Values.extraVolumes }}
+           {{- toYaml . | nindent 6 }}
+       {{- end }}
+{{- end }}
