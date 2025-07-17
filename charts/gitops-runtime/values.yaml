@@ -89,6 +89,7 @@ global:
         enabled: true
         # -- Minimum number of available eventbus pods. For eventbus to stay functional the majority of its replicas should always be available.
         minAvailable: 2
+      type: nats # -- Eventbus type. Can be nats or jetstream.
       nats:
         native:
           nodeSelector: {}
@@ -107,6 +108,24 @@ global:
                 cpu: 200m
                 memory: 1Gi
                 ephemeral-storage: 2Gi
+      jetstream:
+        version: latest
+        nodeSelector: {}
+        tolerations: []
+        affinity: {}
+        replicas: 3
+        maxPayload: "4MB"
+        containerTemplate:
+          resources:
+            limits:
+              cpu: 500m
+              memory: 4Gi
+              ephemeral-storage: 2Gi
+            requests:
+              cpu: 200m
+              memory: 1Gi
+              ephemeral-storage: 2Gi
+
   # -- Configuration for external ArgoCD
   # Should be used when `argo-cd.enabled` is set to false
   external-argo-cd:
