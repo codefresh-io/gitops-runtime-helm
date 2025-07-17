@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: eventbus tests
+templates:
+  - eventbus/codefresh-eventbus.yaml
+tests:
+  - it: Should create an EventBus with the correct type (nats)
+    template: eventbus/codefresh-eventbus.yaml
+    values:
+      - ./values/mandatory-values.yaml
+    set:
+      global.runtime.eventBus.type: nats
+    asserts:
+      - exists:
+          path: spec.nats
+      - notExists:
+          path: spec.jetstream
+
+  - it: Should create an EventBus with the correct type (jetstream)
+    template: eventbus/codefresh-eventbus.yaml
+    values:
+      - ./values/mandatory-values.yaml
+    set:
+      global.runtime.eventBus.type: jetstream
+    asserts:
+      - exists:
+          path: spec.jetstream
+      - notExists:
+          path: spec.nats

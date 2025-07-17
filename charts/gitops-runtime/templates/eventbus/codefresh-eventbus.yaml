@@ -1,5 +1,6 @@
 {{- $eventBusName := default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
 {{- $eventBusSpec := .Values.global.runtime.eventBus }}
+{{- $eventBusType := .Values.global.runtime.eventBus.type }}
 {{/* Remove name from eventbus spec */}}
 {{- if hasKey $eventBusSpec "name" }}
 {{- $eventBusSpec = unset $eventBusSpec "name" }}
@@ -8,12 +9,22 @@
 {{- if hasKey $eventBusSpec "pdb" }}
 {{- $eventBusSpec = unset $eventBusSpec "pdb" }}
 {{- end }}
+{{/* Remove annotations from eventbus spec */}}
 {{- if hasKey $eventBusSpec "annotations" }}
 {{- $eventBusSpec = unset $eventBusSpec "annotations" }}
 {{- end }}
 
-{{- $_ := set $eventBusSpec.nats.native "nodeSelector" ($eventBusSpec.nats.native.nodeSelector | default .Values.global.nodeSelector) }}
-{{- $_ := set $eventBusSpec.nats.native "tolerations" ($eventBusSpec.nats.native.tolerations | default .Values.global.tolerations) }}
+{{- if eq $eventBusType "nats" }}
+  {{- $eventBusSpec = unset $eventBusSpec "jetstream" }}
+  {{- $_ := set $eventBusSpec.nats.native "nodeSelector" ($eventBusSpec.nats.native.nodeSelector | default .Values.global.nodeSelector) }}
+  {{- $_ := set $eventBusSpec.nats.native "tolerations" ($eventBusSpec.nats.native.tolerations | default .Values.global.tolerations) }}
+{{- end }}
+
+{{- if eq $eventBusType "jetstream" }}
+  {{- $eventBusSpec = unset $eventBusSpec "nats" }}
+  {{- $_ := set $eventBusSpec.jetstream "nodeSelector" ($eventBusSpec.jetstream.nodeSelector | default .Values.global.nodeSelector) }}
+  {{- $_ := set $eventBusSpec.jetstream "tolerations" ($eventBusSpec.jetstream.tolerations | default .Values.global.tolerations) }}
+{{- end }}
 
 apiVersion: argoproj.io/v1alpha1
 kind: EventBus
