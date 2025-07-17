@@ -40,4 +40,3 @@ dependencies:
 - name: cf-common
   repository: oci://quay.io/codefresh/charts
   version: 0.27.0
-  
