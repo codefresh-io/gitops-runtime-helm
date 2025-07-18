@@ -8,6 +8,9 @@
 {{- $_ := set $context "Values" $vals.sourcesServer }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 
+{{/* Workaround to NOT change label selectors from previous runtime release when sources-server was part of cf-argocd-extras Subchart */}}
+{{- $_ := set $context.Values "nameOverride" "cf-argocd-extras" }}
+
 {{- $templateName := printf "cf-common-%s.pdb" (index .Subcharts "cf-common").Chart.Version }}
 {{- include $templateName $context }}
 

@@ -8,6 +8,9 @@
 {{- $_ := set $context "Values" $vals.eventReporter }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 
+{{/* Workaround to NOT change label selectors from previous runtime release when event-reporter was part of cf-argocd-extras Subchart */}}
+{{- $_ := set $context.Values "nameOverride" "cf-argocd-extras" }}
+
 {{- $templateName := printf "cf-common-%s.service" (index .Subcharts "cf-common").Chart.Version }}
 {{- include $templateName $context }}
 

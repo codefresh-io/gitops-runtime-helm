@@ -36,6 +36,9 @@
   {{- $_ := set (index $context.Values.volumes "codefresh-tls-certs") "nameOverride" $secretName }}
 {{- end }}
 
+{{/* Workaround to NOT change label selectors from previous runtime release when event-reporter was part of cf-argocd-extras Subchart */}}
+{{- $_ := set $context.Values "nameOverride" "cf-argocd-extras" }}
+
 {{- $templateName := printf "cf-common-%s.controller" (index .Subcharts "cf-common").Chart.Version -}}
 {{- include $templateName $context -}}
 
