@@ -145,10 +145,6 @@ global:
       svc: argocd-server
       # -- Port of the ArgoCD server
       port: 80
-      # -- Image settings for the ArgoCD server
-      image:
-        repository: quay.io/argoproj/argocd
-        tag: "v2.14.4"
       # -- Set if Argo CD is running behind reverse proxy under subpath different from /
       # e.g.
       # rootpath: '/argocd'
