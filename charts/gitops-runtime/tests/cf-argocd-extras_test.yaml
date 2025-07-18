@@ -309,3 +309,49 @@ tests:
             name: codefresh-tls-certs
             mountPath: /app/config/codefresh-tls-certs
             readOnly: true
+
+  - it: Event Reporter checksum annotation should be changed when configmap is updated
+    template: cf-argocd-extras/event-reporter/statefulset.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      cf-argocd-extras.eventReporter.configMaps.cmd-params-cm.data.foo: bar
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["checksum/config"]
+          value: "747ba21145c84900dd029f20a15e73096e090da7865b67b86601135d10d8cc18"
+
+
+  - it: Event Reporter checksum annotation should be changed when configmap is updated
+    template: cf-argocd-extras/event-reporter/statefulset.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      cf-argocd-extras.eventReporter.configMaps.cmd-params-cm.data.alice: bob
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["checksum/config"]
+          value: "42a0e8eee09a1a411447be59e5b5a078d699560b4d93b62d388a1b622a463b18"
+
+  - it: Sources Server checksum annotation should be changed when configmap is updated
+    template: cf-argocd-extras/sources-server/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      cf-argocd-extras.sourcesServer.configMaps.cmd-params-cm.data.foo: bar
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["checksum/config"]
+          value: "1aac0bdcb473209b67afca0d5ff7cb1d9b849748f82c76e53fd9a43c51456dc2"
+
+
+  - it: Sources Server checksum annotation should be changed when configmap is updated
+    template: cf-argocd-extras/sources-server/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      cf-argocd-extras.sourcesServer.configMaps.cmd-params-cm.data.alice: bob
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations["checksum/config"]
+          value: "cf799238e8fa77132860698833bfe00a6dce93ec57d994da59aa8be3909e61b5"
