@@ -33,7 +33,6 @@ Selector labels
 */}}
 {{- define "cap-app-proxy.selectorLabels" -}}
 app: cap-app-proxy
-app.kubernetes.io/name: cap-app-proxy
 {{- end }}
 
 {{/*
