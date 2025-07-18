@@ -47,7 +47,7 @@ app.kubernetes.io/part-of: internal-router
 Selector labels
 */}}
 {{- define "internal-router.selectorLabels" -}}
-app: "internal-router"
+app: internal-router
 {{- end }}
 
 {{/*

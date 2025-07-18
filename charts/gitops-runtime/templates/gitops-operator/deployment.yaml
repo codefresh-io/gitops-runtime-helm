@@ -1,0 +1,46 @@
+{{- $context := deepCopy . }}
+
+{{- $defaultVals := include "gitops-operator.default-values" . | fromYaml }}
+{{- $vals := mergeOverwrite $defaultVals (get .Values "gitops-operator") }}
+
+{{- $_ := set $context "Values" $vals }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+
+{{- if and (not (index .Values "argo-cd" "enabled")) }}
+    {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
+        {{- if not (index $context.Values "global" "external-argo-cd" "auth" "token") }}
+            {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required" (index $context.Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name")) }}
+            {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.key is required" (index $context.Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "key")) }}
+        {{- else }}
+            {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_NAME" "gitops-runtime-argo-cd-token" }}
+            {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_KEY" "token" }}
+        {{- end }}
+    {{- end }}
+{{- end }}
+
+{{/* Set argo-cd-server service and port */}}
+{{ if not (index $context.Values "env" "ARGO_CD_URL") }}
+{{- $_ := set $context.Values.env "ARGO_CD_URL" (include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . ) }}
+{{- end }}
+
+{{/* Set workflows url */}}
+{{- if index .Values "argo-workflows" "enabled" }}
+    {{- if not $context.Values.env.ARGO_WF_URL }}
+        {{- $argoWorkflowsUrl := include "codefresh-gitops-runtime.argo-workflows.server.url" . }}
+        {{- $_ := set $context.Values.env "ARGO_WF_URL" $argoWorkflowsUrl }}
+    {{- end }}
+{{- end}}
+
+{{/* Set certificates */}}
+{{- if or $context.Values.global.codefresh.tls.caCerts.secret.create $context.Values.global.codefresh.tls.caCerts.secretKeyRef}}
+    {{- $_ := set $context.Values.global.codefresh.tls.caCerts.secretKeyRef "name" ($context.Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" $context.Values.global.codefresh.tls.caCerts.secretKeyRef.name) }}
+    {{- $_ := set $context.Values.global.codefresh.tls.caCerts.secretKeyRef "key" ($context.Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" $context.Values.global.codefresh.tls.caCerts.secret.key) $context.Values.global.codefresh.tls.caCerts.secretKeyRef.key) }}
+{{- end }}
+
+{{- if and (gt (int $context.Values.replicaCount) 1 ) }}
+{{- $_ := set $context.Values.env "LEADER_ELECT" "true" }}
+{{- else }}
+{{- $_ := set $context.Values.env "LEADER_ELECT" "false" }}
+{{- end }}
+
+{{- include "gitops-operator.resources.deployment" $context }}
