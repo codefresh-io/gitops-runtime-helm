@@ -96,6 +96,9 @@ global:
       type: nats # -- Eventbus type. Can be nats or jetstream.
       nats:
         native:
+          metadata:
+            labels:
+              app.kubernetes.io/name: codefresh-eventbus
           nodeSelector: {}
           tolerations: []
           affinity: {}
@@ -113,6 +116,9 @@ global:
                 memory: 1Gi
                 ephemeral-storage: 2Gi
       jetstream:
+        metadata:
+          labels:
+            app.kubernetes.io/name: codefresh-eventbus
         version: latest
         nodeSelector: {}
         tolerations: []

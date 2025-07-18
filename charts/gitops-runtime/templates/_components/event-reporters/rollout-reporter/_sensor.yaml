@@ -19,6 +19,9 @@ spec:
     eventName: analysisruns
   eventBusName: {{ default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
   template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rollout-reporter-sensor
     serviceAccountName: {{ include "event-reporters.rollout-reporter.serviceAccountName" .}}
     container:
       name: ""

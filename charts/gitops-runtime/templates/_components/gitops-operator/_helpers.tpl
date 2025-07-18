@@ -32,7 +32,7 @@ codefresh.io/internal: "true"
 Selector labels
 */}}
 {{- define "gitops-operator.selectorLabels" -}}
-app: gitops-operator
+app.kubernetes.io/name: gitops-operator
 {{- end }}
 
 {{/*

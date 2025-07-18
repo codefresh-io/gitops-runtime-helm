@@ -40,6 +40,9 @@ spec:
       resource: rollouts
       version: v1alpha1
   template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: rollout-reporter-eventsource
     container:
       name: ""
       resources:
