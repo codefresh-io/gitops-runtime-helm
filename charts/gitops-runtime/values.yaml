@@ -763,10 +763,21 @@ cf-argocd-extras:
     enabled: true
     container:
       image:
+        registry: quay.io/codefresh
+        repository: cf-argocd-extras
         tag: 0.5.8
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+    pdb:
+      # -- Enable PDB for event-reporter
+      enabled: false
+      minAvailable: "50%"
+      maxUnavailable: ""
     serviceMonitor:
       main:
         # -- Enable ServiceMonitor for event reporter
@@ -776,7 +787,24 @@ cf-argocd-extras:
     enabled: true
     container:
       image:
+        registry: quay.io/codefresh
+        repository: cf-argocd-extras
         tag: 0.5.8
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+    hpa:
+      # -- Enable HPA for sources server
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 10
+      targetCPUUtilizationPercentage: 70
+    pdb:
+      # -- Enable PDB for sources server
+      enabled: false
+      minAvailable: "50%"
+      maxUnavailable: ""

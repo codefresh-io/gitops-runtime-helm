@@ -344,7 +344,6 @@ tests:
           path: spec.template.metadata.annotations["checksum/config"]
           value: "1aac0bdcb473209b67afca0d5ff7cb1d9b849748f82c76e53fd9a43c51456dc2"
 
-
   - it: Sources Server checksum annotation should be changed when configmap is updated
     template: cf-argocd-extras/sources-server/deployment.yaml
     values:
@@ -355,3 +354,39 @@ tests:
       - equal:
           path: spec.template.metadata.annotations["checksum/config"]
           value: "cf799238e8fa77132860698833bfe00a6dce93ec57d994da59aa8be3909e61b5"
+
+  - it: Sources Server with external redis
+    template: cf-argocd-extras/sources-server/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      cf-argocd-extras.externalRedis.enabled: true
+      cf-argocd-extras.externalRedis.existingSecretKeyRef.name: my-redis-secret
+      cf-argocd-extras.externalRedis.existingSecretKeyRef.key: my-redis-key
+    asserts:
+    - contains:
+        path: spec.template.spec.containers[0].env
+        content:
+          name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-redis-secret
+              key: my-redis-key
+
+  - it: Event Reporter with external redis
+    template: cf-argocd-extras/sources-server/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      cf-argocd-extras.externalRedis.enabled: true
+      cf-argocd-extras.externalRedis.existingSecretKeyRef.name: my-redis-secret
+      cf-argocd-extras.externalRedis.existingSecretKeyRef.key: my-redis-key
+    asserts:
+    - contains:
+        path: spec.template.spec.containers[0].env
+        content:
+          name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-redis-secret
+              key: my-redis-key

@@ -3,7 +3,9 @@ global: {}
 
 externalRedis:
   enabled: false
-  existingSecret: ''
+  existingSecretKeyRef:
+    name: "argocd-redis"
+    key: "redis-password"
 
 eventReporter:
   fullnameOverride: event-reporter
@@ -352,6 +354,9 @@ sourcesServer:
     minReplicas: 1
     maxReplicas: 10
     targetCPUUtilizationPercentage: 70
+
+  keda:
+    enabled: false
 
   pdb:
     enabled: true
