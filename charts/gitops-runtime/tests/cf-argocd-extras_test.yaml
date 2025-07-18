@@ -27,13 +27,13 @@ tests:
       - equal:
           path: spec.selector.matchLabels
           value:
-            app.kubernetes.io/name: gitops-runtime
+            app.kubernetes.io/name: cf-argocd-extras
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/component: sources-server
       - equal:
           path: spec.template.metadata.labels
           value:
-            app.kubernetes.io/name: gitops-runtime
+            app.kubernetes.io/name: cf-argocd-extras
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/component: sources-server
 
@@ -45,7 +45,7 @@ tests:
       - equal:
           path: spec.selector
           value:
-            app.kubernetes.io/name: gitops-runtime
+            app.kubernetes.io/name: cf-argocd-extras
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/component: sources-server
 
