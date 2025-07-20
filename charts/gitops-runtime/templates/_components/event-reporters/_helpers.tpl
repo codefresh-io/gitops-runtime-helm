@@ -134,6 +134,10 @@ assumes the name, condition and payload.dependencyName are identical
   retryStrategy:
   {{- .retryStrategy | toYaml | nindent 4 }}
   {{- end }}
+  {{- if .policy }}
+  policy:
+  {{- .policy | toYaml | nindent 4 }}
+  {{- end }}
 {{- end -}}
 
 {{/* Logging trigger for the sensor - gets sensor.logging dict */}}
