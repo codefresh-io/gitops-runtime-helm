@@ -245,3 +245,20 @@ tests:
           factor: 1.2
           jitter: 3
 
+  - it: HTTP trigger contains policy if set - workflow reporter
+    template: 'event-reporters/workflow-reporter/sensor.yaml'
+    values:
+    - './values/mandatory-values.yaml'
+    set:
+      event-reporters.workflow.sensor:
+        policy:
+          status:
+            allow:
+              - 200
+    asserts:
+    - equal:
+        path: spec.triggers[0].policy
+        value:
+          status:
+            allow:
+              - 200
