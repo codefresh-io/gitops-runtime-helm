@@ -81,7 +81,7 @@ global:
         # -- Runtime eventbus
     eventBus:
       # -- Eventbus name
-      name: 'codefresh-eventbus'
+      name: ''
       # -- Annotations on EventBus resource
       annotations: {}
       # -- Pod disruption budget for the eventbus
