@@ -1,4 +1,4 @@
-{{- $eventBusName := default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
+{{- $eventBusName := .Values.global.runtime.eventBus.name }}
 {{- $eventBusSpec := .Values.global.runtime.eventBus }}
 {{- $eventBusType := .Values.global.runtime.eventBus.type }}
 {{/* Remove name from eventbus spec */}}
@@ -16,12 +16,14 @@
 
 {{- if eq $eventBusType "nats" }}
   {{- $eventBusSpec = unset $eventBusSpec "jetstream" }}
+  {{- $eventBusName = default "codefresh-eventbus" $eventBusName }}
   {{- $_ := set $eventBusSpec.nats.native "nodeSelector" ($eventBusSpec.nats.native.nodeSelector | default .Values.global.nodeSelector) }}
   {{- $_ := set $eventBusSpec.nats.native "tolerations" ($eventBusSpec.nats.native.tolerations | default .Values.global.tolerations) }}
 {{- end }}
 
 {{- if eq $eventBusType "jetstream" }}
   {{- $eventBusSpec = unset $eventBusSpec "nats" }}
+  {{- $eventBusName = default "codefresh-eventbus-jetstream" $eventBusName }}
   {{- $_ := set $eventBusSpec.jetstream "nodeSelector" ($eventBusSpec.jetstream.nodeSelector | default .Values.global.nodeSelector) }}
   {{- $_ := set $eventBusSpec.jetstream "tolerations" ($eventBusSpec.jetstream.tolerations | default .Values.global.tolerations) }}
 {{- end }}
