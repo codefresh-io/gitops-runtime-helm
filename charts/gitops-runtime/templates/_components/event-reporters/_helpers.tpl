@@ -130,6 +130,7 @@ assumes the name, condition and payload.dependencyName are identical
         src:
           dataKey: body
           dependencyName: {{ .name }}
+  atLeastOnce: {{ .atLeastOnce }}
   {{- if .retryStrategy }}
   retryStrategy:
   {{- .retryStrategy | toYaml | nindent 4 }}
