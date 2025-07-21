@@ -268,7 +268,7 @@ tests:
     values:
     - './values/mandatory-values.yaml'
     set:
-      event-reporters.workflow.sensor:
+      event-reporters.rollout.sensor:
         atLeastOnce: false
     asserts:
     - equal:
