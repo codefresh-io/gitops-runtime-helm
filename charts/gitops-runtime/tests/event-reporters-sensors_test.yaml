@@ -263,6 +263,19 @@ tests:
             allow:
               - 200
 
+  - it: HTTP trigger contains atLeastOnce if unset - rollout reporter
+    template: 'event-reporters/rollout-reporter/sensor.yaml'
+    values:
+    - './values/mandatory-values.yaml'
+    set:
+      event-reporters.workflow.sensor:
+        atLeastOnce: false
+    asserts:
+    - equal:
+        path: spec.triggers[0].atLeastOnce
+        value: false
+
+
   - it: HTTP trigger contains atLeastOnce if unset - workflow reporter
     template: 'event-reporters/workflow-reporter/sensor.yaml'
     values:
@@ -274,3 +287,25 @@ tests:
     - equal:
         path: spec.triggers[0].atLeastOnce
         value: false
+
+  - it: uses the correct eventBusName if type is jetstream - rollout reporter
+    template: 'event-reporters/rollout-reporter/sensor.yaml'
+    values:
+    - './values/mandatory-values.yaml'
+    set:
+      global.runtime.eventBus.type: jetstream
+    asserts:
+    - equal:
+        path: spec.eventBusName
+        value: codefresh-eventbus-jetstream
+
+  - it: uses the correct eventBusName if type is jetstream - workflow reporter
+    template: 'event-reporters/workflow-reporter/sensor.yaml'
+    values:
+    - './values/mandatory-values.yaml'
+    set:
+      global.runtime.eventBus.type: jetstream
+    asserts:
+    - equal:
+        path: spec.eventBusName
+        value: codefresh-eventbus-jetstream
