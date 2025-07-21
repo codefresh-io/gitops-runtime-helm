@@ -507,3 +507,17 @@ valueFrom:
     optional: true
 {{- end }}
 # ------------------------------------------------------------------------------------------------------------
+
+{{- define "codefresh-gitops-runtime.eventbus.name" }}
+  {{- $eventBusName := "" }}
+  {{- $eventBusType := .type }}
+  {{- if eq $eventBusType "nats" }}
+    {{- $eventBusName = default "codefresh-eventbus" .name }}
+  {{- else if eq $eventBusType "jetstream" }}
+    {{- $eventBusName = default "codefresh-eventbus-jetstream" .name }}
+  {{- else }}
+    {{- fail (printf "ERROR: EventBus type %s is inavlid, must be nats|jetstream" $eventBusType ) }}
+  {{- end }}
+
+{{- printf "%s" $eventBusName }}
+{{- end }}

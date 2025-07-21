@@ -17,7 +17,7 @@ spec:
   - name: analysisruns
     eventSourceName: rollout-reporter
     eventName: analysisruns
-  eventBusName: {{ default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
+  eventBusName: {{ include "codefresh-gitops-runtime.eventbus.name" .Values.global.runtime.eventBus }}
   template:
     serviceAccountName: {{ include "event-reporters.rollout-reporter.serviceAccountName" .}}
     container:
