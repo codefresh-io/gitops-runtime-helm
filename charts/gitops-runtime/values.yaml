@@ -729,7 +729,8 @@ gitops-operator:
 
   image:
     # -- defaults
-    # repository: quay.io/codefresh/codefresh-gitops-operator
+    registry: quay.io
+    repository: codefresh/codefresh-gitops-operator
     tag: v0.8.4
 
   serviceAccount:
