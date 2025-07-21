@@ -262,3 +262,15 @@ tests:
           status:
             allow:
               - 200
+
+  - it: HTTP trigger contains atLeastOnce if unset - workflow reporter
+    template: 'event-reporters/workflow-reporter/sensor.yaml'
+    values:
+    - './values/mandatory-values.yaml'
+    set:
+      event-reporters.workflow.sensor:
+        atLeastOnce: false
+    asserts:
+    - equal:
+        path: spec.triggers[0].atLeastOnce
+        value: false
