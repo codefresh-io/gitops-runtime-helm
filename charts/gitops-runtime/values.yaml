@@ -675,7 +675,7 @@ gitops-operator:
     # -- An optional template for the promotion wrapper (empty default will use the embedded one)
     promotionWrapperTemplate: ''
   image:
-    tag: feat-remove-helm-templates-427a0e4
+    tag: feat-remove-helm-templates-0812c20
     repository: codefresh/dev/codefresh-gitops-operator
   # -- defaults
   # repository: quay.io/codefresh/codefresh-gitops-operator
