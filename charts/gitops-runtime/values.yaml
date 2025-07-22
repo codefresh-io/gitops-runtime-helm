@@ -786,8 +786,8 @@ cf-argocd-extras:
     enabled: true
     container:
       image:
-        registry: quay.io/codefresh
-        repository: cf-argocd-extras
+        registry: quay.io
+        repository: codefresh/cf-argocd-extras
         tag: 0.5.8
     nodeSelector: {}
     tolerations: []
@@ -810,8 +810,8 @@ cf-argocd-extras:
     enabled: true
     container:
       image:
-        registry: quay.io/codefresh
-        repository: cf-argocd-extras
+        registry: quay.io
+        repository: codefresh/cf-argocd-extras
         tag: 0.5.8
     nodeSelector: {}
     tolerations: []
