@@ -82,7 +82,7 @@ global:
         # -- secretKeyReference for Git credentials password. Provide name and key fields.
         secretKeyRef: {}
 
-   # -- Runtime eventbus
+    # -- Runtime eventbus
     eventBus:
       # -- Eventbus name
       name: ''

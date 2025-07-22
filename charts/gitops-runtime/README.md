@@ -315,9 +315,16 @@ sealed-secrets:
 | event-reporters.rollout.eventSource.resources | object | `{}` |  |
 | event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
 | event-reporters.rollout.sensor.affinity | object | `{}` |  |
+| event-reporters.rollout.sensor.atLeastOnce | bool | `true` | At Least Once |
 | event-reporters.rollout.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
 | event-reporters.rollout.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
 | event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
+| event-reporters.rollout.sensor.policy.status.allow[0] | int | `200` |  |
+| event-reporters.rollout.sensor.policy.status.allow[1] | int | `201` |  |
+| event-reporters.rollout.sensor.policy.status.allow[2] | int | `204` |  |
+| event-reporters.rollout.sensor.policy.status.allow[3] | int | `400` |  |
+| event-reporters.rollout.sensor.policy.status.allow[4] | int | `401` |  |
+| event-reporters.rollout.sensor.policy.status.allow[5] | int | `404` |  |
 | event-reporters.rollout.sensor.replicas | int | `1` |  |
 | event-reporters.rollout.sensor.resources | object | `{}` |  |
 | event-reporters.rollout.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
@@ -333,9 +340,16 @@ sealed-secrets:
 | event-reporters.workflow.eventSource.resources | object | `{}` |  |
 | event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
 | event-reporters.workflow.sensor.affinity | object | `{}` |  |
+| event-reporters.workflow.sensor.atLeastOnce | bool | `true` | At Least Once |
 | event-reporters.workflow.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
 | event-reporters.workflow.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
 | event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
+| event-reporters.workflow.sensor.policy.status.allow[0] | int | `200` |  |
+| event-reporters.workflow.sensor.policy.status.allow[1] | int | `201` |  |
+| event-reporters.workflow.sensor.policy.status.allow[2] | int | `204` |  |
+| event-reporters.workflow.sensor.policy.status.allow[3] | int | `400` |  |
+| event-reporters.workflow.sensor.policy.status.allow[4] | int | `401` |  |
+| event-reporters.workflow.sensor.policy.status.allow[5] | int | `404` |  |
 | event-reporters.workflow.sensor.replicas | int | `1` |  |
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
 | event-reporters.workflow.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
@@ -410,11 +424,12 @@ sealed-secrets:
 | global.httpsProxy | string | `""` | global HTTPS_PROXY for all components |
 | global.noProxy | string | `""` | global NO_PROXY for all components |
 | global.nodeSelector | object | `{}` | Global nodeSelector for all components |
-| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"jetstream":{"affinity":{},"containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","metadata":{"labels":{"app.kubernetes.io/name":"codefresh-eventbus"}},"nodeSelector":{},"replicas":3,"tolerations":[],"version":"latest"},"name":"codefresh-eventbus","nats":{"native":{"affinity":{},"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","metadata":{"labels":{"app.kubernetes.io/name":"codefresh-eventbus"}},"nodeSelector":{},"replicas":3,"tolerations":[]}},"pdb":{"enabled":true,"minAvailable":2},"type":"nats"},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
+| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"jetstream":{"affinity":{},"containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","metadata":{"labels":{"app.kubernetes.io/name":"codefresh-eventbus"}},"nodeSelector":{},"replicas":3,"tolerations":[],"version":"latest"},"name":"","nats":{"native":{"affinity":{},"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","metadata":{"labels":{"app.kubernetes.io/name":"codefresh-eventbus"}},"nodeSelector":{},"replicas":3,"tolerations":[]}},"pdb":{"enabled":true,"minAvailable":2},"type":"nats"},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
+| global.runtime.eventBus | object | `{"annotations":{},"jetstream":{"affinity":{},"containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","metadata":{"labels":{"app.kubernetes.io/name":"codefresh-eventbus"}},"nodeSelector":{},"replicas":3,"tolerations":[],"version":"latest"},"name":"","nats":{"native":{"affinity":{},"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","metadata":{"labels":{"app.kubernetes.io/name":"codefresh-eventbus"}},"nodeSelector":{},"replicas":3,"tolerations":[]}},"pdb":{"enabled":true,"minAvailable":2},"type":"nats"}` | Runtime eventbus |
 | global.runtime.eventBus.annotations | object | `{}` | Annotations on EventBus resource |
-| global.runtime.eventBus.name | string | `"codefresh-eventbus"` | Eventbus name |
+| global.runtime.eventBus.name | string | `""` | Eventbus name |
 | global.runtime.eventBus.pdb | object | `{"enabled":true,"minAvailable":2}` | Pod disruption budget for the eventbus |
 | global.runtime.eventBus.pdb.minAvailable | int | `2` | Minimum number of available eventbus pods. For eventbus to stay functional the majority of its replicas should always be available. |
 | global.runtime.gitCredentials | object | `{"password":{"secretKeyRef":{},"value":null},"username":"username"}` | Git credentials runtime. Runtime is not fully functional without those credentials. If not provided through the installation, they must be provided through the Codefresh UI. |
