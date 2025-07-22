@@ -11,7 +11,7 @@ spec:
     - eventName: workflows
       eventSourceName: workflow-reporter
       name: workflows
-  eventBusName: {{ default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
+  eventBusName: {{ include "codefresh-gitops-runtime.eventbus.name" .Values.global.runtime.eventBus }}
   template:
     serviceAccountName: {{ include "event-reporters.workflow-reporter.serviceAccountName" .}}
     container:
@@ -34,6 +34,6 @@ spec:
       {{- . | toYaml | nindent 6 }}
     {{- end }}
   triggers:
-  {{- include "event-reporters.http.trigger" (dict "name" "workflows" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.workflow.sensor.retryStrategy) | nindent 4 }}
+  {{- include "event-reporters.http.trigger" (dict "name" "workflows" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.workflow.sensor.retryStrategy "policy" .Values.workflow.sensor.policy "atLeastOnce" .Values.workflow.sensor.atLeastOnce) | nindent 4 }}
   {{- include "event-reporters.log.trigger" (.Values.workflow.sensor.logging) | nindent 4 }}
 {{- end }}
