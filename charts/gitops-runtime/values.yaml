@@ -738,7 +738,7 @@ cf-argocd-extras:
         # -- Enable ServiceMonitor for event reporter
         enabled: false
     image:
-      tag: chore-add-gitversion-1c93771
+      tag: chore-add-gitversion-5aae5b6
       repository: codefresh/dev/cf-argocd-extras
   # -- Sources server configuration
   sourcesServer:
@@ -750,5 +750,5 @@ cf-argocd-extras:
       # -- Enable HPA for sources server
       enabled: true
     image:
-      tag: chore-add-gitversion-1c93771
+      tag: chore-add-gitversion-5aae5b6
       repository: codefresh/dev/cf-argocd-extras
