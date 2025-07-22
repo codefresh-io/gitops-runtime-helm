@@ -84,8 +84,8 @@ global:
 
    # -- Runtime eventbus
     eventBus:
-       # -- Eventbus name
-      name: 'codefresh-eventbus'
+      # -- Eventbus name
+      name: ''
       # -- Annotations on EventBus resource
       annotations: {}
       # -- Pod disruption budget for the eventbus
@@ -376,6 +376,8 @@ event-reporters:
       logging:
         enabled: false
         intervalSeconds: 0
+      # -- At Least Once
+      atLeastOnce: true
       # -- Retry strategy for events sent to Codefresh
       retryStrategy:
         # -- Number of retries
@@ -386,6 +388,15 @@ event-reporters:
         factor: 1.0
         # -- The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`.
         jitter: 1
+      policy:
+        status:
+          allow:
+            - 200
+            - 201
+            - 204
+            - 400
+            - 401
+            - 404
       replicas: 1
       resources: {}
       # -- Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs
@@ -407,6 +418,8 @@ event-reporters:
       logging:
         enabled: false
         intervalSeconds: 0
+      # -- At Least Once
+      atLeastOnce: true
       # -- Retry strategy for events sent to Codefresh
       retryStrategy:
         # -- Number of retries
@@ -417,6 +430,15 @@ event-reporters:
         factor: 1.0
         # -- The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`.
         jitter: 1
+      policy:
+        status:
+          allow:
+            - 200
+            - 201
+            - 204
+            - 400
+            - 401
+            - 404
       replicas: 1
       resources: {}
       # -- Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs

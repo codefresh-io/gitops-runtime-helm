@@ -1,4 +1,4 @@
-{{- $eventBusName := default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
+{{- $eventBusName := (include "codefresh-gitops-runtime.eventbus.name" .Values.global.runtime.eventBus) }}
 {{- if .Values.global.runtime.eventBus.pdb.enabled }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget

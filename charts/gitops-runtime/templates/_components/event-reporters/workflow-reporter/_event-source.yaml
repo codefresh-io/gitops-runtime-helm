@@ -7,7 +7,7 @@ metadata:
     {{- include "event-reporters.workflow-reporter.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.workflow.eventSource.replicas }}
-  eventBusName: {{ default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
+  eventBusName: {{ include "codefresh-gitops-runtime.eventbus.name" .Values.global.runtime.eventBus }}
   resource:
     workflows:
       eventTypes:

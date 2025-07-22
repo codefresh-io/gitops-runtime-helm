@@ -14,6 +14,9 @@ tests:
           path: spec.nats
       - notExists:
           path: spec.jetstream
+      - equal:
+          path: metadata.name
+          value: codefresh-eventbus
 
   - it: Should create an EventBus with the correct type (jetstream)
     template: eventbus/codefresh-eventbus.yaml
@@ -26,3 +29,40 @@ tests:
           path: spec.jetstream
       - notExists:
           path: spec.nats
+
+  - it: Should create an EventBus with the correct default name (nats)
+    template: eventbus/codefresh-eventbus.yaml
+    values:
+      - ./values/mandatory-values.yaml
+    set:
+      global.runtime.eventBus.type: nats
+    asserts:
+      - equal:
+          path: metadata.name
+          value: codefresh-eventbus
+
+  - it: Should create an EventBus with the correct override name (nats)
+    template: eventbus/codefresh-eventbus.yaml
+    values:
+      - ./values/mandatory-values.yaml
+    set:
+      global.runtime.eventBus:
+        name: manual-override
+        type: nats
+    asserts:
+      - equal:
+          path: metadata.name
+          value: manual-override
+
+  - it: Should create an EventBus with the correct override name (jetstream)
+    template: eventbus/codefresh-eventbus.yaml
+    values:
+      - ./values/mandatory-values.yaml
+    set:
+      global.runtime.eventBus:
+        name: manual-override
+        type: jetstream
+    asserts:
+      - equal:
+          path: metadata.name
+          value: manual-override
