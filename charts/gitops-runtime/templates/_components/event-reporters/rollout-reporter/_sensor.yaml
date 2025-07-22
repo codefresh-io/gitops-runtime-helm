@@ -17,7 +17,7 @@ spec:
   - name: analysisruns
     eventSourceName: rollout-reporter
     eventName: analysisruns
-  eventBusName: {{ default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
+  eventBusName: {{ include "codefresh-gitops-runtime.eventbus.name" .Values.global.runtime.eventBus }}
   template:
     serviceAccountName: {{ include "event-reporters.rollout-reporter.serviceAccountName" .}}
     container:
@@ -40,8 +40,8 @@ spec:
       {{- . | toYaml | nindent 6 }}
     {{- end }}
   triggers:
-  {{- include "event-reporters.http.trigger" (dict "name" "rollouts" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.rollout.sensor.retryStrategy) | nindent 4 }}
-  {{- include "event-reporters.http.trigger" (dict "name" "replicasets" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.rollout.sensor.retryStrategy) | nindent 4 }}
-  {{- include "event-reporters.http.trigger" (dict "name" "analysisruns" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.rollout.sensor.retryStrategy) | nindent 4 }}
+  {{- include "event-reporters.http.trigger" (dict "name" "rollouts" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.rollout.sensor.retryStrategy "policy" .Values.rollout.sensor.policy "atLeastOnce" .Values.rollout.sensor.atLeastOnce) | nindent 4 }}
+  {{- include "event-reporters.http.trigger" (dict "name" "replicasets" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.rollout.sensor.retryStrategy "policy" .Values.rollout.sensor.policy "atLeastOnce" .Values.rollout.sensor.atLeastOnce) | nindent 4 }}
+  {{- include "event-reporters.http.trigger" (dict "name" "analysisruns" "Values" .Values "payloadDest" "data.object" "retryStrategy" .Values.rollout.sensor.retryStrategy "policy" .Values.rollout.sensor.policy "atLeastOnce" .Values.rollout.sensor.atLeastOnce) | nindent 4 }}
   {{- include "event-reporters.log.trigger" (.Values.rollout.sensor.logging) | nindent 4 }}
 {{- end }}
