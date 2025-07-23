@@ -753,7 +753,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: v0.8.6
+    tag: v0.8.7
 
   serviceAccount:
     create: true
@@ -788,7 +788,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/cf-argocd-extras
-        tag: 0.5.8
+        tag: v0.5.10
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -812,7 +812,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/cf-argocd-extras
-        tag: 0.5.8
+        tag: v0.5.10
     nodeSelector: {}
     tolerations: []
     affinity: {}
