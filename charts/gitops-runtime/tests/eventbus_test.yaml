@@ -39,7 +39,7 @@ tests:
     asserts:
       - equal:
           path: metadata.name
-          value: codefresh-eventbus
+          value: codefresh-eventbus-jetstream
 
   - it: Should create an EventBus with the correct override name (nats)
     template: eventbus/codefresh-eventbus.yaml

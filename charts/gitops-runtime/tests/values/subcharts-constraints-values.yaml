@@ -12,10 +12,9 @@ anchors:
 global:
   runtime:
     eventBus:
-      nats:
-        native:
-          nodeSelector: *nodeSelector
-          tolerations: *tolerations
+      jetstream:
+        nodeSelector: *nodeSelector
+        tolerations: *tolerations
 
 app-proxy:
   nodeSelector: *nodeSelector
