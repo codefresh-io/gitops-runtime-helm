@@ -1,4 +1,4 @@
-{{- $eventBusName := default "codefresh-eventbus" .Values.global.runtime.eventBus.name }}
+{{- $eventBusName := (include "codefresh-gitops-runtime.eventbus.name" .Values.global.runtime.eventBus) }}
 {{- $eventBusSpec := .Values.global.runtime.eventBus }}
 {{- $eventBusType := .Values.global.runtime.eventBus.type }}
 {{/* Remove name from eventbus spec */}}
