@@ -33,7 +33,7 @@ spec:
         - name: 'internal-router'
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" .Values.env | nindent 10 }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

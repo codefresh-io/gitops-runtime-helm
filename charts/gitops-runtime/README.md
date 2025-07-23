@@ -459,8 +459,7 @@ sealed-secrets:
 | internal-router.env | object | `{}` | Environment variables - see values.yaml inside the chart for usage |
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
-| internal-router.image.registry | string | `"docker.io"` |  |
-| internal-router.image.repository | string | `"nginxinc/nginx-unprivileged"` |  |
+| internal-router.image.repository | string | `"docker.io/nginxinc/nginx-unprivileged"` |  |
 | internal-router.image.tag | string | `"1.28-alpine3.21"` |  |
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.ipv6 | object | `{"enabled":false}` | For ipv6 enabled clusters switch ipv6 enabled to true |
