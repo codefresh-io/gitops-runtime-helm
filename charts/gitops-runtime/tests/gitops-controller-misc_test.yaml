@@ -10,12 +10,12 @@ tests:
   set:
     gitops-operator:
       image:
-        repository: example.com/repo
+        repository: test/repo
         tag: 0.0.1
   asserts:
   - equal:
       path: spec.template.spec.containers[0].image
-      value: example.com/repo:0.0.1
+      value: test/repo:0.0.1
 
 - it: override service account name - sa object
   template: gitops-operator/serviceaccount.yaml
