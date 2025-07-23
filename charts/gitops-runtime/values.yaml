@@ -451,7 +451,7 @@ event-reporters:
 internal-router:
   replicaCount: 1
   image:
-    repository: nginxinc/nginx-unprivileged
+    repository: docker.io/nginxinc/nginx-unprivileged
     pullPolicy: IfNotPresent
     tag: 1.28-alpine3.21
   imagePullSecrets: []
