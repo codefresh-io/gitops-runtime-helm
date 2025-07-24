@@ -729,7 +729,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/dev/cf-argocd-extras
-        tag: feat-remove-helm-chart-f93e8cd
+        tag: feat-remove-helm-chart-1a506bc
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -753,7 +753,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/dev/cf-argocd-extras
-        tag: feat-remove-helm-chart-f93e8cd
+        tag: feat-remove-helm-chart-1a506bc
     nodeSelector: {}
     tolerations: []
     affinity: {}
