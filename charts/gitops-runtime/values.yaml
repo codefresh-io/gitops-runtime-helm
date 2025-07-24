@@ -82,7 +82,7 @@ global:
         # -- secretKeyReference for Git credentials password. Provide name and key fields.
         secretKeyRef: {}
 
-   # -- Runtime eventbus
+    # -- Runtime eventbus
     eventBus:
       # -- Eventbus name
       name: ''
@@ -96,6 +96,9 @@ global:
       type: nats # -- Eventbus type. Can be nats or jetstream.
       nats:
         native:
+          metadata:
+            labels:
+              app.kubernetes.io/name: codefresh-eventbus
           nodeSelector: {}
           tolerations: []
           affinity: {}
@@ -113,6 +116,9 @@ global:
                 memory: 1Gi
                 ephemeral-storage: 2Gi
       jetstream:
+        metadata:
+          labels:
+            app.kubernetes.io/name: codefresh-eventbus
         version: latest
         nodeSelector: {}
         tolerations: []
@@ -139,10 +145,6 @@ global:
       svc: argocd-server
       # -- Port of the ArgoCD server
       port: 80
-      # -- Image settings for the ArgoCD server
-      image:
-        repository: quay.io/argoproj/argocd
-        tag: "v2.14.4"
       # -- Set if Argo CD is running behind reverse proxy under subpath different from /
       # e.g.
       # rootpath: '/argocd'
@@ -720,10 +722,9 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
-  # -- Do not change unless instructed otherwise by Codefresh support
-  libraryMode: true
   enabled: true
   replicaCount: 1
+
 
   # -- Codefresh gitops operator crds
   crds:
@@ -748,10 +749,11 @@ gitops-operator:
     # -- An optional template for the promotion wrapper (empty default will use the embedded one)
     promotionWrapperTemplate: ''
 
-  image: {}
+  image:
     # -- defaults
-    # repository: quay.io/codefresh/codefresh-gitops-operator
-    # tag: 'v{{ .Chart.AppVersion }}'
+    registry: quay.io
+    repository: codefresh/codefresh-gitops-operator
+    tag: v0.8.7
 
   serviceAccount:
     create: true
@@ -780,16 +782,25 @@ gitops-operator:
 #-----------------------------------------------------------------------------------------------------------------------
 # -- Codefresh extra services for ArgoCD
 cf-argocd-extras:
-  # -- Library mode for the chart. Allows to inject values from gitops runtime chart
-  libraryMode: true
   eventReporter:
     enabled: true
+    container:
+      image:
+        registry: quay.io
+        repository: codefresh/cf-argocd-extras
+        tag: v0.5.10
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
     pdb:
-      # -- Enable PDB for event reporter
+      # -- Enable PDB for event-reporter
       enabled: false
+      minAvailable: "50%"
+      maxUnavailable: ""
     serviceMonitor:
       main:
         # -- Enable ServiceMonitor for event reporter
@@ -797,9 +808,26 @@ cf-argocd-extras:
   # -- Sources server configuration
   sourcesServer:
     enabled: true
+    container:
+      image:
+        registry: quay.io
+        repository: codefresh/cf-argocd-extras
+        tag: v0.5.10
     nodeSelector: {}
     tolerations: []
     affinity: {}
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
     hpa:
       # -- Enable HPA for sources server
-      enabled: true
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 10
+      targetCPUUtilizationPercentage: 70
+    pdb:
+      # -- Enable PDB for sources server
+      enabled: false
+      minAvailable: "50%"
+      maxUnavailable: ""

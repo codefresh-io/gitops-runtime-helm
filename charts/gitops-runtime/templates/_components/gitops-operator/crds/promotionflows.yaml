@@ -1,0 +1,147 @@
+{{- define "gitops-operator.crds.promotion-flow" }}
+  {{- if .Values.crds.install }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: promotionflows.codefresh.io
+  annotations:
+    {{- if .Values.crds.keep }}
+    "helm.sh/resource-policy": keep
+    {{- end }}
+    {{- with .Values.crds.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    app.kubernetes.io/name: promotionflows.codefresh.io
+    app.kubernetes.io/part-of: gitops-operator
+    {{- with .Values.crds.additionalLabels }}
+      {{- toYaml . | nindent 4}}
+    {{- end }}
+spec:
+  group: codefresh.io
+  names:
+    kind: PromotionFlow
+    listKind: PromotionFlowList
+    plural: promotionflows
+    shortNames:
+    - pf
+    singular: promotionflow
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: PromotionFlow is the Schema for the PromotionFlow API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: PromotionFlowSpec defines the desired state of PromotionFlow
+            properties:
+              hooks:
+                description: Hooks specifies the workflows to run on different stages
+                  of the release execution
+                properties:
+                  onFail:
+                    description: OnFail specifies the workflow to run when step fails
+                      to complete execution
+                    type: string
+                  onStart:
+                    description: OnStart specifies the workflow to run when step begins
+                      execution
+                    type: string
+                  onSuccess:
+                    description: OnSuccess specifies the workflow to run when step
+                      completes successfully
+                    type: string
+                type: object
+              postTrigger:
+                description: |-
+                  PostTrigger is the command to run after 1st environment promotion
+                  Deprecated: PostTrigger is deprecated, use OnStart instead
+                type: string
+              promotionTimeoutLimit:
+                description: PromotionTimeoutLimit is the timeout for any product
+                  release that was triggered by the promotion flow
+                type: integer
+              steps:
+                description: Steps is the list of steps in the promotion flow
+                items:
+                  description: FlowStep defines a step in the promotion flow
+                  properties:
+                    dependsOn:
+                      description: DependsOn is the environment that triggers flow
+                        step
+                      items:
+                        type: string
+                      minItems: 1
+                      type: array
+                    environment:
+                      description: Environment is the environment that triggers the
+                        promotion
+                      type: string
+                    hooks:
+                      description: Hooks specifies the workflows to run on different
+                        stages of the step execution
+                      properties:
+                        onFail:
+                          description: OnFail specifies the workflow to run when step
+                            fails to complete execution
+                          type: string
+                        onStart:
+                          description: OnStart specifies the workflow to run when
+                            step begins execution
+                          type: string
+                        onSuccess:
+                          description: OnSuccess specifies the workflow to run when
+                            step completes successfully
+                          type: string
+                      type: object
+                    policy:
+                      description: FlowStepPolicy defines the policy for a step in
+                        the promotion flow
+                      properties:
+                        action:
+                          description: Action is the action to take
+                          type: string
+                        postAction:
+                          description: PostAction is the workflowTemplate to run after
+                            the action
+                          type: string
+                        preAction:
+                          description: PreAction is the workflowTemplate to run before
+                            the action
+                          type: string
+                      type: object
+                  required:
+                  - dependsOn
+                  - environment
+                  type: object
+                type: array
+              triggerEnvironment:
+                description: TriggerEnvironment is the environment that triggers the
+                  promotion
+                type: string
+            required:
+            - triggerEnvironment
+            type: object
+        type: object
+    served: true
+    storage: true
+  {{- end }}
+{{- end }}

@@ -1,0 +1,19 @@
+
+{{- define "gitops-operator.resources.rbac" }}
+
+{{- $context := deepCopy . }}
+
+{{- $defaultVals := include "gitops-operator.default-values" . | fromYaml }}
+{{- $vals := mergeOverwrite $defaultVals (get .Values "gitops-operator") }}
+
+{{- $_ := set $context "Values" $vals }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+
+  {{- include "gitops-operator.resources.auth-proxy-rbac" $context }}
+---
+  {{- include "gitops-operator.resources.leader-election-rbac" $context  }}
+---
+  {{- include "gitops-operator.resources.restricted-git-source-rbac" $context }}
+---
+  {{- include "gitops-operator.resources.rbac-operator" $context }}
+{{- end }}

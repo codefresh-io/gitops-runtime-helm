@@ -1,27 +1,24 @@
 suite: misc tests on gitops-operator templates generation
 templates:
-  - "gitops-operator.yaml"
-  - charts/gitops-operator/*
+  - gitops-operator/*
+  - _components/gitops-operator/*
 tests:
 - it: override both images works
-  template: gitops-operator.yaml
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
     gitops-operator:
       image:
-        repository: example.com/repo
+        repository: test/repo
         tag: 0.0.1
   asserts:
   - equal:
       path: spec.template.spec.containers[0].image
-      value: example.com/repo:0.0.1
+      value: quay.io/test/repo:0.0.1
 
 - it: override service account name - sa object
-  template: gitops-operator.yaml
+  template: gitops-operator/serviceaccount.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -34,12 +31,9 @@ tests:
       any: true
 
 - it: override service account name - deployment
-  template: 'gitops-operator.yaml'
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
-  documentSelector:
-    path: kind
-    value: Deployment
   set:
     gitops-operator.serviceAccount.name: sa-name
   asserts:
@@ -48,10 +42,7 @@ tests:
       value: sa-name
 
 - it: overriding of environment variables on main container
-  template: 'gitops-operator.yaml'
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -64,10 +55,7 @@ tests:
         value: "8787"
 
 - it: adding environment variables on main container
-  template: 'gitops-operator.yaml'
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -80,10 +68,7 @@ tests:
         value: test
 
 - it: setting security context on main container
-  template: 'gitops-operator.yaml'
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -94,10 +79,7 @@ tests:
       value: 1000
 
 - it: override readiness and liveness probes values
-  template: 'gitops-operator.yaml'
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -144,10 +126,7 @@ tests:
       value: 1
 
 - it: setting node selector
-  template: 'gitops-operator.yaml'
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -160,10 +139,7 @@ tests:
         test.io/node: "test"
 
 - it: setting tolerations
-  template: 'gitops-operator.yaml'
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -182,10 +158,7 @@ tests:
         effect: "NoSchedule"
 
 - it: setting affinity
-  template: 'gitops-operator.yaml'
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -214,7 +187,7 @@ tests:
                 - antarctica-west1
 
 - it: contains all expected roles and role bindings
-  template: gitops-operator.yaml
+  template: gitops-operator/rbac.yaml
   values:
   - ./values/mandatory-values.yaml
   asserts:
@@ -275,10 +248,7 @@ tests:
         any: true
 
 - it: argocd and workflows overrides for manager
-  template: gitops-operator.yaml
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
@@ -301,10 +271,7 @@ tests:
         value: myargocd-server:80/some-path
 
 - it: uses explicit ARGO_CD_URL instead of value defined by argo-cd settings
-  template: gitops-operator.yaml
-  documentSelector:
-    path: kind
-    value: Deployment
+  template: gitops-operator/deployment.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
