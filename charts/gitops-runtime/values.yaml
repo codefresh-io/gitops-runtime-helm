@@ -701,6 +701,7 @@ gitops-operator:
     registry: quay.io
     repository: codefresh/dev/codefresh-gitops-operator
     tag: feat-remove-helm-chart-0558aae
+    pullPolicy: IfNotPresent
   serviceAccount:
     create: true
     annotations: {}
