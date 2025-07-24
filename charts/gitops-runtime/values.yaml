@@ -699,8 +699,8 @@ gitops-operator:
   image:
     # -- defaults
     registry: quay.io
-    repository: codefresh/codefresh-gitops-operator
-    tag: v0.8.11
+    repository: codefresh/dev/codefresh-gitops-operator
+    tag: feat-remove-helm-chart-04c78e7
   serviceAccount:
     create: true
     annotations: {}
