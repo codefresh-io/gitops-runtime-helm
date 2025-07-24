@@ -193,4 +193,27 @@ sealed-secrets:
     enabled: false
 ```
 
+## Upgrading
+
+### To 0.23.x
+
+####  Affected values
+
+- `.Values.gitops-operator.image` map has been changed to include `registry` field. Please migrate the values git below:
+
+```yaml
+# before
+gitops-operator:
+  image:
+    repository: quay.io/codefresh/codefresh-gitops-operator
+    tag: vX.Y.Z
+
+# after
+gitops-operator:
+  image:
+    registry: quay.io
+    repository: codefresh/codefresh-gitops-operator
+    tag: vX.Y.Z
+```
+
 {{ template "chart.valuesSection" . }}
