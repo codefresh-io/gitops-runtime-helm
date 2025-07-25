@@ -1,7 +1,7 @@
 
 {{- define "gitops-operator.resources.rbac-operator" }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
@@ -26,6 +26,7 @@ rules:
   - patch
   - update
   - watch
+{{- if not .Values.singleNamespace }}
 - apiGroups:
   - codefresh.io
   resources:
@@ -52,6 +53,7 @@ rules:
   - get
   - patch
   - update
+{{- end }}
 - apiGroups:
   - ""
   resources:
@@ -72,14 +74,14 @@ rules:
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: {{ .Values.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
   name: codefresh-gitops-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
   name: codefresh-gitops-operator
 subjects:
 - kind: ServiceAccount
@@ -87,14 +89,14 @@ subjects:
   namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: {{ .Values.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
   name: codefresh-gitops-operator-workflows
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
   name: argo-edit
 subjects:
 - kind: ServiceAccount

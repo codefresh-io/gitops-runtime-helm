@@ -11,6 +11,18 @@
 {{/* Workaround to NOT change label selectors from previous runtime release when event-reporter was part of cf-argocd-extras Subchart */}}
 {{- $_ := set $context.Values "nameOverride" "cf-argocd-extras" }}
 
+{{/* Remove nonResourceURLs when RBAC is namespaced */}}
+{{- $rules := $context.Values.rbac.rules }}
+{{- if $context.Values.rbac.namespaced }}
+    {{- $rules = list }}
+        {{- range $context.Values.rbac.rules }}
+            {{- if not .nonResourceURLs }}
+                {{- $rules = append $rules . }}
+            {{- end }}
+    {{- end }}
+{{- end }}
+{{- $_ := set $context.Values.rbac "rules" $rules }}
+
 {{- $templateName := printf "cf-common-%s.rbac" (index .Subcharts "cf-common").Chart.Version }}
 {{- include $templateName $context }}
 
