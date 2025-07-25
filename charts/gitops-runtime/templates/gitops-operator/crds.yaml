@@ -1,1 +1,3 @@
-{{- include "gitops-operator.crds" . }}
+{{- if and (index .Values "gitops-operator" "enabled") }}
+    {{- include "gitops-operator.crds" . }}
+{{- end }}
