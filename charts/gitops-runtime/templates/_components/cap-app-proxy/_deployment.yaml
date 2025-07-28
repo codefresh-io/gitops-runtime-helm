@@ -87,6 +87,7 @@ spec:
         - mountPath: /app/config/all
           name: all-certs
           readOnly: true
+      {{- if gt (int .Values.replicaCount) 1 }}
       - name: leader-elector
         image: {{ include (printf "%s.image.name" $cfCommonTplSemver ) (dict "image" (index .Values "leader-elector" "image") "context" .) }}
         imagePullPolicy: {{ index .Values "leader-elector" "image" "pullPolicy" | default "IfNotPresent" }}
@@ -139,6 +140,7 @@ spec:
         resources:
           {{- toYaml . | nindent 10 }}
         {{- end }}
+      {{- end }}
       {{- with .Values.nodeSelector | default .Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
