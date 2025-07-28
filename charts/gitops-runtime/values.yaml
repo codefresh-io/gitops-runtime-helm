@@ -518,7 +518,7 @@ tunnel-client:
 # app-proxy
 #-----------------------------------------------------------------------------------------------------------------------
 app-proxy:
-  replicaCount: 1
+  replicaCount: 2
   # -- Image enrichment process configuration
   image-enrichment:
     # -- Enable or disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.
