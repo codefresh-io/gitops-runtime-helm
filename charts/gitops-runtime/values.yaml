@@ -585,7 +585,7 @@ app-proxy:
     extraVolumeMounts: []
   leader-elector:
     image:
-      registy: quay.io
+      registry: quay.io
       repository: codefresh/leader-elector
       tag: v0.0.1
     containerSecurityContext:
