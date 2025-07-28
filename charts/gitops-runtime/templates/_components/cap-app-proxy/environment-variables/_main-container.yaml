@@ -211,6 +211,10 @@ IRW_JIRA_ENRICHMENT_TASK_IMAGE:
       key: enrichmentJiraEnrichmentImage
       optional: true
 NODE_EXTRA_CA_CERTS: /app/config/all/all.cer
+LEADER_ID:
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.name
 {{ include "codefresh-gitops-runtime.get-proxy-env-vars" . }}
 {{- end -}}
 
