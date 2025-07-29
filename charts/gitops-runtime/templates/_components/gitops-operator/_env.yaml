@@ -8,7 +8,7 @@ to keep the separation of components as pseudo library charts, they are defined 
 CF_CA_CERT: {{ printf "/app/config/codefresh-tls/%s" .Values.global.codefresh.tls.caCerts.secretKeyRef.key  }}
   {{- end }}
 CF_URL: {{ .Values.global.codefresh.url }}
-GITOPS_OPERATOR_VERSION: {{ .Chart.AppVersion }}
+GITOPS_OPERATOR_VERSION: {{ .Values.image.tag }}
 RUNTIME: {{ .Values.global.runtime.name }}
 TASK_POLLING_INTERVAL: {{ .Values.config.taskPollingInterval }}
 COMMIT_STATUS_POLLING_INTERVAL: {{ .Values.config.commitStatusPollingInterval }}
