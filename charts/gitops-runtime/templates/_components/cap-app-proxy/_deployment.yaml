@@ -122,20 +122,20 @@ spec:
           httpGet:
             path: /healthz
             port: 4040
-          initialDelaySeconds: {{ index .Values "leader-elector" "initialDelaySeconds" }}
-          periodSeconds: {{ index .Values "leader-elector" "periodSeconds" }}
-          timeoutSeconds: {{ index .Values "leader-elector" "timeoutSeconds" }}
-          successThreshold: {{ index .Values "leader-elector" "successThreshold" }}
-          failureThreshold: {{ index .Values "leader-elector" "failureThreshold" }}
+          initialDelaySeconds: {{ index .Values "leader-elector" "livenessProbe" "initialDelaySeconds" }}
+          periodSeconds: {{ index .Values "leader-elector" "livenessProbe" "periodSeconds" }}
+          timeoutSeconds: {{ index .Values "leader-elector" "livenessProbe" "timeoutSeconds" }}
+          successThreshold: {{ index .Values "leader-elector" "livenessProbe" "successThreshold" }}
+          failureThreshold: {{ index .Values "leader-elector" "livenessProbe" "failureThreshold" }}
         readinessProbe:
           httpGet:
             path: /readyz
             port: 4040
-          initialDelaySeconds: {{ index .Values "leader-elector" "initialDelaySeconds" }}
-          periodSeconds: {{ index .Values "leader-elector" "periodSeconds" }}
-          timeoutSeconds: {{ index .Values "leader-elector" "timeoutSeconds" }}
-          successThreshold: {{ index .Values "leader-elector" "successThreshold" }}
-          failureThreshold: {{ index .Values "leader-elector" "failureThreshold" }}
+          initialDelaySeconds: {{ index .Values "leader-elector" "readinessProbe" "initialDelaySeconds" }}
+          periodSeconds: {{ index .Values "leader-elector" "readinessProbe" "periodSeconds" }}
+          timeoutSeconds: {{ index .Values "leader-elector" "readinessProbe" "timeoutSeconds" }}
+          successThreshold: {{ index .Values "leader-elector" "readinessProbe" "successThreshold" }}
+          failureThreshold: {{ index .Values "leader-elector" "readinessProbe" "failureThreshold" }}
         {{- with index .Values "leader-elector" "resources" }}
         resources:
           {{- toYaml . | nindent 10 }}
