@@ -699,8 +699,8 @@ gitops-operator:
   image:
     # -- defaults
     registry: quay.io
-    repository: codefresh/dev/codefresh-gitops-operator
-    tag: feat-remove-helm-chart-0558aae
+    repository: codefresh/codefresh-gitops-operator
+    tag: v0.8.11
   serviceAccount:
     create: true
     annotations: {}
@@ -728,8 +728,8 @@ cf-argocd-extras:
     container:
       image:
         registry: quay.io
-        repository: codefresh/dev/cf-argocd-extras
-        tag: feat-remove-helm-chart-1a506bc
+        repository: codefresh/cf-argocd-extras
+        tag: v0.5.12
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -752,8 +752,8 @@ cf-argocd-extras:
     container:
       image:
         registry: quay.io
-        repository: codefresh/dev/cf-argocd-extras
-        tag: feat-remove-helm-chart-1a506bc
+        repository: codefresh/cf-argocd-extras
+        tag: v0.5.12
     nodeSelector: {}
     tolerations: []
     affinity: {}
