@@ -1,11 +1,11 @@
 
 {{- define "gitops-operator.resources.rbac-operator" }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
+kind: ClusterRole
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: codefresh-gitops-operator
+  name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-%s" .Release.Namespace) "codefresh-gitops-operator"  }}
 rules:
 - apiGroups:
     - ""
@@ -74,29 +74,29 @@ rules:
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: {{ .Values.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
+kind: ClusterRoleBinding
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: codefresh-gitops-operator
+  name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-%s" .Release.Namespace) "codefresh-gitops-operator"  }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
-  name: codefresh-gitops-operator
+  kind: ClusterRole
+  name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-%s" .Release.Namespace) "codefresh-gitops-operator"  }}
 subjects:
 - kind: ServiceAccount
   name: {{ include "gitops-operator.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: {{ .Values.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
+kind: ClusterRoleBinding
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: codefresh-gitops-operator-workflows
+  name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-workflows-%s" .Release.Namespace) "codefresh-gitops-operator-workflows"  }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
+  kind: ClusterRole
   name: argo-edit
 subjects:
 - kind: ServiceAccount

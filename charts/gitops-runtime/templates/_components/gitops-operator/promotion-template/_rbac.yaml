@@ -1,11 +1,11 @@
 
 {{- define "gitops-operator.resources.promotion-template-rbac" }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
+kind: ClusterRole
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: promotion-template
+  name: {{ .Values.singleNamespace | ternary (printf "promotion-template-%s" .Release.Namespace) "promotion-template"  }}
 rules:
 - apiGroups:
   - ""
@@ -45,15 +45,15 @@ rules:
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: {{ .Values.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
+kind: ClusterRoleBinding
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: promotion-template
+  name: {{ .Values.singleNamespace | ternary (printf "promotion-template-%s" .Release.Namespace) "promotion-template"  }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
-  name: promotion-template
+  kind: ClusterRole
+  name: {{ .Values.singleNamespace | ternary (printf "promotion-template-%s" .Release.Namespace) "promotion-template"  }}
 subjects:
 - kind: ServiceAccount
   name: {{ include "gitops-operator.promotionTemplate.serviceAccountName" . }}
