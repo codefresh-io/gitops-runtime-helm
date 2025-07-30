@@ -89,15 +89,15 @@ subjects:
   namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: {{ .Values.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
   name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-workflows-%s" .Release.Namespace) "codefresh-gitops-operator-workflows"  }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: argo-edit
+  kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
+  name: {{ .Values.singleNamespace | ternary "argo-workflow-controller" "argo-edit" }}
 subjects:
 - kind: ServiceAccount
   name: {{ include "gitops-operator.serviceAccountName" . }}
