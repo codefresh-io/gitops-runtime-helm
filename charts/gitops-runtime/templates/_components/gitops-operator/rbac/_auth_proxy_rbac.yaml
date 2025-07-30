@@ -1,11 +1,11 @@
 
 {{- define "gitops-operator.resources.auth-proxy-rbac" }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
+kind: ClusterRole
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: codefresh-gitops-operator-proxy
+  name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-proxy-%s" .Release.Namespace) "codefresh-gitops-operator-proxy"  }}
 rules:
 - apiGroups:
   - authentication.k8s.io
@@ -22,15 +22,15 @@ rules:
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: {{ .Values.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
+kind: ClusterRoleBinding
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: codefresh-gitops-operator-proxy
+  name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-proxy-%s" .Release.Namespace) "codefresh-gitops-operator-proxy"  }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
-  name: codefresh-gitops-operator-proxy
+  kind: ClusterRole
+  name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-proxy-%s" .Release.Namespace) "codefresh-gitops-operator-proxy"  }}
 subjects:
 - kind: ServiceAccount
   name: {{ include "gitops-operator.serviceAccountName" . }}
