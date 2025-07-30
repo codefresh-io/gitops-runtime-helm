@@ -211,6 +211,7 @@ IRW_JIRA_ENRICHMENT_TASK_IMAGE:
       key: enrichmentJiraEnrichmentImage
       optional: true
 NODE_EXTRA_CA_CERTS: /app/config/all/all.cer
+CF_TELEMETRY_LOGS_PRETTIFY: single-line
 {{ include "codefresh-gitops-runtime.get-proxy-env-vars" . }}
 {{- end -}}
 
