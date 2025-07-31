@@ -728,8 +728,8 @@ cf-argocd-extras:
     container:
       image:
         registry: quay.io
-        repository: codefresh/dev/cf-argocd-extras
-        tag: chore-test-e2e-5187688
+        repository: codefresh/cf-argocd-extras
+        tag: v0.5.13
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -752,8 +752,8 @@ cf-argocd-extras:
     container:
       image:
         registry: quay.io
-        repository: codefresh/dev/cf-argocd-extras
-        tag: chore-test-e2e-5187688
+        repository: codefresh/cf-argocd-extras
+        tag: v0.5.13
     nodeSelector: {}
     tolerations: []
     affinity: {}
