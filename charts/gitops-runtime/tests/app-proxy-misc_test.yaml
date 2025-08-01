@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
 suite: misc tests on app-proxy templates generation
 templates:
   - app-proxy/deployment.yaml
@@ -266,3 +267,17 @@ tests:
       content:
         name: HTTPS_PROXY
         value: proxys.example.com
+
+- it: app-proxy should have leader-elector container if replicaCount > 1
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.replicaCount: 2
+  asserts:
+  - lengthEqual:
+      path: spec.template.spec.containers
+      count: 2
+  - equal:
+      path: spec.template.spec.containers[1].name
+      value: leader-elector
