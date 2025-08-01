@@ -99,6 +99,9 @@ spec:
       {{- with .Values.affinity }}
       affinity: {{ toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include (printf "%s.tplrender" $cfCommonTplSemver ) (dict "Values" . "context" .) | nindent 8 }}
+      {{- end }}
       volumes:
        - name: tls-certs
          configMap:
