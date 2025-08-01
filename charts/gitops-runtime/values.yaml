@@ -700,7 +700,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/dev/codefresh-gitops-operator
-    tag: feat-remove-helm-chart-32dae17
+    tag: feat-remove-helm-chart-7578a13
   serviceAccount:
     create: true
     annotations: {}
