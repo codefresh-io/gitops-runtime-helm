@@ -281,3 +281,17 @@ tests:
   - equal:
       path: spec.template.spec.containers[1].name
       value: leader-elector
+
+- it: app-proxy should not have leader-elector container if replicaCount = 1
+  template: 'app-proxy/deployment.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    app-proxy.replicaCount: 1
+  asserts:
+  - lengthEqual:
+      path: spec.template.spec.containers
+      count: 1
+  - equal:
+      path: spec.template.spec.containers[0].name
+      value: cap-app-proxy
