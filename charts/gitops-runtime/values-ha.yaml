@@ -1,0 +1,79 @@
+app-proxy:
+  replicaCount: 2
+
+gitops-operator:
+  replicaCount: 2
+
+cf-argocd-extras:
+  sourcesServer:
+    hpa:
+      enabled: true
+      minReplicas: 2
+
+argo-cd:
+  redis-ha:
+    enabled: true
+
+  controller:
+    replicas: 1
+
+  server:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+  repoServer:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+  applicationSet:
+    replicas: 2
+
+argo-workflows:
+  controller:
+    replicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+  server:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+event-reporters:
+  workflow:
+    sensor:
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: sensor-name
+                    operator: In
+                    values:
+                      - workflow-reporter
+              topologyKey: "kubernetes.io/hostname"
+  rollout:
+    sensor:
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: sensor-name
+                    operator: In
+                    values:
+                      - rollout-reporter
+              topologyKey: "kubernetes.io/hostname"
