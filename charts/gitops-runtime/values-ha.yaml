@@ -1,7 +1,11 @@
 app-proxy:
-  replicaCount: 2
+  # -- Set to 1 until https://codefresh-io.atlassian.net/browse/CR-29338 is resolved
+  replicaCount: 1
 
 gitops-operator:
+  replicaCount: 2
+
+internal-router:
   replicaCount: 2
 
 cf-argocd-extras:
