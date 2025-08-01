@@ -699,8 +699,8 @@ gitops-operator:
   image:
     # -- defaults
     registry: quay.io
-    repository: codefresh/codefresh-gitops-operator
-    tag: v0.8.11
+    repository: codefresh/dev/codefresh-gitops-operator
+    tag: cr-29944-configurable-lookback-period-8098a97
   serviceAccount:
     create: true
     annotations: {}
