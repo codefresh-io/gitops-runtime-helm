@@ -4,8 +4,7 @@ kind: Role
 metadata:
   name: rollout-reporter-sa
   labels: 
-    app.kubernetes.io/part-of: rollout-reporter
-    codefresh.io/internal: "true"
+    app{{- include "event-reporters.rollout-reporter.labels" . | nindent 4}}
 rules:
   - apiGroups:
       - "*"
@@ -19,8 +18,7 @@ kind: RoleBinding
 metadata:
   name: rollout-reporter-sa
   labels:
-    app.kubernetes.io/part-of: workflow-reporter
-    codefresh.io/internal: "true"
+    {{- include "event-reporters.rollout-reporter.labels" . | nindent 4}}
 roleRef:
   apiGroup: ""
   kind: Role
