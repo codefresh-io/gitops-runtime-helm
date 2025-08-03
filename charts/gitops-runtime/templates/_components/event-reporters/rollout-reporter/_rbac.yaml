@@ -4,7 +4,7 @@ kind: Role
 metadata:
   name: rollout-reporter-sa
   labels: 
-    app{{- include "event-reporters.rollout-reporter.labels" . | nindent 4}}
+    {{- include "event-reporters.rollout-reporter.labels" . | nindent 4}}
 rules:
   - apiGroups:
       - "*"
