@@ -33,7 +33,7 @@ metadata:
   annotations:
     {{- .Values.global.runtime.eventBus.annotations | toYaml | nindent 4}}
   labels:
-    app.kubernetes.io/part-of: argo-events
+    app.kubernetes.io/part-of: codefresh-eventbus
     codefresh.io/internal: "true"
 spec:
   {{- $eventBusSpec | toYaml | nindent 2}}
