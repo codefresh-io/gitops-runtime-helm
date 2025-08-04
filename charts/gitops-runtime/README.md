@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.22.0](https://img.shields.io/badge/Version-0.22.0-informational?style=flat-square) ![AppVersion: 0.1.74](https://img.shields.io/badge/AppVersion-0.1.74-informational?style=flat-square)
+![Version: 0.22.2](https://img.shields.io/badge/Version-0.22.2-informational?style=flat-square) ![AppVersion: 0.1.74](https://img.shields.io/badge/AppVersion-0.1.74-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -149,7 +149,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.22.0 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.22.2 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -162,7 +162,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.22.0 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.22.2 <local_registry>
 ```
 
 ## Openshift
@@ -229,7 +229,7 @@ sealed-secrets:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3636.0"` |  |
+| app-proxy.image.tag | string | `"1.3636.0-6119302"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
@@ -297,9 +297,16 @@ sealed-secrets:
 | event-reporters.rollout.eventSource.resources | object | `{}` |  |
 | event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
 | event-reporters.rollout.sensor.affinity | object | `{}` |  |
+| event-reporters.rollout.sensor.atLeastOnce | bool | `true` | At Least Once |
 | event-reporters.rollout.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
 | event-reporters.rollout.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
 | event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
+| event-reporters.rollout.sensor.policy.status.allow[0] | int | `200` |  |
+| event-reporters.rollout.sensor.policy.status.allow[1] | int | `201` |  |
+| event-reporters.rollout.sensor.policy.status.allow[2] | int | `204` |  |
+| event-reporters.rollout.sensor.policy.status.allow[3] | int | `400` |  |
+| event-reporters.rollout.sensor.policy.status.allow[4] | int | `401` |  |
+| event-reporters.rollout.sensor.policy.status.allow[5] | int | `404` |  |
 | event-reporters.rollout.sensor.replicas | int | `1` |  |
 | event-reporters.rollout.sensor.resources | object | `{}` |  |
 | event-reporters.rollout.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
@@ -315,9 +322,16 @@ sealed-secrets:
 | event-reporters.workflow.eventSource.resources | object | `{}` |  |
 | event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
 | event-reporters.workflow.sensor.affinity | object | `{}` |  |
+| event-reporters.workflow.sensor.atLeastOnce | bool | `true` | At Least Once |
 | event-reporters.workflow.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
 | event-reporters.workflow.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
 | event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
+| event-reporters.workflow.sensor.policy.status.allow[0] | int | `200` |  |
+| event-reporters.workflow.sensor.policy.status.allow[1] | int | `201` |  |
+| event-reporters.workflow.sensor.policy.status.allow[2] | int | `204` |  |
+| event-reporters.workflow.sensor.policy.status.allow[3] | int | `400` |  |
+| event-reporters.workflow.sensor.policy.status.allow[4] | int | `401` |  |
+| event-reporters.workflow.sensor.policy.status.allow[5] | int | `404` |  |
 | event-reporters.workflow.sensor.replicas | int | `1` |  |
 | event-reporters.workflow.sensor.resources | object | `{}` |  |
 | event-reporters.workflow.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
@@ -373,11 +387,11 @@ sealed-secrets:
 | global.external-argo-rollouts.rollout-reporter | object | `{"enabled":false}` | Rollout reporter settings |
 | global.external-argo-rollouts.rollout-reporter.enabled | bool | `false` | Enable or disable rollout reporter Configuration is defined at .Values.event-reporters.rollout |
 | global.nodeSelector | object | `{}` | Global nodeSelector for all components |
-| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"name":"codefresh-eventbus","nats":{"native":{"affinity":{},"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","nodeSelector":{},"replicas":3,"tolerations":[]}},"pdb":{"enabled":true,"minAvailable":2}},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
+| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"jetstream":{"affinity":{},"containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","nodeSelector":{},"replicas":3,"tolerations":[],"version":"latest"},"name":"","nats":{"native":{"affinity":{},"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","nodeSelector":{},"replicas":3,"tolerations":[]}},"pdb":{"enabled":true,"minAvailable":2},"type":"nats"},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
 | global.runtime.eventBus.annotations | object | `{}` | Annotations on EventBus resource |
-| global.runtime.eventBus.name | string | `"codefresh-eventbus"` | Eventbus name |
+| global.runtime.eventBus.name | string | `""` | Eventbus name |
 | global.runtime.eventBus.pdb | object | `{"enabled":true,"minAvailable":2}` | Pod disruption budget for the eventbus |
 | global.runtime.eventBus.pdb.minAvailable | int | `2` | Minimum number of available eventbus pods. For eventbus to stay functional the majority of its replicas should always be available. |
 | global.runtime.gitCredentials | object | `{"password":{"secretKeyRef":{},"value":null},"username":"username"}` | Git credentials runtime. Runtime is not fully functional without those credentials. If not provided through the installation, they must be provided through the Codefresh UI. |

@@ -125,7 +125,6 @@ global:
               cpu: 200m
               memory: 1Gi
               ephemeral-storage: 2Gi
-
   # -- Configuration for external ArgoCD
   # Should be used when `argo-cd.enabled` is set to false
   external-argo-cd:
@@ -663,7 +662,7 @@ app-proxy:
     maxUnavailable: ""
 
 # ---------------------------------------------------------------------------------------------------------------------
-# DOCS: https://github.com/codefresh-io/codefresh-gitops-operator/tree/codefresh-gitops-operator-0.8.5-helm/charts/codefresh-gitops-operator
+# DOCS: https://github.com/codefresh-io/codefresh-gitops-operator/tree/codefresh-gitops-operator-0.8.6-helm/charts/codefresh-gitops-operator
 # ---------------------------------------------------------------------------------------------------------------------
 gitops-operator:
   # -- Do not change unless instructed otherwise by Codefresh support
@@ -691,7 +690,8 @@ gitops-operator:
     maxConcurrentReleases: 100
     # -- An optional template for the promotion wrapper (empty default will use the embedded one)
     promotionWrapperTemplate: ''
-  image: {}
+  image:
+    tag: 0.8.6-832833c
   # -- defaults
   # repository: quay.io/codefresh/codefresh-gitops-operator
   # tag: 'v{{ .Chart.AppVersion }}'
