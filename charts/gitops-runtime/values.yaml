@@ -758,8 +758,8 @@ cf-argocd-extras:
     container:
       image:
         registry: quay.io
-        repository: codefresh/cf-argocd-extras
-        tag: v0.5.12
+        repository: codefresh/dev/cf-argocd-extras
+        tag: cr-30232-security-dc3672b
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -782,8 +782,8 @@ cf-argocd-extras:
     container:
       image:
         registry: quay.io
-        repository: codefresh/cf-argocd-extras
-        tag: v0.5.12
+        repository: codefresh/dev/cf-argocd-extras
+        tag: cr-30232-security-dc3672b
     nodeSelector: {}
     tolerations: []
     affinity: {}
