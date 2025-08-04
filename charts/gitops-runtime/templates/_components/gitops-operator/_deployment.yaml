@@ -99,27 +99,30 @@ spec:
       {{- with .Values.affinity }}
       affinity: {{ toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include (printf "%s.tplrender" $cfCommonTplSemver ) (dict "Values" . "context" .) | nindent 8 }}
+      {{- end }}
       volumes:
-       - name: tls-certs
-         configMap:
-           name: argocd-tls-certs-cm
-       - name: argocd-repo-server-tls
-         secret:
-           secretName: argocd-repo-server-tls
-           optional: true
-           items:
-           - key: tls.crt
-             path: tls.crt
-           - key: tls.key
-             path: tls.key
-           - key: ca.crt
-             path: ca.crt
-       {{- if .Values.global.codefresh.tls.caCerts.secretKeyRef }}
-       - name: codefresh-tls
-         secret:
-           secretName: {{ .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
-       {{- end }}
-       {{- with .Values.extraVolumes }}
-           {{- toYaml . | nindent 6 }}
-       {{- end }}
+        - name: tls-certs
+          configMap:
+            name: argocd-tls-certs-cm
+        - name: argocd-repo-server-tls
+          secret:
+            secretName: argocd-repo-server-tls
+            optional: true
+            items:
+            - key: tls.crt
+              path: tls.crt
+            - key: tls.key
+              path: tls.key
+            - key: ca.crt
+              path: ca.crt
+        {{- if .Values.global.codefresh.tls.caCerts.secretKeyRef }}
+        - name: codefresh-tls
+          secret:
+            secretName: {{ .Values.global.codefresh.tls.caCerts.secretKeyRef.name }}
+        {{- end }}
+        {{- with .Values.extraVolumes }}
+            {{- toYaml . | nindent 6 }}
+        {{- end }}
 {{- end }}
