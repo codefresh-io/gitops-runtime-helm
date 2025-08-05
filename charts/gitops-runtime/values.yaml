@@ -726,7 +726,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/dev/codefresh-gitops-operator
-    tag: cr-30107-stop-suspend-wf-c962388
+    tag: cr-30107-stop-suspend-wf-f304b76
   serviceAccount:
     create: true
     annotations: {}
