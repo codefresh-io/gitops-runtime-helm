@@ -9,7 +9,7 @@ spec:
   backoffLimit: 3
   template:
     spec:
-      serviceAccount: argocd-application-controller
+      serviceAccount: runtime-cleanup
       restartPolicy: Never
       containers:
       - name: cleanup-runtime-resources
