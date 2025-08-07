@@ -802,3 +802,16 @@ cf-argocd-extras:
       enabled: false
       minAvailable: "50%"
       maxUnavailable: ""
+#-----------------------------------------------------------------------------------------------------------------------
+# redis
+#-----------------------------------------------------------------------------------------------------------------------
+# -- redis instance
+redis:
+  enabled: false
+  global:
+    imageRegistry: docker.io
+
+  image:
+    registry: docker.io
+    repository: redis
+    tag: 8.0.3
