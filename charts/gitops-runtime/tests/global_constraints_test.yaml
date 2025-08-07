@@ -119,13 +119,13 @@ tests:
         template: event-reporters/workflow-reporter/sensor.yaml
       # -- codefresh-eventbus
       - equal:
-          path: spec.nats.native.nodeSelector
+          path: spec.jetstream.nodeSelector
           value:
             some-key: some-value
             extra-key: extra-value
         template: eventbus/codefresh-eventbus.yaml
       - equal:
-          path: spec.nats.native.tolerations
+          path: spec.jetstream.tolerations
           value:
           - key: some-key
             operator: Equal
@@ -456,13 +456,13 @@ tests:
         template: event-reporters/workflow-reporter/sensor.yaml
       # -- codefresh-eventbus
       - equal:
-          path: spec.nats.native.nodeSelector
+          path: spec.jetstream.nodeSelector
           value:
             some-key: another-value
             foo: bar
         template: eventbus/codefresh-eventbus.yaml
       - equal:
-          path: spec.nats.native.tolerations
+          path: spec.jetstream.tolerations
           value:
             - key: another-key
               operator: Equal
