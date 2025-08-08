@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
+![Version: 0.23.0](https://img.shields.io/badge/Version-0.23.0-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -144,7 +144,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.0.0 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.23.0 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -157,7 +157,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.0.0 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.23.0 <local_registry>
 ```
 
 ## Openshift
@@ -247,17 +247,35 @@ gitops-operator:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3680.0"` |  |
+| app-proxy.image.tag | string | `"1.3694.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3680.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3694.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
+| app-proxy.leader-elector.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| app-proxy.leader-elector.image.registry | string | `"quay.io"` |  |
+| app-proxy.leader-elector.image.repository | string | `"codefresh/leader-elector"` |  |
+| app-proxy.leader-elector.image.tag | string | `"v0.0.1"` |  |
+| app-proxy.leader-elector.livenessProbe.failureThreshold | int | `10` |  |
+| app-proxy.leader-elector.livenessProbe.initialDelaySeconds | int | `10` |  |
+| app-proxy.leader-elector.livenessProbe.periodSeconds | int | `10` |  |
+| app-proxy.leader-elector.livenessProbe.successThreshold | int | `1` |  |
+| app-proxy.leader-elector.livenessProbe.timeoutSeconds | int | `10` |  |
+| app-proxy.leader-elector.readinessProbe.failureThreshold | int | `3` |  |
+| app-proxy.leader-elector.readinessProbe.initialDelaySeconds | int | `10` |  |
+| app-proxy.leader-elector.readinessProbe.periodSeconds | int | `10` |  |
+| app-proxy.leader-elector.readinessProbe.successThreshold | int | `1` |  |
+| app-proxy.leader-elector.readinessProbe.timeoutSeconds | int | `10` |  |
+| app-proxy.leader-elector.resources.limits.cpu | string | `"200m"` |  |
+| app-proxy.leader-elector.resources.limits.memory | string | `"200Mi"` |  |
+| app-proxy.leader-elector.resources.requests.cpu | string | `"100m"` |  |
+| app-proxy.leader-elector.resources.requests.memory | string | `"100Mi"` |  |
 | app-proxy.livenessProbe.failureThreshold | int | `10` | Minimum consecutive failures for the [probe] to be considered failed after having succeeded. |
 | app-proxy.livenessProbe.initialDelaySeconds | int | `10` | Number of seconds after the container has started before [probe] is initiated. |
 | app-proxy.livenessProbe.periodSeconds | int | `10` | How often (in seconds) to perform the [probe]. |
@@ -397,10 +415,13 @@ gitops-operator:
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.registry | string | `"quay.io"` | defaults |
 | gitops-operator.image.repository | string | `"codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"v0.8.11"` |  |
+| gitops-operator.image.tag | string | `"v0.10.0"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
+| gitops-operator.pdb.enabled | bool | `false` |  |
+| gitops-operator.pdb.maxUnavailable | string | `""` |  |
+| gitops-operator.pdb.minAvailable | int | `1` |  |
 | gitops-operator.podAnnotations | object | `{}` |  |
 | gitops-operator.podLabels | object | `{}` |  |
 | gitops-operator.replicaCount | int | `1` |  |
