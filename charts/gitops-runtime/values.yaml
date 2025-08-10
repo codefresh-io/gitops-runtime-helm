@@ -587,7 +587,7 @@ app-proxy:
     image:
       registry: quay.io
       repository: codefresh/leader-elector
-      tag: v0.0.1
+      tag: 0.0.1
     containerSecurityContext:
       allowPrivilegeEscalation: false
     readinessProbe:
