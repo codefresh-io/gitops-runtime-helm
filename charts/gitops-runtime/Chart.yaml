@@ -15,59 +15,29 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'feat: solve out-of-sync crds in Argo CD v3 (#630)'
-    - kind: changed
-      description: 'feat: add leader election support to agent and remove from handler (#647)'
-    - kind: changed
-      description: 'chore: update cap-app-proxy image tags to 1.3694.0 - use proxy env vars in git operations (#646)'
-    - kind: changed
-      description: quote proxy env vars (#644)
-    - kind: changed
-      description: 'fix: update workflow submission logic and improve error handling (#625)'
-    - kind: changed
-      description: 'chore: update cap-app-proxy image tags to 1.3688.0 - fix eventBusName when using jetstream (#636)'
-    - kind: changed
-      description: 'fix: argo helm bump redis version (#631)'
-    - kind: changed
       description: 'feat(app-proxy): add leader election (#621)'
     - kind: changed
-      description: 'chore: update cap-app-proxy image tags to 1.3680.0 - fix: return the pushed commit sha (#6560) (#628)'
+      description: 'chore(app-proxy): update cap-app-proxy image tags to 1.3694.0 - allow concurrent reading of git repo file content (#585), update cf-git-providers to version ^0.15.2 (#590), return the pushed commit sha (#628), fix eventBusName when using jetstream (#636), use proxy env vars in git operations (#646)'
     - kind: changed
-      description: 'chore: Gitops Operator to v0.8.11 to fix 4 issues (#624)'
+      description: 'chore(gitops-operator): update codefresh-gitops-operator to 0.10.0 - stop attempting to resume a non-running workflow (#584), change look back time to 2 hours for git log (#586), Improve error handling and fix bugs from 0.22.0 release for Gitops Operator (#595), add 5 minute max time for curl to complete on action node (#624), update Workflows.Resume to not have a loop (#624), make maps using in multi-threaded contexts, thread safe (#624), Add requeue workaround for degraded rollout apps (#624), update workflow submission logic and improve error handling (#625), add leader election support to agent and remove from handler (#647)'
     - kind: changed
-      description: 'fix: GITOPS_OPERATOR_VERSION should be based upon its own tag, and not the chart appVersion (#626)'
+      description: 'chore(argo-rollouts): update argo-rollotus sub-chart to 2.37.3-6-v1.7.2-cap-CR-29629 - solve out-of-sync crds in Argo CD v3 (#630)'
     - kind: changed
-      description: 'fix: event-reporter should handle applications from a specific argo-cd instance (#618)'
+      description: 'chore(argo-cd): update argo-cd sub-chart to 8.0.6-6-cap-v3.0.2-2025-07-06-e9fc72a9 - helm and go-git bump (#599), bump redis version (#631)'
     - kind: changed
-      description: '[cf-argocd-extras]fix: dependencies not returned correctly (#616)'
+      description: 'fix(event-reporter): update cf-argocd-extras to 0.5.12 - dependencies not returned correctly (#616), event-reporter should handle applications from a specific argo-cd instance (#618)'
+    - kind: changed
+      description: 'fix: quote proxy env vars (#644)'
     - kind: changed
       description: 'chore: update README.md'
     - kind: changed
       description: 'feat: add gitops-operator and argocd-extras templates (#591)'
     - kind: changed
-      description: 'feat: updated argo cd to 8.0.6-5-cap-v3.0.2-2025-07-21-ac26d0e2 with helm and go-git bump (#599)'
-    - kind: changed
-      description: remove submodules
-    - kind: changed
       description: 'fix: add retries to argo-event Sensors (#593)'
-    - kind: changed
-      description: bump gitops operator to v0.8.6 (#595)
-    - kind: changed
-      description: 'chore: update app-proxy image tags to 1.3651.0 (#590)'
     - kind: changed
       description: 'feat: jetstream eventbus (#589)'
     - kind: changed
-      description: 'chore: update app-proxy image tags to 1.3642.0 (#585)'
-    - kind: changed
-      description: 'chore: bump app proxy to revert cf-git-provider that had error handling issue (#587)'
-    - kind: changed
-      description: bump gitops operator chart version to 0.8.5 (#586)
-    - kind: changed
-      description: 'chore: update codefresh-gitops-operator version to 0.8.4 - stop attempting to resume a non-running workflow (#584)'
-    - kind: changed
-      description: 'chore: bump gitops operator to revert relative path (#579)'
-    - kind: changed
-      description: 'fix: update REQUIRED_VERSION_CONSTRAINT for Argo CD compatibility (#576)'
+      description: 'fix: support bring-your-own Argo-CD <3.1 (#576)'
     - kind: changed
       description: added global proxy variables (#573)
     - kind: changed
