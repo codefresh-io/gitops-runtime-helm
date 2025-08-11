@@ -513,13 +513,13 @@ Print proxy environment variables
 */}}
 {{- define "codefresh-gitops-runtime.get-proxy-env-vars" -}}
   {{- if .Values.global.httpProxy }}
-HTTP_PROXY: {{ .Values.global.httpProxy }}
+HTTP_PROXY: {{ .Values.global.httpProxy | quote }}
   {{- end }}
   {{- if .Values.global.httpsProxy }}
-HTTPS_PROXY: {{ .Values.global.httpsProxy }}
+HTTPS_PROXY: {{ .Values.global.httpsProxy | quote }}
   {{- end }}
   {{- if .Values.global.noProxy }}
-NO_PROXY: {{ .Values.global.noProxy }}
+NO_PROXY: {{ .Values.global.noProxy | quote }}
   {{- end }}
 {{- end -}}
 
