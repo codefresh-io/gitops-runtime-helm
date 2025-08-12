@@ -759,7 +759,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/cf-argocd-extras
-        tag: v0.5.12
+        tag: v0.5.14
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -783,7 +783,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/cf-argocd-extras
-        tag: v0.5.12
+        tag: v0.5.14
     nodeSelector: {}
     tolerations: []
     affinity: {}
