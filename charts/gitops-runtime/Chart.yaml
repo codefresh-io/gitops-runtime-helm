@@ -40,3 +40,7 @@ dependencies:
 - name: cf-common
   repository: oci://quay.io/codefresh/charts
   version: 0.27.0
+- name: redis
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 21.2.13
+  condition: redis.enabled
