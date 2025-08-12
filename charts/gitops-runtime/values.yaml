@@ -725,8 +725,8 @@ gitops-operator:
   image:
     # -- defaults
     registry: quay.io
-    repository: codefresh/codefresh-gitops-operator
-    tag: v0.10.0
+    repository: codefresh/dev/codefresh-gitops-operator
+    tag: bump-minor-for-promotion-uplift-c4d8088
   serviceAccount:
     create: true
     annotations: {}
