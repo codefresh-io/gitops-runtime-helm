@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 0.1.72
+appVersion: 0.1.75
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
 version: 0.23.0
@@ -17,9 +17,9 @@ annotations:
     - kind: changed
       description: 'feat(app-proxy): add leader election (#621)'
     - kind: changed
-      description: 'chore(app-proxy): update cap-app-proxy image tags to 1.3694.0 - allow concurrent reading of git repo file content (#585), update cf-git-providers to version ^0.15.2 (#590), return the pushed commit sha (#628), fix eventBusName when using jetstream (#636), use proxy env vars in git operations (#646)'
+      description: 'chore(app-proxy): update cap-app-proxy image tags to 1.3702.0 - allow concurrent reading of git repo file content (#585), update cf-git-providers to version ^0.15.2 (#590), return the pushed commit sha (#628), fix eventBusName when using jetstream (#636), use proxy env vars in git operations (#646)'
     - kind: changed
-      description: 'chore(gitops-operator): update codefresh-gitops-operator to 0.10.0 - stop attempting to resume a non-running workflow (#584), change look back time to 2 hours for git log (#586), Improve error handling and fix bugs from 0.22.0 release for Gitops Operator (#595), add 5 minute max time for curl to complete on action node (#624), update Workflows.Resume to not have a loop (#624), make maps using in multi-threaded contexts, thread safe (#624), Add requeue workaround for degraded rollout apps (#624), update workflow submission logic and improve error handling (#625), add leader election support to agent and remove from handler (#647)'
+      description: 'chore(gitops-operator): update codefresh-gitops-operator to 0.10.2 - stop attempting to resume a non-running workflow (#584), change look back time to 2 hours for git log (#586), Improve error handling and fix bugs from 0.22.0 release for Gitops Operator (#595), add 5 minute max time for curl to complete on action node (#624), update Workflows.Resume to not have a loop (#624), make maps using in multi-threaded contexts, thread safe (#624), Add requeue workaround for degraded rollout apps (#624), update workflow submission logic and improve error handling (#625), add leader election support to agent and remove from handler (#647), don't requeue on known release creation failures (#655), support failing release if app sync fails (#645)'
     - kind: changed
       description: 'chore(argo-rollouts): update argo-rollotus sub-chart to 2.37.3-6-v1.7.2-cap-CR-29629 - solve out-of-sync crds in Argo CD v3 (#630)'
     - kind: changed

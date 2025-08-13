@@ -247,21 +247,21 @@ gitops-operator:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3694.0"` |  |
+| app-proxy.image.tag | string | `"1.3702.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3694.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3702.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
 | app-proxy.leader-elector.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
 | app-proxy.leader-elector.image.registry | string | `"quay.io"` |  |
 | app-proxy.leader-elector.image.repository | string | `"codefresh/leader-elector"` |  |
-| app-proxy.leader-elector.image.tag | string | `"v0.0.1"` |  |
+| app-proxy.leader-elector.image.tag | string | `"0.0.1"` |  |
 | app-proxy.leader-elector.livenessProbe.failureThreshold | int | `10` |  |
 | app-proxy.leader-elector.livenessProbe.initialDelaySeconds | int | `10` |  |
 | app-proxy.leader-elector.livenessProbe.periodSeconds | int | `10` |  |
@@ -392,7 +392,7 @@ gitops-operator:
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.registry | string | `"quay.io"` | defaults |
 | gitops-operator.image.repository | string | `"codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"v0.10.0"` |  |
+| gitops-operator.image.tag | string | `"v0.10.2"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
