@@ -177,7 +177,7 @@
             "method": "POST",
             "path": "/2.0/api/graphql",
             "body": {
-                "query": "\n  query me {\n    me {\n      runtimeName\n      activeAccount {\n        id\n        name\n        gitProvider\n        gitApiUrl\n        sharedConfigRepo\n      }\n    }\n  }\n"
+                "query": "\n  query me {\n    me {\n      runtimeName\n      activeAccount {\n        id\n        name\n        gitProvider\n        gitApiUrl\n        sharedConfigRepo\n        csdpValidated\n      }\n    }\n  }\n"
             }
         },
         "httpResponse": {
@@ -191,7 +191,8 @@
                             "name": "local",
                             "gitProvider": "GITHUB",
                             "gitApiUrl": "http://mockserver.mockserver:1080",
-                            "sharedConfigRepo": "http://gitea-http.gitea:3000/test-owner/codefresh-isc"
+                            "sharedConfigRepo": "http://gitea-http.gitea:3000/test-owner/codefresh-isc",
+                            "csdpValidated": true
                         }
                     }
                 }
