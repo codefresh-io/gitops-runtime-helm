@@ -758,8 +758,8 @@ cf-argocd-extras:
     container:
       image:
         registry: quay.io
-        repository: codefresh/cf-argocd-extras
-        tag: v0.5.14
+        repository: codefresh/dev/cf-argocd-extras
+        tag: cr-30595-add-worker-queue-e6e7d92
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -782,8 +782,8 @@ cf-argocd-extras:
     container:
       image:
         registry: quay.io
-        repository: codefresh/cf-argocd-extras
-        tag: v0.5.14
+        repository: codefresh/dev/cf-argocd-extras
+        tag: cr-30595-add-worker-queue-e6e7d92
     nodeSelector: {}
     tolerations: []
     affinity: {}
