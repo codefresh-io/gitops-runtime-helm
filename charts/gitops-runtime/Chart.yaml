@@ -33,7 +33,7 @@ annotations:
     - kind: changed
       description: 'fix: support bring-your-own Argo-CD <3.1 (#576)'
     - kind: changed
-      description: added global proxy variables (#573)
+      description: 'added global proxy variables (#573)'
     - kind: changed
       description: 'fix(Readme): set correct minimal helm version (#569)'
 dependencies:
