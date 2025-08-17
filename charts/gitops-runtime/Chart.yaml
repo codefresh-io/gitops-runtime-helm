@@ -19,29 +19,29 @@ annotations:
     - kind: changed
       description: 'chore(app-proxy): update cap-app-proxy image tags to 1.3727.0 (#692) - fix: remote-cluster application fails to sync due to its project'
 dependencies:
-  - name: argo-cd
-    repository: https://codefresh-io.github.io/argo-helm
-    condition: argo-cd.enabled
-    version: 8.0.6-6-cap-v3.0.2-2025-07-06-e9fc72a9
-  - name: argo-events
-    repository: https://codefresh-io.github.io/argo-helm
-    version: 2.4.8-cap-CR-29689
-  - name: argo-workflows
-    repository: https://codefresh-io.github.io/argo-helm
-    version: 0.45.15-v3.6.7-cap-CR-28355
-    condition: argo-workflows.enabled
-  - name: argo-rollouts
-    repository: https://codefresh-io.github.io/argo-helm
-    version: 2.37.3-6-v1.7.2-cap-CR-29629
-    condition: argo-rollouts.enabled
-  - name: sealed-secrets
-    repository: https://bitnami-labs.github.io/sealed-secrets/
-    version: 2.17.2
-  - name: codefresh-tunnel-client
-    repository: oci://quay.io/codefresh/charts
-    version: 0.1.21
-    alias: tunnel-client
-    condition: tunnel-client.enabled
-  - name: cf-common
-    repository: oci://quay.io/codefresh/charts
-    version: 0.27.0
+- name: argo-cd
+  repository: https://codefresh-io.github.io/argo-helm
+  condition: argo-cd.enabled
+  version: 8.0.6-8-cap-v3.0.2-2025-08-12-9c8dfae9
+- name: argo-events
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 2.4.8-cap-CR-29689
+- name: argo-workflows
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 0.45.15-v3.6.7-cap-CR-28355
+  condition: argo-workflows.enabled
+- name: argo-rollouts
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 2.37.3-6-v1.7.2-cap-CR-29629
+  condition: argo-rollouts.enabled
+- name: sealed-secrets
+  repository: https://bitnami-labs.github.io/sealed-secrets/
+  version: 2.17.2
+- name: codefresh-tunnel-client
+  repository: oci://quay.io/codefresh/charts
+  version: 0.1.21
+  alias: tunnel-client
+  condition: tunnel-client.enabled
+- name: cf-common
+  repository: oci://quay.io/codefresh/charts
+  version: 0.27.0
