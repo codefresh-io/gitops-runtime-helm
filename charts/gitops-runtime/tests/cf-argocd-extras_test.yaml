@@ -3,6 +3,8 @@ suite: cf-argocd-extras tests
 templates:
   - cf-argocd-extras/**/*.yaml
   - _components/cf-argocd-extras/**
+chart:
+  version: 0.0.0
 tests:
   - it: Sources Server ConfigMap should have valid data
     template: cf-argocd-extras/sources-server/configmap.yaml
