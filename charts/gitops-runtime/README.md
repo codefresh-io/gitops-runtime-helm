@@ -189,6 +189,154 @@ sealed-secrets:
     enabled: false
 ```
 
+## High Availability
+
+This chart installs the non-HA version of GitOps Runtime by default. If you want to run GitOps Runtime in HA mode, you can use the example values below:
+
+> **Warning:**
+> You need at least 3 worker nodes for HA mode
+
+### HA mode with autoscaling
+
+```yaml
+global:
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+
+app-proxy:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: cap-app-proxy
+
+gitops-operator:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: gitops-operator
+
+internal-router:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: internal-router
+
+cf-argocd-extras:
+  sourcesServer:
+    hpa:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/component: sources-server
+  eventReporter:
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/component: event-reporter
+
+argo-cd:
+  redis-ha:
+    enabled: true
+
+  controller:
+    replicas: 1
+
+  server:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+  repoServer:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+  applicationSet:
+    replicas: 2
+
+argo-workflows:
+  controller:
+    replicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+  server:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+event-reporters:
+  workflow:
+    sensor:
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: sensor-name
+                    operator: In
+                    values:
+                      - workflow-reporter
+              topologyKey: "kubernetes.io/hostname"
+  rollout:
+    sensor:
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: sensor-name
+                    operator: In
+                    values:
+                      - rollout-reporter
+              topologyKey: "kubernetes.io/hostname"
+```
+
 ## Upgrading
 
 ### To >=0.23.3
@@ -261,14 +409,14 @@ gitops-operator:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3727.0"` |  |
+| app-proxy.image.tag | string | `"1.3706.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3727.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3706.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -429,7 +577,7 @@ gitops-operator:
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.registry | string | `"quay.io"` | defaults |
 | gitops-operator.image.repository | string | `"codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"v0.10.2"` |  |
+| gitops-operator.image.tag | string | `"v0.11.1"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |

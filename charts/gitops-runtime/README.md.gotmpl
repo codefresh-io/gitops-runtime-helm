@@ -193,6 +193,154 @@ sealed-secrets:
     enabled: false
 ```
 
+## High Availability
+
+This chart installs the non-HA version of GitOps Runtime by default. If you want to run GitOps Runtime in HA mode, you can use the example values below:
+
+> **Warning:**
+> You need at least 3 worker nodes for HA mode
+
+### HA mode with autoscaling
+
+```yaml
+global:
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+
+app-proxy:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: cap-app-proxy
+
+gitops-operator:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: gitops-operator
+
+internal-router:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: internal-router
+
+cf-argocd-extras:
+  sourcesServer:
+    hpa:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/component: sources-server
+  eventReporter:
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/component: event-reporter
+
+argo-cd:
+  redis-ha:
+    enabled: true
+
+  controller:
+    replicas: 1
+
+  server:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+  repoServer:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+  applicationSet:
+    replicas: 2
+
+argo-workflows:
+  controller:
+    replicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+  server:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+event-reporters:
+  workflow:
+    sensor:
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: sensor-name
+                    operator: In
+                    values:
+                      - workflow-reporter
+              topologyKey: "kubernetes.io/hostname"
+  rollout:
+    sensor:
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: sensor-name
+                    operator: In
+                    values:
+                      - rollout-reporter
+              topologyKey: "kubernetes.io/hostname"
+```
+
 ## Upgrading
 
 ### To >=0.23.3
