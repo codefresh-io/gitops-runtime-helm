@@ -189,6 +189,154 @@ sealed-secrets:
     enabled: false
 ```
 
+## High Availability
+
+This chart installs the non-HA version of GitOps Runtime by default. If you want to run GitOps Runtime in HA mode, you can use the example values below:
+
+> **Warning:**
+> You need at least 3 worker nodes for HA mode
+
+### HA mode with autoscaling
+
+```yaml
+global:
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+
+app-proxy:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: cap-app-proxy
+
+gitops-operator:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: gitops-operator
+
+internal-router:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: internal-router
+
+cf-argocd-extras:
+  sourcesServer:
+    hpa:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/component: sources-server
+  eventReporter:
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/component: event-reporter
+
+argo-cd:
+  redis-ha:
+    enabled: true
+
+  controller:
+    replicas: 1
+
+  server:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+  repoServer:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+  applicationSet:
+    replicas: 2
+
+argo-workflows:
+  controller:
+    replicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+  server:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+event-reporters:
+  workflow:
+    sensor:
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: sensor-name
+                    operator: In
+                    values:
+                      - workflow-reporter
+              topologyKey: "kubernetes.io/hostname"
+  rollout:
+    sensor:
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: sensor-name
+                    operator: In
+                    values:
+                      - rollout-reporter
+              topologyKey: "kubernetes.io/hostname"
+```
+
 ## Upgrading
 
 ### To 0.23.x
@@ -230,13 +378,13 @@ gitops-operator:
 | app-proxy.extraVolumeMounts | list | `[]` | Extra volume mounts for main container |
 | app-proxy.extraVolumes | list | `[]` | extra volumes |
 | app-proxy.fullnameOverride | string | `"cap-app-proxy"` |  |
-| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.14-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.14-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
-| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.14-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.14-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
+| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.15-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.15-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.15-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
+| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.15-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.15-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.15-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
 | app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds | int | `5` | Client heartbeat interval in seconds for image enrichemnt workflow |
 | app-proxy.image-enrichment.config.concurrencyCmKey | string | `"imageReportExecutor"` | The name of the key in the configmap to use as synchronization semaphore |
 | app-proxy.image-enrichment.config.concurrencyCmName | string | `"workflow-synchronization-semaphores"` | The name of the configmap to use as synchronization semaphore, see https://argoproj.github.io/argo-workflows/synchronization/ |
-| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.14-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.14-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}}` | Enrichemnt images |
-| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.14-main"}` | Report image enrichment task image |
+| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.15-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.15-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.15-main"}}` | Enrichemnt images |
+| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.15-main"}` | Report image enrichment task image |
 | app-proxy.image-enrichment.config.podGcStrategy | string | `"OnWorkflowCompletion"` | Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes. |
 | app-proxy.image-enrichment.config.ttlActiveInSeconds | int | `900` | Maximum allowed runtime for the enrichment workflow |
 | app-proxy.image-enrichment.config.ttlAfterCompletionInSeconds | int | `86400` | Number of seconds to live after completion |
@@ -247,17 +395,35 @@ gitops-operator:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3680.0"` |  |
+| app-proxy.image.tag | string | `"1.3706.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3680.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3706.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
+| app-proxy.leader-elector.containerSecurityContext.allowPrivilegeEscalation | bool | `false` |  |
+| app-proxy.leader-elector.image.registry | string | `"quay.io"` |  |
+| app-proxy.leader-elector.image.repository | string | `"codefresh/leader-elector"` |  |
+| app-proxy.leader-elector.image.tag | string | `"0.0.1"` |  |
+| app-proxy.leader-elector.livenessProbe.failureThreshold | int | `10` |  |
+| app-proxy.leader-elector.livenessProbe.initialDelaySeconds | int | `10` |  |
+| app-proxy.leader-elector.livenessProbe.periodSeconds | int | `10` |  |
+| app-proxy.leader-elector.livenessProbe.successThreshold | int | `1` |  |
+| app-proxy.leader-elector.livenessProbe.timeoutSeconds | int | `10` |  |
+| app-proxy.leader-elector.readinessProbe.failureThreshold | int | `3` |  |
+| app-proxy.leader-elector.readinessProbe.initialDelaySeconds | int | `10` |  |
+| app-proxy.leader-elector.readinessProbe.periodSeconds | int | `10` |  |
+| app-proxy.leader-elector.readinessProbe.successThreshold | int | `1` |  |
+| app-proxy.leader-elector.readinessProbe.timeoutSeconds | int | `10` |  |
+| app-proxy.leader-elector.resources.limits.cpu | string | `"200m"` |  |
+| app-proxy.leader-elector.resources.limits.memory | string | `"200Mi"` |  |
+| app-proxy.leader-elector.resources.requests.cpu | string | `"100m"` |  |
+| app-proxy.leader-elector.resources.requests.memory | string | `"100Mi"` |  |
 | app-proxy.livenessProbe.failureThreshold | int | `10` | Minimum consecutive failures for the [probe] to be considered failed after having succeeded. |
 | app-proxy.livenessProbe.initialDelaySeconds | int | `10` | Number of seconds after the container has started before [probe] is initiated. |
 | app-proxy.livenessProbe.periodSeconds | int | `10` | How often (in seconds) to perform the [probe]. |
@@ -325,10 +491,10 @@ gitops-operator:
 | argo-workflows.mainContainer.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
-| cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"v0.5.12"}},"enabled":true,"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"serviceMonitor":{"main":{"enabled":false}},"tolerations":[]},"sourcesServer":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"v0.5.12"}},"enabled":true,"hpa":{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
+| cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"v0.5.14"}},"enabled":true,"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"serviceMonitor":{"main":{"enabled":false}},"tolerations":[]},"sourcesServer":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"v0.5.14"}},"enabled":true,"hpa":{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
 | cf-argocd-extras.eventReporter.pdb.enabled | bool | `false` | Enable PDB for event-reporter |
 | cf-argocd-extras.eventReporter.serviceMonitor.main.enabled | bool | `false` | Enable ServiceMonitor for event reporter |
-| cf-argocd-extras.sourcesServer | object | `{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"v0.5.12"}},"enabled":true,"hpa":{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"tolerations":[]}` | Sources server configuration |
+| cf-argocd-extras.sourcesServer | object | `{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"v0.5.14"}},"enabled":true,"hpa":{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"tolerations":[]}` | Sources server configuration |
 | cf-argocd-extras.sourcesServer.hpa.enabled | bool | `false` | Enable HPA for sources server |
 | cf-argocd-extras.sourcesServer.pdb.enabled | bool | `false` | Enable PDB for sources server |
 | codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
@@ -397,10 +563,13 @@ gitops-operator:
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.registry | string | `"quay.io"` | defaults |
 | gitops-operator.image.repository | string | `"codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"v0.8.11"` |  |
+| gitops-operator.image.tag | string | `"v0.11.1"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
+| gitops-operator.pdb.enabled | bool | `false` |  |
+| gitops-operator.pdb.maxUnavailable | string | `""` |  |
+| gitops-operator.pdb.minAvailable | int | `1` |  |
 | gitops-operator.podAnnotations | object | `{}` |  |
 | gitops-operator.podLabels | object | `{}` |  |
 | gitops-operator.replicaCount | int | `1` |  |
