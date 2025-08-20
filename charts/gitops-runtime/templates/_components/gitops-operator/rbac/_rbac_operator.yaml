@@ -1,11 +1,11 @@
 
 {{- define "gitops-operator.resources.rbac-operator" }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-%s" .Release.Namespace) "codefresh-gitops-operator"  }}
+  name: codefresh-gitops-operator
 rules:
 - apiGroups:
     - ""
@@ -194,15 +194,15 @@ rules:
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: {{ .Values.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-%s" .Release.Namespace) "codefresh-gitops-operator"  }}
+  name: codefresh-gitops-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-%s" .Release.Namespace) "codefresh-gitops-operator"  }}
+  kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
+  name: codefresh-gitops-operator
 subjects:
 - kind: ServiceAccount
   name: {{ include "gitops-operator.serviceAccountName" . }}
@@ -213,7 +213,7 @@ kind: {{ .Values.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
-  name: {{ .Values.singleNamespace | ternary (printf "codefresh-gitops-operator-workflows-%s" .Release.Namespace) "codefresh-gitops-operator-workflows"  }}
+  name: codefresh-gitops-operator-workflows
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
