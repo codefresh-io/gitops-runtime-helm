@@ -759,7 +759,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/dev/cf-argocd-extras
-        tag: cr-better-logs-81cec6e
+        tag: cr-better-logs-273da06
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -783,7 +783,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/dev/cf-argocd-extras
-        tag: cr-better-logs-81cec6e
+        tag: cr-better-logs-273da06
     nodeSelector: {}
     tolerations: []
     affinity: {}
