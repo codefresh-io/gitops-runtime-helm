@@ -726,7 +726,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/dev/codefresh-gitops-operator
-    tag: feat-add-releasestep-crd-aae7e52
+    tag: feat-add-releasestep-crd-37d783b
   serviceAccount:
     create: true
     annotations: {}
