@@ -725,10 +725,8 @@ gitops-operator:
   image:
     # -- defaults
     registry: quay.io
-    repository: codefresh/codefresh-gitops-operator
-    tag: b913720
-  env:
-    GITOPS_OPERATOR_VERSION: 0.11.1
+    repository: codefresh/dev/codefresh-gitops-operator
+    tag: feat-cr-30450-add-promotion-task-reconciler-0144fb4
   serviceAccount:
     create: true
     annotations: {}
