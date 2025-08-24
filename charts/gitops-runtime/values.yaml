@@ -432,7 +432,7 @@ internal-router:
   image:
     repository: docker.io/nginxinc/nginx-unprivileged
     pullPolicy: IfNotPresent
-    tag: 1.28-alpine3.21
+    tag: 1.29-alpine3.22
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
