@@ -725,7 +725,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/dev/codefresh-gitops-operator
-    tag: cr-29615-support-single-namespace-installation-d43b4f8
+    tag: cr-29615-support-single-namespace-installation-29f6833
   serviceAccount:
     create: true
     annotations: {}
