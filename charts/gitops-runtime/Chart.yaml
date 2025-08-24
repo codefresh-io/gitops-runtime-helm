@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: bumped app-proxy to 1.3707.0 closed ha gaps (#667)
+      description: bumped app-proxy to 1.3718.0 - fix Argo-CD log issue
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
