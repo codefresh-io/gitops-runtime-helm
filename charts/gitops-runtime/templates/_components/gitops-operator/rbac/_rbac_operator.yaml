@@ -1,7 +1,7 @@
 
 {{- define "gitops-operator.resources.rbac-operator" }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: {{ .Values.global.runtime.singleNamespace | ternary "Role" "ClusterRole" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
@@ -26,6 +26,7 @@ rules:
   - patch
   - update
   - watch
+{{- if not .Values.global.runtime.singleNamespace }}
 - apiGroups:
   - codefresh.io
   resources:
@@ -52,6 +53,7 @@ rules:
   - get
   - patch
   - update
+{{- end }}
 - apiGroups:
   - ""
   resources:
@@ -69,17 +71,137 @@ rules:
   - get
   - list
   - watch
+---
+{{- if .Values.global.runtime.singleNamespace }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: argo-role
+rules:
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - create
+  - get
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - pods/exec
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - ""
+  resources:
+  - persistentvolumeclaims
+  - persistentvolumeclaims/finalizers
+  verbs:
+  - create
+  - update
+  - delete
+  - get
+- apiGroups:
+  - argoproj.io
+  resources:
+  - workflows
+  - workflows/finalizers
+  - workflowtasksets
+  - workflowtasksets/finalizers
+  - workflowartifactgctasks
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - delete
+  - create
+- apiGroups:
+  - argoproj.io
+  resources:
+  - workflowtemplates
+  - workflowtemplates/finalizers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - argoproj.io
+  resources:
+  - workflowtaskresults
+  verbs:
+  - list
+  - watch
+  - deletecollection
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+- apiGroups:
+  - argoproj.io
+  resources:
+  - cronworkflows
+  - cronworkflows/finalizers
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - policy
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - create
+  - get
+  - delete
+{{- end }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: {{ .Values.global.runtime.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
   name: codefresh-gitops-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: {{ .Values.global.runtime.singleNamespace | ternary "Role" "ClusterRole" }}
   name: codefresh-gitops-operator
 subjects:
 - kind: ServiceAccount
@@ -87,15 +209,15 @@ subjects:
   namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: {{ .Values.global.runtime.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
   name: codefresh-gitops-operator-workflows
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: argo-edit
+  kind: {{ .Values.global.runtime.singleNamespace | ternary "Role" "ClusterRole" }}
+  name: {{ .Values.global.runtime.singleNamespace | ternary "argo-role" "argo-edit" }}
 subjects:
 - kind: ServiceAccount
   name: {{ include "gitops-operator.serviceAccountName" . }}
