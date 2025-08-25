@@ -725,8 +725,8 @@ gitops-operator:
   image:
     # -- defaults
     registry: quay.io
-    repository: codefresh/codefresh-gitops-operator
-    tag: v0.11.1
+    repository: codefresh/dev/codefresh-gitops-operator
+    tag: test-go-sdk-5d45d98
   serviceAccount:
     create: true
     annotations: {}
