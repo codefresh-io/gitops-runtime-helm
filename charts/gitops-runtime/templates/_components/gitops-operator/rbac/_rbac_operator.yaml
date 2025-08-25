@@ -1,7 +1,7 @@
 
 {{- define "gitops-operator.resources.rbac-operator" }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
+kind: {{ .Values.global.runtime.singleNamespace | ternary "Role" "ClusterRole" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
@@ -26,7 +26,7 @@ rules:
   - patch
   - update
   - watch
-{{- if not .Values.singleNamespace }}
+{{- if not .Values.global.runtime.singleNamespace }}
 - apiGroups:
   - codefresh.io
   resources:
@@ -72,7 +72,7 @@ rules:
   - list
   - watch
 ---
-{{- if .Values.singleNamespace }}
+{{- if .Values.global.runtime.singleNamespace }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -194,14 +194,14 @@ rules:
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: {{ .Values.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
+kind: {{ .Values.global.runtime.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
   name: codefresh-gitops-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
+  kind: {{ .Values.global.runtime.singleNamespace | ternary "Role" "ClusterRole" }}
   name: codefresh-gitops-operator
 subjects:
 - kind: ServiceAccount
@@ -209,15 +209,15 @@ subjects:
   namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: {{ .Values.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
+kind: {{ .Values.global.runtime.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
 metadata:
   labels:
     {{- include "gitops-operator.selectorLabels" . | nindent 4 }}
   name: codefresh-gitops-operator-workflows
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: {{ .Values.singleNamespace | ternary "Role" "ClusterRole" }}
-  name: {{ .Values.singleNamespace | ternary "argo-role" "argo-edit" }}
+  kind: {{ .Values.global.runtime.singleNamespace | ternary "Role" "ClusterRole" }}
+  name: {{ .Values.global.runtime.singleNamespace | ternary "argo-role" "argo-edit" }}
 subjects:
 - kind: ServiceAccount
   name: {{ include "gitops-operator.serviceAccountName" . }}

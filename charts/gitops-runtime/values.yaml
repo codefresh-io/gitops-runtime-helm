@@ -49,6 +49,8 @@ global:
     cluster: https://kubernetes.default.svc
     # -- Defines whether this is a Codefresh hosted runtime. Should not be changed.
     codefreshHosted: false
+    # -- Runtime single namespace mode. When true, runtime operates in single namespace scope.
+    singleNamespace: true
     # -- Ingress settings
     ingress:
       # -- if set to true, the pre-install hook will validate the existance of appropriate values, but *will not* attempt to make a web request to the ingress host
@@ -518,8 +520,6 @@ tunnel-client:
 #-----------------------------------------------------------------------------------------------------------------------
 app-proxy:
   replicaCount: 1
-  # -- Runtime single namespace mode. When true, runtime operates in single namespace scope.
-  singleNamespace: false
   # -- Image enrichment process configuration
   image-enrichment:
     # -- Enable or disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.
@@ -712,8 +712,6 @@ gitops-operator:
     annotations: {}
     # -- Additional labels for gitops operator CRDs
     additionalLabels: {}
-  # -- Restrict the gitops operator to a single namespace (by the namespace of Helm release)
-  singleNamespace: false
   # -- GitOps operator configuration
   config:
     # -- Task polling interval
