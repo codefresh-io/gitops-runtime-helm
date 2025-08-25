@@ -1,6 +1,6 @@
 
 {{- define "gitops-operator.resources.restricted-git-source-rbac" }}
-  {{- if not .Values.singleNamespace }}
+  {{- if not .Values.global.runtime.singleNamespace }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
