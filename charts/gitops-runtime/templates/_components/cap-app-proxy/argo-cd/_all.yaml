@@ -1,0 +1,7 @@
+{{- if (get .Values "app-proxy").singleNamespace }}
+{{- include "argo-cd.namespaced-rbac.serviceaccount" . }}
+---
+{{- include "argo-cd.namespaced-rbac.role" . }}
+---
+{{- include "argo-cd.namespaced-rbac.rolebinding" . }}
+{{- end }} 
