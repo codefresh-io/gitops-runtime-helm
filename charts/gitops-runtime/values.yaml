@@ -726,7 +726,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/dev/codefresh-gitops-operator
-    tag: test-component-test-helm-dependency-127a969
+    tag: test-component-test-helm-dependency-78bc1e2
   serviceAccount:
     create: true
     annotations: {}
