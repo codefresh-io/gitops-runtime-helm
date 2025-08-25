@@ -50,7 +50,7 @@ global:
     # -- Defines whether this is a Codefresh hosted runtime. Should not be changed.
     codefreshHosted: false
     # -- Runtime single namespace mode. When true, runtime operates in single namespace scope.
-    singleNamespace: true
+    singleNamespace: false
     # -- Ingress settings
     ingress:
       # -- if set to true, the pre-install hook will validate the existance of appropriate values, but *will not* attempt to make a web request to the ingress host
