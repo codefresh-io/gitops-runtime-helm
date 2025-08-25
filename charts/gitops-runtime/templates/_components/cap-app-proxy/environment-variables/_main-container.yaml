@@ -109,6 +109,12 @@ RUNTIME_NAME:
     configMapKeyRef:
       name: cap-app-proxy-cm
       key: runtimeName
+RUNTIME_SINGLE_NAMESPACE:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: runtimeSingleNamespace
+      optional: true
 RUNTIME_TOKEN:
   valueFrom:
     secretKeyRef:
@@ -210,6 +216,7 @@ IRW_JIRA_ENRICHMENT_TASK_IMAGE:
       name: cap-app-proxy-cm
       key: enrichmentJiraEnrichmentImage
       optional: true
+
 NODE_EXTRA_CA_CERTS: /app/config/all/all.cer
 {{- if gt (int .Values.replicaCount) 1 }}
 LEADER_ID:

@@ -1,0 +1,3 @@
+{{- include "argo-cd.namespaced-rbac.role" . }}
+---
+{{- include "argo-cd.namespaced-rbac.rolebinding" . }} 

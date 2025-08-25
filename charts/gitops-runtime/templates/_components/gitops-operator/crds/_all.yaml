@@ -14,7 +14,9 @@
 ---
   {{- include "gitops-operator.crds.product" $context }}
 ---
+  {{- if not .Values.app-proxy.singleNamespace }}
   {{- include "gitops-operator.crds.restricted-gitsource" $context }}
+  {{- end }}
 ---
   {{- include "gitops-operator.crds.promotion-policy" $context }}
 {{- end }}

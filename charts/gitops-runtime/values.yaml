@@ -518,6 +518,8 @@ tunnel-client:
 #-----------------------------------------------------------------------------------------------------------------------
 app-proxy:
   replicaCount: 1
+  # -- Runtime single namespace mode. When true, runtime operates in single namespace scope.
+  singleNamespace: false
   # -- Image enrichment process configuration
   image-enrichment:
     # -- Enable or disable enrichment process. Please note that for enrichemnt, argo-workflows has to be enabled as well.

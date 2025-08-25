@@ -15,4 +15,5 @@ data:
   ingressController: {{ .Values.global.runtime.ingress.className | default "" | quote }}
   ingressHost: {{ include "codefresh-gitops-runtime.ingress-url" . }}
   isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote }} 
+  singleNamespace: {{ .Values.app-proxy.singleNamespace | quote }}
   version: {{ .Chart.AppVersion }}
