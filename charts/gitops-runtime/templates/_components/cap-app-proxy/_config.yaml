@@ -11,7 +11,7 @@ env: {{ .Values.config.env | quote}}
 isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote }}
 isExternalArgoCD: {{ .Values.global.runtime.isExternalArgoCD | quote }}
 runtimeName: {{ required "global.runtime.name is required" .Values.global.runtime.name | quote}}
-runtimeSingleNamespace: {{ .Values.app-proxy.singleNamespace | quote }}
+runtimeSingleNamespace: {{ (get .Values "app-proxy").singleNamespace | quote }}
 skipGitPermissionValidation: {{ .Values.config.skipGitPermissionValidation | quote }}
 logLevel: {{ .Values.config.logLevel | quote }}
   {{- $enrichmentValues := get .Values "image-enrichment" }}

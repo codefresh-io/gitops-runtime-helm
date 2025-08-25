@@ -13,7 +13,7 @@
 ---
   {{- include "gitops-operator.resources.leader-election-rbac" $context  }}
 ---
-  {{- if not .Values.app-proxy.singleNamespace }}
+  {{- if not (get .Values "app-proxy").singleNamespace }}
   {{- include "gitops-operator.resources.restricted-git-source-rbac" $context }}
   {{- end }}
 ---

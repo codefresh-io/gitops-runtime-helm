@@ -1,4 +1,4 @@
-{{- if .Values.app-proxy.singleNamespace }}
+{{- if (get .Values "app-proxy").singleNamespace }}
 {{- define "argo-cd.namespaced-rbac.rolebinding" }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
