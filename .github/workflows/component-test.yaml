@@ -8,12 +8,16 @@ on:
     paths-ignore:
       - "*.md"
       - charts/**
+      - 'stable/*'
+      - 'monthly/*'
   pull_request:
     branches:
       - main
     paths-ignore:
       - "*.md"
       - charts/**
+      - 'stable/*'
+      - 'monthly/*'
 
 jobs:
   component-test:
@@ -68,7 +72,7 @@ jobs:
           helm repo add gitea-charts https://dl.gitea.com/charts/
           helm repo add mockserver https://www.mock-server.com
 
-      
+
       - name: Run KUTTL tests
         run: |
           cd tests/component-tests && ./../../bin/kuttl test --parallel 1 --start-kind=false --namespace e2e-test --config startup.yaml
