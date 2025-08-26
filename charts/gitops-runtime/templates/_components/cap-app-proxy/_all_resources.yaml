@@ -11,5 +11,4 @@
 ---
   {{ include "cap-app-proxy.resources.sa" .}}
 ---
-  {{ include "argo-cd.namespaced-rbac.all" . }}
 {{- end }}
