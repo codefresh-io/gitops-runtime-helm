@@ -10,6 +10,7 @@
 
 {{/* Workaround to NOT change label selectors from previous runtime release when sources-server was part of cf-argocd-extras Subchart */}}
 {{- $_ := set $context.Values "nameOverride" "cf-argocd-extras" }}
+{{- $_ := set $context.Values.rbac "namespaced" (get .Values.global.runtime "singleNamespace") }}
 
 {{- $templateName := printf "cf-common-%s.rbac" (index .Subcharts "cf-common").Chart.Version }}
 {{- include $templateName $context }}

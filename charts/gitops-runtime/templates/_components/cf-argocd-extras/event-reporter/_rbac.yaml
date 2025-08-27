@@ -13,6 +13,7 @@
 
 {{/* Remove nonResourceURLs when RBAC is namespaced */}}
 {{- $rules := $context.Values.rbac.rules }}
+{{- $_ := set $context.Values.rbac "namespaced" (get .Values.global.runtime "singleNamespace") }}
 {{- if $context.Values.rbac.namespaced }}
     {{- $rules = list }}
         {{- range $context.Values.rbac.rules }}
