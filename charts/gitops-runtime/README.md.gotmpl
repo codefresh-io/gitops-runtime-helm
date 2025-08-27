@@ -50,6 +50,9 @@ argo-rollouts:
   enabled: false
 tunnel-client:
   enabled: false
+gitops-operator:
+  crds:
+    install: false
 ```
 
 Note that for the first runtime in the cluster, you have to configure it to install the CRDs, with setting these values:
