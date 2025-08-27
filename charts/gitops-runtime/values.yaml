@@ -759,7 +759,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/dev/cf-argocd-extras
-        tag: cr-30626-optimize-app-reporter-b17c107
+        tag: cr-30626-optimize-app-reporter-40949aa
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -783,7 +783,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/dev/cf-argocd-extras
-        tag: cr-30626-optimize-app-reporter-b17c107
+        tag: cr-30626-optimize-app-reporter-40949aa
     nodeSelector: {}
     tolerations: []
     affinity: {}
