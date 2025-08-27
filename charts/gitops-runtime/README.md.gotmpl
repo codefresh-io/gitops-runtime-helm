@@ -15,8 +15,6 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
-To achieve this, configure your Runtimes to run in namespaced mode, which uses Roles instead of ClusterRoles. See the values.yaml example below:
-
 ## Multi Runtime Installation
 You can install multiple Codefresh GitOps Runtimes in the same cluster, as long as each Runtime is deployed in its own namespace and manages only the applications in that namespace.
 To achieve this, configure your Runtimes to run in namespaced mode by setting `global.runtime.singleNamespace=true`. See the values.yaml example below:
