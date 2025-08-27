@@ -726,7 +726,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/dev/codefresh-gitops-operator
-    tag: cr-30486-9883b54
+    tag: cr-30486-b1f42cd
   serviceAccount:
     create: true
     annotations: {}
