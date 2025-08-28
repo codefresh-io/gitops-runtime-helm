@@ -237,9 +237,21 @@ sealed-secrets:
 #-----------------------------------------------------------------------------------------------------------------------
 argo-cd:
   enabled: true
+  global:
+    image:
+      repository: quay.io/codefresh/argocd
+      tag: v3.0.2-2025-08-12-9c8dfae9
   fullnameOverride: argo-cd
   crds:
     install: true
+  redis:
+    image:
+      tag: 7.4.5-alpine
+  dex:
+    image:
+      tag: v2.43.1
+  notifications:
+    enabled: false
   configs:
     cm:
       timeout.reconciliation: 20s
