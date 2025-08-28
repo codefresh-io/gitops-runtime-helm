@@ -73,6 +73,10 @@ gitops-operator:
     install: true
 ```
 
+> [!WARNING]
+> If you want more than one runtime in your cluster, make sure that all of the runtimes in your cluster are configured with `global.runtime.singleNamespace=true`.
+> If you already have a runtime installed in the cluster without this setting, multi runtime installation is not supported.
+
 
 ## Argo-workflows artifact and log storage
 Codefresh provides a SaaS object storage based solution for Argo workflows logs storage. The chart deploys a configmap named `codefresh-workflows-log-store` with the repository configuration.
