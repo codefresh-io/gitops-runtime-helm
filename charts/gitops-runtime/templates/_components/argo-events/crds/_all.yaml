@@ -1,0 +1,16 @@
+{{- define "argo-events.crds" }}
+
+{{- $context := deepCopy . }}
+
+{{- $defaultVals := include "argo-events.default-values" . | fromYaml }}
+{{- $vals := mergeOverwrite $defaultVals (get .Values "argo-events") }}
+
+{{- $_ := set $context "Values" $vals }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+
+  {{- include "argo-events.crds.event-bus" $context }}
+---
+  {{- include "argo-events.crds.event-source" $context }}
+---
+  {{- include "argo-events.crds.sensor" $context }}
+{{- end }}

@@ -1,0 +1,3 @@
+{{- if and (index .Values "argo-events" "enabled") }}
+    {{- include "argo-events.crds" . }}
+{{- end }}
