@@ -14,8 +14,6 @@ argo-events:
   controller:
     rbac:
       namespaced: true
-  crds:
-    install: false
 argo-workflows:
   crds:
     install: false

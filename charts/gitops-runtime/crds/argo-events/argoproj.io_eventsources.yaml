@@ -1,19 +1,17 @@
 # This is an auto-generated file. DO NOT EDIT
-{{- define "argo-events.crds.event-bus" }}
-  {{- if .Values.crds.install }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: eventbus.argoproj.io
+  name: eventsources.argoproj.io
 spec:
   group: argoproj.io
   names:
-    kind: EventBus
-    listKind: EventBusList
-    plural: eventbus
+    kind: EventSource
+    listKind: EventSourceList
+    plural: eventsources
     shortNames:
-    - eb
-    singular: eventbus
+    - es
+    singular: eventsource
   scope: Namespaced
   versions:
   - name: v1alpha1
@@ -40,5 +38,3 @@ spec:
     storage: true
     subresources:
       status: {}
-  {{- end }}
-{{- end }}
