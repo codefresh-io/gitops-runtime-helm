@@ -536,3 +536,20 @@ NO_PROXY: {{ .Values.global.noProxy | quote }}
 
 {{- printf "%s" $eventBusName }}
 {{- end }}
+
+{{/*
+  Create acr controller name and version as used by the chart label.
+*/}}
+{{- define "argo-cd.acr-controller.fullname" -}}
+{{- printf "%s-%s" (include "argo-cd.fullname" .) .Values.argo-cd.acrController.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{/*
+  Create the name of the acr controller service account to use
+  */}}
+{{- define "argo-cd.acrControllerServiceAccountName" -}}
+{{- if .Values.argo-cd.acrController.serviceAccount.create -}}
+{{ default (include "argo-cd.acr-controller.fullname" .) .Values.argo-cd.acrController.serviceAccount.name }}
+{{- else -}}
+{{ default "default" .Values.argo-cd.acrController.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
