@@ -1,8 +1,9 @@
-{{- if index .Values "argo-cd" "acrController" "enabled" }}
+{{- $acr := index .Values "argo-cd" "acrController" | default dict }}
+{{- if $acr.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  {{- with (mergeOverwrite (deepCopy .Values.global.statefulsetAnnotations) .Values.argo-cd.acrController.statefulsetAnnotations) }}
+  {{- with (mergeOverwrite (deepCopy (default (dict) .Values.global.statefulsetAnnotations)) $acr.statefulsetAnnotations) }}
   annotations:
     {{- range $key, $value := . }}
     {{ $key }}: {{ $value | quote }}
@@ -11,23 +12,23 @@ metadata:
   name: {{ template "argo-cd.acr-controller.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    {{- include "argo-cd.labels" (dict "context" . "component" .Values.argo-cd.acrController.name "name" .Values.argo-cd.acrController.name) | nindent 4 }}
+    {{- include "argo-cd.labels" (dict "context" . "component" $acr.name "name" $acr.name) | nindent 4 }}
 spec:
-  replicas: {{ .Values.argo-cd.acrController.replicas }}
+  replicas: {{ $acr.replicas }}
   # TODO: Remove for breaking release as history limit cannot be patched
   revisionHistoryLimit: 5
   selector:
     matchLabels:
-      {{- include "argo-cd.selectorLabels" (dict "context" . "name" .Values.argo-cd.acrController.name) | nindent 6 }}
+      {{- include "argo-cd.selectorLabels" (dict "context" . "name" $acr.name) | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "argo-cd.labels" (dict "context" . "component" .Values.argo-cd.acrController.name "name" .Values.argo-cd.acrController.name) | nindent 8 }}
-        {{- with (mergeOverwrite (deepCopy .Values.global.podLabels) .Values.argo-cd.acrController.podLabels) }}
+        {{- include "argo-cd.labels" (dict "context" . "component" $acr.name "name" $acr.name) | nindent 8 }}
+        {{- with (mergeOverwrite (deepCopy (default (dict) .Values.global.podLabels)) $acr.podLabels) }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- with .Values.argo-cd.acrController.imagePullSecrets | default .Values.global.imagePullSecrets }}
+      {{- with $acr.imagePullSecrets | default .Values.global.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -39,24 +40,24 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.argo-cd.acrController.priorityClassName | default .Values.global.priorityClassName }}
+      {{- with $acr.priorityClassName | default .Values.global.priorityClassName }}
       priorityClassName: {{ . }}
       {{- end }}
-      {{- if .Values.argo-cd.acrController.terminationGracePeriodSeconds }}
-      terminationGracePeriodSeconds: {{ .Values.argo-cd.acrController.terminationGracePeriodSeconds }}
+      {{- if $acr.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ $acr.terminationGracePeriodSeconds }}
       {{- end }}
       serviceAccountName: {{ include "argo-cd.acrControllerServiceAccountName" . }}
       containers:
       - args:
         - /usr/local/bin/argocd-application-change-revision-controller
-        {{- with .Values.argo-cd.acrController.extraArgs }}
+        {{- with $acr.extraArgs }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
-        image: {{ default .Values.global.image.repository .Values.argo-cd.acrController.image.repository }}:{{ default (include "argo-cd.defaultTag" .) .Values.argo-cd.acrController.image.tag }}
-        imagePullPolicy: {{ default .Values.global.image.imagePullPolicy .Values.argo-cd.acrController.image.imagePullPolicy }}
-        name: {{ .Values.argo-cd.acrController.name }}
+        image: {{ default .Values.global.image.repository $acr.image.repository }}:{{ default (include "argo-cd.defaultTag" .) $acr.image.tag }}
+        imagePullPolicy: {{ default .Values.global.image.imagePullPolicy $acr.image.imagePullPolicy }}
+        name: {{ $acr.name }}
         env:
-            {{- with (concat .Values.global.env .Values.argo-cd.acrController.env) }}
+            {{- with (concat (default (list) .Values.global.env) (default (list) $acr.env)) }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
             - name: ARGOCD_TOKEN
@@ -94,13 +95,13 @@ spec:
                   key: server.rootpath
                   name: argocd-cmd-params-cm
                   optional: true
-        {{- with .Values.argo-cd.acrController.envFrom }}
+        {{- with $acr.envFrom }}
         envFrom:
           {{- toYaml . | nindent 10 }}
         {{- end }}
         ports:
           - name: health
-            containerPort: {{ .Values.argo-cd.acrController.containerPorts.health }}
+            containerPort: {{ $acr.containerPorts.health }}
             protocol: TCP
         livenessProbe:
           httpGet:
@@ -113,53 +114,53 @@ spec:
           httpGet:
             path: /healthz
             port: health
-          initialDelaySeconds: {{ .Values.argo-cd.acrController.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.argo-cd.acrController.readinessProbe.periodSeconds }}
-          timeoutSeconds: {{ .Values.argo-cd.acrController.readinessProbe.timeoutSeconds }}
-          successThreshold: {{ .Values.argo-cd.acrController.readinessProbe.successThreshold }}
-          failureThreshold: {{ .Values.argo-cd.acrController.readinessProbe.failureThreshold }}
+          initialDelaySeconds: {{ $acr.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ $acr.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ $acr.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ $acr.readinessProbe.successThreshold }}
+          failureThreshold: {{ $acr.readinessProbe.failureThreshold }}
         resources:
-          {{- toYaml .Values.argo-cd.acrController.resources | nindent 12 }}
-        {{- with .Values.argo-cd.acrController.containerSecurityContext }}
+          {{- toYaml $acr.resources | nindent 12 }}
+        {{- with $acr.containerSecurityContext }}
         securityContext:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-      {{- with .Values.argo-cd.acrController.extraContainers }}
+      {{- with $acr.extraContainers }}
         {{- tpl (toYaml .) $ | nindent 6 }}
       {{- end }}
-      {{- with .Values.argo-cd.acrController.initContainers }}
+      {{- with $acr.initContainers }}
       initContainers:
         {{- tpl (toYaml .) $ | nindent 6 }}
       {{- end }}
-      {{- with include "argo-cd.affinity" (dict "context" . "component" .Values.argo-cd.acrController) }}
+      {{- with include "argo-cd.affinity" (dict "context" . "component" $acr) }}
       affinity:
         {{- trim . | nindent 8 }}
       {{- end }}
-      {{- with .Values.argo-cd.acrController.nodeSelector | default .Values.global.nodeSelector }}
+      {{- with $acr.nodeSelector | default .Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.argo-cd.acrController.tolerations | default .Values.global.tolerations }}
+      {{- with $acr.tolerations | default .Values.global.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.argo-cd.acrController.topologySpreadConstraints | default .Values.global.topologySpreadConstraints }}
+      {{- with $acr.topologySpreadConstraints | default .Values.global.topologySpreadConstraints }}
       topologySpreadConstraints:
         {{- range $constraint := . }}
       - {{ toYaml $constraint | nindent 8 | trim }}
           {{- if not $constraint.labelSelector }}
         labelSelector:
           matchLabels:
-            {{- include "argo-cd.selectorLabels" (dict "context" $ "name" $.Values.argo-cd.acrController.name) | nindent 12 }}
+            {{- include "argo-cd.selectorLabels" (dict "context" $ "name" $acr.name) | nindent 12 }}
           {{- end }}
         {{- end }}
       {{- end }}
-      {{- if .Values.argo-cd.acrController.hostNetwork }}
-      hostNetwork: {{ .Values.argo-cd.acrController.hostNetwork }}
+      {{- if $acr.hostNetwork }}
+      hostNetwork: {{ $acr.hostNetwork }}
       {{- end }}
-      {{- with .Values.argo-cd.acrController.dnsConfig }}
+      {{- with $acr.dnsConfig }}
       dnsConfig:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      dnsPolicy: {{ .Values.argo-cd.acrController.dnsPolicy }}
+      dnsPolicy: {{ $acr.dnsPolicy }}
 {{- end }}
