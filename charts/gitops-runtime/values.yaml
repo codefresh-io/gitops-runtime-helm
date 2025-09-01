@@ -236,6 +236,18 @@ sealed-secrets:
 # ArgoCD
 #-----------------------------------------------------------------------------------------------------------------------
 argo-cd:
+  global:
+    image: 
+      repository: quay.io/codefresh/argocd
+      tag: v3.0.2-2025-08-12-9c8dfae9
+  redis:
+    image:
+      tag: 7.4.5-alpine
+  dex:
+    image:
+      tag: v2.43.1
+  notifications:
+    enabled: false
   enabled: true
   fullnameOverride: argo-cd
   crds:
@@ -245,6 +257,7 @@ argo-cd:
       timeout.reconciliation: 20s
       accounts.admin: apiKey,login
       application.resourceTrackingMethod: annotation+label
+      application.instanceLabelKey: ""
       resource.customizations.actions.argoproj.io_Rollout: |
         mergeBuiltinActions: true
         discovery.lua: |
