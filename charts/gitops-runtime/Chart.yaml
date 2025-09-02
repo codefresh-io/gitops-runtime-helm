@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.75
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: '{{ workflow.outputs.parameters.global-chart-version }}'
+version: '0.23.3'
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
