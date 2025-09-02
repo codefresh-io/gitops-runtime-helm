@@ -258,6 +258,7 @@ argo-cd:
       accounts.admin: apiKey,login
       application.resourceTrackingMethod: annotation+label
       application.instanceLabelKey: ""
+      kustomize.setNamespace.enabled: false
       resource.customizations.actions.argoproj.io_Rollout: |
         mergeBuiltinActions: true
         discovery.lua: |
