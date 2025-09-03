@@ -237,7 +237,7 @@ sealed-secrets:
 #-----------------------------------------------------------------------------------------------------------------------
 argo-cd:
   global:
-    image: 
+    image:
       repository: quay.io/codefresh/argocd
       tag: v3.0.2-2025-08-12-9c8dfae9
   redis:
