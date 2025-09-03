@@ -15,15 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'bumped app-proxy to 1.3718.0 - fix Argo-CD log issue'
-    - kind: changed
-      description: 'updated image enricher tags to 1.1.15-main - fix security vulnerabilities'
-    - kind: changed
-      description: 'updated event-reporter and sources-server images to v0.5.14 - fix security vulnerabilities'
-    - kind: changed
-      description: 'updated cli-v2, kubectl in runtime-installer image - fix security vulnerabilities'
-    - kind: changed
-      description: 'updated nginx image to 1.29-alpine3.22 - fix security vulnerabilities'
+      description: 'chore(app-proxy): update cap-app-proxy image tags to 1.3727.0 (#692)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
