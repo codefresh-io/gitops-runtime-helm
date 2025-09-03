@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.75
+appVersion: 0.1.72
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: '0.24.0'
+version: '0.24.1'
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,13 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'feat: support single-namespaced runtime installation (#617)'
-    - kind: changed
-      description: 'chore: update app-proxy image tags to 1.3736.0 - support single-namespaced runtime'
-    - kind: changed
-      description: 'chore: update gitops-operator image tags to 58625b8 - disable RGS controller in single-namespaced mode'
-    - kind: security
-      description: 'sanitized argo-cd Project API response to remove sensitive information (https://github.com/advisories/GHSA-786q-9hcg-v9ff)'
+      description: 'chore: security'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
@@ -44,7 +38,7 @@ dependencies:
     condition: sealed-secrets.enabled
   - name: codefresh-tunnel-client
     repository: oci://quay.io/codefresh/charts
-    version: 0.1.21
+    version: 0.1.22
     alias: tunnel-client
     condition: tunnel-client.enabled
   - name: cf-common
