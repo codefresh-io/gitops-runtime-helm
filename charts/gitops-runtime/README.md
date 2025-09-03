@@ -191,6 +191,20 @@ sealed-secrets:
 
 ## Upgrading
 
+### To >=0.23.3
+
+#### Manual fix in the ISC repository
+
+If the ISC repository already contains the resources/app-projects/cf-runtime-app-project.yaml file it should be manually updated:
+```yaml
+...
+spec:
+  destinations:
+  - namespace: '*'
+    server: "*" # <-- replace 'https://kubernetes.default.svc' with "*" here
+...
+```
+
 ### To 0.23.x
 
 ####  Affected values
@@ -311,13 +325,36 @@ gitops-operator:
 | app-proxy.serviceMonitor.labels | object | `{}` |  |
 | app-proxy.serviceMonitor.name | string | `""` |  |
 | app-proxy.tolerations | list | `[]` |  |
-| argo-cd | object | `{"applicationVersioning":{"enabled":true,"useApplicationConfiguration":true},"configs":{"cm":{"accounts.admin":"apiKey,login","application.resourceTrackingMethod":"annotation+label","resource.customizations.actions.argoproj.io_Rollout":"mergeBuiltinActions: true\ndiscovery.lua: |\n  actions = {}\n  local fullyPromoted = obj.status.currentPodHash == obj.status.stableRS\n  actions[\"pause\"] = {[\"disabled\"] = fullyPromoted or obj.spec.paused == true}\n  actions[\"skip-current-step\"] = {[\"disabled\"] = obj.spec.strategy.canary == nil or obj.spec.strategy.canary.steps == nil or obj.status.currentStepIndex == table.getn(obj.spec.strategy.canary.steps)}\n  return actions\ndefinitions:\n- name: pause\n  action.lua: |\n    obj.spec.paused = true\n    return obj\n- name: skip-current-step\n  action.lua: |\n    if obj.status ~= nil then\n        if obj.spec.strategy.canary ~= nil and obj.spec.strategy.canary.steps ~= nil and obj.status.currentStepIndex < table.getn(obj.spec.strategy.canary.steps) then\n            if obj.status.pauseConditions ~= nil and table.getn(obj.status.pauseConditions) > 0 then\n                obj.status.pauseConditions = nil\n            end\n            obj.status.currentStepIndex = obj.status.currentStepIndex + 1\n        end\n    end\n    return obj\n","timeout.reconciliation":"20s"},"params":{"application.namespaces":"cf-*","server.insecure":true}},"crds":{"install":true},"enabled":true,"fullnameOverride":"argo-cd"}` | ------------------------------------------------------------------------------------------------------------------- |
 | argo-cd.applicationVersioning.enabled | bool | `true` | Enable application versioning |
 | argo-cd.applicationVersioning.useApplicationConfiguration | bool | `true` | Extract application version based on ApplicationConfiguration CRD |
-| argo-events | object | `{"configs":{"jetstream":{"versions":[{"configReloaderImage":"natsio/nats-server-config-reloader:0.18.2","metricsExporterImage":"natsio/prometheus-nats-exporter:0.16.0","natsImage":"nats:2.11.4","startCommand":"/nats-server","version":"latest"}]},"nats":{"versions":[{"metricsExporterImage":"natsio/prometheus-nats-exporter:0.16.0","natsStreamingImage":"nats-streaming:0.25.6","version":"0.22.1"}]}},"crds":{"install":false},"fullnameOverride":"argo-events"}` | ------------------------------------------------------------------------------------------------------------------- |
-| argo-rollouts | object | `{"controller":{"replicas":1},"enabled":true,"fullnameOverride":"argo-rollouts","installCRDs":true}` | ------------------------------------------------------------------------------------------------------------------- |
-| argo-workflows | object | `{"crds":{"install":true},"enabled":true,"executor":{"resources":{"requests":{"ephemeral-storage":"10Mi"}}},"fullnameOverride":"argo","mainContainer":{"resources":{"requests":{"ephemeral-storage":"10Mi"}}},"server":{"authModes":["client"],"baseHref":"/workflows/"}}` | ------------------------------------------------------------------------------------------------------------------- |
+| argo-cd.configs.cm."accounts.admin" | string | `"apiKey,login"` |  |
+| argo-cd.configs.cm."application.resourceTrackingMethod" | string | `"annotation+label"` |  |
+| argo-cd.configs.cm."resource.customizations.actions.argoproj.io_Rollout" | string | `"mergeBuiltinActions: true\ndiscovery.lua: |\n  actions = {}\n  local fullyPromoted = obj.status.currentPodHash == obj.status.stableRS\n  actions[\"pause\"] = {[\"disabled\"] = fullyPromoted or obj.spec.paused == true}\n  actions[\"skip-current-step\"] = {[\"disabled\"] = obj.spec.strategy.canary == nil or obj.spec.strategy.canary.steps == nil or obj.status.currentStepIndex == table.getn(obj.spec.strategy.canary.steps)}\n  return actions\ndefinitions:\n- name: pause\n  action.lua: |\n    obj.spec.paused = true\n    return obj\n- name: skip-current-step\n  action.lua: |\n    if obj.status ~= nil then\n        if obj.spec.strategy.canary ~= nil and obj.spec.strategy.canary.steps ~= nil and obj.status.currentStepIndex < table.getn(obj.spec.strategy.canary.steps) then\n            if obj.status.pauseConditions ~= nil and table.getn(obj.status.pauseConditions) > 0 then\n                obj.status.pauseConditions = nil\n            end\n            obj.status.currentStepIndex = obj.status.currentStepIndex + 1\n        end\n    end\n    return obj\n"` |  |
+| argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
+| argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
+| argo-cd.configs.params."server.insecure" | bool | `true` |  |
+| argo-cd.crds.install | bool | `true` |  |
+| argo-cd.enabled | bool | `true` |  |
+| argo-cd.fullnameOverride | string | `"argo-cd"` |  |
+| argo-events.configs.jetstream.versions[0].configReloaderImage | string | `"natsio/nats-server-config-reloader:0.18.2"` |  |
+| argo-events.configs.jetstream.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.16.0"` |  |
+| argo-events.configs.jetstream.versions[0].natsImage | string | `"nats:2.11.4"` |  |
+| argo-events.configs.jetstream.versions[0].startCommand | string | `"/nats-server"` |  |
+| argo-events.configs.jetstream.versions[0].version | string | `"latest"` |  |
+| argo-events.configs.nats.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.16.0"` |  |
+| argo-events.configs.nats.versions[0].natsStreamingImage | string | `"nats-streaming:0.25.6"` |  |
+| argo-events.configs.nats.versions[0].version | string | `"0.22.1"` |  |
+| argo-events.crds.install | bool | `false` |  |
+| argo-events.fullnameOverride | string | `"argo-events"` |  |
+| argo-rollouts.controller.replicas | int | `1` |  |
+| argo-rollouts.enabled | bool | `true` |  |
+| argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
+| argo-rollouts.installCRDs | bool | `true` |  |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
+| argo-workflows.enabled | bool | `true` |  |
+| argo-workflows.executor.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
+| argo-workflows.fullnameOverride | string | `"argo"` |  |
+| argo-workflows.mainContainer.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
 | cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"v0.5.14"}},"enabled":true,"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"serviceMonitor":{"main":{"enabled":false}},"tolerations":[]},"sourcesServer":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"v0.5.14"}},"enabled":true,"hpa":{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
@@ -502,7 +539,19 @@ gitops-operator:
 | internal-router.serviceAccount.create | bool | `true` |  |
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
-| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.29.0"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | ------------------------------------------------------------------------------------------------------------------- |
-| tunnel-client | object | `{"affinity":{},"enabled":true,"libraryMode":true,"nodeSelector":{},"tolerations":[],"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | ------------------------------------------------------------------------------------------------------------------- |
+| sealed-secrets.fullnameOverride | string | `"sealed-secrets-controller"` |  |
+| sealed-secrets.image.registry | string | `"quay.io"` |  |
+| sealed-secrets.image.repository | string | `"codefresh/sealed-secrets-controller"` |  |
+| sealed-secrets.image.tag | string | `"0.29.0"` |  |
+| sealed-secrets.keyrenewperiod | string | `"720h"` |  |
+| sealed-secrets.resources.limits.cpu | string | `"500m"` |  |
+| sealed-secrets.resources.limits.memory | string | `"1Gi"` |  |
+| sealed-secrets.resources.requests.cpu | string | `"200m"` |  |
+| sealed-secrets.resources.requests.memory | string | `"512Mi"` |  |
+| tunnel-client.affinity | object | `{}` |  |
 | tunnel-client.enabled | bool | `true` | Will only be used if global.runtime.ingress.enabled = false |
 | tunnel-client.libraryMode | bool | `true` | Do not change this value! Breaks chart logic |
+| tunnel-client.nodeSelector | object | `{}` |  |
+| tunnel-client.tolerations | list | `[]` |  |
+| tunnel-client.tunnelServer.host | string | `"register-tunnels.cf-cd.com"` |  |
+| tunnel-client.tunnelServer.subdomainHost | string | `"tunnels.cf-cd.com"` |  |
