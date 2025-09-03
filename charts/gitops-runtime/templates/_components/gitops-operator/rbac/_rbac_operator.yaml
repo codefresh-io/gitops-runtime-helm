@@ -29,6 +29,7 @@ rules:
 - apiGroups:
   - codefresh.io
   resources:
+  - promotiontasks
   - restrictedgitsources
   verbs:
   - create
@@ -41,12 +42,14 @@ rules:
 - apiGroups:
   - codefresh.io
   resources:
+  - promotiontasks/finalizers
   - restrictedgitsources/finalizers
   verbs:
   - update
 - apiGroups:
   - codefresh.io
   resources:
+  - promotiontasks/status
   - restrictedgitsources/status
   verbs:
   - get
