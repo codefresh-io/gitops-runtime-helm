@@ -1,4 +1,4 @@
-{{- define "gitops-operator.crds.product" }}
+{{- define "gitops-operator.crds.promotiontask" }}
   {{- if .Values.crds.install }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
