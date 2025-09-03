@@ -308,8 +308,8 @@ argo-events:
       versions:
         - version: latest
           natsImage: nats:2.11.4
-          metricsExporterImage: natsio/prometheus-nats-exporter:0.16.0
-          configReloaderImage: natsio/nats-server-config-reloader:0.18.2
+          metricsExporterImage: natsio/prometheus-nats-exporter:0.17.3
+          configReloaderImage: natsio/nats-server-config-reloader:0.19.1
           startCommand: /nats-server
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Workflows
@@ -578,14 +578,14 @@ app-proxy:
           tag: 1.1.15-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3718.0
+    tag: 1.3727.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3718.0
+      tag: 1.3727.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
