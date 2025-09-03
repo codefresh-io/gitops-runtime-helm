@@ -15,9 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: update cli-v2 in installer - fix token validation code (#696)
+      description: 'update cli-v2 in installer - fix token validation code (#696)'
     - kind: changed
-      description: 'chore(app-proxy): update cap-app-proxy image tags to 1.3727.0 (#692)'
+      description: 'chore(app-proxy): update cap-app-proxy image tags to 1.3727.0 (#692) - fix: remote-cluster application fails to sync due to its project'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm

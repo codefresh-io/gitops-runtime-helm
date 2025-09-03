@@ -191,6 +191,20 @@ sealed-secrets:
 
 ## Upgrading
 
+### To >=0.23.3
+
+#### Manual fix in the ISC repository
+
+If the ISC repository already contains the resources/app-projects/cf-runtime-app-project.yaml file it should be manually updated:
+```yaml
+...
+spec:
+  destinations:
+  - namespace: '*'
+    server: "*" # <-- replace 'https://kubernetes.default.svc' with "*" here
+...
+```
+
 ### To 0.23.x
 
 ####  Affected values
