@@ -727,8 +727,10 @@ gitops-operator:
   # -- GitOps operator image
   image:
     registry: quay.io
-    repository: codefresh/dev/codefresh-gitops-operator
-    tag: cr-29615-support-single-namespace-installation-9823710
+    repository: codefresh/codefresh-gitops-operator
+    tag: 58625b8
+  env:
+    GITOPS_OPERATOR_VERSION: 0.10.1 # hacky workaround, since our tags are no longer semver compliant
   serviceAccount:
     create: true
     annotations: {}
