@@ -86,6 +86,12 @@ IS_EXTERNAL_ARGOCD:
       name: cap-app-proxy-cm
       key: isExternalArgoCD
       optional: true
+IS_NAMESPACED_RUNTIME:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: isNamespacedRuntime
+      optional: true
 MANAGED: false
 NAMESPACE:
   valueFrom:
