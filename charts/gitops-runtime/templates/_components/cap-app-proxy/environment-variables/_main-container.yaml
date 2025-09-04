@@ -115,12 +115,6 @@ RUNTIME_NAME:
     configMapKeyRef:
       name: cap-app-proxy-cm
       key: runtimeName
-RUNTIME_SINGLE_NAMESPACE:
-  valueFrom:
-    configMapKeyRef:
-      name: cap-app-proxy-cm
-      key: runtimeSingleNamespace
-      optional: true
 RUNTIME_TOKEN:
   valueFrom:
     secretKeyRef:
