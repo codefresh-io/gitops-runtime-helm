@@ -70,6 +70,8 @@ cf-argocd-extras:
 argo-cd:
   redis-ha:
     enabled: true
+    image:
+      tag: 7.4.5-alpine
 
   controller:
     replicas: 1
