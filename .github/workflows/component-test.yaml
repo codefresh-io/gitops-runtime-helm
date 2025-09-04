@@ -5,19 +5,19 @@ on:
   push:
     branches:
       - main
+      - 'stable/*'
+      - 'monthly/*'
     paths-ignore:
       - "*.md"
       - charts/**
-      - 'stable/*'
-      - 'monthly/*'
   pull_request:
     branches:
       - main
+      - 'stable/*'
+      - 'monthly/*'
     paths-ignore:
       - "*.md"
       - charts/**
-      - 'stable/*'
-      - 'monthly/*'
 
 jobs:
   component-test:
