@@ -431,11 +431,14 @@ Output comma separated list of installed runtime components
 */}}
 {{- define "codefresh-gitops-runtime.component-list"}}
   {{- $argoEvents := dict "name" "argo-events" "version" (get .Subcharts "argo-events").Chart.AppVersion }}
-  {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
   {{- $internalRouter := dict "name" "internal-router" "version" .Chart.AppVersion }}
   {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
   {{- $sourcesServer := dict "name" "sources-server" "version" (get .Values "cf-argocd-extras").sourcesServer.container.image.tag }}
-  {{- $comptList := list $argoEvents $appProxy $sealedSecrets $internalRouter $sourcesServer }}
+  {{- $comptList := list $argoEvents $appProxy $internalRouter $sourcesServer }}
+{{- if and (index .Values "sealed-secrets" "enabled") }}
+  {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
+  {{- $comptList = append $comptList $sealedSecrets }}
+{{- end }}
 {{- if and (index .Values "argo-cd" "enabled") }}
   {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
   {{- $comptList = append $comptList $argoCD }}

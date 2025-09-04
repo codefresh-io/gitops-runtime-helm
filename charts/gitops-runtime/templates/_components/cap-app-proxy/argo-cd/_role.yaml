@@ -1,0 +1,17 @@
+{{- define "argo-cd.namespaced-rbac.role" }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: argocd-namespaced-role
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "codefresh-gitops-runtime.labels" . | nindent 4 }}
+    codefresh.io/component: argocd-namespaced-rbac
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - '*'
+{{- end }}

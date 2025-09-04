@@ -10,4 +10,5 @@
   {{ include "cap-app-proxy.resources.service" . }}
 ---
   {{ include "cap-app-proxy.resources.sa" .}}
+---
 {{- end }}

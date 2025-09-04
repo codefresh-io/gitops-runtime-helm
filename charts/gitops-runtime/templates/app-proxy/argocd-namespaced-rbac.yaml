@@ -1,0 +1,1 @@
+{{- include "argo-cd.namespaced-rbac.all" . }}

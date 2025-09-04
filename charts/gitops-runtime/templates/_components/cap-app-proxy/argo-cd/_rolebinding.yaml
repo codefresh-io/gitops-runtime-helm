@@ -1,0 +1,18 @@
+{{- define "argo-cd.namespaced-rbac.rolebinding" }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: argocd-namespaced-rolebinding
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "codefresh-gitops-runtime.labels" . | nindent 4 }}
+    codefresh.io/component: argocd-namespaced-rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: argocd-namespaced-role
+subjects:
+- kind: ServiceAccount
+  name: argocd-manager
+  namespace: {{ .Release.Namespace }}
+{{- end }} 

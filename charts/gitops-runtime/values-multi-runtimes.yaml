@@ -1,0 +1,34 @@
+global:
+  runtime:
+    singleNamespace: true
+sealed-secrets:
+  enabled: false
+argo-cd:
+  createClusterRoles: false
+  crds:
+    install: false
+  configs:
+    params:
+      application.namespaces: ''
+argo-events:
+  controller:
+    rbac:
+      namespaced: true
+argo-workflows:
+  crds:
+    install: false
+  singleNamespace: true
+  createAggregateRoles: false
+  controller:
+    clusterWorkflowTemplates:
+      enabled: false
+  server:
+    clusterWorkflowTemplates:
+      enabled: false
+argo-rollouts:
+  enabled: false
+tunnel-client:
+  enabled: false
+gitops-operator:
+  crds:
+    install: false
