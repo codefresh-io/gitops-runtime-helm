@@ -564,8 +564,8 @@ app-proxy:
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
           tag: 1.1.15-main
   image:
-    repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3727.0
+    repository: quay.io/codefresh/dev/cap-app-proxy
+    tag: 1.3730.0-cr-29616-add-singlenamespace-to-runtime-entity-514d763
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
@@ -727,8 +727,8 @@ gitops-operator:
   # -- GitOps operator image
   image:
     registry: quay.io
-    repository: codefresh/codefresh-gitops-operator
-    tag: v0.10.2
+    repository: codefresh/dev/codefresh-gitops-operator
+    tag: cr-29615-support-single-namespace-installation-29d8658
   serviceAccount:
     create: true
     annotations: {}
