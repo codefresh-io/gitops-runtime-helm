@@ -1,0 +1,15 @@
+## Values for the first runtime in a multi-runtime cluster (installing CRDs on the cluster)
+global:
+  runtime:
+    isConfigurationRuntime: true
+argo-cd:
+  crds:
+    install: true
+argo-workflows:
+  crds:
+    install: true
+argo-rollouts:
+  installCRDs: true
+gitops-operator:
+  crds:
+    install: true
