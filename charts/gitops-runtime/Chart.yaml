@@ -15,6 +15,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'feat: support single-namespaced runtime installation (#617)'
+    - kind: changed
       description: 'prepare-version(0.23.3): prepare chart content for release (#695)'
     - kind: changed
       description: 'chore: update app-proxy image tags to 1.3727.0 and bump version to 0.23.3'
