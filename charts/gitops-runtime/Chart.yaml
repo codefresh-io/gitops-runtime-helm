@@ -14,8 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'feat: OSS-522 cherry-pick sec advisory ghsa-786q-9hcg-v9ff (#704)'
+    - kind: security
+      description: sanitized argo-cd Project API response to remove sensitive information (https://github.com/advisories/GHSA-786q-9hcg-v9ff)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
