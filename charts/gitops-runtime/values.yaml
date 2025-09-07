@@ -233,7 +233,7 @@ sealed-secrets:
       cpu: 200m
       memory: 512Mi
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-cd-8.0.6-6-cap-v3.0.2-2025-07-06-e9fc72a9/charts/argo-cd
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-cd-8.0.6-8-cap-v3.0.2-2025-09-07-cdf75df5/charts/argo-cd
 # *********************************************************************************************************************
 argo-cd:
   enabled: true
