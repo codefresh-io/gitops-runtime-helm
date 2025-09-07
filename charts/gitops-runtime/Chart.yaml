@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.75
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: '0.23.3'
+version: '0.24.0'
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -37,6 +37,7 @@ dependencies:
   - name: sealed-secrets
     repository: https://bitnami-labs.github.io/sealed-secrets/
     version: 2.17.2
+    condition: sealed-secrets.enabled
   - name: codefresh-tunnel-client
     repository: oci://quay.io/codefresh/charts
     version: 0.1.21

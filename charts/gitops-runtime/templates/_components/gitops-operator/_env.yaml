@@ -15,6 +15,7 @@ COMMIT_STATUS_POLLING_INTERVAL: {{ .Values.config.commitStatusPollingInterval }}
 WORKFLOW_MONITOR_POLLING_INTERVAL: {{ .Values.config.workflowMonitorPollingInterval }}
 MAX_CONCURRENT_RELEASES: {{ .Values.config.maxConcurrentReleases }}
 PROMOTION_WRAPPER_TEMPLATE: {{ .Values.config.promotionWrapperTemplate | quote }}
+IS_NAMESPACED_RUNTIME: {{ .Values.global.runtime.singleNamespace }}
 {{- end }}
 
 {{- define "gitops-operator.resources.environment-variables.defaults" -}}
@@ -36,7 +37,7 @@ NAMESPACE:
   valueFrom:
     fieldRef:
       fieldPath: metadata.namespace
-RUNTIME_VERSION: 
+RUNTIME_VERSION:
   valueFrom:
     configMapKeyRef:
       name: codefresh-cm

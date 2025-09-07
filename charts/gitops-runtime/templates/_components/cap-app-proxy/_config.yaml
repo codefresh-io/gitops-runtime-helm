@@ -4,13 +4,14 @@ argoCdUsername: {{ .Values.config.argoCdUsername }}
 argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
 argoWorkflowsUrl: {{ default "" .Values.config.argoWorkflowsUrl }}
 cors: {{ .Values.global.codefresh.url }}
-  {{- with .Values.config.clusterChunkSize }} 
+  {{- with .Values.config.clusterChunkSize }}
 clusterChunkSize: {{ . | quote }}
   {{- end }}
 env: {{ .Values.config.env | quote}}
 isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote }}
 isExternalArgoCD: {{ .Values.global.runtime.isExternalArgoCD | quote }}
 runtimeName: {{ required "global.runtime.name is required" .Values.global.runtime.name | quote}}
+isNamespacedRuntime: {{ .Values.global.runtime.singleNamespace | quote }}
 skipGitPermissionValidation: {{ .Values.config.skipGitPermissionValidation | quote }}
 logLevel: {{ .Values.config.logLevel | quote }}
   {{- $enrichmentValues := get .Values "image-enrichment" }}

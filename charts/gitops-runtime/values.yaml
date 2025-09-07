@@ -49,6 +49,8 @@ global:
     cluster: https://kubernetes.default.svc
     # -- Defines whether this is a Codefresh hosted runtime. Should not be changed.
     codefreshHosted: false
+    # -- Runtime single namespace mode. When true, runtime operates in single namespace scope.
+    singleNamespace: false
     # -- Ingress settings
     ingress:
       # -- if set to true, the pre-install hook will validate the existance of appropriate values, but *will not* attempt to make a web request to the ingress host
@@ -563,14 +565,14 @@ app-proxy:
           tag: 1.1.15-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3727.0
+    tag: 1.3736.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3727.0
+      tag: 1.3736.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -710,6 +712,7 @@ gitops-operator:
     annotations: {}
     # -- Additional labels for gitops operator CRDs
     additionalLabels: {}
+  # -- GitOps operator configuration
   config:
     # -- Task polling interval
     taskPollingInterval: 10s
@@ -721,11 +724,13 @@ gitops-operator:
     maxConcurrentReleases: 100
     # -- An optional template for the promotion wrapper (empty default will use the embedded one)
     promotionWrapperTemplate: ''
+  # -- GitOps operator image
   image:
-    # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: v0.10.2
+    tag: 58625b8
+  env:
+    GITOPS_OPERATOR_VERSION: 0.10.1 # hacky workaround, since our tags are no longer semver compliant
   serviceAccount:
     create: true
     annotations: {}

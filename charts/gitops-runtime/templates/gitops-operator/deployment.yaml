@@ -1,3 +1,4 @@
+{{- if and (index .Values "gitops-operator" "enabled") }}
 {{- $context := deepCopy . }}
 
 {{- $defaultVals := include "gitops-operator.default-values" . | fromYaml }}
@@ -5,6 +6,7 @@
 
 {{- $_ := set $context "Values" $vals }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+{{- $_ := set $context.Values "app-proxy" (deepCopy (get .Values "app-proxy")) }}
 
 {{- if and (not (index .Values "argo-cd" "enabled")) }}
     {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
@@ -44,3 +46,4 @@
 {{- end }}
 
 {{- include "gitops-operator.resources.deployment" $context }}
+{{- end }}
