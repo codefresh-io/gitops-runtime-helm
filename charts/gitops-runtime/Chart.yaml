@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: security
-      description: sanitized argo-cd Project API response to remove sensitive information (https://github.com/advisories/GHSA-786q-9hcg-v9ff)'
+      description: 'sanitized argo-cd Project API response to remove sensitive information (https://github.com/advisories/GHSA-786q-9hcg-v9ff)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
