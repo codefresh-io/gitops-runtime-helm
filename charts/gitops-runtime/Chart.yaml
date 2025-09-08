@@ -14,8 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'Feat: OSS-522 cherry-pick sec advisory-ghsa-786q-9hcg-v9ff (#705)'
+    - kind: security
+      description: 'sanitized argo-cd Project API response to remove sensitive information (https://github.com/advisories/GHSA-786q-9hcg-v9ff)'
     - kind: changed
       description: 'feat: support single-namespaced runtime installation (#617)'
     - kind: changed
