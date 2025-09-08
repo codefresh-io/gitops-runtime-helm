@@ -15,9 +15,13 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'update cli-v2 in installer - fix token validation code (#696)'
+      description: 'feat: support single-namespaced runtime installation (#617)'
     - kind: changed
-      description: 'chore(app-proxy): update cap-app-proxy image tags to 1.3727.0 (#692) - fix: remote-cluster application fails to sync due to its project'
+      description: 'chore: update app-proxy image tags to 1.3736.0 - support single-namespaced runtime'
+    - kind: changed
+      description: 'chore: update gitops-operator image tags to 58625b8 - disable RGS controller in single-namespaced mode'
+    - kind: security
+      description: 'sanitized argo-cd Project API response to remove sensitive information (https://github.com/advisories/GHSA-786q-9hcg-v9ff)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
