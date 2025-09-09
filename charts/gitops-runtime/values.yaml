@@ -761,7 +761,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/cf-argocd-extras
-        tag: f2fd1c2
+        tag: 88898aa
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -785,7 +785,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/cf-argocd-extras
-        tag: f2fd1c2
+        tag: 88898aa
     nodeSelector: {}
     tolerations: []
     affinity: {}
