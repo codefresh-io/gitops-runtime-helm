@@ -254,13 +254,13 @@ eventReporter:
     cmd-params-cm:
       enabled: true
       data:
-        app.queue.size: 1000
+        app.queue.size: '1000'
         argocd.server: argo-cd-server:80
-        max.app.retries: 5
+        max.app.retries: '5'
         otlp.address: ''
         repo.server: argo-cd-repo-server:8081
         sources.server: http://sources-server
-        threadiness: 100
+        threadiness: '100'
 
   volumes:
     codefresh-tls-certs:
