@@ -759,7 +759,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/dev/cf-argocd-extras
-        tag: cr-test-queue-6faf15a
+        tag: cr-30629-resource-reporter-workqueu-2-7bd1185
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -783,7 +783,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/dev/cf-argocd-extras
-        tag: cr-test-queue-6faf15a
+        tag: cr-30629-resource-reporter-workqueu-2-7bd1185
     nodeSelector: {}
     tolerations: []
     affinity: {}
