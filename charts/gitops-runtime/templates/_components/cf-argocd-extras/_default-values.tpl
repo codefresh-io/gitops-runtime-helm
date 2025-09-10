@@ -33,7 +33,7 @@ eventReporter:
   controller:
     enabled: true
     type: statefulset
-    replicas: 3
+    replicas: 1
     revisionHistoryLimit: 5
 
   container:
@@ -62,6 +62,11 @@ eventReporter:
       HTTP_PROXY: '{{ .Values.global.httpProxy }}'
       HTTPS_PROXY: '{{ .Values.global.httpsProxy }}'
       NO_PROXY: '{{ .Values.global.noProxy }}'
+      APP_QUEUE_SIZE:
+        valueFrom:
+          configMapKeyRef:
+            name: event-reporter-cmd-params-cm
+            key: app.queue.size
       ARGOCD_APPLICATION_NAMESPACES:
         valueFrom:
           configMapKeyRef:
@@ -99,7 +104,7 @@ eventReporter:
           configMapKeyRef:
             key: base-url
             name: codefresh-cm
-      EVENT_REPORTER_REPLICAS: 3
+      EVENT_REPORTER_REPLICAS: 1
       INSECURE:
         valueFrom:
           configMapKeyRef:
@@ -124,36 +129,22 @@ eventReporter:
             name: event-reporter-cmd-params-cm
             key: log.level
             optional: true
+      MAX_APP_RETRIES:
+        valueFrom:
+          configMapKeyRef:
+            name: event-reporter-cmd-params-cm
+            key: max.app.retries
       METRICS_LISTEN_ADDRESS:
         valueFrom:
           configMapKeyRef:
             name: event-reporter-cmd-params-cm
             key: metrics.listen.address
             optional: true
-      RATE_LIMITER_BUCKET_SIZE:
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:
         valueFrom:
           configMapKeyRef:
             name: event-reporter-cmd-params-cm
-            key: rate.limiter.bucket.size
-            optional: true
-      RATE_LIMITER_DURATION:
-        valueFrom:
-          configMapKeyRef:
-            name: event-reporter-cmd-params-cm
-            key: rate.limiter.duration
-            optional: true
-      RATE_LIMITER_ENABLED:
-        valueFrom:
-          configMapKeyRef:
-            name: event-reporter-cmd-params-cm
-            key: rate.limiter.enabled
-            optional: true
-      RATE_LIMITER_LEARNING_MODE_ENABLED:
-        valueFrom:
-          configMapKeyRef:
-            name: event-reporter-cmd-params-cm
-            key: rate.limiter.learning.mode.enabled
-            optional: true
+            key: otlp.address
       REDISDB:
         valueFrom:
           configMapKeyRef:
@@ -221,6 +212,11 @@ eventReporter:
           configMapKeyRef:
             name: event-reporter-cmd-params-cm
             key: sources.server
+      THREADINESS:
+        valueFrom:
+          configMapKeyRef:
+            name: event-reporter-cmd-params-cm
+            key: threadiness
 
     volumeMounts:
       codefresh-tls-certs:
@@ -258,9 +254,13 @@ eventReporter:
     cmd-params-cm:
       enabled: true
       data:
+        app.queue.size: '1000'
         argocd.server: argo-cd-server:80
+        max.app.retries: '5'
+        otlp.address: ''
         repo.server: argo-cd-repo-server:8081
         sources.server: http://sources-server
+        threadiness: '100'
 
   volumes:
     codefresh-tls-certs:
