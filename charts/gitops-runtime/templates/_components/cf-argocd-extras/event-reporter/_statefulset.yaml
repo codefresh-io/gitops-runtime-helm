@@ -15,6 +15,10 @@
   {{- $_ := set $context.Values.container.env.REDIS_PASSWORD.valueFrom.secretKeyRef "key"  (default "redis-password" $vals.externalRedis.existingSecretKeyRef.key) }}
 {{- end }}
 
+{{- if not (index $context.Values.container.env "OTEL_SERVICE_NAME") }}
+  {{- $_ := set $context.Values.container.env "OTEL_SERVICE_NAME" $context.Values.fullnameOverride }}
+{{- end }}
+
 {{- if and (eq (index $context.Values "global" "external-argo-cd" "auth" "type") "token") }}
   {{- if not (index $context.Values "global" "external-argo-cd" "auth" "token") }}
       {{- $_ := set $context.Values.container.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required" (index $context.Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name")) }}
