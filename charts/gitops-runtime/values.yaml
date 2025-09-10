@@ -294,8 +294,8 @@ argo-events:
       versions:
         - version: latest
           natsImage: nats:2.11.4
-          metricsExporterImage: natsio/prometheus-nats-exporter:0.16.0
-          configReloaderImage: natsio/nats-server-config-reloader:0.18.2
+          metricsExporterImage: natsio/prometheus-nats-exporter:0.17.3
+          configReloaderImage: natsio/nats-server-config-reloader:0.19.1
           startCommand: /nats-server
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Workflows
@@ -432,7 +432,7 @@ internal-router:
   image:
     repository: docker.io/nginxinc/nginx-unprivileged
     pullPolicy: IfNotPresent
-    tag: 1.28-alpine3.21
+    tag: 1.29-alpine3.22
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
@@ -551,27 +551,27 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.14-main
+          tag: 1.1.15-main
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.14-main
+          tag: 1.1.15-main
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.14-main
+          tag: 1.1.15-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3694.0
+    tag: 1.3735.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3694.0
+      tag: 1.3735.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -587,7 +587,7 @@ app-proxy:
     image:
       registry: quay.io
       repository: codefresh/leader-elector
-      tag: v0.0.1
+      tag: 0.0.1
     containerSecurityContext:
       allowPrivilegeEscalation: false
     readinessProbe:
@@ -726,7 +726,9 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: v0.10.0
+    tag: b913720
+  env:
+    GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
     create: true
     annotations: {}
