@@ -235,7 +235,7 @@ sealed-secrets:
       cpu: 200m
       memory: 512Mi
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-cd-8.0.6-6-cap-v3.0.2-2025-07-06-e9fc72a9/charts/argo-cd
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-cd-8.0.6-8-cap-v3.0.2-2025-09-07-cdf75df5/charts/argo-cd
 # *********************************************************************************************************************
 argo-cd:
   enabled: true
@@ -502,7 +502,7 @@ internal-router:
     # -- Set number of pods that are unavailable after eviction as number or percentage
     maxUnavailable: ""
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/codefresh-tunnel-charts/blob/codefresh-tunnel-client-0.1.21-helm/codefresh-tunnel-client/values.yaml
+# DOCS: https://github.com/codefresh-io/codefresh-tunnel-charts/blob/codefresh-tunnel-client-0.1.22-helm/codefresh-tunnel-client/values.yaml
 # *********************************************************************************************************************
 tunnel-client:
   # -- Will only be used if global.runtime.ingress.enabled = false
