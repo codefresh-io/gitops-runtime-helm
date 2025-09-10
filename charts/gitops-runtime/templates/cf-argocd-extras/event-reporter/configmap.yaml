@@ -1,1 +1,1 @@
-{{- include "cf-argocd-extras.event-reporter.configmap" . }}
+{{- include "cf-argocd-extras.event-reporter.configmap" (merge (dict "reporterComponentName" "eventReporter") .) }}

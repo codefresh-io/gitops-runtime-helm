@@ -1,0 +1,1 @@
+{{- include "cf-argocd-extras.event-reporter.rbac" (merge (dict "reporterComponentName" "resourceReporter") .) }}

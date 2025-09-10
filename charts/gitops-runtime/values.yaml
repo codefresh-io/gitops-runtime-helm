@@ -778,6 +778,31 @@ cf-argocd-extras:
       main:
         # -- Enable ServiceMonitor for event reporter
         enabled: false
+        labels: {}
+  resourceReporter:
+    enabled: true
+    container:
+      image:
+        registry: quay.io
+        repository: codefresh/dev/cf-argocd-extras
+        tag: cr-30629-resource-reporter-workqueu-2-7bd1185
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+    pdb:
+      # -- Enable PDB for event-reporter
+      enabled: false
+      minAvailable: "50%"
+      maxUnavailable: ""
+    serviceMonitor:
+      main:
+        # -- Enable ServiceMonitor for event reporter
+        enabled: false
+        labels: {}
   # -- Sources server configuration
   sourcesServer:
     enabled: true

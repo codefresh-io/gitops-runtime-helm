@@ -1,1 +1,1 @@
-{{- include "cf-argocd-extras.event-reporter.service" . }}
+{{- include "cf-argocd-extras.event-reporter.service" (merge (dict "reporterComponentName" "eventReporter") .) }}

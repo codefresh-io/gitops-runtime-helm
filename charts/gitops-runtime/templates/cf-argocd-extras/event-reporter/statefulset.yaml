@@ -1,1 +1,1 @@
-{{- include "cf-argocd-extras.event-reporter.statefulset" . }}
+{{- include "cf-argocd-extras.event-reporter.statefulset" (merge (dict "reporterComponentName" "eventReporter") .) }}
