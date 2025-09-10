@@ -5,7 +5,7 @@
 {{- $defaultVals := include "cf-argocd-extras.default-values" . | fromYaml }}
 {{- $vals := mergeOverwrite $defaultVals (get .Values "cf-argocd-extras") }}
 
-{{- $_ := set $context "Values" $vals.eventReporter }}
+{{- $_ := set $context "Values" (get $vals .reporterComponentName) }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 
 {{- $_ := set (index $context.Values.configMaps "cmd-params-cm" "data") "argocd.server" (include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . ) }}

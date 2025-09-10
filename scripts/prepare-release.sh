@@ -9,7 +9,7 @@ docker run \
     -e GITHUB_TOKEN=$(gh auth token) \
     -u $(id -u) \
     --rm \
-    quay.io/codefresh/gitops-runtime-scripts /scripts/prepare-release.sh
+    gitops-runtime-scripts:local /scripts/prepare-release.sh
 
 docker run \
     -v "$(pwd):/helm-docs" \
