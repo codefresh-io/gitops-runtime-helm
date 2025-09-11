@@ -343,7 +343,7 @@ Supported version for gitops-runtime mean that we have complete E2E tests, and t
 
 | Supported | GitOps-Runtime version| Codefresh On-Prem version     |
 | :-------: | --------------------- | ----------------------------- |
-|    🔄     | **0.24.0**            | 2.9.x  |
+|    ✅     | **0.24.0**            | 2.9.x  |
 
 ## Upgrading
 
