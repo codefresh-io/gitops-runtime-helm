@@ -14,8 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: security
-      description: 'chore: security fixes in tunnel-client, argo-events jetstreaming, runtime-installer'
+    - kind: changed
+      description: 'feat: update cap-app-proxy image tags to 1.3750.0 (#720)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
