@@ -1,14 +1,14 @@
-FROM golang:1.24.6 AS go-build
+FROM golang:1.24.6 AS go-build 
 
 RUN go install github.com/davidrjonas/semver-cli@latest \
   && cp $GOPATH/bin/semver-cli /usr/local/bin/
 
 #bookworm-slim
-FROM debian:12.11-slim
+FROM debian:12.12-slim
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
-ARG CF_CLI_VERSION=v0.2.12
+ARG CF_CLI_VERSION=v0.2.13
 ARG TARGETARCH
 
 RUN apt-get update && apt-get install curl jq -y
