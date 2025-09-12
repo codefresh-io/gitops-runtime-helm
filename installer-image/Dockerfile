@@ -1,4 +1,4 @@
-FROM golang:1.24.6 AS go-build
+FROM golang:1.24.6 AS go-build 
 
 RUN go install github.com/davidrjonas/semver-cli@latest \
   && cp $GOPATH/bin/semver-cli /usr/local/bin/
