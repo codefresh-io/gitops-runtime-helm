@@ -8,8 +8,9 @@ kind: Job
 metadata:
   name: delete-runtime-from-platform
   annotations:
-    "helm.sh/hook": pre-delete
-    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
+    helm.sh/hook: pre-delete
+    helm.sh/hook-weight: "5"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation,hook-failed
 spec:
   backoffLimit: 3
   template:
