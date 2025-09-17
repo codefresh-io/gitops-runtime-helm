@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: security
-      description: 'chore: security fixes in tunnel-client, argo-events jetstreaming, runtime-installer'
+      description: 'fix: security vulnerability in codefresh-gitops-operator'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
