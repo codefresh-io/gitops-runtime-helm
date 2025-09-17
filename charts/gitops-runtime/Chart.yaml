@@ -1,9 +1,6 @@
 apiVersion: v2
 appVersion: 0.1.75
 description: A Helm chart for Codefresh gitops runtime
-artifacthub.io/changes: |-
-    - kind: security
-      description: 'chore: security fixes in tunnel-client, argo-events jetstreaming, runtime-installer'
 name: gitops-runtime
 version: '0.24.2'
 home: https://github.com/codefresh-io/gitops-runtime-helm
@@ -16,6 +13,9 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
+artifacthub.io/changes: |-
+    - kind: security
+      description: 'chore: security fixes in tunnel-client, argo-events jetstreaming, runtime-installer'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
