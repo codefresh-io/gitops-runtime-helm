@@ -14,30 +14,30 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
 dependencies:
-- name: argo-cd
-  repository: https://codefresh-io.github.io/argo-helm
-  condition: argo-cd.enabled
-  version: 8.0.6-8-cap-v3.0.2-2025-09-07-cdf75df5
-- name: argo-events
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 2.4.9-cap-CR-30841
-- name: argo-workflows
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 0.45.16-v3.6.7-cap-CR-30835
-  condition: argo-workflows.enabled
-- name: argo-rollouts
-  repository: https://codefresh-io.github.io/argo-helm
-  version: 2.37.3-6-v1.7.2-cap-CR-29629
-  condition: argo-rollouts.enabled
-- name: sealed-secrets
-  repository: https://bitnami-labs.github.io/sealed-secrets/
-  version: 2.17.2
-  condition: sealed-secrets.enabled
-- name: codefresh-tunnel-client
-  repository: oci://quay.io/codefresh/charts
-  version: 0.1.22
-  alias: tunnel-client
-  condition: tunnel-client.enabled
-- name: cf-common
-  repository: oci://quay.io/codefresh/charts
-  version: 0.27.0
+  - name: argo-cd
+    repository: https://codefresh-io.github.io/argo-helm
+    condition: argo-cd.enabled
+    version: 8.0.6-8-cap-v3.0.2-2025-09-07-cdf75df5
+  - name: argo-events
+    repository: https://codefresh-io.github.io/argo-helm
+    version: 2.4.9-cap-CR-30841
+  - name: argo-workflows
+    repository: https://codefresh-io.github.io/argo-helm
+    version: 0.45.16-v3.6.7-cap-CR-30835
+    condition: argo-workflows.enabled
+  - name: argo-rollouts
+    repository: https://codefresh-io.github.io/argo-helm
+    version: 2.37.3-6-v1.7.2-cap-CR-29629
+    condition: argo-rollouts.enabled
+  - name: sealed-secrets
+    repository: https://bitnami-labs.github.io/sealed-secrets/
+    version: 2.17.2
+    condition: sealed-secrets.enabled
+  - name: codefresh-tunnel-client
+    repository: oci://quay.io/codefresh/charts
+    version: 0.1.22
+    alias: tunnel-client
+    condition: tunnel-client.enabled
+  - name: cf-common
+    repository: oci://quay.io/codefresh/charts
+    version: 0.27.0
