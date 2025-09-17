@@ -18,5 +18,5 @@
 ---
   {{- include "gitops-operator.crds.promotion-policy" $context }}
 ---
-  {{- include "gitops-operator.crds.promotiontask" $context }}
+  {{- include "gitops-operator.crds.promotion-task" $context }}
 {{- end }}
