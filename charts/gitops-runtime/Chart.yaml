@@ -13,7 +13,7 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
-artifacthub.io/changes: |-
+  artifacthub.io/changes: |-
     - kind: security
       description: 'chore: security fixes in tunnel-client, argo-events jetstreaming, runtime-installer'
 dependencies:
