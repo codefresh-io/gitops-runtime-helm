@@ -15,6 +15,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'fix: security vulnerability CVE-2025-55190 (#733)'
+    - kind: changed
       description: Fix/svc-acc-pre-uninstall-hook (#728)
     - kind: changed
       description: updated sealed-secrets-controller (#723) (#724)
