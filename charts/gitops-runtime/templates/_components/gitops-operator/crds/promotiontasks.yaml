@@ -137,6 +137,10 @@ spec:
                       type: object
                     promoteAppWithCommit:
                       properties:
+                        commitDescription:
+                          type: string
+                        commitMessage:
+                          type: string
                         promotionValues:
                           items:
                             properties:
@@ -182,11 +186,19 @@ spec:
                           - namespace
                           type: object
                       required:
+                      - commitDescription
+                      - commitMessage
                       - promotionValues
                       - targetApplication
                       type: object
                     promoteAppWithPR:
                       properties:
+                        prBranchName:
+                          type: string
+                        prDescription:
+                          type: string
+                        prTitle:
+                          type: string
                         promotionValues:
                           items:
                             properties:
@@ -232,6 +244,9 @@ spec:
                           - namespace
                           type: object
                       required:
+                      - prBranchName
+                      - prDescription
+                      - prTitle
                       - promotionValues
                       - targetApplication
                       type: object
