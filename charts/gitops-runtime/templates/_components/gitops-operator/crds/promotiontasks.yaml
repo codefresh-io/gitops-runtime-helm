@@ -164,7 +164,6 @@ spec:
                             - file
                             - properties
                             type: object
-                          minItems: 1
                           type: array
                         targetApplication:
                           properties:
@@ -215,7 +214,6 @@ spec:
                             - file
                             - properties
                             type: object
-                          minItems: 1
                           type: array
                         targetApplication:
                           properties:
@@ -373,10 +371,10 @@ spec:
                 items:
                   description: StepStatus
                   properties:
+                    failureSummary:
+                      type: string
                     getPromotionValues:
                       properties:
-                        error:
-                          type: string
                         phase:
                           description: GetPromotionValuesStatusPhase
                           enum:
@@ -450,8 +448,6 @@ spec:
                           minLength: 7
                           pattern: ^[A-Fa-f0-9]+$
                           type: string
-                        error:
-                          type: string
                         phase:
                           description: PromoteAppWithCommitPhase
                           enum:
@@ -480,8 +476,6 @@ spec:
                           - health
                           - sync
                           type: object
-                        error:
-                          type: string
                         phase:
                           description: PromoteAppWithPRPhase
                           enum:
@@ -562,7 +556,10 @@ spec:
                           - health
                           - sync
                           type: object
-                        error:
+                        commitSha:
+                          maxLength: 40
+                          minLength: 7
+                          pattern: ^[A-Fa-f0-9]+$
                           type: string
                         phase:
                           description: VerifyAppPhase
