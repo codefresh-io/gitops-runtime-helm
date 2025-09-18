@@ -763,7 +763,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/cf-argocd-extras
-        tag: c74d94c
+        tag: c74d94c 
     nodeSelector: {}
     tolerations: []
     affinity: {}
