@@ -137,6 +137,10 @@ spec:
                       type: object
                     promoteAppWithCommit:
                       properties:
+                        commitDescription:
+                          type: string
+                        commitMessage:
+                          type: string
                         promotionValues:
                           items:
                             properties:
@@ -164,7 +168,6 @@ spec:
                             - file
                             - properties
                             type: object
-                          minItems: 1
                           type: array
                         targetApplication:
                           properties:
@@ -183,11 +186,19 @@ spec:
                           - namespace
                           type: object
                       required:
+                      - commitDescription
+                      - commitMessage
                       - promotionValues
                       - targetApplication
                       type: object
                     promoteAppWithPR:
                       properties:
+                        prBranchName:
+                          type: string
+                        prDescription:
+                          type: string
+                        prTitle:
+                          type: string
                         promotionValues:
                           items:
                             properties:
@@ -215,7 +226,6 @@ spec:
                             - file
                             - properties
                             type: object
-                          minItems: 1
                           type: array
                         targetApplication:
                           properties:
@@ -234,6 +244,9 @@ spec:
                           - namespace
                           type: object
                       required:
+                      - prBranchName
+                      - prDescription
+                      - prTitle
                       - promotionValues
                       - targetApplication
                       type: object
@@ -373,10 +386,10 @@ spec:
                 items:
                   description: StepStatus
                   properties:
+                    failureSummary:
+                      type: string
                     getPromotionValues:
                       properties:
-                        error:
-                          type: string
                         phase:
                           description: GetPromotionValuesStatusPhase
                           enum:
@@ -450,8 +463,6 @@ spec:
                           minLength: 7
                           pattern: ^[A-Fa-f0-9]+$
                           type: string
-                        error:
-                          type: string
                         phase:
                           description: PromoteAppWithCommitPhase
                           enum:
@@ -480,8 +491,6 @@ spec:
                           - health
                           - sync
                           type: object
-                        error:
-                          type: string
                         phase:
                           description: PromoteAppWithPRPhase
                           enum:
@@ -562,7 +571,10 @@ spec:
                           - health
                           - sync
                           type: object
-                        error:
+                        commitSha:
+                          maxLength: 40
+                          minLength: 7
+                          pattern: ^[A-Fa-f0-9]+$
                           type: string
                         phase:
                           description: VerifyAppPhase
@@ -602,5 +614,3 @@ spec:
     storage: true
     subresources:
       status: {}
-  {{- end }}
-{{- end }}
