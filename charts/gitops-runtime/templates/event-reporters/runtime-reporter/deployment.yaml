@@ -1,0 +1,109 @@
+{{- $cfCommonTplSemver := printf "cf-common-%s" (index .Subcharts "cf-common").Chart.Version }}
+{{- $context := deepCopy . }}
+{{- $_ := set $context "Values" (deepCopy (get (index .Values "event-reporters") "runtime-reporter")) }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+{{/* Merge environment variables from calculated, defaults and overwrites */}}
+{{- $defaults := (include "runtime-reporter.resources.environment-variables.defaults" . | fromYaml) }}
+{{- $calculated := (include "runtime-reporter.resources.environment-variables.calculated" . | fromYaml) }}
+{{- $overrides := $context.Values.env }}
+{{- $mergedValues := mergeOverwrite $defaults $calculated $overrides }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "runtime-reporter.fullname" . }}
+  labels:
+    {{- include "runtime-reporter.labels" . | nindent 4 }}
+spec:
+  replicas: {{ $context.Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "runtime-reporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with $context.Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "runtime-reporter.selectorLabels" . | nindent 8 }}
+        {{- with $context.Values.podLabels }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with $context.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "runtime-reporter.serviceAccountName" $context }}
+      securityContext:
+      {{- toYaml $context.Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: {{ include "runtime-reporter.fullname" . }}
+        securityContext:
+          {{- toYaml $context.Values.securityContext | nindent 12 }}
+        {{- $imageContext := deepCopy $context.Values.image }}
+        image: {{ include (printf "%s.image.name" $cfCommonTplSemver ) (dict "image" $imageContext "context" .) }}
+        env: {{- include (printf "%s.env-vars" $cfCommonTplSemver ) (dict "Values" $mergedValues "context" .) | nindent 8 }}
+        imagePullPolicy: {{ $context.Values.image.pullPolicy }}
+        {{- if $context.Values.command }}
+        command:
+        {{- $context.Values.command | toYaml | nindent 8 }}
+        {{- end }}
+        {{- with $context.Values.extraArgs }}
+        args:
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
+        ports:
+        {{- range $name, $port := $context.Values.service.ports }}
+        - name: {{ $name }}
+          containerPort: {{ $port.targetPort }}
+        {{- end }}
+        readinessProbe:
+          initialDelaySeconds: {{ $context.Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ $context.Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ $context.Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ $context.Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ $context.Values.readinessProbe.failureThreshold }}
+          httpGet:
+            port: http
+            path: /healthz
+        livenessProbe:
+          initialDelaySeconds: {{ $context.Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ $context.Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ $context.Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ $context.Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ $context.Values.livenessProbe.failureThreshold }}
+          httpGet:
+            port: http
+            path: /healthz?full=true
+        resources:
+          {{- toYaml $context.Values.resources | nindent 10 }}
+        volumeMounts:
+        {{- if $context.Values.global.codefresh.tls.caCerts.secretKeyRef }}
+        - name: codefresh-tls
+          mountPath: /app/config/codefresh-tls
+        {{- end }}
+        {{- with $context.Values.extraVolumeMounts }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with $context.Values.nodeSelector | default $context.Values.global.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $context.Values.tolerations | default $context.Values.global.tolerations }}
+      tolerations: {{ toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with $context.Values.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $context.Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include (printf "%s.tplrender" $cfCommonTplSemver ) (dict "Values" . "context" .) | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{- if $context.Values.global.codefresh.tls.caCerts.secretKeyRef }}
+        - name: codefresh-tls
+          secret:
+            secretName: {{ $context.Values.global.codefresh.tls.caCerts.secretKeyRef.name | default "codefresh-tls-certs" }}
+        {{- end }}
+        {{- with $context.Values.extraVolumes }}
+            {{- toYaml . | nindent 6 }}
+        {{- end }}

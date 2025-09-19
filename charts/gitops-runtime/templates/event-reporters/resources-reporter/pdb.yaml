@@ -1,0 +1,20 @@
+{{- $context := deepCopy . }}
+{{- $_ := set $context "Values" (deepCopy (get (index .Values "event-reporters") "resources-reporter")) }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+
+{{- if and $context.Values.pdb.enabled }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "resources-reporter.fullname" . }}
+spec:
+  {{- with $context.Values.pdb.minAvailable }}
+  minAvailable: {{ . }}
+  {{- end }}
+  {{- with $context.Values.pdb.maxUnavailable }}
+  maxUnavailable: {{ . }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "resources-reporter.selectorLabels" . | nindent 6 }}
+{{- end }}

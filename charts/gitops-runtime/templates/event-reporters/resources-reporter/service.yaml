@@ -1,0 +1,19 @@
+{{- $context := deepCopy . }}
+{{- $_ := set $context "Values" (deepCopy (get (index .Values "event-reporters") "resources-reporter")) }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "resources-reporter.fullname" . }}
+  labels:
+    {{- include "resources-reporter.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+{{- range $name, $port := $context.Values.service.ports }}
+  - name: {{ $name }}
+    port: {{ $port.port }}
+    targetPort: {{ $port.targetPort }}
+{{- end }}
+  selector:
+    {{- include "resources-reporter.selectorLabels" . | nindent 4 }}

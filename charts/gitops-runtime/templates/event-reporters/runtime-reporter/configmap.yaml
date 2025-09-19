@@ -1,0 +1,20 @@
+{{- define "argo-api-gateway.resources.configmap.defaults"}}
+argocd.server: {{ include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . }}
+redis.server: {{ include "codefresh-gitops-runtime.argocd.redis.url" . }}
+repo.server: {{ include "codefresh-gitops-runtime.argocd.reposerver.url" . }}
+app.queue.size: '1000'
+max.app.retries: '5'
+threadiness: '100'
+{{- end }}
+
+{{- $defaultConfig := (include "argo-api-gateway.resources.configmap.defaults" . | fromYaml ) }}
+{{- $overrides := index .Values "argo-api-gateway" "config" | default dict }}
+{{- $mergedConfig := mergeOverwrite $defaultConfig $overrides }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: runtime-reporter-cmd-params-cm
+  labels:
+    {{- include "runtime-reporter.labels" . | nindent 4 }}
+data:
+  {{- $mergedConfig | toYaml | nindent 2 }}
