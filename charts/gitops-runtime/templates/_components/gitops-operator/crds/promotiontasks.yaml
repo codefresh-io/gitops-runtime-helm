@@ -137,6 +137,10 @@ spec:
                       type: object
                     promoteAppWithCommit:
                       properties:
+                        commitDescription:
+                          type: string
+                        commitMessage:
+                          type: string
                         promotionValues:
                           items:
                             properties:
@@ -147,15 +151,14 @@ spec:
                               properties:
                                 items:
                                   properties:
-                                    jsonPath:
+                                    path:
                                       minLength: 1
-                                      pattern: ^\$[.\[\]'"0-9a-zA-Z_*?@()]*$
                                       type: string
                                     value:
                                       minLength: 1
                                       type: string
                                   required:
-                                  - jsonPath
+                                  - path
                                   - value
                                   type: object
                                 minItems: 1
@@ -182,11 +185,19 @@ spec:
                           - namespace
                           type: object
                       required:
+                      - commitDescription
+                      - commitMessage
                       - promotionValues
                       - targetApplication
                       type: object
                     promoteAppWithPR:
                       properties:
+                        prBranchName:
+                          type: string
+                        prDescription:
+                          type: string
+                        prTitle:
+                          type: string
                         promotionValues:
                           items:
                             properties:
@@ -197,15 +208,14 @@ spec:
                               properties:
                                 items:
                                   properties:
-                                    jsonPath:
+                                    path:
                                       minLength: 1
-                                      pattern: ^\$[.\[\]'"0-9a-zA-Z_*?@()]*$
                                       type: string
                                     value:
                                       minLength: 1
                                       type: string
                                   required:
-                                  - jsonPath
+                                  - path
                                   - value
                                   type: object
                                 minItems: 1
@@ -232,6 +242,9 @@ spec:
                           - namespace
                           type: object
                       required:
+                      - prBranchName
+                      - prDescription
+                      - prTitle
                       - promotionValues
                       - targetApplication
                       type: object
@@ -392,15 +405,14 @@ spec:
                               properties:
                                 items:
                                   properties:
-                                    jsonPath:
+                                    path:
                                       minLength: 1
-                                      pattern: ^\$[.\[\]'"0-9a-zA-Z_*?@()]*$
                                       type: string
                                     value:
                                       minLength: 1
                                       type: string
                                   required:
-                                  - jsonPath
+                                  - path
                                   - value
                                   type: object
                                 minItems: 1
@@ -446,7 +458,7 @@ spec:
                         commitSha:
                           maxLength: 40
                           minLength: 7
-                          pattern: ^[A-Fa-f0-9]+$
+                          pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
                           type: string
                         phase:
                           description: PromoteAppWithCommitPhase
@@ -559,7 +571,7 @@ spec:
                         commitSha:
                           maxLength: 40
                           minLength: 7
-                          pattern: ^[A-Fa-f0-9]+$
+                          pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
                           type: string
                         phase:
                           description: VerifyAppPhase
