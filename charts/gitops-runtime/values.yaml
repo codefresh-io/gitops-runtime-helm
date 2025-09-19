@@ -664,67 +664,12 @@ gitops-operator:
     enabled: false
     minAvailable: 1
     maxUnavailable: ""
-#-----------------------------------------------------------------------------------------------------------------------
-# cf-argocd-extras
-#-----------------------------------------------------------------------------------------------------------------------
-# -- Codefresh extra services for ArgoCD
-cf-argocd-extras:
-  eventReporter:
-    enabled: true
-    container:
-      image:
-        registry: quay.io
-        repository: codefresh/cf-argocd-extras
-        tag: c74d94c
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    resources:
-      requests:
-        memory: "128Mi"
-        cpu: "100m"
-    pdb:
-      # -- Enable PDB for event-reporter
-      enabled: false
-      minAvailable: "50%"
-      maxUnavailable: ""
-    serviceMonitor:
-      main:
-        # -- Enable ServiceMonitor for event reporter
-        enabled: false
-  # -- Sources server configuration
-  sourcesServer:
-    enabled: true
-    container:
-      image:
-        registry: quay.io
-        repository: codefresh/cf-argocd-extras
-        tag: c74d94c
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    resources:
-      requests:
-        memory: "128Mi"
-        cpu: "100m"
-    hpa:
-      # -- Enable HPA for sources server
-      enabled: false
-      minReplicas: 1
-      maxReplicas: 10
-      targetCPUUtilizationPercentage: 70
-    pdb:
-      # -- Enable PDB for sources server
-      enabled: false
-      minAvailable: "50%"
-      maxUnavailable: ""
-
 
 argo-api-gateway:
   image:
     registry: quay.io
-    repository: codefresh/cf-argocd-extras
-    tag: c74d94c
+    repository: codefresh/dev/cf-argocd-extras
+    tag: cr-30629-resource-reporter-workqueu-2-66d7459
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -762,8 +707,8 @@ event-reporters:
   runtime-reporter:
     image:
       registry: quay.io
-      repository: codefresh/cf-argocd-extras
-      tag: c74d94c
+      repository: codefresh/dev/cf-argocd-extras
+      tag: cr-30629-resource-reporter-workqueu-2-66d7459
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -802,8 +747,8 @@ event-reporters:
   resources-reporter:
     image:
       registry: quay.io
-      repository: codefresh/cf-argocd-extras
-      tag: c74d94c
+      repository: codefresh/dev/cf-argocd-extras
+      tag: cr-30629-resource-reporter-workqueu-2-66d7459
     nodeSelector: {}
     tolerations: []
     affinity: {}
