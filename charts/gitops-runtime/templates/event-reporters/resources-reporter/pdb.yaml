@@ -3,7 +3,7 @@
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 
 {{- if and $context.Values.pdb.enabled }}
-apiVersion: policy/v1beta1
+apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "resources-reporter.fullname" . }}
