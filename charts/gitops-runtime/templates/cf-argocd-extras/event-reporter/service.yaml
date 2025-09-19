@@ -1,1 +1,0 @@
-{{- include "cf-argocd-extras.event-reporter.service" . }}

@@ -17,7 +17,9 @@ global:
       # --  Custom CA certificates bundle for platform access with ssl
       caCerts:
         # -- Reference to existing secret
-        secretKeyRef: {}
+        secretKeyRef:
+          name: ""
+          key: ""
         # -- Chart managed secret for custom platform CA certificates
         secret:
           # -- Whether to create the secret.
@@ -336,94 +338,6 @@ argo-rollouts:
   controller:
     replicas: 1
   installCRDs: true
-#-----------------------------------------------------------------------------------------------------------------------
-# Event reporters
-#-----------------------------------------------------------------------------------------------------------------------
-event-reporters:
-  rollout:
-    serviceAccount:
-      create: true
-    eventSource:
-      replicas: 1
-      resources: {}
-      tolerations: []
-      nodeSelector: {}
-      affinity: {}
-    sensor:
-      # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
-      logging:
-        enabled: false
-        intervalSeconds: 0
-      # -- At Least Once
-      atLeastOnce: true
-      # -- Retry strategy for events sent to Codefresh
-      retryStrategy:
-        # -- Number of retries
-        steps: 3
-        # -- The initial duration, use strings like "2s", "1m"
-        duration: 0
-        # -- Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative
-        factor: 1.0
-        # -- The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`.
-        jitter: 1
-      policy:
-        status:
-          allow:
-            - 200
-            - 201
-            - 204
-            - 400
-            - 401
-            - 404
-      replicas: 1
-      resources: {}
-      # -- Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs
-      env: {}
-      tolerations: []
-      nodeSelector: {}
-      affinity: {}
-  workflow:
-    serviceAccount:
-      create: true
-    eventSource:
-      replicas: 1
-      resources: {}
-      tolerations: []
-      nodeSelector: {}
-      affinity: {}
-    sensor:
-      # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
-      logging:
-        enabled: false
-        intervalSeconds: 0
-      # -- At Least Once
-      atLeastOnce: true
-      # -- Retry strategy for events sent to Codefresh
-      retryStrategy:
-        # -- Number of retries
-        steps: 3
-        # -- The initial duration, use strings like "2s", "1m"
-        duration: 0
-        # -- Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative
-        factor: 1.0
-        # -- The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`.
-        jitter: 1
-      policy:
-        status:
-          allow:
-            - 200
-            - 201
-            - 204
-            - 400
-            - 401
-            - 404
-      replicas: 1
-      resources: {}
-      # -- Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs
-      env: {}
-      tolerations: []
-      nodeSelector: {}
-      affinity: {}
 #-----------------------------------------------------------------------------------------------------------------------
 # Internal router
 #-----------------------------------------------------------------------------------------------------------------------
@@ -843,3 +757,84 @@ argo-api-gateway:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 10
+
+event-reporters:
+  runtime-reporter:
+    image:
+      registry: quay.io
+      repository: codefresh/cf-argocd-extras
+      tag: c74d94c
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+    pdb:
+      enabled: true
+      minAvailable: "50%"
+      maxUnavailable: ""
+    service:
+      type: ClusterIP
+      ports:
+        http:
+          port: 8088
+          targetPort: 8088
+        metrics:
+          port: 8087
+          targetPort: 8087
+    serviceAccount:
+      create: true
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 10
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 10
+
+  resources-reporter:
+    image:
+      registry: quay.io
+      repository: codefresh/cf-argocd-extras
+      tag: c74d94c
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+    pdb:
+      enabled: true
+      minAvailable: "50%"
+      maxUnavailable: ""
+    service:
+      type: ClusterIP
+      ports:
+        http:
+          port: 8088
+          targetPort: 8088
+        metrics:
+          port: 8087
+          targetPort: 8087
+    serviceAccount:
+      create: true
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 10
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 10

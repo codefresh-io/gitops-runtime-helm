@@ -1,6 +1,6 @@
 {{- define "argo-api-gateway.resources.configmap.defaults"}}
-argocd.server: argo-cd-server:80
-repo.server: argo-cd-repo-server:8081
+argocd.server: {{ include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . }}
+repo.server: {{ include "codefresh-gitops-runtime.argocd.reposerver.url" . }}
 {{- end }}
 
 {{- $defaultConfig := (include "argo-api-gateway.resources.configmap.defaults" . | fromYaml ) }}
