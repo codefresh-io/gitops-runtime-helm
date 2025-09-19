@@ -804,3 +804,42 @@ cf-argocd-extras:
       enabled: false
       minAvailable: "50%"
       maxUnavailable: ""
+
+
+argo-api-gateway:
+  image:
+    registry: quay.io
+    repository: codefresh/cf-argocd-extras
+    tag: c74d94c
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+  pdb:
+    enabled: true
+    minAvailable: "50%"
+    maxUnavailable: ""
+  service:
+    type: ClusterIP
+  serviceAccount:
+    create: true
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10

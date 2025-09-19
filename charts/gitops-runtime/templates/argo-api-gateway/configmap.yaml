@@ -1,0 +1,16 @@
+{{- define "argo-api-gateway.resources.configmap.defaults"}}
+argocd.server: argo-cd-server:80
+repo.server: argo-cd-repo-server:8081
+{{- end }}
+
+{{- $defaultConfig := (include "argo-api-gateway.resources.configmap.defaults" . | fromYaml ) }}
+{{- $overrides := index .Values "argo-api-gateway" "config" | default dict }}
+{{- $mergedConfig := mergeOverwrite $defaultConfig $overrides }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argo-api-gateway-cmd-params-cm
+  labels:
+    {{- include "argo-api-gateway.labels" . | nindent 4 }}
+data:
+  {{- $mergedConfig | toYaml | nindent 2 }}

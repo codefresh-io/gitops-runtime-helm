@@ -1,0 +1,20 @@
+{{- $context := deepCopy . }}
+{{- $_ := set $context "Values" (deepCopy (get .Values "argo-api-gateway")) }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+
+{{- if and $context.Values.pdb.enabled }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "argo-api-gateway.fullname" . }}
+spec:
+  {{- with $context.Values.pdb.minAvailable }}
+  minAvailable: {{ . }}
+  {{- end }}
+  {{- with $context.Values.pdb.maxUnavailable }}
+  maxUnavailable: {{ . }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "argo-api-gateway.selectorLabels" . | nindent 6 }}
+{{- end }}
