@@ -1,9 +1,9 @@
 suite: Test global constraints (nodeSelector, tolerations)
 templates:
   - app-proxy/deployment.yaml
-  - cf-argocd-extras/**
   - gitops-operator/*
-  - _components/cf-argocd-extras/**
+  - event-reporters/**
+  - argo-api-gateway/**
   - _components/gitops-operator/*
   - tunnel-client.yaml
   - charts/codefresh-tunnel-client/*
@@ -222,7 +222,7 @@ tests:
           value:
             some-key: some-value
             extra-key: extra-value
-        template: cf-argocd-extras/sources-server/deployment.yaml
+        template: argo-api-gateway/deployment.yaml
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -230,14 +230,14 @@ tests:
             operator: Equal
             value: some-value
             effect: NoSchedule
-        template: cf-argocd-extras/sources-server/deployment.yaml
+        template: argo-api-gateway/deployment.yaml
       # -- event-reporter
       - equal:
           path: spec.template.spec.nodeSelector
           value:
             some-key: some-value
             extra-key: extra-value
-        template: cf-argocd-extras/event-reporter/statefulset.yaml
+        template: event-reporters/runtime-reporter/deployment.yaml
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -245,7 +245,7 @@ tests:
             operator: Equal
             value: some-value
             effect: NoSchedule
-        template: cf-argocd-extras/event-reporter/statefulset.yaml
+        template: event-reporters/runtime-reporter/deployment.yaml
       # -- gitops-operator
       - equal:
           path: spec.template.spec.nodeSelector
@@ -559,7 +559,7 @@ tests:
           value:
             some-key: another-value
             foo: bar
-        template: cf-argocd-extras/sources-server/deployment.yaml
+        template: argo-api-gateway/deployment.yaml
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -567,14 +567,14 @@ tests:
             operator: Equal
             value: another-value
             effect: NoSchedule
-        template: cf-argocd-extras/sources-server/deployment.yaml
+        template: argo-api-gateway/deployment.yaml
       # -- event-reporter
       - equal:
           path: spec.template.spec.nodeSelector
           value:
             some-key: another-value
             foo: bar
-        template: cf-argocd-extras/event-reporter/statefulset.yaml
+        template: event-reporters/runtime-reporter/deployment.yaml
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -582,7 +582,7 @@ tests:
             operator: Equal
             value: another-value
             effect: NoSchedule
-        template: cf-argocd-extras/event-reporter/statefulset.yaml
+        template: event-reporters/runtime-reporter/deployment.yaml
       # -- gitops-operator
       - equal:
           path: spec.template.spec.nodeSelector

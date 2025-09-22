@@ -1,13 +1,13 @@
-{{- $cfCommonTplSemver := printf "cf-common-%s" (index .Subcharts "cf-common").Chart.Version }}
 {{- $context := deepCopy . }}
 {{- $_ := set $context "Values" (deepCopy (get (index .Values "global") "event-reporters")) }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 {{/* Merge .Values.event-reporters.<event-reporter-name> with .Values.global.event-reporters */}}
 {{- $valuesOverrides := index .Values "event-reporters" "runtime-reporter" }}
-{{- $_ := mergeOverwrite $context.Values $valuesOverrides | set $context "Values" }}
+{{- $values := mergeOverwrite $context.Values $valuesOverrides }}
+{{- $_ := set $context "Values" $values }}
 {{/* Merge environment variables from calculated, defaults and overwrites */}}
-{{- $defaults := (include "runtime-reporter.resources.environment-variables.defaults" . | fromYaml) }}
-{{- $calculated := (include "runtime-reporter.resources.environment-variables.calculated" . | fromYaml) }}
+{{- $defaults := (include "runtime-reporter.resources.environment-variables.defaults" $context | fromYaml) }}
+{{- $calculated := (include "runtime-reporter.resources.environment-variables.calculated" $context | fromYaml) }}
 {{- $overrides := $context.Values.env }}
 {{- $mergedValues := mergeOverwrite $defaults $calculated $overrides }}
 apiVersion: apps/v1
@@ -45,8 +45,8 @@ spec:
         securityContext:
           {{- toYaml $context.Values.securityContext | nindent 12 }}
         {{- $imageContext := deepCopy $context.Values.image }}
-        image: {{ include (printf "%s.image.name" $cfCommonTplSemver ) (dict "image" $imageContext "context" .) }}
-        env: {{- include (printf "%s.env-vars" $cfCommonTplSemver ) (dict "Values" $mergedValues "context" .) | nindent 8 }}
+        image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" $imageContext "context" .) }}
+        env: {{- include "codefresh-gitops-runtime.env-vars" (dict "Values" $mergedValues "context" .) | nindent 8 }}
         imagePullPolicy: {{ $context.Values.image.pullPolicy }}
         {{- if $context.Values.command }}
         command:
@@ -82,9 +82,10 @@ spec:
         resources:
           {{- toYaml $context.Values.resources | nindent 10 }}
         volumeMounts:
-        {{- if $context.Values.global.codefresh.tls.caCerts.secretKeyRef }}
-        - name: codefresh-tls
-          mountPath: /app/config/codefresh-tls
+        {{- if or $context.Values.global.codefresh.tls.caCerts.secretKeyRef $context.Values.global.codefresh.tls.caCerts.secret.create }}
+        - name: codefresh-tls-certs
+          mountPath: /app/config/codefresh-tls-certs
+          readOnly: true
         {{- end }}
         {{- with $context.Values.extraVolumeMounts }}
           {{- toYaml . | nindent 8 }}
@@ -99,11 +100,11 @@ spec:
       affinity: {{ toYaml . | nindent 8 }}
       {{- end }}
       {{- with $context.Values.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include (printf "%s.tplrender" $cfCommonTplSemver ) (dict "Values" . "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "codefresh-gitops-runtime.tplrender" (dict "Values" . "context" .) | nindent 8 }}
       {{- end }}
       volumes:
-        {{- if $context.Values.global.codefresh.tls.caCerts.secretKeyRef }}
-        - name: codefresh-tls
+        {{- if or $context.Values.global.codefresh.tls.caCerts.secretKeyRef $context.Values.global.codefresh.tls.caCerts.secret.create }}
+        - name: codefresh-tls-certs
           secret:
             secretName: {{ $context.Values.global.codefresh.tls.caCerts.secretKeyRef.name | default "codefresh-tls-certs" }}
         {{- end }}

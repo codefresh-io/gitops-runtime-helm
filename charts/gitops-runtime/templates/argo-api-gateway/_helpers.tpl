@@ -33,6 +33,7 @@ Selector labels
 */}}
 {{- define "argo-api-gateway.selectorLabels" -}}
 app.kubernetes.io/name: argo-api-gateway
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*

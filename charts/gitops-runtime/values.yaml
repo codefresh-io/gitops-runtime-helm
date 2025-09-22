@@ -197,6 +197,7 @@ global:
   imageRegistry: ""
 
   event-reporters:
+    replicaCount: 2
     image:
       registry: quay.io
       repository: codefresh/dev/cf-argocd-extras
@@ -324,6 +325,7 @@ argo-cd:
 # Argo Events
 #-----------------------------------------------------------------------------------------------------------------------
 argo-events:
+  enabled: false
   fullnameOverride: argo-events
   crds:
     install: false

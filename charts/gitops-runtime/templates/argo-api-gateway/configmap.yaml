@@ -1,6 +1,7 @@
-{{- define "argo-api-gateway.resources.configmap.defaults"}}
+{{- define "argo-api-gateway.resources.configmap.defaults" }}
 argocd.server: {{ include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . }}
 repo.server: {{ include "codefresh-gitops-runtime.argocd.reposerver.url" . }}
+redis.server: {{ include "codefresh-gitops-runtime.argocd.redis.url" . }}
 {{- end }}
 
 {{- $defaultConfig := (include "argo-api-gateway.resources.configmap.defaults" . | fromYaml ) }}
@@ -14,3 +15,8 @@ metadata:
     {{- include "argo-api-gateway.labels" . | nindent 4 }}
 data:
   {{- $mergedConfig | toYaml | nindent 2 }}
+  {{- if index .Values "argo-cd" "enabled" }}
+  foo: bar
+  {{- else }}
+  baz: qux
+  {{- end }}

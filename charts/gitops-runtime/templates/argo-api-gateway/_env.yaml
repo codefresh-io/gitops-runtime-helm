@@ -5,16 +5,16 @@ NO_PROXY: {{ .Values.global.noProxy | squote }}
 
 {{- if and (eq (index .Values "global" "external-argo-cd" "auth" "type") "token") }}
   {{- if not (index .Values "global" "external-argo-cd" "auth" "token") }}
-ARGO_CD_TOKEN_SECRET_NAME: {{ required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name") }}
-ARGO_CD_TOKEN_SECRET_KEY: {{ required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore Values.global.external-argo-cd.auth.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "key" ) }}
+ARGO_CD_TOKEN_SECRET_NAME: {{ required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .global.external-argo-cd.auth.tokenSecretKeyRef.name is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name") }}
+ARGO_CD_TOKEN_SECRET_KEY: {{ required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .global.external-argo-cd.auth.tokenSecretKeyRef.key is required" (index .Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "key" ) }}
   {{- else }}
 ARGO_CD_TOKEN_SECRET_NAME: "gitops-runtime-argo-cd-token"
 ARGO_CD_TOKEN_SECRET_KEY: "token"
   {{- end }}
 {{- end }}
 
-{{- if and (index .Values "global" "external-argo-cd" "server" "rootpath") }}
-ARGOCD_SERVER_ROOTPATH: {{ index .Values "global" "external-argo-cd" "server" "rootpath" }}
+{{- with (index .Values "global" "external-argo-cd" "server" "rootpath") }}
+ARGOCD_SERVER_ROOTPATH: {{ . }}
 {{- end }}
 
 {{- if or .Values.global.codefresh.tls.caCerts.secret.create (and .Values.global.codefresh.tls.caCerts.secretKeyRef.key .Values.global.codefresh.tls.caCerts.secretKeyRef.name) }}
