@@ -109,6 +109,7 @@ OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:
     configMapKeyRef:
       name: resources-reporter-cmd-params-cm
       key: otlp.address
+      optional: true
 REDISDB:
   valueFrom:
     configMapKeyRef:

@@ -17,9 +17,7 @@ global:
       # --  Custom CA certificates bundle for platform access with ssl
       caCerts:
         # -- Reference to existing secret
-        secretKeyRef:
-          name: ""
-          key: ""
+        secretKeyRef: {}
         # -- Chart managed secret for custom platform CA certificates
         secret:
           # -- Whether to create the secret.
@@ -196,6 +194,7 @@ global:
   httpsProxy: ''
   # -- global NO_PROXY for all components
   noProxy: ''
+  imageRegistry: ""
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
