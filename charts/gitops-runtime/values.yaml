@@ -195,6 +195,48 @@ global:
   # -- global NO_PROXY for all components
   noProxy: ''
   imageRegistry: ""
+
+  event-reporters:
+    image:
+      registry: quay.io
+      repository: codefresh/dev/cf-argocd-extras
+      tag: cr-30629-resource-reporter-workqueu-2-66d7459
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+    pdb:
+      enabled: true
+      minAvailable: "50%"
+      maxUnavailable: ""
+    service:
+      type: ClusterIP
+      ports:
+        http:
+          port: 8088
+          targetPort: 8088
+        metrics:
+          port: 8087
+          targetPort: 8087
+    serviceAccount:
+      create: true
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 10
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 10
+    config: {}
+
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
@@ -703,6 +745,10 @@ argo-api-gateway:
     timeoutSeconds: 10
 
 event-reporters:
+  # runtime-reporter: {}
+  resources-reporter: {}
+
+# event-reporters:
   runtime-reporter:
     image:
       registry: quay.io
@@ -743,42 +789,42 @@ event-reporters:
       successThreshold: 1
       timeoutSeconds: 10
 
-  resources-reporter:
-    image:
-      registry: quay.io
-      repository: codefresh/dev/cf-argocd-extras
-      tag: cr-30629-resource-reporter-workqueu-2-66d7459
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    resources:
-      requests:
-        memory: "128Mi"
-        cpu: "100m"
-    pdb:
-      enabled: true
-      minAvailable: "50%"
-      maxUnavailable: ""
-    service:
-      type: ClusterIP
-      ports:
-        http:
-          port: 8088
-          targetPort: 8088
-        metrics:
-          port: 8087
-          targetPort: 8087
-    serviceAccount:
-      create: true
-    readinessProbe:
-      failureThreshold: 3
-      initialDelaySeconds: 10
-      periodSeconds: 10
-      successThreshold: 1
-      timeoutSeconds: 10
-    livenessProbe:
-      failureThreshold: 3
-      initialDelaySeconds: 10
-      periodSeconds: 10
-      successThreshold: 1
-      timeoutSeconds: 10
+#   resources-reporter:
+#     image:
+#       registry: quay.io
+#       repository: codefresh/dev/cf-argocd-extras
+#       tag: cr-30629-resource-reporter-workqueu-2-66d7459
+#     nodeSelector: {}
+#     tolerations: []
+#     affinity: {}
+#     resources:
+#       requests:
+#         memory: "128Mi"
+#         cpu: "100m"
+#     pdb:
+#       enabled: true
+#       minAvailable: "50%"
+#       maxUnavailable: ""
+#     service:
+#       type: ClusterIP
+#       ports:
+#         http:
+#           port: 8088
+#           targetPort: 8088
+#         metrics:
+#           port: 8087
+#           targetPort: 8087
+#     serviceAccount:
+#       create: true
+#     readinessProbe:
+#       failureThreshold: 3
+#       initialDelaySeconds: 10
+#       periodSeconds: 10
+#       successThreshold: 1
+#       timeoutSeconds: 10
+#     livenessProbe:
+#       failureThreshold: 3
+#       initialDelaySeconds: 10
+#       periodSeconds: 10
+#       successThreshold: 1
+#       timeoutSeconds: 10

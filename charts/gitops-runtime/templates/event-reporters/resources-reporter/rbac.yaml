@@ -1,6 +1,8 @@
 {{- $context := deepCopy . }}
-{{- $_ := set $context "Values" (deepCopy (get (index .Values "event-reporters") "resources-reporter")) }}
+{{- $_ := set $context "Values" (deepCopy (get (index .Values "global") "event-reporters")) }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+{{- $valuesOverrides := index .Values "event-reporters" "resources-reporter" }}
+{{- $_ := mergeOverwrite $context.Values $valuesOverrides | set $context "Values" }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:

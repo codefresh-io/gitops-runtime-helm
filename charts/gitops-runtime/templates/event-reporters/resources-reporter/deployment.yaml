@@ -1,7 +1,10 @@
 {{- $cfCommonTplSemver := printf "cf-common-%s" (index .Subcharts "cf-common").Chart.Version }}
 {{- $context := deepCopy . }}
-{{- $_ := set $context "Values" (deepCopy (get (index .Values "event-reporters") "resources-reporter")) }}
+{{- $_ := set $context "Values" (deepCopy (get (index .Values "global") "event-reporters")) }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+{{/* Merge .Values.event-reporters.<event-reporter-name> with .Values.global.event-reporters */}}
+{{- $valuesOverrides := index .Values "event-reporters" "resources-reporter" }}
+{{- $_ := mergeOverwrite $context.Values $valuesOverrides | set $context "Values" }}
 {{/* Merge environment variables from calculated, defaults and overwrites */}}
 {{- $defaults := (include "resources-reporter.resources.environment-variables.defaults" . | fromYaml) }}
 {{- $calculated := (include "resources-reporter.resources.environment-variables.calculated" . | fromYaml) }}

@@ -9,8 +9,9 @@ threadiness: '100'
 {{- end }}
 
 {{- $defaultConfig := (include "resources-reporter.resources.configmap.defaults" . | fromYaml ) }}
-{{- $overrides := index .Values "event-reporters" "resources-reporter" "config" | default dict }}
-{{- $mergedConfig := mergeOverwrite $defaultConfig $overrides }}
+{{- $globalOverrides := index .Values "global" "event-reporters" "config" | default dict }}
+{{- $reporterOverrides := index .Values "event-reporters" "resources-reporter" "config" | default dict }}
+{{- $mergedConfig := mergeOverwrite $defaultConfig $globalOverrides $reporterOverrides }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
