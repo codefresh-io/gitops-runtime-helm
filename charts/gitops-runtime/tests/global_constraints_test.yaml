@@ -8,10 +8,6 @@ templates:
   - tunnel-client.yaml
   - charts/codefresh-tunnel-client/*
   - internal-router/deployment.yaml
-  - event-reporters/rollout-reporter/eventsource.yaml
-  - event-reporters/rollout-reporter/sensor.yaml
-  - event-reporters/workflow-reporter/eventsource.yaml
-  - event-reporters/workflow-reporter/sensor.yaml
   - eventbus/codefresh-eventbus.yaml
   - hooks/pre-install/validate-values.yaml
   - hooks/pre-install/validate-usage.yaml
@@ -57,66 +53,36 @@ tests:
             value: some-value
             effect: NoSchedule
         template: internal-router/deployment.yaml
-      # -- rollout-reporter eventsource
+      # -- runtime-reporter
       - equal:
-          path: spec.template.nodeSelector
+          path: spec.template.spec.nodeSelector
           value:
             some-key: some-value
             extra-key: extra-value
-        template: event-reporters/rollout-reporter/eventsource.yaml
+        template: event-reporters/runtime-reporter/deployment.yaml
       - equal:
-          path: spec.template.tolerations
+          path: spec.template.spec.tolerations
           value:
           - key: some-key
             operator: Equal
             value: some-value
             effect: NoSchedule
-        template: event-reporters/rollout-reporter/eventsource.yaml
-      # -- rollout-reporter sensor
+        template: event-reporters/runtime-reporter/deployment.yaml
+      # -- argo-api-gateway
       - equal:
-          path: spec.template.nodeSelector
+          path: spec.template.spec.nodeSelector
           value:
             some-key: some-value
             extra-key: extra-value
-        template: event-reporters/rollout-reporter/sensor.yaml
+        template: argo-api-gateway/deployment.yaml
       - equal:
-          path: spec.template.tolerations
+          path: spec.template.spec.tolerations
           value:
           - key: some-key
             operator: Equal
             value: some-value
             effect: NoSchedule
-        template: event-reporters/rollout-reporter/sensor.yaml
-      # -- workflow-reporter eventsource
-      - equal:
-          path: spec.template.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
-        template: event-reporters/workflow-reporter/eventsource.yaml
-      - equal:
-          path: spec.template.tolerations
-          value:
-          - key: some-key
-            operator: Equal
-            value: some-value
-            effect: NoSchedule
-        template: event-reporters/workflow-reporter/eventsource.yaml
-      # -- workflow-reporter sensor
-      - equal:
-          path: spec.template.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
-        template: event-reporters/workflow-reporter/sensor.yaml
-      - equal:
-          path: spec.template.tolerations
-          value:
-          - key: some-key
-            operator: Equal
-            value: some-value
-            effect: NoSchedule
-        template: event-reporters/workflow-reporter/sensor.yaml
+        template: argo-api-gateway/deployment.yaml
       # -- codefresh-eventbus
       - equal:
           path: spec.nats.native.nodeSelector
@@ -282,36 +248,6 @@ tests:
         documentSelector:
           path: kind
           value: Deployment
-      # -- argo-events-controller
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
-        template: charts/argo-events/templates/argo-events-controller/deployment.yaml
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-          - key: some-key
-            operator: Equal
-            value: some-value
-            effect: NoSchedule
-        template: charts/argo-events/templates/argo-events-controller/deployment.yaml
-      # -- argo-events-webhook
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
-        template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-          - key: some-key
-            operator: Equal
-            value: some-value
-            effect: NoSchedule
-        template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
       # -- argo-rollouts controller
       - equal:
           path: spec.template.spec.nodeSelector
@@ -394,66 +330,6 @@ tests:
               value: another-value
               effect: NoSchedule
         template: internal-router/deployment.yaml
-      # -- rollout-reporter eventsource
-      - equal:
-          path: spec.template.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
-        template: event-reporters/rollout-reporter/eventsource.yaml
-      - equal:
-          path: spec.template.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
-        template: event-reporters/rollout-reporter/eventsource.yaml
-      # -- rollout-reporter sensor
-      - equal:
-          path: spec.template.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
-        template: event-reporters/rollout-reporter/sensor.yaml
-      - equal:
-          path: spec.template.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
-        template: event-reporters/rollout-reporter/sensor.yaml
-      # -- workflow-reporter eventsource
-      - equal:
-          path: spec.template.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
-        template: event-reporters/workflow-reporter/eventsource.yaml
-      - equal:
-          path: spec.template.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
-        template: event-reporters/workflow-reporter/eventsource.yaml
-      # -- workflow-reporter sensor
-      - equal:
-          path: spec.template.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
-        template: event-reporters/workflow-reporter/sensor.yaml
-      - equal:
-          path: spec.template.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
-        template: event-reporters/workflow-reporter/sensor.yaml
       # -- codefresh-eventbus
       - equal:
           path: spec.nats.native.nodeSelector
@@ -619,36 +495,6 @@ tests:
         documentSelector:
           path: kind
           value: Deployment
-      # -- argo-events-controller
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
-        template: charts/argo-events/templates/argo-events-controller/deployment.yaml
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
-        template: charts/argo-events/templates/argo-events-controller/deployment.yaml
-      # -- argo-events-webhook
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
-        template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
-        template: charts/argo-events/templates/argo-events-webhook/deployment.yaml
       # -- argo-rollouts controller
       - equal:
           path: spec.template.spec.nodeSelector

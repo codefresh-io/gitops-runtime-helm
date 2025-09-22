@@ -13,9 +13,7 @@ ARGO_CD_TOKEN_SECRET_KEY: "token"
   {{- end }}
 {{- end }}
 
-{{- with (index .Values "global" "external-argo-cd" "server" "rootpath") }}
-ARGOCD_SERVER_ROOTPATH: {{ . }}
-{{- end }}
+ARGOCD_SERVER_ROOTPATH: {{ dig "server" "rootpath" "/" (index .Values "global" "external-argo-cd") | quote }}
 
 {{- if or .Values.global.codefresh.tls.caCerts.secret.create (and .Values.global.codefresh.tls.caCerts.secretKeyRef.key .Values.global.codefresh.tls.caCerts.secretKeyRef.name) }}
   {{- $secretKey := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
