@@ -238,6 +238,8 @@ global:
       timeoutSeconds: 10
     serviceMonitor:
       enabled: false
+      interval: 30s
+      scrapeTimeout: 10s
     config: {}
 
 # -------------------------------------------------------------------------------------------------------------------------
@@ -749,6 +751,8 @@ argo-api-gateway:
     timeoutSeconds: 10
   serviceMonitor:
     enabled: false
+    interval: 30s
+    scrapeTimeout: 10s
 
 event-reporters:
   runtime-reporter: {}

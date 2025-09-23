@@ -17,7 +17,7 @@ spec:
   endpoints:
     - port: metrics
       {{- if $context.Values.serviceMonitor.interval }}
-      interval: {{ $context.Values.serviceMonitor.interval | default "30s" }}
+      interval: {{ $context.Values.serviceMonitor.interval }}
       {{- end }}
       {{- if $context.Values.serviceMonitor.scrapeTimeout }}
       scrapeTimeout: {{ $context.Values.serviceMonitor.scrapeTimeout }}
