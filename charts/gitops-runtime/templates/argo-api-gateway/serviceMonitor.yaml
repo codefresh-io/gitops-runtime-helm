@@ -14,10 +14,10 @@ spec:
       {{- include "argo-api-gateway.selectorLabels" . | nindent 8 }}
   endpoints:
     - port: http
-      {{- if $context.metrics.serviceMonitor.interval }}
-      interval: {{ $context.metrics.serviceMonitor.interval | default "30s" }}
+      {{- if $context.Values.serviceMonitor.interval }}
+      interval: {{ $context.Values.serviceMonitor.interval | default "30s" }}
       {{- end }}
-      {{- if $context.metrics.serviceMonitor.scrapeTimeout }}
-      scrapeTimeout: {{ $context.metrics.serviceMonitor.scrapeTimeout }}
+      {{- if $context.Values.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ $context.Values.serviceMonitor.scrapeTimeout }}
       {{- end }}
 {{- end }}
