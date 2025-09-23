@@ -1,0 +1,25 @@
+{{- $context := deepCopy . }}
+{{- $_ := set $context "Values" (deepCopy (get (index .Values "global") "event-reporters")) }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+{{- $valuesOverrides := index .Values "event-reporters" "runtime-reporter" }}
+{{- $_ := mergeOverwrite $context.Values $valuesOverrides | set $context "Values" }}
+{{- if $context.Values.serviceMonitor.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "runtime-reporter.fullname" . }}
+  labels:
+    {{- include "runtime-reporter.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "runtime-reporter.selectorLabels" . | nindent 8 }}
+  endpoints:
+    - port: metrics
+      {{- if $context.metrics.serviceMonitor.interval }}
+      interval: {{ $context.metrics.serviceMonitor.interval | default "30s" }}
+      {{- end }}
+      {{- if $context.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ $context.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+{{- end }}

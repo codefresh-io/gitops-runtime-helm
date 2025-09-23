@@ -236,6 +236,8 @@ global:
       periodSeconds: 10
       successThreshold: 1
       timeoutSeconds: 10
+    serviceMonitor:
+      enabled: false
     config: {}
 
 # -------------------------------------------------------------------------------------------------------------------------
@@ -745,6 +747,8 @@ argo-api-gateway:
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 10
+  serviceMonitor:
+    enabled: false
 
 event-reporters:
   runtime-reporter: {}
