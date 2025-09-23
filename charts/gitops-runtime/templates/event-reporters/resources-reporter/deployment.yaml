@@ -2,7 +2,7 @@
 {{- $_ := set $context "Values" (deepCopy (get (index .Values "global") "event-reporters")) }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 {{/* Merge .Values.event-reporters.<event-reporter-name> with .Values.global.event-reporters */}}
-{{- $valuesOverrides := index .Values "event-reporters" "runtime-reporter" }}
+{{- $valuesOverrides := index .Values "event-reporters" "resources-reporter" }}
 {{- $values := mergeOverwrite $context.Values $valuesOverrides }}
 {{- $_ := set $context "Values" $values }}
 {{/* Merge environment variables from calculated, defaults and overwrites */}}
