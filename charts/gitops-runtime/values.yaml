@@ -240,8 +240,7 @@ global:
       enabled: false
       interval: 30s
       scrapeTimeout: 10s
-      labels:
-        foo: bar
+      labels: {}
     config: {}
 
 # -------------------------------------------------------------------------------------------------------------------------
@@ -755,6 +754,7 @@ argo-api-gateway:
     enabled: false
     interval: 30s
     scrapeTimeout: 10s
+    labels: {}
 
 event-reporters:
   runtime-reporter: {}
