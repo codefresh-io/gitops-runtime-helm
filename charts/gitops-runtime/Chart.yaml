@@ -15,21 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: Chore-30961 security argocd-exstras (#729)
-    - kind: changed
-      description: bump argo-rollouts (#731)
-    - kind: changed
-      description: Chore/cr 29689 argo events workflow update with security fixes (#727)
-    - kind: changed
-      description: 'fix: security vulnerability CVE-2025-55190 (#733)'
-    - kind: changed
-      description: Fix/svc-acc-pre-uninstall-hook (#728)
-    - kind: changed
-      description: updated sealed-secrets-controller (#723) (#724)
-    - kind: changed
-      description: 'fix: security fix: upgrade cli-v2 and debian versions (#718)'
-    - kind: changed
-      description: 'feat: update cap-app-proxy image tags to 1.3750.0 (#720)'
+      description: 'chore(CR-30960): update enrichment images tag (#747)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
