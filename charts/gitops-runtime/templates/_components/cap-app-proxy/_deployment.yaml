@@ -1,5 +1,4 @@
 {{- define "cap-app-proxy.resources.deployment" }}
-{{- $cfCommonTplSemver := printf "cf-common-%s" (index .Subcharts "cf-common").Chart.Version }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -89,7 +88,7 @@ spec:
           readOnly: true
       {{- if gt (int .Values.replicaCount) 1 }}
       - name: leader-elector
-        image: {{ include (printf "%s.image.name" $cfCommonTplSemver ) (dict "image" (index .Values "leader-elector" "image") "context" .) }}
+        image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" (index .Values "leader-elector" "image") "context" .) }}
         imagePullPolicy: {{ index .Values "leader-elector" "image" "pullPolicy" | default "IfNotPresent" }}
         command:
           - leader-elector
@@ -154,7 +153,7 @@ spec:
         {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- with .Values.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include (printf "%s.tplrender" $cfCommonTplSemver ) (dict "Values" . "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "codefresh-gitops-runtime.tplrender" (dict "Values" . "context" .) | nindent 8 }}
       {{- end }}
       volumes:
       {{- with .Values.extraVolumes }}

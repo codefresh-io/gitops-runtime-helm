@@ -1,5 +1,5 @@
 global:
-  external-argo-cd: 
+  external-argo-cd:
     server:
       protocol: http
       svc: my-argocd-server
@@ -21,7 +21,7 @@ global:
       passwordSecretKeyRef:
         name: argocd-initial-admin-secret
         key: password
-      
+
       token: ""
       tokenSecretKeyRef:
         name: ""
@@ -29,4 +29,3 @@ global:
 
 argo-cd:
   enabled: false
-
