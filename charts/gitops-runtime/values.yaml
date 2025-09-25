@@ -565,7 +565,7 @@ app-proxy:
           tag: 1.1.16-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3750.0
+    tag: d0f2de1
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
