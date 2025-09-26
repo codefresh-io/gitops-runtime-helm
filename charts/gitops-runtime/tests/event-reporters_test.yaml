@@ -1,10 +1,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: argo-api-gateway tests
+suite: argo-gateway tests
 templates:
   - event-reporters/**/*.yaml
 tests:
   - it: Runtime Reporter should be deployed with forked ArgoCD
-    template: event-reporters/runtime-reporter/deployment.yaml
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
@@ -14,10 +14,10 @@ tests:
           of: Deployment
       - equal:
           path: metadata.name
-          value: runtime-reporter
+          value: runtime-event-reporter
 
   - it: Runtime Reporter should be deployed with external OSS ArgoCD
-    template: event-reporters/runtime-reporter/deployment.yaml
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -28,10 +28,10 @@ tests:
           of: Deployment
       - equal:
           path: metadata.name
-          value: runtime-reporter
+          value: runtime-event-reporter
 
   - it: Runtime Reporter ConfigMap should have valid redis-ha url
-    template: event-reporters/runtime-reporter/configmap.yaml
+    template: event-reporters/runtime-event-reporter/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -44,7 +44,7 @@ tests:
           value: RELEASE-NAME-redis-ha-haproxy:6379
 
   - it: Runtime Reporter should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secret.create is true
-    template: event-reporters/runtime-reporter/deployment.yaml
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -77,7 +77,7 @@ tests:
             readOnly: true
 
   - it: Runtime Reporter should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secretKeyRef is set
-    template: event-reporters/runtime-reporter/deployment.yaml
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -106,7 +106,7 @@ tests:
             readOnly: true
 
   - it: Runtime Reporter should use local env over global Values.event-reporters.env
-    template: event-reporters/runtime-reporter/deployment.yaml
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -115,7 +115,7 @@ tests:
           env:
             FOO: outer
       event-reporters:
-        runtime-reporter:
+        runtime-event-reporter:
           env:
             FOO: inner
             BAR: inner
@@ -128,7 +128,7 @@ tests:
           value: inner
 
   - it: Runtime Reporter should use local values over global Values.event-reporters
-    template: event-reporters/runtime-reporter/deployment.yaml
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -142,7 +142,7 @@ tests:
               cpu: 100m
               memory: 128Mi
       event-reporters:
-        runtime-reporter:
+        runtime-event-reporter:
           resources:
             limits:
               cpu: 200m

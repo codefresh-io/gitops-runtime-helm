@@ -1,0 +1,38 @@
+{{- $context := deepCopy . }}
+{{- $_ := set $context "Values" (deepCopy (get .Values "argo-gateway")) }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+{{- if and $context.Values.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "argo-gateway.fullname" . }}
+  labels:
+    {{- include "argo-gateway.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "argo-gateway.fullname" . }}
+  minReplicas: {{ $context.Values.hpa.minReplicas | default 1 }}
+  maxReplicas: {{ $context.Values.hpa.maxReplicas | default 10 }}
+  metrics:
+  {{- if $context.Values.hpa.metrics }}
+  {{- toYaml $context.Values.hpa.metrics | indent 4 }}
+  {{- end }}
+  {{- with $context.Values.hpa.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ . | int }}
+  {{- end }}
+  {{- with $context.Values.hpa.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ . | int }}
+  {{- end }}
+{{- end -}}

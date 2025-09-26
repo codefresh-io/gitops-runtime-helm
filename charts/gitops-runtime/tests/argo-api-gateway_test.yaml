@@ -1,10 +1,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: argo-api-gateway tests
+suite: argo-gateway tests
 templates:
-  - argo-api-gateway/**
+  - argo-gateway/**
 tests:
   - it: Argo Api Gateway ConfigMap should have valid data
-    template: argo-api-gateway/configmap.yaml
+    template: argo-gateway/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
@@ -19,34 +19,34 @@ tests:
           value: argo-cd-repo-server:8081
 
   - it: Argo Api Gateway Deployment should have valid matchLabel selectors
-    template: argo-api-gateway/deployment.yaml
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
       - equal:
           path: spec.selector.matchLabels
           value:
-            app.kubernetes.io/name: argo-api-gateway
+            app.kubernetes.io/name: argo-gateway
             app.kubernetes.io/instance: RELEASE-NAME
       - equal:
           path: spec.template.metadata.labels
           value:
-            app.kubernetes.io/name: argo-api-gateway
+            app.kubernetes.io/name: argo-gateway
             app.kubernetes.io/instance: RELEASE-NAME
 
   - it: Argo Api Gateway Service should have valid matchLabel selectors
-    template: argo-api-gateway/service.yaml
+    template: argo-gateway/service.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
       - equal:
           path: spec.selector
           value:
-            app.kubernetes.io/name: argo-api-gateway
+            app.kubernetes.io/name: argo-gateway
             app.kubernetes.io/instance: RELEASE-NAME
 
   - it: Argo Api Gateway should be deployed with forked ArgoCD
-    template: argo-api-gateway/deployment.yaml
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
@@ -56,10 +56,10 @@ tests:
           of: Deployment
       - equal:
           path: metadata.name
-          value: argo-api-gateway
+          value: argo-gateway
 
   - it: Argo Api Gateway should be deployed with external OSS ArgoCD
-    template: argo-api-gateway/deployment.yaml
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -70,10 +70,10 @@ tests:
           of: Deployment
       - equal:
           path: metadata.name
-          value: argo-api-gateway
+          value: argo-gateway
 
   - it: Argo Api Gateway ConfigMap should have valid redis-ha url
-    template: argo-api-gateway/configmap.yaml
+    template: argo-gateway/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -86,7 +86,7 @@ tests:
           value: RELEASE-NAME-redis-ha-haproxy:6379
 
   - it: Argo Api Gateway should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secret.create is true
-    template: argo-api-gateway/deployment.yaml
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
@@ -119,7 +119,7 @@ tests:
             readOnly: true
 
   - it: Argo Api Gateway should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secretKeyRef is set
-    template: argo-api-gateway/deployment.yaml
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:

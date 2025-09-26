@@ -3,7 +3,7 @@ templates:
   - app-proxy/deployment.yaml
   - gitops-operator/*
   - event-reporters/**
-  - argo-api-gateway/**
+  - argo-gateway/**
   - _components/gitops-operator/*
   - tunnel-client.yaml
   - charts/codefresh-tunnel-client/*
@@ -53,13 +53,13 @@ tests:
             value: some-value
             effect: NoSchedule
         template: internal-router/deployment.yaml
-      # -- runtime-reporter
+      # -- runtime-event-reporter
       - equal:
           path: spec.template.spec.nodeSelector
           value:
             some-key: some-value
             extra-key: extra-value
-        template: event-reporters/runtime-reporter/deployment.yaml
+        template: event-reporters/runtime-event-reporter/deployment.yaml
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -67,14 +67,14 @@ tests:
             operator: Equal
             value: some-value
             effect: NoSchedule
-        template: event-reporters/runtime-reporter/deployment.yaml
-      # -- argo-api-gateway
+        template: event-reporters/runtime-event-reporter/deployment.yaml
+      # -- argo-gateway
       - equal:
           path: spec.template.spec.nodeSelector
           value:
             some-key: some-value
             extra-key: extra-value
-        template: argo-api-gateway/deployment.yaml
+        template: argo-gateway/deployment.yaml
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -82,7 +82,7 @@ tests:
             operator: Equal
             value: some-value
             effect: NoSchedule
-        template: argo-api-gateway/deployment.yaml
+        template: argo-gateway/deployment.yaml
       # -- codefresh-eventbus
       - equal:
           path: spec.nats.native.nodeSelector
@@ -188,7 +188,7 @@ tests:
           value:
             some-key: some-value
             extra-key: extra-value
-        template: argo-api-gateway/deployment.yaml
+        template: argo-gateway/deployment.yaml
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -196,14 +196,14 @@ tests:
             operator: Equal
             value: some-value
             effect: NoSchedule
-        template: argo-api-gateway/deployment.yaml
+        template: argo-gateway/deployment.yaml
       # -- event-reporter
       - equal:
           path: spec.template.spec.nodeSelector
           value:
             some-key: some-value
             extra-key: extra-value
-        template: event-reporters/runtime-reporter/deployment.yaml
+        template: event-reporters/runtime-event-reporter/deployment.yaml
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -211,7 +211,7 @@ tests:
             operator: Equal
             value: some-value
             effect: NoSchedule
-        template: event-reporters/runtime-reporter/deployment.yaml
+        template: event-reporters/runtime-event-reporter/deployment.yaml
       # -- gitops-operator
       - equal:
           path: spec.template.spec.nodeSelector
@@ -435,7 +435,7 @@ tests:
           value:
             some-key: another-value
             foo: bar
-        template: argo-api-gateway/deployment.yaml
+        template: argo-gateway/deployment.yaml
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -443,14 +443,14 @@ tests:
             operator: Equal
             value: another-value
             effect: NoSchedule
-        template: argo-api-gateway/deployment.yaml
+        template: argo-gateway/deployment.yaml
       # -- event-reporter
       - equal:
           path: spec.template.spec.nodeSelector
           value:
             some-key: another-value
             foo: bar
-        template: event-reporters/runtime-reporter/deployment.yaml
+        template: event-reporters/runtime-event-reporter/deployment.yaml
       - equal:
           path: spec.template.spec.tolerations
           value:
@@ -458,7 +458,7 @@ tests:
             operator: Equal
             value: another-value
             effect: NoSchedule
-        template: event-reporters/runtime-reporter/deployment.yaml
+        template: event-reporters/runtime-event-reporter/deployment.yaml
       # -- gitops-operator
       - equal:
           path: spec.template.spec.nodeSelector

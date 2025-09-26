@@ -48,7 +48,7 @@ installer:
   nodeSelector: *nodeSelector
   tolerations: *tolerations
 
-argo-api-gateway:
+argo-gateway:
   nodeSelector: *nodeSelector
   tolerations: *tolerations
 

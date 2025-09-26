@@ -433,7 +433,7 @@ Output comma separated list of installed runtime components
   {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
   {{- $internalRouter := dict "name" "internal-router" "version" .Chart.AppVersion }}
   {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
-  {{- $argoApiGateway := dict "name" "argo-api-gateway" "version" (get .Values "argo-api-gateway").image.tag }}
+  {{- $argoApiGateway := dict "name" "argo-gateway" "version" (get .Values "argo-gateway").image.tag }}
   {{- $comptList := list $appProxy $sealedSecrets $internalRouter $argoApiGateway }}
   {{- if and (index .Values "argo-cd" "enabled") }}
     {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}

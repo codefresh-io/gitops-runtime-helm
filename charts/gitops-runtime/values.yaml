@@ -713,7 +713,7 @@ gitops-operator:
     minAvailable: 1
     maxUnavailable: ""
 
-argo-api-gateway:
+argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/dev/cf-argocd-extras
@@ -757,5 +757,5 @@ argo-api-gateway:
     labels: {}
 
 event-reporters:
-  runtime-reporter: {}
-  resources-reporter: {}
+  runtime-event-reporter: {}
+  cluster-event-reporter: {}
