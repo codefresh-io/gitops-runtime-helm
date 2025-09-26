@@ -364,4 +364,20 @@ gitops-operator:
     tag: vX.Y.Z
 ```
 
+### To 0.24.x
+
+####  Affected values
+
+- `.Values.redis`/`.Values.redis-ha`/`.Values.redis-secret-init` were added
+
+```yaml
+# Enabled standalone (single Deployment) Redis
+redis:
+  enabled: true
+
+# Enabled Redis High Availability (StatefulSet with Proxy)
+redis-ha:
+  enabled: false
+```
+
 {{ template "chart.valuesSection" . }}
