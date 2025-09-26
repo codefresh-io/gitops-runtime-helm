@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: redis-secret-init
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+    helm.sh/hook-weight: "10"
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      serviceAccountName: redis-secret-init
+      restartPolicy: Never
+      containers:
+      - name: redis-secret-init
+        image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" (index .Values "redis-secret-init" "image") "context" .) }}
+        imagePullPolicy: {{ index .Values "redis-secret-init" "image" "pullPolicy" | default "IfNotPresent" }}
+        command: ["sh", "-c"]
+        args:
+        - |
+          PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c16)
+          if kubectl get secret gitops-runtime-redis -o jsonpath="{.data.auth}" &> /dev/null; then
+            echo "Secret gitops-runtime-redis already exists, skipping creation"
+            exit 0
+          fi
+          kubectl create secret generic gitops-runtime-redis --from-literal=auth=$PASSWORD --dry-run=client -o yaml | kubectl apply -f -
+      {{- with (index .Values "redis-secret-init" "nodeSelector") | default .Values.global.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with (index .Values "redis-secret-init" "tolerations") | default .Values.global.tolerations }}
+      tolerations: {{ toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with (index .Values "redis-secret-init" "affinity") }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}

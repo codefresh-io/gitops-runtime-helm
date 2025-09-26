@@ -804,3 +804,181 @@ cf-argocd-extras:
       enabled: false
       minAvailable: "50%"
       maxUnavailable: ""
+
+redis-secret-init:
+  image:
+    registry: docker.io
+    repository: alpine/kubectl
+    tag: 1.34.1
+
+redis:
+  enabled: true
+  image:
+    registry: public.ecr.aws
+    repository: docker/library/redis
+    tag: 8.2.1-alpine
+  podAnnotations: {}
+  podLabels: {}
+  imagePullSecrets: []
+  podSecurityContext: {}
+  securityContext: {}
+  env: {}
+  envFrom: []
+  extraArgs: []
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 15
+    successThreshold: 1
+    failureThreshold: 5
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 15
+    successThreshold: 1
+    failureThreshold: 5
+  service:
+    type: ClusterIP
+    labels: {}
+    annotations: {}
+    ports:
+      redis:
+        port: 6379
+        targetPort: 6379
+      metrics:
+        port: 9121
+        targetPort: 9121
+  resources: {}
+  metrics:
+    enabled: true
+    image:
+      registry: ghcr.io
+      repository: oliver006/redis_exporter
+      tag: v1.72.1
+    env: {}
+    envFrom: []
+    resources: {}
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 30
+      periodSeconds: 15
+      timeoutSeconds: 15
+      successThreshold: 1
+      failureThreshold: 5
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 30
+      periodSeconds: 15
+      timeoutSeconds: 15
+      successThreshold: 1
+      failureThreshold: 5
+    serviceMonitor:
+      enabled: false
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  topologySpreadConstraints: []
+  pdb:
+    enabled: true
+    labels: {}
+    annotations: {}
+    minAvailable: 1
+    maxUnavailable: ""
+  serviceAccount:
+    create: true
+    name: ""
+    annotations: {}
+
+## Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true`
+# Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
+redis-ha:
+  # -- Enables the Redis HA subchart and disables the custom Redis single node deployment
+  enabled: false
+  # -- Full name of the Redis HA Resources
+  fullnameOverride: "redis-ha"
+  ## Redis image
+  image:
+    # -- Redis repository
+    repository: public.ecr.aws/docker/library/redis
+    # -- Redis tag
+    tag: 8.2.1-alpine
+  ## Prometheus redis-exporter sidecar
+  exporter:
+    # -- Enable Prometheus redis-exporter sidecar
+    enabled: false
+    # -- Repository to use for the redis-exporter
+    image: ghcr.io/oliver006/redis_exporter
+    # -- Tag to use for the redis-exporter
+    tag: v1.69.0
+  persistentVolume:
+    # -- Configures persistence on Redis nodes
+    enabled: false
+  ## Redis specific configuration options
+  redis:
+    # -- Redis convention for naming the cluster group: must match `^[\\w-\\.]+$` and can be templated
+    masterGroupName: gitops-runtime
+    # -- Any valid redis config options in this section will be applied to each server (see `redis-ha` chart)
+    # @default -- See [values.yaml]
+    config:
+      # -- Will save the DB if both the given number of seconds and the given number of write operations against the DB occurred. `""`  is disabled
+      # @default -- `'""'`
+      save: '""'
+  ## Enables a HA Proxy for better LoadBalancing / Sentinel Master support. Automatically proxies to Redis master.
+  haproxy:
+    # -- Enabled HAProxy LoadBalancing/Proxy
+    enabled: true
+    metrics:
+      # -- HAProxy enable prometheus metric scraping
+      enabled: true
+    # -- Whether the haproxy pods should be forced to run on separate nodes.
+    hardAntiAffinity: true
+    # -- Additional affinities to add to the haproxy pods.
+    additionalAffinities: {}
+    # -- Assign custom [affinity] rules to the haproxy pods.
+    affinity: |
+
+    # -- [Tolerations] for use with node taints for haproxy pods.
+    tolerations: []
+    # -- HAProxy container-level security context
+    # @default -- See [values.yaml]
+    containerSecurityContext:
+      readOnlyRootFilesystem: true
+
+  # -- Configures redis-ha with AUTH
+  auth: true
+  # -- Existing Secret to use for redis-ha authentication.
+  # By default the redis-secret-init Job is generating this Secret.
+  existingSecret: gitops-runtime-redis
+
+  # -- Whether the Redis server pods should be forced to run on separate nodes.
+  hardAntiAffinity: true
+
+  # -- Additional affinities to add to the Redis server pods.
+  additionalAffinities: {}
+
+  # -- Assign custom [affinity] rules to the Redis pods.
+  affinity: |
+
+  # -- [Tolerations] for use with node taints for Redis pods.
+  tolerations: []
+
+  # -- Assign custom [TopologySpreadConstraints] rules to the Redis pods.
+  ## https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+  topologySpreadConstraints:
+    # -- Enable Redis HA topology spread constraints
+    enabled: false
+    # -- Max skew of pods tolerated
+    # @default -- `""` (defaults to `1`)
+    maxSkew: ""
+    # -- Topology key for spread
+    # @default -- `""` (defaults to `topology.kubernetes.io/zone`)
+    topologyKey: ""
+    # -- Enforcement policy, hard or soft
+    # @default -- `""` (defaults to `ScheduleAnyway`)
+    whenUnsatisfiable: ""
+  # -- Redis HA statefulset container-level security context
+  # @default -- See [values.yaml]
+  containerSecurityContext:
+    readOnlyRootFilesystem: true

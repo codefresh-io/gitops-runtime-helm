@@ -217,6 +217,13 @@ LEADER_ID:
     fieldRef:
       fieldPath: metadata.name
 {{- end }}
+CACHE_HOST: {{ (splitList ":" (include "codefresh-gitops-runtime.argocd.redis.url" .) | first) }}
+CACHE_PORT: {{ (splitList ":" (include "codefresh-gitops-runtime.argocd.redis.url" .) | last) }}
+CACHE_PASSWORD:
+  valueFrom:
+    secretKeyRef:
+      name: gitops-runtime-redis
+      key: auth
 {{ include "codefresh-gitops-runtime.get-proxy-env-vars" . }}
 {{- end -}}
 

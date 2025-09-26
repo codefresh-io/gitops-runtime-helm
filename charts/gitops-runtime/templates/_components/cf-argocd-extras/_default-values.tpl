@@ -148,29 +148,29 @@ eventReporter:
       REDISDB:
         valueFrom:
           configMapKeyRef:
-            name: argocd-cmd-params-cm
+            name: event-reporter-cmd-params-cm
             key: redis.db
             optional: true
       REDIS_COMPRESSION:
         valueFrom:
           configMapKeyRef:
-            name: argocd-cmd-params-cm
+            name: event-reporter-cmd-params-cm
             key: redis.compression
             optional: true
       REDIS_PASSWORD:
         valueFrom:
           secretKeyRef:
-            name: argocd-redis
+            name: gitops-runtime-redis
             key: auth
       REDIS_SERVER:
         valueFrom:
           configMapKeyRef:
-            name: argocd-cmd-params-cm
+            name: event-reporter-cmd-params-cm
             key: redis.server
       REDIS_USERNAME:
         valueFrom:
           secretKeyRef:
-            name: argocd-redis
+            name: event-reporter-cmd-params-cm
             key: redis-username
             optional: true
       REPO_SERVER:
@@ -427,29 +427,29 @@ sourcesServer:
       REDISDB:
         valueFrom:
           configMapKeyRef:
-            name: argocd-cmd-params-cm
+            name: sources-server-cmd-params-cm
             key: redis.db
             optional: true
       REDIS_COMPRESSION:
         valueFrom:
           configMapKeyRef:
-            name: argocd-cmd-params-cm
+            name: sources-server-cmd-params-cm
             key: redis.compression
             optional: true
       REDIS_PASSWORD:
         valueFrom:
           secretKeyRef:
-            name: argocd-redis
+            name: gitops-runtime-redis
             key: auth
       REDIS_SERVER:
         valueFrom:
           configMapKeyRef:
-            name: argocd-cmd-params-cm
+            name: sources-server-cmd-params-cm
             key: redis.server
       REDIS_USERNAME:
         valueFrom:
           secretKeyRef:
-            name: argocd-redis
+            name: sources-server-cmd-params-cm
             key: redis-username
             optional: true
       REPO_SERVER:

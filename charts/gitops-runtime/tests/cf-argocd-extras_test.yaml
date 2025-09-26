@@ -14,7 +14,7 @@ tests:
           value: argo-cd-server:80
       - equal:
           path: data["redis.server"]
-          value: argo-cd-redis:6379
+          value: redis:6379
       - equal:
           path: data["repo.server"]
           value: argo-cd-repo-server:8081
@@ -123,26 +123,24 @@ tests:
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
-      argo-cd:
-        redis-ha:
-          enabled: true
+      redis-ha:
+        enabled: true
     asserts:
       - equal:
           path: data["redis.server"]
-          value: RELEASE-NAME-redis-ha-haproxy:6379
+          value: redis-ha-haproxy:6379
 
   - it: Event-Reporter ConfigMap should have valid redis-ha url
     template: cf-argocd-extras/event-reporter/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
-      argo-cd:
-        redis-ha:
-          enabled: true
+      redis-ha:
+        enabled: true
     asserts:
       - equal:
           path: data["redis.server"]
-          value: RELEASE-NAME-redis-ha-haproxy:6379
+          value: redis-ha-haproxy:6379
 
   - it: Sources-Server should have an OPTIONAL codefresh-tls-certs volume and volumeMount by default
     template: cf-argocd-extras/sources-server/deployment.yaml

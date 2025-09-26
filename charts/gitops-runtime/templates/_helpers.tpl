@@ -330,18 +330,18 @@ Determine argocd server password.
 Determine argocd redis url
 */}}
 {{- define "codefresh-gitops-runtime.argocd.redis.url" -}}
-{{- $argoCDValues := (get .Values "argo-cd") }}
-{{- if and (index .Values "argo-cd" "enabled") }}
-  {{- $serviceName := include "codefresh-gitops-runtime.argocd.redis.servicename" . }}
-  {{- $port := include "codefresh-gitops-runtime.argocd.redis.serviceport" . }}
-  {{- printf "%s:%s" $serviceName $port }}
-{{- else if and (index .Values "global" "external-argo-cd" "redis") }}
-  {{- $redis := (index .Values "global" "external-argo-cd" "redis") }}
-  {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.redis.svc is not set" $redis.svc }}
-  {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.redis.port is not set" $redis.port }}
-  {{- printf "%s:%v" $svc $port }}
+{{- if and (index .Values "redis-ha" "enabled") (index .Values "redis-ha" "haproxy" "enabled") }}
+  {{- $redisHa := (index .Values "redis-ha") -}}
+  {{- $redisHaContext := dict "Chart" (dict "Name" "redis-ha") "Release" .Release "Values" $redisHa -}}
+  {{- $serverName := printf "%s-haproxy" (include "redis-ha.fullname" $redisHaContext) | trunc 63 | trimSuffix "-" -}}
+  {{- $port := $redisHa.haproxy.servicePort -}}
+  {{- printf "%s:%v" $serverName $port }}
+{{- else if .Values.redis.enabled }}
+  {{- $serviceName := include "redis.fullname" . }}
+  {{- $port := .Values.redis.service.ports.redis.port }}
+  {{- printf "%s:%v" $serviceName $port }}
 {{- else }}
-  {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.redis is not set" }}
+  {{- fail "ERROR: .Values.redis or .Values.redis-ha must be enabled!" }}
 {{- end }}
 {{- end}}
 
@@ -536,3 +536,75 @@ NO_PROXY: {{ .Values.global.noProxy | quote }}
 
 {{- printf "%s" $eventBusName }}
 {{- end }}
+
+{{- define "codefresh-gitops-runtime.image.name" -}}
+  {{/* Restoring root $ context */}}
+  {{- $ := .context -}}
+
+  {{- $registryName := .image.registry -}}
+  {{- $repositoryName := .image.repository -}}
+  {{- $imageTag := .image.tag | toString -}}
+  {{- $imageDigest := .image.digest }}
+
+  {{- if $.Values.global -}}
+    {{- if $.Values.global.imageRegistry -}}
+      {{ $registryName = $.Values.global.imageRegistry }}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if $registryName -}}
+    {{- if $imageDigest }}
+      {{- printf "%s/%s:%s@%s" $registryName $repositoryName $imageTag $imageDigest -}}
+    {{- else }}
+      {{- printf "%s/%s:%s" $registryName $repositoryName $imageTag -}}
+    {{- end }}
+  {{- else }}
+    {{- if $imageDigest }}
+      {{- printf "%s:%s@%s" $repositoryName $imageTag $imageDigest -}}
+    {{- else }}
+      {{- printf "%s:%s" $repositoryName $imageTag -}}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- define "codefresh-gitops-runtime.env-vars"}}
+{{- $ := .context }}
+  {{- if .Values }}
+    {{- if not (kindIs "map" .Values) }}
+      {{ fail "ERROR: env block must be a map"}}
+    {{- end }}
+  {{- end }}
+  {{- $env := .Values }}
+  {{- $templatedEnv := include "codefresh-gitops-runtime.tplrender" (dict "Values" $env "context" $) | fromYaml }}
+  {{- range $name, $val := $templatedEnv }}
+    {{- if or (kindIs "string" $val) (kindIs "bool" $val) (kindIs "int" $val) (kindIs "float64" $val) }}
+- name: {{ $name }}
+  value: {{ $val | quote }}
+    {{- else if kindIs "map" $val}}
+      {{- if hasKey $val "valueFrom" }}
+        {{- if or (hasKey $val.valueFrom "secretKeyRef") (hasKey $val.valueFrom "configMapKeyRef") (hasKey $val.valueFrom "fieldRef") }}
+- name: {{ $name }}
+{{- $val | toYaml | nindent 2 }}
+        {{- else}}
+          {{ fail "ERROR: Only secretKeyRef/configMapKeyRef/fieldRef are supported for valueFrom block for environment variables!" }}
+        {{- end}}
+      {{- else }}
+        {{ fail "ERROR: Cannot generate environment variables only strings and valueFrom are supported!"}}
+      {{- end }}
+    {{- else }}
+      {{ fail "ERROR: Only maps and string/int/bool are supported for environment variables!"}}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- define "codefresh-gitops-runtime.tplrender" -}}
+  {{- $tpl := .Values -}}
+  {{- if not (typeIs "string" $tpl) -}}
+    {{- $tpl = toYaml $tpl -}}
+  {{- end -}}
+  {{- if contains "{{" $tpl -}}
+    {{- tpl $tpl .context }}
+  {{- else -}}
+    {{- $tpl -}}
+  {{- end -}}
+{{- end -}}
