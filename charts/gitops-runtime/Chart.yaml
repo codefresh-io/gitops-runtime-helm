@@ -40,3 +40,7 @@ dependencies:
 - name: cf-common
   repository: oci://quay.io/codefresh/charts
   version: 0.27.0
+- name: redis-ha
+  version: 4.33.4
+  repository: https://dandydeveloper.github.io/charts/
+  condition: redis-ha.enabled

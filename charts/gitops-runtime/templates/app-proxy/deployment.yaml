@@ -3,6 +3,8 @@
 {{- $_ := set $appProxyContext "Values" (deepCopy (get .Values "app-proxy")) }}
 {{- $_ := set $appProxyContext.Values "global" (deepCopy (get .Values "global")) }}
 {{- $_ := set $appProxyContext.Values "argo-cd" (get .Values "argo-cd") }}
+{{- $_ := set $appProxyContext.Values "redis" (get .Values "redis") }}
+{{- $_ := set $appProxyContext.Values "redis-ha" (get .Values "redis-ha") }}
 
 {{/* Merge environment variables with the ones in _app-proxy-env.yaml */}}
 {{- $mainContainerMergedValues := mergeOverwrite $appProxyContext.Values.env (include "codefresh-gitops-runtime.app-proxy.calculated-env-vars" . | fromYaml) }}

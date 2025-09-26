@@ -253,7 +253,7 @@ tests:
     asserts:
       - equal:
           path: data["redis.server"]
-          value: my-argocd-redis:6379
+          value: redis:6379
 
   - it: event-reporter ConfigMap should have valid Sources Server address
     template: cf-argocd-extras/event-reporter/configmap.yaml
@@ -379,7 +379,7 @@ tests:
     asserts:
       - equal:
           path: data["redis.server"]
-          value: my-argocd-redis:6379
+          value: redis:6379
 
   - it: sources-server ConfigMap should have valid Repo Server URL
     template: cf-argocd-extras/sources-server/configmap.yaml
@@ -489,17 +489,6 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.password or .Values.global.external-argo-cd.auth.passwordSecretKeyRef is not set"
-
-  - it: should require ArgoCd redis address if it's not provided
-    template: cf-argocd-extras/sources-server/deployment.yaml
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    set:
-      global.external-argo-cd.redis: null
-    asserts:
-      - failedTemplate:
-          errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.redis is not set"
 
   - it: should require ArgoCd repoServer address if it's not provided
     template: cf-argocd-extras/sources-server/deployment.yaml
