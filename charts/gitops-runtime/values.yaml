@@ -903,7 +903,7 @@ redis:
 # Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
 redis-ha:
   # -- Enables the Redis HA subchart and disables the custom Redis single node deployment
-  enabled: false
+  enabled: true
   # -- Full name of the Redis HA Resources
   fullnameOverride: "redis-ha"
   ## Redis image
