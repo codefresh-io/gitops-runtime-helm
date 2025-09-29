@@ -185,4 +185,5 @@ RESOURCE_THREADINESS:
     configMapKeyRef:
       name: runtime-event-reporter-cmd-params-cm
       key: resource.threadiness
+SERVICE_NAME: {{ include "runtime-event-reporter.fullname" . }}
 {{- end -}}

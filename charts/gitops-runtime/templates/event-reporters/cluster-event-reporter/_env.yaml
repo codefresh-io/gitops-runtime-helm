@@ -185,4 +185,5 @@ RESOURCE_THREADINESS:
     configMapKeyRef:
       name: cluster-event-reporter-cmd-params-cm
       key: resource.threadiness
+SERVICE_NAME: {{ include "cluster-event-reporter.fullname" . }}
 {{- end -}}
