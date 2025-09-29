@@ -445,14 +445,19 @@ spec:
                             health:
                               description: Represents resource health status
                               type: string
+                            healthMessage:
+                              type: string
                             sync:
                               description: SyncStatusCode is a type which represents
                                 possible comparison results
                               type: string
                             syncOperation:
                               type: string
+                            syncOperationMessage:
+                              type: string
                           required:
                           - health
+                          - healthMessage
                           - sync
                           type: object
                         commitSha:
@@ -478,14 +483,19 @@ spec:
                             health:
                               description: Represents resource health status
                               type: string
+                            healthMessage:
+                              type: string
                             sync:
                               description: SyncStatusCode is a type which represents
                                 possible comparison results
                               type: string
                             syncOperation:
                               type: string
+                            syncOperationMessage:
+                              type: string
                           required:
                           - health
+                          - healthMessage
                           - sync
                           type: object
                         phase:
@@ -558,14 +568,19 @@ spec:
                             health:
                               description: Represents resource health status
                               type: string
+                            healthMessage:
+                              type: string
                             sync:
                               description: SyncStatusCode is a type which represents
                                 possible comparison results
                               type: string
                             syncOperation:
                               type: string
+                            syncOperationMessage:
+                              type: string
                           required:
                           - health
+                          - healthMessage
                           - sync
                           type: object
                         commitSha:
