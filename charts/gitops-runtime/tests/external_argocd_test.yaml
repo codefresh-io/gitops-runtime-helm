@@ -262,7 +262,7 @@ tests:
       - ./values/external-argocd-values.yaml
     asserts:
       - equal:
-          path: data["sources.server"]
+          path: data["argo-gateway.server"]
           value: http://argo-gateway
 
   - it: runtime-event-reporter ConfigMap should have valid Repo Server URL

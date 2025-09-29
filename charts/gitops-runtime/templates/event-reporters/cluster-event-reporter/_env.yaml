@@ -170,14 +170,19 @@ SHARDING_ALGORITHM:
       name: cluster-event-reporter-cmd-params-cm
       key: sharding.algorithm
       optional: true
-SOURCES_SERVER:
+ARGO_GATEWAY_URL:
   valueFrom:
     configMapKeyRef:
       name: cluster-event-reporter-cmd-params-cm
-      key: sources.server
+      key: argo-gateway.server
 THREADINESS:
   valueFrom:
     configMapKeyRef:
       name: cluster-event-reporter-cmd-params-cm
       key: threadiness
+RESOURCE_THREADINESS:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: resource.threadiness
 {{- end -}}
