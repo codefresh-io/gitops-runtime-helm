@@ -337,6 +337,14 @@ event-reporters:
               topologyKey: "kubernetes.io/hostname"
 ```
 
+### Supported Versions table
+
+Supported version for gitops-runtime mean that we have complete E2E tests, and they are passing for the [Codefresh On-Prem](https://github.com/codefresh-io/codefresh-onprem-helm) versions listed.
+
+| Supported | GitOps-Runtime version| Codefresh On-Prem version     |
+| :-------: | --------------------- | ----------------------------- |
+|    ✅     | **0.24.0**            | 2.9.x, 2.8.x |
+
 ## Upgrading
 
 ### To 0.23.x
@@ -395,14 +403,14 @@ gitops-operator:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3706.0"` |  |
+| app-proxy.image.tag | string | `"1.3750.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3706.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3750.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -470,8 +478,8 @@ gitops-operator:
 | argo-cd.crds.install | bool | `true` |  |
 | argo-cd.enabled | bool | `true` |  |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
-| argo-events.configs.jetstream.versions[0].configReloaderImage | string | `"natsio/nats-server-config-reloader:0.18.2"` |  |
-| argo-events.configs.jetstream.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.16.0"` |  |
+| argo-events.configs.jetstream.versions[0].configReloaderImage | string | `"natsio/nats-server-config-reloader:0.19.1"` |  |
+| argo-events.configs.jetstream.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.17.3"` |  |
 | argo-events.configs.jetstream.versions[0].natsImage | string | `"nats:2.11.4"` |  |
 | argo-events.configs.jetstream.versions[0].startCommand | string | `"/nats-server"` |  |
 | argo-events.configs.jetstream.versions[0].version | string | `"latest"` |  |
@@ -491,10 +499,10 @@ gitops-operator:
 | argo-workflows.mainContainer.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
-| cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"v0.5.14"}},"enabled":true,"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"serviceMonitor":{"main":{"enabled":false}},"tolerations":[]},"sourcesServer":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"v0.5.14"}},"enabled":true,"hpa":{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
+| cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"88898aa"}},"enabled":true,"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"serviceMonitor":{"main":{"enabled":false}},"tolerations":[]},"sourcesServer":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"88898aa"}},"enabled":true,"hpa":{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
 | cf-argocd-extras.eventReporter.pdb.enabled | bool | `false` | Enable PDB for event-reporter |
 | cf-argocd-extras.eventReporter.serviceMonitor.main.enabled | bool | `false` | Enable ServiceMonitor for event reporter |
-| cf-argocd-extras.sourcesServer | object | `{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"v0.5.14"}},"enabled":true,"hpa":{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"tolerations":[]}` | Sources server configuration |
+| cf-argocd-extras.sourcesServer | object | `{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"88898aa"}},"enabled":true,"hpa":{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"tolerations":[]}` | Sources server configuration |
 | cf-argocd-extras.sourcesServer.hpa.enabled | bool | `false` | Enable HPA for sources server |
 | cf-argocd-extras.sourcesServer.pdb.enabled | bool | `false` | Enable PDB for sources server |
 | codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
@@ -560,10 +568,11 @@ gitops-operator:
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
 | gitops-operator.enabled | bool | `true` |  |
+| gitops-operator.env.GITOPS_OPERATOR_VERSION | string | `"0.11.1"` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.registry | string | `"quay.io"` | defaults |
 | gitops-operator.image.repository | string | `"codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"v0.11.1"` |  |
+| gitops-operator.image.tag | string | `"b913720"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
@@ -649,7 +658,7 @@ gitops-operator:
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
 | internal-router.image.repository | string | `"docker.io/nginxinc/nginx-unprivileged"` |  |
-| internal-router.image.tag | string | `"1.28-alpine3.21"` |  |
+| internal-router.image.tag | string | `"1.29-alpine3.22"` |  |
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.ipv6 | object | `{"enabled":false}` | For ipv6 enabled clusters switch ipv6 enabled to true |
 | internal-router.nameOverride | string | `""` |  |
