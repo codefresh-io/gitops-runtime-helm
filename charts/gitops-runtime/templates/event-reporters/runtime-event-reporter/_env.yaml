@@ -23,7 +23,7 @@ CODEFRESH_SSL_CERT_PATH: {{ printf "/app/config/codefresh-tls-certs/%s" $secretK
 {{- end }}
 
 {{- define "runtime-event-reporter.resources.environment-variables.defaults" -}}
-REPORTER_MODE: combined
+REPORTER_MODE: app
 APP_QUEUE_SIZE:
   valueFrom:
     configMapKeyRef:
@@ -48,7 +48,7 @@ ARGOCD_SERVER_ROOTPATH:
       optional: true
 ARGO_CD_TOKEN_SECRET_NAME: argocd-token
 ARGO_CD_TOKEN_SECRET_KEY: token
-BINARY_NAME: runtime-event-reporter
+BINARY_NAME: event-reporter
 CODEFRESH_SSL_CERT_PATH: ""
 CODEFRESH_TLS_INSECURE:
   valueFrom:
