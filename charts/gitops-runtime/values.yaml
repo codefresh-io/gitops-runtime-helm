@@ -721,7 +721,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: 3ac2676
+    tag: 18fcd09
   env:
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
@@ -903,7 +903,7 @@ redis:
 # Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
 redis-ha:
   # -- Enables the Redis HA subchart and disables the custom Redis single node deployment
-  enabled: true
+  enabled: false
   # -- Full name of the Redis HA Resources
   fullnameOverride: "redis-ha"
   ## Redis image
