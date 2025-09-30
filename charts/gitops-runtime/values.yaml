@@ -721,7 +721,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: 18fcd09
+    tag: 3ac2676
   env:
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
