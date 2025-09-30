@@ -41,6 +41,6 @@ RUNTIME_VERSION:
     configMapKeyRef:
       name: codefresh-cm
       key: version
-SOURCES_SERVER_URL: http://argo-gateway
+SOURCES_SERVER_URL: http://argo-gateway # TODO: remove and leave only ARGO_GATEWAY_URL
 ARGO_GATEWAY_URL: http://argo-gateway
 {{- end -}}
