@@ -1,0 +1,29 @@
+{{- $redisHa := index .Values "redis-ha" }}
+{{- if and .Values.redis.enabled (not $redisHa.enabled) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "redis.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "redis.labels" . | nindent 4 }}
+    {{- with .Values.redis.service.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.redis.service.annotations }}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+spec:
+  ports:
+  - name: redis
+    port: {{ .Values.redis.service.ports.redis.port }}
+    targetPort: redis
+  - name: metrics
+    port: {{ .Values.redis.service.ports.metrics.port }}
+    targetPort: metrics
+  selector:
+    {{- include "redis.selectorLabels" . | nindent 4 }}
+{{- end }}
