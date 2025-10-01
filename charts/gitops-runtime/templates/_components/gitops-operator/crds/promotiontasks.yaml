@@ -506,6 +506,18 @@ spec:
                           - Syncing
                           - Complete
                           type: string
+                        prStatus:
+                          properties:
+                            isClosed:
+                              description: |-
+                                IsClosed is true if either the PR is merged or closed without merging. If the PR is merged, MergeCommitSHA will
+                                also be set.
+                              type: boolean
+                            mergeCommitSha:
+                              type: string
+                          required:
+                          - isClosed
+                          type: object
                         prUrl:
                           format: uri
                           type: string
