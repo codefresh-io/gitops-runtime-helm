@@ -613,8 +613,8 @@ app-proxy:
   nameOverride: ""
   fullnameOverride: "cap-app-proxy"
   config:
-    # -- ArgoCD user to be used by app-proxy
-    argoCdUsername: "admin"
+    # -- deprecated. use `global.external-argo-cd.auth.username` instead
+    argoCdUsername: ""
     # -- ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to
     argoCdUrl:
     # -- Workflows server url. Determined by chart logic. Do not change unless you are certain you need to

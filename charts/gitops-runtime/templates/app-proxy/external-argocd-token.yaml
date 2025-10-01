@@ -1,5 +1,5 @@
 {{- $externalArgoCDValues := (index .Values "global" "external-argo-cd" "auth") }}
-{{- if $externalArgoCDValues.password -}}
+{{- if $externalArgoCDValues.password }}
 ---
 apiVersion: v1
 kind: Secret
@@ -12,7 +12,7 @@ stringData:
   token: {{ $externalArgoCDValues.password }}
 {{- end }}
 
-{{- if $externalArgoCDValues.token -}}
+{{- if $externalArgoCDValues.token }}
 ---
 apiVersion: v1
 kind: Secret
