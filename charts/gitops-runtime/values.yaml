@@ -728,7 +728,7 @@ gitops-operator:
   image:
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: b9481f8
+    tag: 6cad5ad
   env:
     GITOPS_OPERATOR_VERSION: 0.10.1 # hacky workaround, since our tags are no longer semver compliant
   serviceAccount:
