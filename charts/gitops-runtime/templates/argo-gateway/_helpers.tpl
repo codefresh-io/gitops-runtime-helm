@@ -25,6 +25,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: argo-gateway
+app.kubernetes.io/component: argo-gateway
 codefresh.io/internal: "true"
 {{- end }}
 
