@@ -152,7 +152,6 @@ spec:
                                 items:
                                   properties:
                                     path:
-                                      minLength: 1
                                       type: string
                                     value:
                                       type: string
@@ -208,7 +207,6 @@ spec:
                                 items:
                                   properties:
                                     path:
-                                      minLength: 1
                                       type: string
                                     value:
                                       type: string
@@ -404,7 +402,6 @@ spec:
                                 items:
                                   properties:
                                     path:
-                                      minLength: 1
                                       type: string
                                     value:
                                       type: string
