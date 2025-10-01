@@ -1,0 +1,630 @@
+{{- define "gitops-operator.crds.promotion-task" }}
+  {{- if .Values.crds.install }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: promotiontasks.codefresh.io
+  annotations:
+    {{- if .Values.crds.keep }}
+    "helm.sh/resource-policy": keep
+    {{- end }}
+    {{- with .Values.crds.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    app.kubernetes.io/name: promotiontasks.codefresh.io
+    app.kubernetes.io/part-of: gitops-operator
+    {{- with .Values.crds.additionalLabels }}
+      {{- toYaml . | nindent 4}}
+    {{- end }}
+spec:
+  group: codefresh.io
+  names:
+    kind: PromotionTask
+    listKind: PromotionTaskList
+    plural: promotiontasks
+    shortNames:
+    - promtask
+    - promtasks
+    singular: promotiontask
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.phase
+      name: Phase
+      type: string
+    - jsonPath: .status.updatedAt
+      name: Updated
+      type: date
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: PromotionTask is used by Codefresh Gitops Cloud to run tasks
+          on runtimes related to promotions
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: PromotionTaskSpec defines the desired state of PromotionTask
+            properties:
+              steps:
+                description: |-
+                  Steps defines the sequence of operations to perform during the promotion task.
+                  Each step represents a different type of operation (workflow execution, app promotion, verification, etc.)
+                items:
+                  description: |-
+                    StepSpec defines a single step in a promotion task. Each step can be one of several types:
+                    runWorkflow, promoteAppWithCommit, promoteAppWithPR, verifyApp, or getPromotionValues.
+                    Exactly one of these fields must be specified.
+                  properties:
+                    getPromotionValues:
+                      properties:
+                        commitSha:
+                          maxLength: 40
+                          minLength: 7
+                          pattern: ^[A-Fa-f0-9]+$
+                          type: string
+                        promotionProperties:
+                          items:
+                            properties:
+                              file:
+                                minLength: 1
+                                pattern: ^[^\x00]*$
+                                type: string
+                              properties:
+                                items:
+                                  type: string
+                                minItems: 1
+                                type: array
+                            required:
+                            - file
+                            - properties
+                            type: object
+                          minItems: 1
+                          type: array
+                        targetApplication:
+                          properties:
+                            name:
+                              maxLength: 253
+                              minLength: 1
+                              pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?)(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                              type: string
+                            namespace:
+                              maxLength: 63
+                              minLength: 1
+                              pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                              type: string
+                          required:
+                          - name
+                          - namespace
+                          type: object
+                        versionProperty:
+                          properties:
+                            file:
+                              minLength: 1
+                              pattern: ^[^\x00]*$
+                              type: string
+                            jsonPath:
+                              minLength: 1
+                              pattern: ^\$[.\[\]'"0-9a-zA-Z_*?@()]*$
+                              type: string
+                          required:
+                          - file
+                          - jsonPath
+                          type: object
+                      required:
+                      - commitSha
+                      - promotionProperties
+                      - targetApplication
+                      type: object
+                    promoteAppWithCommit:
+                      properties:
+                        commitDescription:
+                          type: string
+                        commitMessage:
+                          type: string
+                        promotionValues:
+                          items:
+                            properties:
+                              file:
+                                minLength: 1
+                                pattern: ^[^\x00]*$
+                                type: string
+                              properties:
+                                items:
+                                  properties:
+                                    path:
+                                      minLength: 1
+                                      type: string
+                                    value:
+                                      minLength: 1
+                                      type: string
+                                  required:
+                                  - path
+                                  - value
+                                  type: object
+                                minItems: 1
+                                type: array
+                            required:
+                            - file
+                            - properties
+                            type: object
+                          type: array
+                        targetApplication:
+                          properties:
+                            name:
+                              maxLength: 253
+                              minLength: 1
+                              pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?)(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                              type: string
+                            namespace:
+                              maxLength: 63
+                              minLength: 1
+                              pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                              type: string
+                          required:
+                          - name
+                          - namespace
+                          type: object
+                      required:
+                      - commitDescription
+                      - commitMessage
+                      - promotionValues
+                      - targetApplication
+                      type: object
+                    promoteAppWithPR:
+                      properties:
+                        prBranchName:
+                          type: string
+                        prDescription:
+                          type: string
+                        prTitle:
+                          type: string
+                        promotionValues:
+                          items:
+                            properties:
+                              file:
+                                minLength: 1
+                                pattern: ^[^\x00]*$
+                                type: string
+                              properties:
+                                items:
+                                  properties:
+                                    path:
+                                      minLength: 1
+                                      type: string
+                                    value:
+                                      minLength: 1
+                                      type: string
+                                  required:
+                                  - path
+                                  - value
+                                  type: object
+                                minItems: 1
+                                type: array
+                            required:
+                            - file
+                            - properties
+                            type: object
+                          type: array
+                        targetApplication:
+                          properties:
+                            name:
+                              maxLength: 253
+                              minLength: 1
+                              pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?)(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                              type: string
+                            namespace:
+                              maxLength: 63
+                              minLength: 1
+                              pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                              type: string
+                          required:
+                          - name
+                          - namespace
+                          type: object
+                      required:
+                      - prBranchName
+                      - prDescription
+                      - prTitle
+                      - promotionValues
+                      - targetApplication
+                      type: object
+                    runWorkflow:
+                      properties:
+                        labels:
+                          additionalProperties:
+                            type: string
+                          type: object
+                        parameters:
+                          additionalProperties:
+                            type: string
+                          type: object
+                        workflowTemplateName:
+                          maxLength: 253
+                          minLength: 1
+                          pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?)(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                          type: string
+                      required:
+                      - workflowTemplateName
+                      type: object
+                    verifyApp:
+                      properties:
+                        commitSha:
+                          maxLength: 40
+                          minLength: 7
+                          pattern: ^[A-Fa-f0-9]+$
+                          type: string
+                        targetApplication:
+                          properties:
+                            name:
+                              maxLength: 253
+                              minLength: 1
+                              pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?)(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                              type: string
+                            namespace:
+                              maxLength: 63
+                              minLength: 1
+                              pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                              type: string
+                          required:
+                          - name
+                          - namespace
+                          type: object
+                      required:
+                      - targetApplication
+                      type: object
+                  type: object
+                  x-kubernetes-validations:
+                  - message: exactly one of the fields in [runWorkflow promoteAppWithCommit
+                      promoteAppWithPR verifyApp getPromotionValues] must be set
+                    rule: '[has(self.runWorkflow),has(self.promoteAppWithCommit),has(self.promoteAppWithPR),has(self.verifyApp),has(self.getPromotionValues)].filter(x,x==true).size()
+                      == 1'
+                maxItems: 100
+                minItems: 1
+                type: array
+            required:
+            - steps
+            type: object
+          status:
+            description: PromotionTaskStatus defines the observed state of PromotionTask
+            properties:
+              conditions:
+                items:
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+              createdAt:
+                format: date-time
+                type: string
+              observedGeneration:
+                format: int64
+                type: integer
+              phase:
+                description: PromotionTaskPhase
+                enum:
+                - Pending
+                - Executing
+                - Terminating
+                - Succeeded
+                - Failed
+                - Terminated
+                - Suspended
+                type: string
+              steps:
+                items:
+                  description: StepStatus
+                  properties:
+                    failureSummary:
+                      type: string
+                    getPromotionValues:
+                      properties:
+                        phase:
+                          description: GetPromotionValuesStatusPhase
+                          enum:
+                          - Pending
+                          - GotPromotionValues
+                          - Complete
+                          type: string
+                        promotionValues:
+                          items:
+                            properties:
+                              file:
+                                minLength: 1
+                                pattern: ^[^\x00]*$
+                                type: string
+                              properties:
+                                items:
+                                  properties:
+                                    path:
+                                      minLength: 1
+                                      type: string
+                                    value:
+                                      minLength: 1
+                                      type: string
+                                  required:
+                                  - path
+                                  - value
+                                  type: object
+                                minItems: 1
+                                type: array
+                            required:
+                            - file
+                            - properties
+                            type: object
+                          type: array
+                        version:
+                          type: string
+                      required:
+                      - phase
+                      type: object
+                    phase:
+                      description: PromotionTaskPhase
+                      enum:
+                      - Pending
+                      - Executing
+                      - Terminating
+                      - Succeeded
+                      - Failed
+                      - Terminated
+                      - Suspended
+                      type: string
+                    promoteAppWithCommit:
+                      properties:
+                        appStatus:
+                          properties:
+                            health:
+                              description: Represents resource health status
+                              type: string
+                            healthMessage:
+                              type: string
+                            sync:
+                              description: SyncStatusCode is a type which represents
+                                possible comparison results
+                              type: string
+                            syncOperation:
+                              type: string
+                            syncOperationMessage:
+                              type: string
+                          required:
+                          - health
+                          - healthMessage
+                          - sync
+                          type: object
+                        commitSha:
+                          maxLength: 40
+                          minLength: 7
+                          pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
+                          type: string
+                        phase:
+                          description: PromoteAppWithCommitPhase
+                          enum:
+                          - Pending
+                          - CommitDone
+                          - Syncing
+                          - Complete
+                          type: string
+                      required:
+                      - phase
+                      type: object
+                    promoteAppWithPR:
+                      properties:
+                        appStatus:
+                          properties:
+                            health:
+                              description: Represents resource health status
+                              type: string
+                            healthMessage:
+                              type: string
+                            sync:
+                              description: SyncStatusCode is a type which represents
+                                possible comparison results
+                              type: string
+                            syncOperation:
+                              type: string
+                            syncOperationMessage:
+                              type: string
+                          required:
+                          - health
+                          - healthMessage
+                          - sync
+                          type: object
+                        phase:
+                          description: PromoteAppWithPRPhase
+                          enum:
+                          - Pending
+                          - PRCreated
+                          - Syncing
+                          - Complete
+                          type: string
+                        prUrl:
+                          format: uri
+                          type: string
+                      required:
+                      - phase
+                      type: object
+                    runWorkflow:
+                      properties:
+                        nodes:
+                          items:
+                            properties:
+                              error:
+                                type: string
+                              name:
+                                minLength: 1
+                                type: string
+                              phase:
+                                description: NodePhase is a label for the condition
+                                  of a node at the current time.
+                                type: string
+                            required:
+                            - name
+                            - phase
+                            type: object
+                          type: array
+                        phase:
+                          description: RunWorkflowStatusPhase
+                          enum:
+                          - Unknown
+                          - Pending
+                          - Running
+                          - Succeeded
+                          - Failed
+                          - Error
+                          - Suspended
+                          type: string
+                        workflowName:
+                          maxLength: 253
+                          pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?)(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                          type: string
+                        workflowUID:
+                          description: |-
+                            UID is a type that holds unique ID values, including UUIDs.  Because we
+                            don't ONLY use UUIDs, this is an alias to string.  Being a type captures
+                            intent and helps make sure that UIDs and names do not get conflated.
+                          type: string
+                      required:
+                      - phase
+                      type: object
+                    startedAt:
+                      format: date-time
+                      type: string
+                    updatedAt:
+                      format: date-time
+                      type: string
+                    verifyApp:
+                      properties:
+                        appStatus:
+                          properties:
+                            health:
+                              description: Represents resource health status
+                              type: string
+                            healthMessage:
+                              type: string
+                            sync:
+                              description: SyncStatusCode is a type which represents
+                                possible comparison results
+                              type: string
+                            syncOperation:
+                              type: string
+                            syncOperationMessage:
+                              type: string
+                          required:
+                          - health
+                          - healthMessage
+                          - sync
+                          type: object
+                        commitSha:
+                          maxLength: 40
+                          minLength: 7
+                          pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
+                          type: string
+                        phase:
+                          description: VerifyAppPhase
+                          enum:
+                          - Pending
+                          - Syncing
+                          - Complete
+                          type: string
+                      required:
+                      - phase
+                      type: object
+                  required:
+                  - phase
+                  - startedAt
+                  - updatedAt
+                  type: object
+                  x-kubernetes-validations:
+                  - message: exactly one of the fields in [runWorkflow promoteAppWithCommit
+                      promoteAppWithPR verifyApp getPromotionValues] must be set
+                    rule: '[has(self.runWorkflow),has(self.promoteAppWithCommit),has(self.promoteAppWithPR),has(self.verifyApp),has(self.getPromotionValues)].filter(x,x==true).size()
+                      == 1'
+                maxItems: 100
+                minItems: 1
+                type: array
+              updatedAt:
+                format: date-time
+                type: string
+            required:
+            - createdAt
+            - phase
+            - updatedAt
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+  {{- end }}
+{{- end }}

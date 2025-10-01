@@ -224,7 +224,7 @@ sealed-secrets:
   image:
     registry: 'quay.io'
     repository: 'codefresh/sealed-secrets-controller'
-    tag: '0.29.0'
+    tag: '0.32.0'
   resources:
     limits:
       cpu: 500m
@@ -551,27 +551,27 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.15-main
+          tag: 1.1.16-main
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.15-main
+          tag: 1.1.16-main
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.15-main
+          tag: 1.1.16-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3735.0
+    tag: 1.3791.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3735.0
+      tag: 1.3791.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -726,7 +726,9 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: v0.11.1
+    tag: 3ac2676
+  env:
+    GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
     create: true
     annotations: {}
@@ -759,7 +761,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/cf-argocd-extras
-        tag: v0.5.14
+        tag: "1556733"
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -783,7 +785,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/cf-argocd-extras
-        tag: v0.5.14
+        tag: "1556733"
     nodeSelector: {}
     tolerations: []
     affinity: {}
