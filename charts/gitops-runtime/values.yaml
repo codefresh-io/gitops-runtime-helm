@@ -525,15 +525,15 @@ app-proxy:
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
           tag: 1.1.15-main
   image:
-    repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3750.0
+    repository: quay.io/codefresh/dev/cap-app-proxy
+    tag: 1.3795.0-cr-31129-resource-reporter-5a7ccae
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
-      repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3750.0
+      repository: quay.io/codefresh/dev/cap-app-proxy-init
+      tag: 1.3795.0-cr-31129-resource-reporter-5a7ccae
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
