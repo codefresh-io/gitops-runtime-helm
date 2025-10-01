@@ -201,7 +201,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/dev/cf-argocd-extras
-      tag: cr-30629-resource-reporter-workqueu-2-495366e
+      tag: cr-30629-resource-reporter-workqueu-2-1d99b0b
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -717,7 +717,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/dev/cf-argocd-extras
-    tag: cr-30629-resource-reporter-workqueu-2-495366e
+    tag: cr-30629-resource-reporter-workqueu-2-1d99b0b
   nodeSelector: {}
   tolerations: []
   affinity: {}
