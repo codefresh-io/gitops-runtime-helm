@@ -14,3 +14,7 @@ postgresql-ha:
   enabled: false
 postgresql:
   enabled: true
+  image:
+    registry: docker.io
+    repository: bitnamicharts/gitea
+    tag: sha256-b5a2e4a468a66945d67ce4d34f1b1b3d98e7887d137ed285cf9b16e1c52446b1
