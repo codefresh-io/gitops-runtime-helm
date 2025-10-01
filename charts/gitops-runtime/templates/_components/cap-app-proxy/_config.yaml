@@ -6,7 +6,6 @@ isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote
 isExternalArgoCD: {{ .Values.global.runtime.isExternalArgoCD | quote }}
 runtimeName: {{ required "global.runtime.name is required" .Values.global.runtime.name | quote}}
 isNamespacedRuntime: {{ .Values.global.runtime.singleNamespace | quote }}
-skipGitPermissionValidation: {{ .Values.config.skipGitPermissionValidation | quote }}
 logLevel: {{ .Values.config.logLevel | quote }}
   {{- $enrichmentValues := get .Values "image-enrichment" }}
   {{- if $enrichmentValues.enabled }}
@@ -25,7 +24,7 @@ enrichmentJiraEnrichmentImage: {{ printf "%s/%s:%s" $enrichmentValues.config.ima
 
 {{- define "cap-app-proxy.resources.configmap" }}
 {{- $documentedConfigs := (include "cap-app-proxy.resources.configmap-documented-configs" . | fromYaml ) }}
-{{- $overrides := omit .Values.config "argoWorkflowsInsecure" "clusterChunkSize" "cors" "singleNamespace" "skipGitPermissionValidation" }}
+{{- $overrides := omit .Values.config "argoWorkflowsInsecure" "clusterChunkSize" "cors" }}
 {{- $mergedConfig := mergeOverwrite $documentedConfigs $overrides }}
 apiVersion: v1
 kind: ConfigMap
