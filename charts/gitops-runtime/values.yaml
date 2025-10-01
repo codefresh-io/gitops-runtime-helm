@@ -280,7 +280,7 @@ argo-cd:
     # -- Extract application version based on ApplicationConfiguration CRD
     useApplicationConfiguration: true
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-events-2.4.8-cap-CR-29689/charts/argo-events
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-events-2.4.9-cap-CR-30841/charts/argo-events
 # *********************************************************************************************************************
 argo-events:
   fullnameOverride: argo-events
@@ -300,7 +300,7 @@ argo-events:
           configReloaderImage: natsio/nats-server-config-reloader:0.19.1
           startCommand: /nats-server
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-workflows-0.45.15-v3.6.7-cap-CR-28355/charts/argo-workflows
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-workflows-0.45.16-v3.6.7-cap-CR-30835/charts/argo-workflows
 # *********************************************************************************************************************
 argo-workflows:
   fullnameOverride: argo
@@ -330,7 +330,7 @@ codefreshWorkflowLogStoreCM:
   endpoint: gitops-workflow-logs.codefresh.io
   insecure: false
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-rollouts-2.37.3-6-v1.7.2-cap-CR-29629/charts/argo-rollouts
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-rollouts-2.37.3-7-v1.7.2-cap-OSS-697/charts/argo-rollouts
 # *********************************************************************************************************************
 argo-rollouts:
   enabled: true
