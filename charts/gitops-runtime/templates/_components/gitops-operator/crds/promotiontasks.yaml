@@ -366,6 +366,22 @@ spec:
               createdAt:
                 format: date-time
                 type: string
+              failure:
+                properties:
+                  code:
+                    type: string
+                  context:
+                    type: string
+                  message:
+                    type: string
+                  stepIndex:
+                    type: integer
+                required:
+                - code
+                - context
+                - message
+                - stepIndex
+                type: object
               observedGeneration:
                 format: int64
                 type: integer
@@ -384,8 +400,6 @@ spec:
                 items:
                   description: StepStatus
                   properties:
-                    failureSummary:
-                      type: string
                     getPromotionValues:
                       properties:
                         phase:
@@ -614,6 +628,32 @@ spec:
               updatedAt:
                 format: date-time
                 type: string
+              warnings:
+                items:
+                  properties:
+                    count:
+                      type: integer
+                    error:
+                      properties:
+                        code:
+                          type: string
+                        context:
+                          type: string
+                        message:
+                          type: string
+                        stepIndex:
+                          type: integer
+                      required:
+                      - code
+                      - context
+                      - message
+                      - stepIndex
+                      type: object
+                  required:
+                  - count
+                  - error
+                  type: object
+                type: array
             required:
             - createdAt
             - phase
