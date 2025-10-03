@@ -82,6 +82,16 @@ spec:
                           minLength: 7
                           pattern: ^[A-Fa-f0-9]+$
                           type: string
+                        committerInfo:
+                          properties:
+                            email:
+                              type: string
+                            username:
+                              type: string
+                          required:
+                          - email
+                          - username
+                          type: object
                         promotionProperties:
                           items:
                             properties:
@@ -393,6 +403,8 @@ spec:
                       type: string
                     getPromotionValues:
                       properties:
+                        committerAvatarUrl:
+                          type: string
                         phase:
                           description: GetPromotionValuesStatusPhase
                           enum:
