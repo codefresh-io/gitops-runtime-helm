@@ -77,12 +77,7 @@ spec:
                   properties:
                     getPromotionValues:
                       properties:
-                        commitSha:
-                          maxLength: 40
-                          minLength: 7
-                          pattern: ^[A-Fa-f0-9]+$
-                          type: string
-                        committerInfo:
+                        commitAuthorId:
                           properties:
                             email:
                               type: string
@@ -92,6 +87,11 @@ spec:
                           - email
                           - username
                           type: object
+                        commitSha:
+                          maxLength: 40
+                          minLength: 7
+                          pattern: ^[A-Fa-f0-9]+$
+                          type: string
                         promotionProperties:
                           items:
                             properties:
@@ -403,7 +403,7 @@ spec:
                       type: string
                     getPromotionValues:
                       properties:
-                        committerAvatarUrl:
+                        commitAuthorAvatarUrl:
                           type: string
                         phase:
                           description: GetPromotionValuesStatusPhase
