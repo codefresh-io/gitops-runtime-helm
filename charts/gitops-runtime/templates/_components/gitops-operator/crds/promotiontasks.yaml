@@ -391,14 +391,11 @@ spec:
                     type: string
                   stepIndex:
                     type: integer
-                  transient:
-                    type: boolean
                 required:
                 - code
                 - context
                 - message
                 - stepIndex
-                - transient
                 type: object
               observedGeneration:
                 format: int64
@@ -653,22 +650,27 @@ spec:
               warnings:
                 items:
                   properties:
-                    code:
-                      type: string
-                    context:
-                      type: string
-                    message:
-                      type: string
-                    stepIndex:
+                    count:
                       type: integer
-                    transient:
-                      type: boolean
+                    error:
+                      properties:
+                        code:
+                          type: string
+                        context:
+                          type: string
+                        message:
+                          type: string
+                        stepIndex:
+                          type: integer
+                      required:
+                      - code
+                      - context
+                      - message
+                      - stepIndex
+                      type: object
                   required:
-                  - code
-                  - context
-                  - message
-                  - stepIndex
-                  - transient
+                  - count
+                  - error
                   type: object
                 type: array
             required:
