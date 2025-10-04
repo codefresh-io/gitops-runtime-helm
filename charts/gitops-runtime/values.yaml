@@ -200,8 +200,8 @@ global:
     replicaCount: 2
     image:
       registry: quay.io
-      repository: codefresh/dev/cf-argocd-extras
-      tag: cr-30629-resource-reporter-workqueu-2-1d99b0b
+      repository: codefresh/cf-argocd-extras
+      tag: 695977c
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -716,8 +716,8 @@ gitops-operator:
 argo-gateway:
   image:
     registry: quay.io
-    repository: codefresh/dev/cf-argocd-extras
-    tag: cr-30629-resource-reporter-workqueu-2-1d99b0b
+    repository: codefresh/cf-argocd-extras
+    tag: 695977c
   nodeSelector: {}
   tolerations: []
   affinity: {}
