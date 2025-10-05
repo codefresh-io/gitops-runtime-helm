@@ -8,11 +8,15 @@
 # These values are used by the Helm install command in the test suite to
 # ensure a minimal and reliable Gitea setup for testing purposes.
 # -----------------------------------------------------------------------------
-redis-cluster:
-  enabled: false
 postgresql-ha:
   enabled: false
-postgresql:
-  enabled: true
-  image:
-    repository: bitnamilegacy/postgresql
+
+valkey-cluster:
+  enabled: false
+
+gitea:
+  config:
+    database:
+      DB_TYPE: sqlite3
+      HOST: localhost
+      PORT: 3306
