@@ -36,9 +36,11 @@ tests:
     template: app-proxy/config.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            username: adminoverride
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                username: adminoverride
     asserts:
       - equal:
           path: data.argoCdUsername
@@ -51,9 +53,11 @@ tests:
     template: app-proxy/config.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            username: external-adminoverride
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                username: external-adminoverride
       app-proxy:
         config:
           argoCdUsername: app-proxy-adminoverride
@@ -69,10 +73,12 @@ tests:
     template: app-proxy/config.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: some-token
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: some-token
     asserts:
       - notExists:
           path: data.argoCdUsername
@@ -124,11 +130,13 @@ tests:
     template: app-proxy/deployment.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            passwordSecretKeyRef:
-              name: name-override
-              key: key-override
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                passwordSecretKeyRef:
+                  name: name-override
+                  key: key-override
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -146,9 +154,11 @@ tests:
     template: app-proxy/deployment.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            password: token
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                password: token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -178,10 +188,12 @@ tests:
     template: app-proxy/deployment.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: plaintexttoken
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: plaintexttoken
     asserts:
       - notContains:
           any: true
@@ -196,10 +208,12 @@ tests:
     template: app-proxy/deployment.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: plaintexttoken
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: plaintexttoken
     asserts:
       - notContains:
           any: true
@@ -214,10 +228,12 @@ tests:
     template: app-proxy/deployment.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: plaintexttoken
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: plaintexttoken
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -235,12 +251,14 @@ tests:
     template: app-proxy/deployment.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            tokenSecretKeyRef:
-              name: my-argocd-secret
-              key: my-token
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-secret
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -258,12 +276,14 @@ tests:
     template: gitops-operator/deployment.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            tokenSecretKeyRef:
-              name: my-argocd-secret
-              key: my-token
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-secret
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -278,12 +298,14 @@ tests:
     template: gitops-operator/deployment.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            tokenSecretKeyRef:
-              name: my-argocd-secret
-              key: my-token
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-secret
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -298,10 +320,12 @@ tests:
     template: gitops-operator/deployment.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: "plaintexttoken"
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -316,10 +340,12 @@ tests:
     template: gitops-operator/deployment.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: "plaintexttoken"
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -434,12 +460,14 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            tokenSecretKeyRef:
-              name: my-argocd-token
-              key: my-token
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-token
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -454,12 +482,14 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            tokenSecretKeyRef:
-              name: my-argocd-token
-              key: my-token
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-token
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -474,10 +504,12 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: "plaintexttoken"
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -492,10 +524,12 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: "plaintexttoken"
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -564,12 +598,14 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            tokenSecretKeyRef:
-              name: my-argocd-token
-              key: my-token
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-token
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -584,12 +620,14 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            tokenSecretKeyRef:
-              name: my-argocd-token
-              key: my-token
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-token
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -604,10 +642,12 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: "plaintexttoken"
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -622,10 +662,12 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: "plaintexttoken"
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -666,12 +708,14 @@ tests:
     template: app-proxy/deployment.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: invalid
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: invalid
     asserts:
       - failedTemplate:
-          errorMessage: "Invalid value for .Values.global.external-argo-cd.auth.type: invalid. Allowed values are: [password token]"
+          errorMessage: "Invalid value for .Values.global.integrations.argo-cd.auth.type: invalid. Allowed values are: [password token]"
 
   - it: event-reporter StatefulSet should have valid ARGOCD_SERVER_ROOTPATH env var
     template: cf-argocd-extras/event-reporter/statefulset.yaml
@@ -746,10 +790,12 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: mytoken
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: mytoken
     asserts:
       - isKind:
           of: Secret
@@ -766,10 +812,12 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: password
-            password: mypassword
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: password
+                password: mypassword
     asserts:
       - isKind:
           of: Secret
@@ -799,16 +847,18 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          auth:
-            type: token
-            token: null
-            tokenSecretKeyRef:
-              name: null
-              key: null
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: null
+                tokenSecretKeyRef:
+                  name: null
+                  key: null
     asserts:
       - failedTemplate:
-          errorMessage: ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required"
+          errorMessage: ".Values.global.integrations.argo-cd.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.auth.tokenSecretKeyRef.name is required"
 
   - it: should require ArgoCd server address if it's not provided
     template: cf-argocd-extras/sources-server/deployment.yaml

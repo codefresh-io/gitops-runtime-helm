@@ -1,5 +1,5 @@
-{{- $externalArgoCDValues := (index .Values "global" "external-argo-cd" "auth") }}
-{{- if $externalArgoCDValues.password }}
+{{- $argoCdAuth := (index .Values "global" "integrations" "argo-cd" "server" "auth") }}
+{{- if $argoCdAuth.password }}
 ---
 apiVersion: v1
 kind: Secret
@@ -9,10 +9,10 @@ metadata:
     {{- include "codefresh-gitops-runtime.labels" . | nindent 4 }}
 type: Opaque
 stringData:
-  token: {{ $externalArgoCDValues.password }}
+  token: {{ $argoCdAuth.password }}
 {{- end }}
 
-{{- if $externalArgoCDValues.token }}
+{{- if $argoCdAuth.token }}
 ---
 apiVersion: v1
 kind: Secret
@@ -22,5 +22,5 @@ metadata:
     {{- include "codefresh-gitops-runtime.labels" . | nindent 4 }}
 type: Opaque
 stringData:
-  token: {{ $externalArgoCDValues.token }}
+  token: {{ $argoCdAuth.token }}
 {{- end }}

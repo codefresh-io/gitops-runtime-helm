@@ -131,6 +131,32 @@ global:
               cpu: 200m
               memory: 1Gi
               ephemeral-storage: 2Gi
+  integrations:
+    argo-cd:
+      server:
+        # -- How GitOps Runtime should authenticate with ArgoCD server
+        auth:
+          # -- Authentication type. Can be password or token
+          type: password
+          # If `auth.type=password` is set
+          # -- ArgoCD username in plain text
+          username: "admin"
+          # -- ArgoCD password in plain text
+          password: ""
+          # -- ArgoCD password referenced by an existing secret
+          passwordSecretKeyRef:
+            name: argocd-initial-admin-secret
+            key: password
+          # If `auth.type=token` is set
+          # -- ArgoCD token in plain text
+          token: ""
+          # -- ArgoCD token referenced by an existing secret
+          tokenSecretKeyRef: {}
+          # e.g:
+          # tokenSecretKeyRef:
+          #   name: argocd-token
+          #   key: token
+
   # -- Configuration for external ArgoCD
   # Should be used when `argo-cd.enabled` is set to false
   external-argo-cd:
@@ -154,29 +180,7 @@ global:
       svc: argocd-repo-server
       # -- Port of the ArgoCD repo server
       port: 8081
-      # -- ArgoCD username in plain text
-    # -- How GitOps Runtime should authenticate with ArgoCD
-    auth:
-      # -- Authentication type. Can be password or token
-      type: password
-      # If `auth.type=password` is set
-      # -- ArgoCD username in plain text
-      username: "admin"
-      # -- ArgoCD password in plain text
-      password: ""
-      # -- ArgoCD password referenced by an existing secret
-      passwordSecretKeyRef:
-        name: argocd-initial-admin-secret
-        key: password
-      # If `auth.type=token` is set
-      # -- ArgoCD token in plain text
-      token: ""
-      # -- ArgoCD token referenced by an existing secret
-      tokenSecretKeyRef: {}
-      # e.g:
-      # tokenSecretKeyRef:
-      #   name: argocd-token
-      #   key: token
+
   # -- Configuration for external Argo Rollouts
   external-argo-rollouts:
     # -- Rollout reporter settings

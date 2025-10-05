@@ -236,8 +236,8 @@ Determine argocd server url witout the protocol. Must be called with chart root 
 {{- end}}
 
 {{- define "codefresh-gitops-runtime.argocd-auth" -}}
-  {{- $authValues := (index .Values "global" "external-argo-cd" "auth") }}
-  {{- if (eq $authValues.type "password") }}
+  {{- $argoCdAuth := (index .Values "global" "integrations" "argo-cd" "server" "auth") }}
+  {{- if (eq $argoCdAuth.type "password") }}
 ARGO_CD_USERNAME:
   valueFrom:
     configMapKeyRef:
@@ -246,28 +246,28 @@ ARGO_CD_USERNAME:
 ARGO_CD_PASSWORD:
   valueFrom:
     secretKeyRef:
-    {{- if $authValues.password }}
+    {{- if $argoCdAuth.password }}
       name: gitops-runtime-argo-cd-password
       key: token
-    {{- else if $authValues.passwordSecretKeyRef }}
-      {{- $authValues.passwordSecretKeyRef | toYaml | nindent 6 }}
+    {{- else if $argoCdAuth.passwordSecretKeyRef }}
+      {{- $argoCdAuth.passwordSecretKeyRef | toYaml | nindent 6 }}
     {{- end }}
-  {{- else if (eq $authValues.type "token") }}
+  {{- else if (eq $argoCdAuth.type "token") }}
 ARGO_CD_TOKEN:
   valueFrom:
     secretKeyRef:
-    {{- if $authValues.token }}
+    {{- if $argoCdAuth.token }}
       name: gitops-runtime-argo-cd-token
       key: token
-    {{- else if $authValues.tokenSecretKeyRef }}
-      {{- if and (hasKey $authValues.tokenSecretKeyRef "name") (hasKey $authValues.tokenSecretKeyRef "key") }}
-        {{- $authValues.tokenSecretKeyRef | toYaml | nindent 6 }}
+    {{- else if $argoCdAuth.tokenSecretKeyRef }}
+      {{- if and (hasKey $argoCdAuth.tokenSecretKeyRef "name") (hasKey $argoCdAuth.tokenSecretKeyRef "key") }}
+        {{- $argoCdAuth.tokenSecretKeyRef | toYaml | nindent 6 }}
       {{- else }}
-        {{- fail "Both 'name' and 'key' must be set in .Values.global.external-argo-cd.auth.tokenSecretKeyRef" }}
+        {{- fail "Both 'name' and 'key' must be set in .Values.global.integrations.argo-cd.auth.tokenSecretKeyRef" }}
       {{- end }}
     {{- end }}
   {{- else }}
-    {{ fail (printf "Invalid value for .Values.global.external-argo-cd.auth.type: %s. Allowed values are: [password token]" $authValues.type) }}
+    {{ fail (printf "Invalid value for .Values.global.integrations.argo-cd.auth.type: %s. Allowed values are: [password token]" $argoCdAuth.type) }}
   {{- end }}
 {{- end }}
 
@@ -275,9 +275,9 @@ ARGO_CD_TOKEN:
 Determine argocd server username ConfigMap.
 */}}
 {{- define "codefresh-gitops-runtime.argocd.server.username-cm" }}
-  {{- $externalArgoCDValues := (index .Values "global" "external-argo-cd" "auth") }}
+  {{- $externalArgoCDValues := (index .Values "global" "integrations" "argo-cd" "server" "auth") }}
   {{- if (eq $externalArgoCDValues.type "password") }}
-    {{- coalesce (index .Values "app-proxy" "config" "argoCdUsername") (index .Values "global" "external-argo-cd" "auth" "username") "" }}
+    {{- coalesce (index .Values "app-proxy" "config" "argoCdUsername") (index .Values "global" "integrations" "argo-cd" "server" "auth" "username") "" }}
   {{- end }}
 {{- end }}
 
