@@ -23,7 +23,7 @@ kind: TestSuite
 commands:
   - command: helm upgrade --install --namespace mockserver --create-namespace --version 5.14.0 --set="service.type=ClusterIP" mockserver mockserver/mockserver
   - command: kubectl -n mockserver wait --for=condition=available --timeout=120s deployment/mockserver
-  - command: helm install gitea oci://registry-1.docker.io/giteacharts/gitea --version 10.1.0 --values ./setup/values/gitea.values.yaml -n gitea --create-namespace
+  - command: helm install gitea oci://docker.gitea.com/charts/gitea:12.3.0 --values ./setup/values/gitea.values.yaml -n gitea --create-namespace
   - command: kubectl -n gitea wait --for=condition=available --timeout=180s deployment/gitea
   - script: ./setup/scripts/init.sh
     background: true
