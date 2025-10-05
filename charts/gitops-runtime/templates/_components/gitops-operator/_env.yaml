@@ -24,6 +24,8 @@ WORKFLOW_MONITOR_POLLING_INTERVAL: {{ .Values.config.workflowMonitorPollingInter
 
 {{- define "gitops-operator.resources.environment-variables.defaults" -}}
 AP_URL: http://cap-app-proxy:3017
+ARGO_CD_URL: argo-cd-server:80
+ARGO_WF_URL: http://argo-server:2746
 CF_TOKEN:
   valueFrom:
     secretKeyRef:
