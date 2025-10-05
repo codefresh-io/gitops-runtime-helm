@@ -1,4 +1,5 @@
 {{- define "cf-argocd-extras.default-values" }}
+  {{- $argoCdAuth := (include "codefresh-gitops-runtime.argocd-token-auth" . | fromYaml) }}
 global: {}
 
 externalRedis:
@@ -84,8 +85,7 @@ eventReporter:
             name: argocd-cmd-params-cm
             key: server.rootpath
             optional: true
-      ARGO_CD_TOKEN_SECRET_NAME: argocd-token
-      ARGO_CD_TOKEN_SECRET_KEY: token
+{{ $argoCdAuth | toYaml | indent 6 }}
       BINARY_NAME: event-reporter
       CODEFRESH_SSL_CERT_PATH: ""
       CODEFRESH_TLS_INSECURE:
@@ -392,8 +392,7 @@ sourcesServer:
           configMapKeyRef:
             name: sources-server-cmd-params-cm
             key: argocd.server
-      ARGO_CD_TOKEN_SECRET_NAME: argocd-token
-      ARGO_CD_TOKEN_SECRET_KEY: token
+{{ $argoCdAuth | toYaml | indent 6}}
       ARGOCD_SERVER_ROOTPATH:
         valueFrom:
           configMapKeyRef:

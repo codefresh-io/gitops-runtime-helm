@@ -6,19 +6,6 @@
 {{- $_ := set $context "Values" $vals }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 
-{{- $argoCdAuth := (index .Values "global" "integrations" "argo-cd" "server" "auth") }}
-{{- if (eq $argoCdAuth.type "token") }}
-  {{- if $argoCdAuth.token }}
-    {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_NAME" "gitops-runtime-argo-cd-token" }}
-    {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_KEY" "token" }}
-  {{- else if $argoCdAuth.tokenSecretKeyRef }}
-    {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.integrations.argo-cd.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.auth.tokenSecretKeyRef.name is required" $argoCdAuth.tokenSecretKeyRef.name) }}
-    {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.integrations.argo-cd.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.auth.tokenSecretKeyRef.key is required" $argoCdAuth.tokenSecretKeyRef.key) }}
-  {{- else }}
-    {{ fail ".Values.global.integrations.argo-cd.auth.type is 'token' and .Values.global.integrations.argo-cd.auth.token or .Values.global.integrations.argo-cd.auth.tokenSecretKeyRef are not set" }}
-  {{- end }}
-{{- end }}
-
 {{/* Set argo-cd-server service and port */}}
 {{ if not (index $context.Values "env" "ARGO_CD_URL") }}
 {{- $_ := set $context.Values.env "ARGO_CD_URL" (include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . ) }}
@@ -36,12 +23,6 @@
 {{- if or $context.Values.global.codefresh.tls.caCerts.secret.create $context.Values.global.codefresh.tls.caCerts.secretKeyRef}}
   {{- $_ := set $context.Values.global.codefresh.tls.caCerts.secretKeyRef "name" ($context.Values.global.codefresh.tls.caCerts.secret.create | ternary "codefresh-tls-certs" $context.Values.global.codefresh.tls.caCerts.secretKeyRef.name) }}
   {{- $_ := set $context.Values.global.codefresh.tls.caCerts.secretKeyRef "key" ($context.Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" $context.Values.global.codefresh.tls.caCerts.secret.key) $context.Values.global.codefresh.tls.caCerts.secretKeyRef.key) }}
-{{- end }}
-
-{{- if and (gt (int $context.Values.replicaCount) 1 ) }}
-  {{- $_ := set $context.Values.env "LEADER_ELECT" "true" }}
-{{- else }}
-  {{- $_ := set $context.Values.env "LEADER_ELECT" "false" }}
 {{- end }}
 
 {{- include "gitops-operator.resources.deployment" $context }}

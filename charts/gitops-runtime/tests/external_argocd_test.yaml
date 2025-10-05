@@ -715,7 +715,7 @@ tests:
                 type: invalid
     asserts:
       - failedTemplate:
-          errorMessage: "Invalid value for .Values.global.integrations.argo-cd.auth.type: invalid. Allowed values are: [password token]"
+          errorMessage: "Invalid value for .Values.global.integrations.argo-cd.server.auth.type: invalid. Allowed values are: [password token]"
 
   - it: event-reporter StatefulSet should have valid ARGOCD_SERVER_ROOTPATH env var
     template: cf-argocd-extras/event-reporter/statefulset.yaml
@@ -858,7 +858,7 @@ tests:
                   key: null
     asserts:
       - failedTemplate:
-          errorMessage: ".Values.global.integrations.argo-cd.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.auth.tokenSecretKeyRef.name is required"
+          errorMessage: ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.server.auth.tokenSecretKeyRef.name is required"
 
   - it: should require ArgoCd server address if it's not provided
     template: cf-argocd-extras/sources-server/deployment.yaml

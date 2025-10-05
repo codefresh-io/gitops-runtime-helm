@@ -263,11 +263,32 @@ ARGO_CD_TOKEN:
       {{- if and (hasKey $argoCdAuth.tokenSecretKeyRef "name") (hasKey $argoCdAuth.tokenSecretKeyRef "key") }}
         {{- $argoCdAuth.tokenSecretKeyRef | toYaml | nindent 6 }}
       {{- else }}
-        {{- fail "Both 'name' and 'key' must be set in .Values.global.integrations.argo-cd.auth.tokenSecretKeyRef" }}
+        {{- fail "Both 'name' and 'key' must be set in .Values.global.integrations.argo-cd.server.auth.tokenSecretKeyRef" }}
       {{- end }}
     {{- end }}
   {{- else }}
-    {{ fail (printf "Invalid value for .Values.global.integrations.argo-cd.auth.type: %s. Allowed values are: [password token]" $argoCdAuth.type) }}
+    {{ fail (printf "Invalid value for .Values.global.integrations.argo-cd.server.auth.type: %s. Allowed values are: [password token]" $argoCdAuth.type) }}
+  {{- end }}
+{{- end }}
+
+{{/*
+Used by gitops-operator, event-reporter and sources-server to use the correct secret name/key for argo-cd token
+*/}}
+{{- define "codefresh-gitops-runtime.argocd-token-auth" }}
+  {{- $argoCdAuth := (index .Values "global" "integrations" "argo-cd" "server" "auth") }}
+  {{- if (eq $argoCdAuth.type "password") }}
+ARGO_CD_TOKEN_SECRET_NAME: argocd-token
+ARGO_CD_TOKEN_SECRET_KEY: token
+  {{- else if (eq $argoCdAuth.type "token") }}
+    {{- if $argoCdAuth.token }}
+ARGO_CD_TOKEN_SECRET_NAME: gitops-runtime-argo-cd-token
+ARGO_CD_TOKEN_SECRET_KEY: token
+    {{- else if $argoCdAuth.tokenSecretKeyRef }}
+ARGO_CD_TOKEN_SECRET_NAME: {{ required ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.server.auth.tokenSecretKeyRef.name is required" $argoCdAuth.tokenSecretKeyRef.name }}
+ARGO_CD_TOKEN_SECRET_KEY: {{ required ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.server.auth.tokenSecretKeyRef.key is required" $argoCdAuth.tokenSecretKeyRef.key }}
+    {{- end }}
+  {{- else }}
+    {{ fail (printf "Invalid value for .Values.global.integrations.argo-cd.server.auth.type: %s. Allowed values are: [password token]" $argoCdAuth.type) }}
   {{- end }}
 {{- end }}
 
