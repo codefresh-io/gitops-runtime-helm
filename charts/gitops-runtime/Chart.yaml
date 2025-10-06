@@ -15,17 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: backport redis bump fix 0.24 (#770)
-    - kind: changed
-      description: 'fix: component-test gitea deployment (#766)'
-    - kind: changed
-      description: 'fix: app-proxy fails to report new and closed pr to product-components (#761)'
-    - kind: changed
-      description: '[gitops-operator]fix: promotions using pull requests do not resume after the pr has been merged (#753)'
-    - kind: changed
-      description: '[app-proxy]fix: git-source permissions are not being calculated for fine-grained tokens (#6683) (#749)'
-    - kind: changed
-      description: 'chore(CR-30960): update enrichment images tag (#747)'
+      description: 'feat: added runtime label to codefresh cm (#781)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
