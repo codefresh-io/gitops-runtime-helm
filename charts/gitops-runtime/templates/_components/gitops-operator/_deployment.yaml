@@ -3,9 +3,8 @@
 {{/* Merge environment variables from calculated, defaults and overwrites */}}
 {{- $defaults := (include "gitops-operator.resources.environment-variables.defaults" . | fromYaml) }}
 {{- $calculated := (include "gitops-operator.resources.environment-variables.calculated" . | fromYaml) }}
-{{- $argoCdAuth := (include "codefresh-gitops-runtime.argocd-token-auth" . | fromYaml) }}
 {{- $overrides := .Values.env }}
-{{- $mergedValues := mergeOverwrite $defaults $calculated $argoCdAuth $overrides }}
+{{- $mergedValues := mergeOverwrite $defaults $calculated $overrides }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
