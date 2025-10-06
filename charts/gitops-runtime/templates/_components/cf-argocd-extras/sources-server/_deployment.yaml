@@ -15,16 +15,6 @@
   {{- $_ := set $context.Values.container.env.REDIS_PASSWORD.valueFrom.secretKeyRef "key"  (default "redis-password" $vals.externalRedis.existingSecretKeyRef.key) }}
 {{- end }}
 
-{{- if and (eq (index $context.Values "global" "external-argo-cd" "auth" "type") "token") }}
-  {{- if not (index $context.Values "global" "external-argo-cd" "auth" "token") }}
-      {{- $_ := set $context.Values.container.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required" (index $context.Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "name")) }}
-      {{- $_ := set $context.Values.container.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.key is required" (index $context.Values "global" "external-argo-cd" "auth" "tokenSecretKeyRef" "key" )) }}
-  {{- else }}
-      {{- $_ := set $context.Values.container.env "ARGO_CD_TOKEN_SECRET_NAME" "gitops-runtime-argo-cd-token" }}
-      {{- $_ := set $context.Values.container.env "ARGO_CD_TOKEN_SECRET_KEY" "token" }}
-  {{- end }}
-{{- end }}
-
 {{- if and (index $context.Values "global" "external-argo-cd" "server" "rootpath") }}
   {{- $_ := set $context.Values.container.env "ARGOCD_SERVER_ROOTPATH" (index $context.Values "global" "external-argo-cd" "server" "rootpath") }}
 {{- end }}
