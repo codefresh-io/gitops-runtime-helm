@@ -131,6 +131,32 @@ global:
               cpu: 200m
               memory: 1Gi
               ephemeral-storage: 2Gi
+  integrations:
+    argo-cd:
+      server:
+        # -- How GitOps Runtime should authenticate with ArgoCD server
+        auth:
+          # -- Authentication type. Can be password or token
+          type: password
+          # If `auth.type=password` is set
+          # -- ArgoCD username in plain text
+          username: "admin"
+          # -- ArgoCD password in plain text
+          password: ""
+          # -- ArgoCD password referenced by an existing secret
+          passwordSecretKeyRef:
+            name: argocd-initial-admin-secret
+            key: password
+          # If `auth.type=token` is set
+          # -- ArgoCD token in plain text
+          token: ""
+          # -- ArgoCD token referenced by an existing secret
+          tokenSecretKeyRef: {}
+          # e.g:
+          # tokenSecretKeyRef:
+          #   name: argocd-token
+          #   key: token
+
   # -- Configuration for external ArgoCD
   # Should be used when `argo-cd.enabled` is set to false
   external-argo-cd:
@@ -154,29 +180,7 @@ global:
       svc: argocd-repo-server
       # -- Port of the ArgoCD repo server
       port: 8081
-      # -- ArgoCD username in plain text
-    # -- How GitOps Runtime should authenticate with ArgoCD
-    auth:
-      # -- Authentication type. Can be password or token
-      type: password
-      # If `auth.type=password` is set
-      # -- ArgoCD username in plain text
-      username: "admin"
-      # -- ArgoCD password in plain text
-      password: ""
-      # -- ArgoCD password referenced by an existing secret
-      passwordSecretKeyRef:
-        name: argocd-initial-admin-secret
-        key: password
-      # If `auth.type=token` is set
-      # -- ArgoCD token in plain text
-      token: ""
-      # -- ArgoCD token referenced by an existing secret
-      tokenSecretKeyRef: {}
-      # e.g:
-      # tokenSecretKeyRef:
-      #   name: argocd-token
-      #   key: token
+
   # -- Configuration for external Argo Rollouts
   external-argo-rollouts:
     # -- Rollout reporter settings
@@ -513,27 +517,27 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.15-main
+          tag: 1.1.16-main
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.15-main
+          tag: 1.1.16-main
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.15-main
+          tag: 1.1.16-main
   image:
-    repository: quay.io/codefresh/dev/cap-app-proxy
-    tag: 1.3795.0-cr-31129-resource-reporter-5a7ccae
+    repository: quay.io/codefresh/cap-app-proxy
+    tag: 1.3798.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
-      repository: quay.io/codefresh/dev/cap-app-proxy-init
-      tag: 1.3795.0-cr-31129-resource-reporter-5a7ccae
+      repository: quay.io/codefresh/cap-app-proxy-init
+      tag: 1.3798.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -575,8 +579,8 @@ app-proxy:
   nameOverride: ""
   fullnameOverride: "cap-app-proxy"
   config:
-    # -- ArgoCD user to be used by app-proxy
-    argoCdUsername: "admin"
+    # -- deprecated. use `global.external-argo-cd.auth.username` instead
+    argoCdUsername: ""
     # -- ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to
     argoCdUrl:
     # -- Workflows server url. Determined by chart logic. Do not change unless you are certain you need to
@@ -688,7 +692,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: c409284
+    tag: 3ac2676
   env:
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
@@ -727,39 +731,50 @@ argo-gateway:
       cpu: "100m"
   hpa:
     enabled: true
-    minReplicas: 1
-    maxReplicas: 10
-    targetCPUUtilizationPercentage: 70
-  pdb:
-    enabled: true
-    minAvailable: "50%"
-    maxUnavailable: ""
-  service:
-    type: ClusterIP
-  serviceAccount:
-    create: true
-  readinessProbe:
-    failureThreshold: 3
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 10
-  livenessProbe:
-    failureThreshold: 3
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 10
-  serviceMonitor:
-    enabled: false
-    interval: 30s
-    scrapeTimeout: 10s
-    labels: {}
-
-event-reporters:
-  runtime-event-reporter: {}
-  cluster-event-reporter:
+    container:
+      image:
+        registry: quay.io
+        repository: codefresh/cf-argocd-extras
+        tag: "1556733"
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
     resources:
       requests:
-        memory: "512Mi"
-        cpu: "256m"
+        memory: "128Mi"
+        cpu: "100m"
+    pdb:
+      # -- Enable PDB for event-reporter
+      enabled: false
+      minAvailable: "50%"
+      maxUnavailable: ""
+    serviceMonitor:
+      main:
+        # -- Enable ServiceMonitor for event reporter
+        enabled: false
+  # -- Sources server configuration
+  sourcesServer:
+    enabled: true
+    container:
+      image:
+        registry: quay.io
+        repository: codefresh/cf-argocd-extras
+        tag: "1556733"
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+    hpa:
+      # -- Enable HPA for sources server
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 10
+      targetCPUUtilizationPercentage: 70
+    pdb:
+      # -- Enable PDB for sources server
+      enabled: false
+      minAvailable: "50%"
+      maxUnavailable: ""

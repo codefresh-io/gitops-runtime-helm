@@ -3,25 +3,29 @@ Some environment variables are determined by values provided in other components
 to keep the separation of components as pseudo library charts, they are defined here to be merged when components are generated.
 */}}
 {{- define "gitops-operator.resources.environment-variables.calculated" }}
+  {{- include "codefresh-gitops-runtime.argocd-token-auth" . }}
   {{/* if custom certificates are provided */}}
   {{- if .Values.global.codefresh.tls.caCerts.secretKeyRef }}
 CF_CA_CERT: {{ printf "/app/config/codefresh-tls/%s" .Values.global.codefresh.tls.caCerts.secretKeyRef.key  }}
   {{- end }}
 CF_URL: {{ .Values.global.codefresh.url }}
-GITOPS_OPERATOR_VERSION: {{ .Values.image.tag }}
-RUNTIME: {{ .Values.global.runtime.name }}
-TASK_POLLING_INTERVAL: {{ .Values.config.taskPollingInterval }}
 COMMIT_STATUS_POLLING_INTERVAL: {{ .Values.config.commitStatusPollingInterval }}
-WORKFLOW_MONITOR_POLLING_INTERVAL: {{ .Values.config.workflowMonitorPollingInterval }}
+GITOPS_OPERATOR_VERSION: {{ .Values.image.tag }}
+  {{- if (gt (int .Values.replicaCount) 1 ) }}
+LEADER_ELECT: true
+  {{- else }}
+LEADER_ELECT: false
+  {{- end }}
 MAX_CONCURRENT_RELEASES: {{ .Values.config.maxConcurrentReleases }}
 PROMOTION_WRAPPER_TEMPLATE: {{ .Values.config.promotionWrapperTemplate | quote }}
+RUNTIME: {{ .Values.global.runtime.name }}
+TASK_POLLING_INTERVAL: {{ .Values.config.taskPollingInterval }}
+WORKFLOW_MONITOR_POLLING_INTERVAL: {{ .Values.config.workflowMonitorPollingInterval }}
 {{- end }}
 
 {{- define "gitops-operator.resources.environment-variables.defaults" -}}
 AP_URL: http://cap-app-proxy:3017
 ARGO_CD_URL: argo-cd-server:80
-ARGO_CD_TOKEN_SECRET_NAME: argocd-token
-ARGO_CD_TOKEN_SECRET_KEY: token
 ARGO_WF_URL: http://argo-server:2746
 CF_TOKEN:
   valueFrom:
@@ -29,7 +33,6 @@ CF_TOKEN:
       name: codefresh-token
       key: token
 HEALTH_PROBE_BIND_ADDRESS: :8081
-LEADER_ELECT: true
 METRICS_BIND_ADDRESS: :8080
 METRICS_SECURE: false
 NAMESPACE:
