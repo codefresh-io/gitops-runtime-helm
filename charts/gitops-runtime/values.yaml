@@ -778,3 +778,7 @@ argo-gateway:
       enabled: false
       minAvailable: "50%"
       maxUnavailable: ""
+
+event-reporters:
+  cluster-event-reporter: {}
+  runtime-event-reporter: {}
