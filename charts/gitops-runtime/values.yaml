@@ -731,46 +731,34 @@ argo-gateway:
       cpu: "100m"
   hpa:
     enabled: true
-    container:
-      image:
-        registry: quay.io
-        repository: codefresh/cf-argocd-extras
-        tag: "1556733"
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
   pdb:
-    # -- Enable PDB for event-reporter
-    enabled: false
+    enabled: true
     minAvailable: "50%"
     maxUnavailable: ""
+  service:
+    type: ClusterIP
+  serviceAccount:
+    create: true
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
   serviceMonitor:
-    main:
-      # -- Enable ServiceMonitor for event reporter
-      enabled: false
-  # -- Sources server configuration
-  sourcesServer:
-    enabled: true
-    container:
-      image:
-        registry: quay.io
-        repository: codefresh/cf-argocd-extras
-        tag: "1556733"
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    resources:
-      requests:
-        memory: "128Mi"
-        cpu: "100m"
-    hpa:
-      # -- Enable HPA for sources server
-      enabled: false
-      minReplicas: 1
-      maxReplicas: 10
-      targetCPUUtilizationPercentage: 70
-    pdb:
-      # -- Enable PDB for sources server
-      enabled: false
-      minAvailable: "50%"
-      maxUnavailable: ""
+    enabled: false
+    interval: 30s
+    scrapeTimeout: 10s
+    labels: {}
 
 event-reporters:
   cluster-event-reporter: {}
