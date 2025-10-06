@@ -258,6 +258,13 @@ spec:
                           additionalProperties:
                             type: string
                           type: object
+                        stage:
+                          type: string
+                        uid:
+                          maxLength: 36
+                          minLength: 36
+                          pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+                          type: string
                         workflowTemplateName:
                           maxLength: 253
                           minLength: 1
@@ -526,9 +533,12 @@ spec:
                                 description: NodePhase is a label for the condition
                                   of a node at the current time.
                                 type: string
+                              templateName:
+                                type: string
                             required:
                             - name
                             - phase
+                            - templateName
                             type: object
                           type: array
                         phase:
