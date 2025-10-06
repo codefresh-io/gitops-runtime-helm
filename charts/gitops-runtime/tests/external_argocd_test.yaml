@@ -705,7 +705,6 @@ tests:
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
-    template: app-proxy/deployment.yaml
     set:
       global:
         integrations:
@@ -841,7 +840,6 @@ tests:
           pattern: "name: sources-server"
 
   - it: should require ArgoCd token if auth.type=token is set and no token is provided
-    template: cf-argocd-extras/sources-server/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
