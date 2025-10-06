@@ -5,8 +5,8 @@ NO_PROXY: {{ .Values.global.noProxy | squote }}
 
 {{- if and (eq (index .Values "global" "integrations" "argo-cd" "server" "auth" "type") "token") }}
   {{- if not (index .Values "global" "integrations" "argo-cd" "server" "auth" "token") }}
-ARGO_CD_TOKEN_SECRET_NAME: {{ required ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .global.integrations.argo-cd.server.auth.tokenSecretKeyRef.name is required" (index .Values "global" "integrations" "argo-cd" "server" "auth" "tokenSecretKeyRef" "name") }}
-ARGO_CD_TOKEN_SECRET_KEY: {{ required ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .global.integrations.argo-cd.server.auth.tokenSecretKeyRef.key is required" (index .Values "global" "integrations" "argo-cd" "server" "auth" "tokenSecretKeyRef" "key" ) }}
+ARGO_CD_TOKEN_SECRET_NAME: {{ required ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.server.auth.tokenSecretKeyRef.name is required" (index .Values "global" "integrations" "argo-cd" "server" "auth" "tokenSecretKeyRef" "name") }}
+ARGO_CD_TOKEN_SECRET_KEY: {{ required ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.server.auth.tokenSecretKeyRef.key is required" (index .Values "global" "integrations" "argo-cd" "server" "auth" "tokenSecretKeyRef" "key" ) }}
   {{- else }}
 ARGO_CD_TOKEN_SECRET_NAME: "gitops-runtime-argo-cd-token"
 ARGO_CD_TOKEN_SECRET_KEY: "token"
