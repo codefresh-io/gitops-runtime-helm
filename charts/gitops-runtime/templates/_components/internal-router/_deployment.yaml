@@ -1,5 +1,4 @@
 {{- define "internal-router.resources.deployment" }}
-{{- $cfCommonTplSemver := printf "cf-common-%s" (index .Subcharts "cf-common").Chart.Version }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -84,6 +83,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include (printf "%s.tplrender" $cfCommonTplSemver ) (dict "Values" . "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "codefresh-gitops-runtime.tplrender" (dict "Values" . "context" .) | nindent 8 }}
       {{- end }}
 {{- end }}

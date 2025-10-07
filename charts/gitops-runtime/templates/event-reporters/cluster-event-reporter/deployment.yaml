@@ -1,0 +1,113 @@
+{{- $context := deepCopy . }}
+{{- $_ := set $context "Values" (deepCopy (get (index .Values "global") "event-reporters")) }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+{{/* Merge .Values.event-reporters.<event-reporter-name> with .Values.global.event-reporters */}}
+{{- $valuesOverrides := index .Values "event-reporters" "cluster-event-reporter" }}
+{{- $values := mergeOverwrite $context.Values $valuesOverrides }}
+{{- $_ := set $context "Values" $values }}
+{{/* Merge environment variables from calculated, defaults and overwrites */}}
+{{- $defaults := (include "cluster-event-reporter.resources.environment-variables.defaults" $context | fromYaml) }}
+{{- $calculated := (include "cluster-event-reporter.resources.environment-variables.calculated" $context | fromYaml) }}
+{{- $overrides := $context.Values.env }}
+{{- $mergedValues := mergeOverwrite $defaults $calculated $overrides }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cluster-event-reporter.fullname" . }}
+  labels:
+    {{- include "cluster-event-reporter.labels" . | nindent 4 }}
+spec:
+  replicas: {{ $context.Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "cluster-event-reporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with $context.Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cluster-event-reporter.selectorLabels" . | nindent 8 }}
+        {{- with $context.Values.podLabels }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with $context.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "cluster-event-reporter.serviceAccountName" $context }}
+      securityContext:
+      {{- toYaml $context.Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: {{ include "cluster-event-reporter.fullname" . }}
+        securityContext:
+          {{- toYaml $context.Values.securityContext | nindent 12 }}
+        {{- $imageContext := deepCopy $context.Values.image }}
+        image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" $imageContext "context" .) }}
+        env: {{- include "codefresh-gitops-runtime.env-vars" (dict "Values" $mergedValues "context" .) | nindent 8 }}
+        imagePullPolicy: {{ $context.Values.image.pullPolicy }}
+        {{- if $context.Values.command }}
+        command:
+        {{- $context.Values.command | toYaml | nindent 8 }}
+        {{- end }}
+        {{- with $context.Values.extraArgs }}
+        args:
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
+        ports:
+        {{- range $name, $port := $context.Values.service.ports }}
+        - name: {{ $name }}
+          containerPort: {{ $port.targetPort }}
+        {{- end }}
+        readinessProbe:
+          initialDelaySeconds: {{ $context.Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ $context.Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ $context.Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ $context.Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ $context.Values.readinessProbe.failureThreshold }}
+          httpGet:
+            port: http
+            path: /healthz
+        livenessProbe:
+          initialDelaySeconds: {{ $context.Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ $context.Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ $context.Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ $context.Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ $context.Values.livenessProbe.failureThreshold }}
+          httpGet:
+            port: http
+            path: /healthz?full=true
+        resources:
+          {{- toYaml $context.Values.resources | nindent 10 }}
+        volumeMounts:
+        {{- if or $context.Values.global.codefresh.tls.caCerts.secretKeyRef $context.Values.global.codefresh.tls.caCerts.secret.create }}
+        - name: codefresh-tls-certs
+          mountPath: /app/config/codefresh-tls-certs
+          readOnly: true
+        {{- end }}
+        {{- with $context.Values.extraVolumeMounts }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with $context.Values.nodeSelector | default $context.Values.global.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $context.Values.tolerations | default $context.Values.global.tolerations }}
+      tolerations: {{ toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with $context.Values.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $context.Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "codefresh-gitops-runtime.tplrender" (dict "Values" . "context" .) | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{- if or $context.Values.global.codefresh.tls.caCerts.secretKeyRef $context.Values.global.codefresh.tls.caCerts.secret.create }}
+        - name: codefresh-tls-certs
+          secret:
+            secretName: {{ $context.Values.global.codefresh.tls.caCerts.secretKeyRef.name | default "codefresh-tls-certs" }}
+        {{- end }}
+        {{- with $context.Values.extraVolumes }}
+            {{- toYaml . | nindent 6 }}
+        {{- end }}

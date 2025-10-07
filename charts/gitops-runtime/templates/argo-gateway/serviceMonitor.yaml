@@ -1,0 +1,26 @@
+{{- $context := deepCopy . }}
+{{- $_ := set $context "Values" (deepCopy (get .Values "argo-gateway")) }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+{{- if $context.Values.serviceMonitor.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "argo-gateway.fullname" . }}
+  labels:
+    {{- include "argo-gateway.labels" . | nindent 4 }}
+    {{- with $context.Values.serviceMonitor.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "argo-gateway.selectorLabels" . | nindent 8 }}
+  endpoints:
+    - port: http
+      {{- if $context.Values.serviceMonitor.interval }}
+      interval: {{ $context.Values.serviceMonitor.interval }}
+      {{- end }}
+      {{- if $context.Values.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ $context.Values.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+{{- end }}

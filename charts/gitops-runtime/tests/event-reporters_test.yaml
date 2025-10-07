@@ -1,0 +1,155 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: argo-gateway tests
+templates:
+  - event-reporters/**/*.yaml
+tests:
+  - it: Runtime Reporter should be deployed with forked ArgoCD
+    template: event-reporters/runtime-event-reporter/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: metadata.name
+          value: runtime-event-reporter
+
+  - it: Runtime Reporter should be deployed with external OSS ArgoCD
+    template: event-reporters/runtime-event-reporter/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Deployment
+      - equal:
+          path: metadata.name
+          value: runtime-event-reporter
+
+  - it: Runtime Reporter ConfigMap should have valid redis-ha url
+    template: event-reporters/runtime-event-reporter/configmap.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      argo-cd:
+        redis-ha:
+          enabled: true
+    asserts:
+      - equal:
+          path: data["redis.server"]
+          value: RELEASE-NAME-redis-ha-haproxy:6379
+
+  - it: Runtime Reporter should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secret.create is true
+    template: event-reporters/runtime-event-reporter/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        codefresh:
+          tls:
+            caCerts:
+              secret:
+                create: true
+                key: ca-bundle.crt
+                content: |
+                  -----BEGIN CERTIFICATE-----
+                  MIID...
+                  -----END CERTIFICATE-----
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name == 'CODEFRESH_SSL_CERT_PATH')].value
+          value: /app/config/codefresh-tls-certs/ca-bundle.crt
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: codefresh-tls-certs
+            secret:
+              secretName: codefresh-tls-certs
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: codefresh-tls-certs
+            mountPath: /app/config/codefresh-tls-certs
+            readOnly: true
+
+  - it: Runtime Reporter should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secretKeyRef is set
+    template: event-reporters/runtime-event-reporter/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        codefresh:
+          tls:
+            caCerts:
+              secretKeyRef:
+                name: my-codefresh-tls-certs
+                key: my-ca-bundle.crt
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name == 'CODEFRESH_SSL_CERT_PATH')].value
+          value: /app/config/codefresh-tls-certs/my-ca-bundle.crt
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: codefresh-tls-certs
+            secret:
+              secretName: my-codefresh-tls-certs
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: codefresh-tls-certs
+            mountPath: /app/config/codefresh-tls-certs
+            readOnly: true
+
+  - it: Runtime Reporter should use local env over global Values.event-reporters.env
+    template: event-reporters/runtime-event-reporter/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        event-reporters:
+          env:
+            FOO: outer
+      event-reporters:
+        runtime-event-reporter:
+          env:
+            FOO: inner
+            BAR: inner
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name == 'FOO')].value
+          value: inner
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name == 'BAR')].value
+          value: inner
+
+  - it: Runtime Reporter should use local values over global Values.event-reporters
+    template: event-reporters/runtime-event-reporter/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        event-reporters:
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+      event-reporters:
+        runtime-event-reporter:
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits
+          value:
+            cpu: 200m
+            memory: 256Mi
