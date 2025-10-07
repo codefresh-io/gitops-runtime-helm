@@ -78,59 +78,6 @@ global:
         value:
         # -- secretKeyReference for Git credentials password. Provide name and key fields.
         secretKeyRef: {}
-    # -- Runtime eventbus
-    eventBus:
-      # -- Eventbus name
-      name: ''
-      # -- Annotations on EventBus resource
-      annotations: {}
-      # -- Pod disruption budget for the eventbus
-      pdb:
-        enabled: true
-        # -- Minimum number of available eventbus pods. For eventbus to stay functional the majority of its replicas should always be available.
-        minAvailable: 2
-      type: nats # -- Eventbus type. Can be nats or jetstream.
-      nats:
-        native:
-          metadata:
-            labels:
-              app.kubernetes.io/name: codefresh-eventbus
-          nodeSelector: {}
-          tolerations: []
-          affinity: {}
-          replicas: 3
-          auth: token
-          maxPayload: "4MB"
-          containerTemplate:
-            resources:
-              limits:
-                cpu: 500m
-                memory: 4Gi
-                ephemeral-storage: 2Gi
-              requests:
-                cpu: 200m
-                memory: 1Gi
-                ephemeral-storage: 2Gi
-      jetstream:
-        metadata:
-          labels:
-            app.kubernetes.io/name: codefresh-eventbus
-        version: latest
-        nodeSelector: {}
-        tolerations: []
-        affinity: {}
-        replicas: 3
-        maxPayload: "4MB"
-        containerTemplate:
-          resources:
-            limits:
-              cpu: 500m
-              memory: 4Gi
-              ephemeral-storage: 2Gi
-            requests:
-              cpu: 200m
-              memory: 1Gi
-              ephemeral-storage: 2Gi
   integrations:
     argo-cd:
       server:
