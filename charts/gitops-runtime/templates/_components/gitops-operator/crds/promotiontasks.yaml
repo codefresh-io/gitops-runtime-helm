@@ -77,6 +77,16 @@ spec:
                   properties:
                     getPromotionValues:
                       properties:
+                        commitAuthorId:
+                          properties:
+                            email:
+                              type: string
+                            username:
+                              type: string
+                          required:
+                          - email
+                          - username
+                          type: object
                         commitSha:
                           maxLength: 40
                           minLength: 7
@@ -393,6 +403,8 @@ spec:
                       type: string
                     getPromotionValues:
                       properties:
+                        commitAuthorAvatarUrl:
+                          type: string
                         phase:
                           description: GetPromotionValuesStatusPhase
                           enum:
