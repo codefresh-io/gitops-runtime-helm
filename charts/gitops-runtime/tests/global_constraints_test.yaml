@@ -8,7 +8,6 @@ templates:
   - tunnel-client.yaml
   - charts/codefresh-tunnel-client/*
   - internal-router/deployment.yaml
-  - eventbus/codefresh-eventbus.yaml
   - hooks/pre-install/validate-values.yaml
   - hooks/pre-install/validate-usage.yaml
   - hooks/pre-uninstall/cleanup-resources.yaml
@@ -83,21 +82,6 @@ tests:
             value: some-value
             effect: NoSchedule
         template: argo-gateway/deployment.yaml
-      # -- codefresh-eventbus
-      - equal:
-          path: spec.nats.native.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
-        template: eventbus/codefresh-eventbus.yaml
-      - equal:
-          path: spec.nats.native.tolerations
-          value:
-          - key: some-key
-            operator: Equal
-            value: some-value
-            effect: NoSchedule
-        template: eventbus/codefresh-eventbus.yaml
       # -- validate-values job
       - equal:
           path: spec.template.spec.nodeSelector
@@ -330,21 +314,6 @@ tests:
               value: another-value
               effect: NoSchedule
         template: internal-router/deployment.yaml
-      # -- codefresh-eventbus
-      - equal:
-          path: spec.nats.native.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
-        template: eventbus/codefresh-eventbus.yaml
-      - equal:
-          path: spec.nats.native.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
-        template: eventbus/codefresh-eventbus.yaml
       # -- validate-values job
       - equal:
           path: spec.template.spec.nodeSelector
