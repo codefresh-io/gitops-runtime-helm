@@ -385,17 +385,17 @@ spec:
                 properties:
                   code:
                     type: string
-                  context:
-                    type: string
                   message:
                     type: string
                   stepIndex:
                     type: integer
+                  while:
+                    type: string
                 required:
                 - code
-                - context
                 - message
                 - stepIndex
+                - while
                 type: object
               observedGeneration:
                 format: int64
@@ -656,17 +656,17 @@ spec:
                       properties:
                         code:
                           type: string
-                        context:
-                          type: string
                         message:
                           type: string
                         stepIndex:
                           type: integer
+                        while:
+                          type: string
                       required:
                       - code
-                      - context
                       - message
                       - stepIndex
+                      - while
                       type: object
                   required:
                   - count
