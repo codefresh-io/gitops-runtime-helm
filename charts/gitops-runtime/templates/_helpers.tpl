@@ -406,16 +406,19 @@ Get ingress url for both tunnel based and ingress based runtimes
 Output comma separated list of installed runtime components
 */}}
 {{- define "codefresh-gitops-runtime.component-list"}}
-  {{- $argoEvents := dict "name" "argo-events" "version" (get .Subcharts "argo-events").Chart.AppVersion }}
   {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
   {{- $internalRouter := dict "name" "internal-router" "version" .Chart.AppVersion }}
   {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
-  {{- $sourcesServer := dict "name" "sources-server" "version" (get .Values "cf-argocd-extras").sourcesServer.container.image.tag }}
-  {{- $comptList := list $argoEvents $appProxy $sealedSecrets $internalRouter $sourcesServer }}
-{{- if and (index .Values "argo-cd" "enabled") }}
-  {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
-  {{- $comptList = append $comptList $argoCD }}
-{{- end }}
+  {{- $argoApiGateway := dict "name" "argo-gateway" "version" (get .Values "argo-gateway").image.tag }}
+  {{- $comptList := list $appProxy $sealedSecrets $internalRouter $argoApiGateway }}
+  {{- if and (index .Values "argo-cd" "enabled") }}
+    {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
+    {{- $comptList = append $comptList $argoCD }}
+  {{- end }}
+  {{- if index (get .Values "argo-events") "enabled" }}
+    {{- $argoEvents := dict "name" "argo-events" "version" (get .Subcharts "argo-events").Chart.AppVersion }}
+    {{- $comptList = append $comptList $argoEvents }}
+  {{- end }}
   {{- if index (get .Values "argo-rollouts") "enabled" }}
     {{- $rolloutReporter := dict "name" "rollout-reporter" "version" .Chart.AppVersion }}
     {{- $argoRollouts := dict "name" "argo-rollouts" "version" (get .Subcharts "argo-rollouts").Chart.AppVersion }}
@@ -437,7 +440,7 @@ Output comma separated list of installed runtime components
     {{- $comptList = append $comptList $gitopsOperator }}
   {{- end }}
   {{- if not (index .Values "argo-cd" "enabled") }}
-    {{- $eventReporter := dict "name" "event-reporter" "version" (get .Values "cf-argocd-extras").eventReporter.container.image.tag }}
+    {{- $eventReporter := dict "name" "event-reporter" "version" (index .Values "global" "event-reporters" "image" "tag") }}
     {{- $comptList = append $comptList $eventReporter }}
   {{- end }}
 {{- $comptList | toYaml }}
@@ -512,3 +515,76 @@ NO_PROXY: {{ .Values.global.noProxy | quote }}
 
 {{- printf "%s" $eventBusName }}
 {{- end }}
+
+
+{{- define "codefresh-gitops-runtime.image.name" -}}
+  {{/* Restoring root $ context */}}
+  {{- $ := .context -}}
+
+  {{- $registryName := .image.registry -}}
+  {{- $repositoryName := .image.repository -}}
+  {{- $imageTag := .image.tag | toString -}}
+  {{- $imageDigest := .image.digest }}
+
+  {{- if $.Values.global -}}
+    {{- if $.Values.global.imageRegistry -}}
+      {{ $registryName = $.Values.global.imageRegistry }}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if $registryName -}}
+    {{- if $imageDigest }}
+      {{- printf "%s/%s:%s@%s" $registryName $repositoryName $imageTag $imageDigest -}}
+    {{- else }}
+      {{- printf "%s/%s:%s" $registryName $repositoryName $imageTag -}}
+    {{- end }}
+  {{- else }}
+    {{- if $imageDigest }}
+      {{- printf "%s:%s@%s" $repositoryName $imageTag $imageDigest -}}
+    {{- else }}
+      {{- printf "%s:%s" $repositoryName $imageTag -}}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- define "codefresh-gitops-runtime.env-vars"}}
+{{- $ := .context }}
+  {{- if .Values }}
+    {{- if not (kindIs "map" .Values) }}
+      {{ fail "ERROR: env block must be a map"}}
+    {{- end }}
+  {{- end }}
+  {{- $env := .Values }}
+  {{- $templatedEnv := include "codefresh-gitops-runtime.tplrender" (dict "Values" $env "context" $) | fromYaml }}
+  {{- range $name, $val := $templatedEnv }}
+    {{- if or (kindIs "string" $val) (kindIs "bool" $val) (kindIs "int" $val) (kindIs "float64" $val) }}
+- name: {{ $name }}
+  value: {{ $val | quote }}
+    {{- else if kindIs "map" $val}}
+      {{- if hasKey $val "valueFrom" }}
+        {{- if or (hasKey $val.valueFrom "secretKeyRef") (hasKey $val.valueFrom "configMapKeyRef") (hasKey $val.valueFrom "fieldRef") }}
+- name: {{ $name }}
+{{- $val | toYaml | nindent 2 }}
+        {{- else}}
+          {{ fail "ERROR: Only secretKeyRef/configMapKeyRef/fieldRef are supported for valueFrom block for environment variables!" }}
+        {{- end}}
+      {{- else }}
+        {{ fail "ERROR: Cannot generate environment variables only strings and valueFrom are supported!"}}
+      {{- end }}
+    {{- else }}
+      {{ fail "ERROR: Only maps and string/int/bool are supported for environment variables!"}}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- define "codefresh-gitops-runtime.tplrender" -}}
+  {{- $tpl := .Values -}}
+  {{- if not (typeIs "string" $tpl) -}}
+    {{- $tpl = toYaml $tpl -}}
+  {{- end -}}
+  {{- if contains "{{" $tpl -}}
+    {{- tpl $tpl .context }}
+  {{- else -}}
+    {{- $tpl -}}
+  {{- end -}}
+{{- end -}}

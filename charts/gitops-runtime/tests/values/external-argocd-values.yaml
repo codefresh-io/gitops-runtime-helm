@@ -1,5 +1,5 @@
 global:
-  external-argo-cd: 
+  external-argo-cd:
     server:
       protocol: http
       svc: my-argocd-server

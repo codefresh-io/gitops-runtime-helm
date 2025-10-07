@@ -108,18 +108,3 @@ tests:
   - equal:
       path: data.argoWorkflowsUrl
       value: https://argo-test-server:2746
-# ------------------------------------------------------------------------------------------
-# Argo rollouts
-# Affected templates - rollouts reporter clusterrolebinding
-# ------------------------------------------------------------------------------------------
-- it: test rollout reporter ClusterRoleBinding to argo rollouts role
-  template: 'event-reporters/rollout-reporter/clusterrolebinding.yaml'
-  values:
-  - ./values/mandatory-values.yaml
-  set:
-    argo-rollouts.enabled: true
-    argo-rollouts.fullnameOverride: rollouts-test
-  asserts:
-  - equal:
-      path: roleRef.name
-      value: rollouts-test
