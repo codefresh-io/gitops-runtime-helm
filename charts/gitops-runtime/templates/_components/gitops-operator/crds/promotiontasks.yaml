@@ -77,6 +77,16 @@ spec:
                   properties:
                     getPromotionValues:
                       properties:
+                        commitAuthorId:
+                          properties:
+                            email:
+                              type: string
+                            username:
+                              type: string
+                          required:
+                          - email
+                          - username
+                          type: object
                         commitSha:
                           maxLength: 40
                           minLength: 7
@@ -155,7 +165,6 @@ spec:
                                       minLength: 1
                                       type: string
                                     value:
-                                      minLength: 1
                                       type: string
                                   required:
                                   - path
@@ -212,7 +221,6 @@ spec:
                                       minLength: 1
                                       type: string
                                     value:
-                                      minLength: 1
                                       type: string
                                   required:
                                   - path
@@ -395,6 +403,8 @@ spec:
                       type: string
                     getPromotionValues:
                       properties:
+                        commitAuthorAvatarUrl:
+                          type: string
                         phase:
                           description: GetPromotionValuesStatusPhase
                           enum:
@@ -416,7 +426,6 @@ spec:
                                       minLength: 1
                                       type: string
                                     value:
-                                      minLength: 1
                                       type: string
                                   required:
                                   - path
