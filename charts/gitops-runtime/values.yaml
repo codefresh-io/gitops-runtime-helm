@@ -156,7 +156,6 @@ global:
           # tokenSecretKeyRef:
           #   name: argocd-token
           #   key: token
-
   # -- Configuration for external ArgoCD
   # Should be used when `argo-cd.enabled` is set to false
   external-argo-cd:
@@ -180,7 +179,6 @@ global:
       svc: argocd-repo-server
       # -- Port of the ArgoCD repo server
       port: 8081
-
   # -- Configuration for external Argo Rollouts
   external-argo-rollouts:
     # -- Rollout reporter settings
@@ -730,7 +728,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: 8bd2a64
+    tag: 266564a
   env:
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
