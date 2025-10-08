@@ -7,7 +7,11 @@
 {{- if not $appProxyContext.Values.config.argoCdUrl }}
   {{ $_ := set $appProxyContext.Values.config "argoCdUrl" $argoCdUrl }}
 {{- end }}
-{{- $_ := set $appProxyContext.Values.config "argoCdUsername" $argoCdUsername }}
+{{- if $argoCdUsername }}
+  {{- $_ := set $appProxyContext.Values.config "argoCdUsername" $argoCdUsername }}
+{{- else }}
+  {{ $_ := unset  $appProxyContext.Values.config "argoCdUsername" }}
+{{- end }}
 {{- if index (get .Values "argo-workflows") "enabled" }}
   {{- if not $appProxyContext.Values.config.argoWorkflowsUrl }}
     {{- $argoWorkflowsUrl := include "codefresh-gitops-runtime.argo-workflows.server.url" . }}

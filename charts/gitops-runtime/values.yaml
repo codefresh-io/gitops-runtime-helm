@@ -565,14 +565,14 @@ app-proxy:
           tag: 1.1.17-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: eab83ae
+    tag: 788a8d5
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3750.0
+      tag: 1.3791.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -614,8 +614,8 @@ app-proxy:
   nameOverride: ""
   fullnameOverride: "cap-app-proxy"
   config:
-    # -- ArgoCD user to be used by app-proxy
-    argoCdUsername: "admin"
+    # -- deprecated. use `global.external-argo-cd.auth.username` instead
+    argoCdUsername: ""
     # -- ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to
     argoCdUrl:
     # -- Workflows server url. Determined by chart logic. Do not change unless you are certain you need to
