@@ -294,7 +294,7 @@ gitops-operator:
 |-----|------|---------|-------------|
 | app-proxy.affinity | object | `{}` |  |
 | app-proxy.config.argoCdUrl | string | `nil` | ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to |
-| app-proxy.config.argoCdUsername | string | `"admin"` | ArgoCD user to be used by app-proxy |
+| app-proxy.config.argoCdUsername | string | `""` | deprecated. use `global.external-argo-cd.auth.username` instead |
 | app-proxy.config.argoWorkflowsInsecure | string | `"true"` |  |
 | app-proxy.config.argoWorkflowsUrl | string | `nil` | Workflows server url. Determined by chart logic. Do not change unless you are certain you need to |
 | app-proxy.config.clusterChunkSize | int | `50` | define cluster list size per request to report the cluster state to platform, e.g. if you have 90 clusters and set clusterChunkSize: 40, it means cron job will report cluster state to platform in 3 iterations (40,40,10) - reduce this value if you have a lot of clusters and the cron job is failing with payload too large error - use 0 to sync all clusters at once |
@@ -323,14 +323,14 @@ gitops-operator:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"eab83ae"` |  |
+| app-proxy.image.tag | string | `"788a8d5"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3750.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3791.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
