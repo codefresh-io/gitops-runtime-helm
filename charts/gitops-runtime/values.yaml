@@ -676,29 +676,29 @@ argo-gateway:
     targetCPUUtilizationPercentage: 70
   pdb:
     enabled: true
-    container:
-      image:
-        registry: quay.io
-        repository: codefresh/cf-argocd-extras
-        tag: "1556733"
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    resources:
-      requests:
-        memory: "128Mi"
-        cpu: "100m"
-    hpa:
-      # -- Enable HPA for sources server
-      enabled: false
-      minReplicas: 1
-      maxReplicas: 10
-      targetCPUUtilizationPercentage: 70
-    pdb:
-      # -- Enable PDB for sources server
-      enabled: false
-      minAvailable: "50%"
-      maxUnavailable: ""
+    minAvailable: "50%"
+    maxUnavailable: ""
+  service:
+    type: ClusterIP
+  serviceAccount:
+    create: true
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    scrapeTimeout: 10s
+    labels: {}
 
 # -- Enable hook job to create redis secret
 redis-secret-init:
@@ -798,6 +798,10 @@ redis:
     create: true
     name: ""
     annotations: {}
+
+event-reporters:
+  cluster-event-reporter: {}
+  runtime-event-reporter: {}
 
 ## Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true`
 # Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
@@ -913,7 +917,3 @@ redis-ha:
     interval: 30s
     scrapeTimeout: 10s
     labels: {}
-
-event-reporters:
-  cluster-event-reporter: {}
-  runtime-event-reporter: {}

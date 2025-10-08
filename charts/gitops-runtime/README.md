@@ -382,7 +382,7 @@ redis-ha:
 |-----|------|---------|-------------|
 | app-proxy.affinity | object | `{}` |  |
 | app-proxy.config.argoCdUrl | string | `nil` | ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to |
-| app-proxy.config.argoCdUsername | string | `"admin"` | ArgoCD user to be used by app-proxy |
+| app-proxy.config.argoCdUsername | string | `""` | deprecated. use `global.external-argo-cd.auth.username` instead |
 | app-proxy.config.argoWorkflowsInsecure | string | `"true"` |  |
 | app-proxy.config.argoWorkflowsUrl | string | `nil` | Workflows server url. Determined by chart logic. Do not change unless you are certain you need to |
 | app-proxy.config.clusterChunkSize | int | `50` | define cluster list size per request to report the cluster state to platform, e.g. if you have 90 clusters and set clusterChunkSize: 40, it means cron job will report cluster state to platform in 3 iterations (40,40,10) - reduce this value if you have a lot of clusters and the cron job is failing with payload too large error - use 0 to sync all clusters at once |
@@ -411,14 +411,14 @@ redis-ha:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3791.0"` |  |
+| app-proxy.image.tag | string | `"1.3806.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3791.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3806.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -495,7 +495,39 @@ redis-ha:
 | argo-events.configs.nats.versions[0].natsStreamingImage | string | `"nats-streaming:0.25.6"` |  |
 | argo-events.configs.nats.versions[0].version | string | `"0.22.1"` |  |
 | argo-events.crds.install | bool | `false` |  |
+| argo-events.enabled | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
+| argo-gateway.affinity | object | `{}` |  |
+| argo-gateway.hpa.enabled | bool | `true` |  |
+| argo-gateway.hpa.maxReplicas | int | `10` |  |
+| argo-gateway.hpa.minReplicas | int | `1` |  |
+| argo-gateway.hpa.targetCPUUtilizationPercentage | int | `70` |  |
+| argo-gateway.image.registry | string | `"quay.io"` |  |
+| argo-gateway.image.repository | string | `"codefresh/cf-argocd-extras"` |  |
+| argo-gateway.image.tag | string | `"695977c"` |  |
+| argo-gateway.livenessProbe.failureThreshold | int | `3` |  |
+| argo-gateway.livenessProbe.initialDelaySeconds | int | `10` |  |
+| argo-gateway.livenessProbe.periodSeconds | int | `10` |  |
+| argo-gateway.livenessProbe.successThreshold | int | `1` |  |
+| argo-gateway.livenessProbe.timeoutSeconds | int | `10` |  |
+| argo-gateway.nodeSelector | object | `{}` |  |
+| argo-gateway.pdb.enabled | bool | `true` |  |
+| argo-gateway.pdb.maxUnavailable | string | `""` |  |
+| argo-gateway.pdb.minAvailable | string | `"50%"` |  |
+| argo-gateway.readinessProbe.failureThreshold | int | `3` |  |
+| argo-gateway.readinessProbe.initialDelaySeconds | int | `10` |  |
+| argo-gateway.readinessProbe.periodSeconds | int | `10` |  |
+| argo-gateway.readinessProbe.successThreshold | int | `1` |  |
+| argo-gateway.readinessProbe.timeoutSeconds | int | `10` |  |
+| argo-gateway.resources.requests.cpu | string | `"100m"` |  |
+| argo-gateway.resources.requests.memory | string | `"128Mi"` |  |
+| argo-gateway.service.type | string | `"ClusterIP"` |  |
+| argo-gateway.serviceAccount.create | bool | `true` |  |
+| argo-gateway.serviceMonitor.enabled | bool | `false` |  |
+| argo-gateway.serviceMonitor.interval | string | `"30s"` |  |
+| argo-gateway.serviceMonitor.labels | object | `{}` |  |
+| argo-gateway.serviceMonitor.scrapeTimeout | string | `"10s"` |  |
+| argo-gateway.tolerations | list | `[]` |  |
 | argo-rollouts.controller.replicas | int | `1` |  |
 | argo-rollouts.enabled | bool | `true` |  |
 | argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
@@ -507,63 +539,9 @@ redis-ha:
 | argo-workflows.mainContainer.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
-| cf-argocd-extras | object | `{"eventReporter":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"1556733"}},"enabled":true,"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"serviceMonitor":{"main":{"enabled":false}},"tolerations":[]},"sourcesServer":{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"1556733"}},"enabled":true,"hpa":{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"tolerations":[]}}` | Codefresh extra services for ArgoCD |
-| cf-argocd-extras.eventReporter.pdb.enabled | bool | `false` | Enable PDB for event-reporter |
-| cf-argocd-extras.eventReporter.serviceMonitor.main.enabled | bool | `false` | Enable ServiceMonitor for event reporter |
-| cf-argocd-extras.sourcesServer | object | `{"affinity":{},"container":{"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"1556733"}},"enabled":true,"hpa":{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"nodeSelector":{},"pdb":{"enabled":false,"maxUnavailable":"","minAvailable":"50%"},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"tolerations":[]}` | Sources server configuration |
-| cf-argocd-extras.sourcesServer.hpa.enabled | bool | `false` | Enable HPA for sources server |
-| cf-argocd-extras.sourcesServer.pdb.enabled | bool | `false` | Enable PDB for sources server |
 | codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
-| event-reporters.rollout.eventSource.affinity | object | `{}` |  |
-| event-reporters.rollout.eventSource.nodeSelector | object | `{}` |  |
-| event-reporters.rollout.eventSource.replicas | int | `1` |  |
-| event-reporters.rollout.eventSource.resources | object | `{}` |  |
-| event-reporters.rollout.eventSource.tolerations | list | `[]` |  |
-| event-reporters.rollout.sensor.affinity | object | `{}` |  |
-| event-reporters.rollout.sensor.atLeastOnce | bool | `true` | At Least Once |
-| event-reporters.rollout.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
-| event-reporters.rollout.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
-| event-reporters.rollout.sensor.nodeSelector | object | `{}` |  |
-| event-reporters.rollout.sensor.policy.status.allow[0] | int | `200` |  |
-| event-reporters.rollout.sensor.policy.status.allow[1] | int | `201` |  |
-| event-reporters.rollout.sensor.policy.status.allow[2] | int | `204` |  |
-| event-reporters.rollout.sensor.policy.status.allow[3] | int | `400` |  |
-| event-reporters.rollout.sensor.policy.status.allow[4] | int | `401` |  |
-| event-reporters.rollout.sensor.policy.status.allow[5] | int | `404` |  |
-| event-reporters.rollout.sensor.replicas | int | `1` |  |
-| event-reporters.rollout.sensor.resources | object | `{}` |  |
-| event-reporters.rollout.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
-| event-reporters.rollout.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
-| event-reporters.rollout.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
-| event-reporters.rollout.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
-| event-reporters.rollout.sensor.retryStrategy.steps | int | `3` | Number of retries |
-| event-reporters.rollout.sensor.tolerations | list | `[]` |  |
-| event-reporters.rollout.serviceAccount.create | bool | `true` |  |
-| event-reporters.workflow.eventSource.affinity | object | `{}` |  |
-| event-reporters.workflow.eventSource.nodeSelector | object | `{}` |  |
-| event-reporters.workflow.eventSource.replicas | int | `1` |  |
-| event-reporters.workflow.eventSource.resources | object | `{}` |  |
-| event-reporters.workflow.eventSource.tolerations | list | `[]` |  |
-| event-reporters.workflow.sensor.affinity | object | `{}` |  |
-| event-reporters.workflow.sensor.atLeastOnce | bool | `true` | At Least Once |
-| event-reporters.workflow.sensor.env | object | `{}` | Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs |
-| event-reporters.workflow.sensor.logging | object | `{"enabled":false,"intervalSeconds":0}` | Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow. |
-| event-reporters.workflow.sensor.nodeSelector | object | `{}` |  |
-| event-reporters.workflow.sensor.policy.status.allow[0] | int | `200` |  |
-| event-reporters.workflow.sensor.policy.status.allow[1] | int | `201` |  |
-| event-reporters.workflow.sensor.policy.status.allow[2] | int | `204` |  |
-| event-reporters.workflow.sensor.policy.status.allow[3] | int | `400` |  |
-| event-reporters.workflow.sensor.policy.status.allow[4] | int | `401` |  |
-| event-reporters.workflow.sensor.policy.status.allow[5] | int | `404` |  |
-| event-reporters.workflow.sensor.replicas | int | `1` |  |
-| event-reporters.workflow.sensor.resources | object | `{}` |  |
-| event-reporters.workflow.sensor.retryStrategy | object | `{"duration":0,"factor":1,"jitter":1,"steps":3}` | Retry strategy for events sent to Codefresh |
-| event-reporters.workflow.sensor.retryStrategy.duration | int | `0` | The initial duration, use strings like "2s", "1m" |
-| event-reporters.workflow.sensor.retryStrategy.factor | float | `1` | Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative |
-| event-reporters.workflow.sensor.retryStrategy.jitter | int | `1` | The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`. |
-| event-reporters.workflow.sensor.retryStrategy.steps | int | `3` | Number of retries |
-| event-reporters.workflow.sensor.tolerations | list | `[]` |  |
-| event-reporters.workflow.serviceAccount.create | bool | `true` |  |
+| event-reporters.cluster-event-reporter | object | `{}` |  |
+| event-reporters.runtime-event-reporter | object | `{}` |  |
 | gitops-operator.affinity | object | `{}` |  |
 | gitops-operator.config.commitStatusPollingInterval | string | `"10s"` | Commit status polling interval |
 | gitops-operator.config.maxConcurrentReleases | int | `100` | Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime) |
@@ -577,11 +555,10 @@ redis-ha:
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
 | gitops-operator.enabled | bool | `true` |  |
 | gitops-operator.env.GITOPS_OPERATOR_VERSION | string | `"0.11.1"` |  |
-| gitops-operator.env.GITOPS_OPERATOR_VERSION | string | `"0.11.1"` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.registry | string | `"quay.io"` | defaults |
 | gitops-operator.image.repository | string | `"codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"3ac2676"` |  |
+| gitops-operator.image.tag | string | `"a1316ff"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
@@ -611,14 +588,40 @@ redis-ha:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.external-argo-cd | object | `{"auth":{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"},"repoServer":{"port":8081,"svc":"argocd-repo-server"},"server":{"port":80,"rootpath":"","svc":"argocd-server"}}` | Configuration for external ArgoCD Should be used when `argo-cd.enabled` is set to false |
-| global.external-argo-cd.auth | object | `{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"}` | How GitOps Runtime should authenticate with ArgoCD |
-| global.external-argo-cd.auth.password | string | `""` | ArgoCD password in plain text |
-| global.external-argo-cd.auth.passwordSecretKeyRef | object | `{"key":"password","name":"argocd-initial-admin-secret"}` | ArgoCD password referenced by an existing secret |
-| global.external-argo-cd.auth.token | string | `""` | ArgoCD token in plain text |
-| global.external-argo-cd.auth.tokenSecretKeyRef | object | `{}` | ArgoCD token referenced by an existing secret |
-| global.external-argo-cd.auth.type | string | `"password"` | Authentication type. Can be password or token |
-| global.external-argo-cd.auth.username | string | `"admin"` | ArgoCD username in plain text |
+| global.event-reporters.affinity | object | `{}` |  |
+| global.event-reporters.config | object | `{}` |  |
+| global.event-reporters.image.registry | string | `"quay.io"` |  |
+| global.event-reporters.image.repository | string | `"codefresh/cf-argocd-extras"` |  |
+| global.event-reporters.image.tag | string | `"695977c"` |  |
+| global.event-reporters.livenessProbe.failureThreshold | int | `3` |  |
+| global.event-reporters.livenessProbe.initialDelaySeconds | int | `10` |  |
+| global.event-reporters.livenessProbe.periodSeconds | int | `10` |  |
+| global.event-reporters.livenessProbe.successThreshold | int | `1` |  |
+| global.event-reporters.livenessProbe.timeoutSeconds | int | `10` |  |
+| global.event-reporters.nodeSelector | object | `{}` |  |
+| global.event-reporters.pdb.enabled | bool | `true` |  |
+| global.event-reporters.pdb.maxUnavailable | string | `""` |  |
+| global.event-reporters.pdb.minAvailable | string | `"50%"` |  |
+| global.event-reporters.readinessProbe.failureThreshold | int | `3` |  |
+| global.event-reporters.readinessProbe.initialDelaySeconds | int | `10` |  |
+| global.event-reporters.readinessProbe.periodSeconds | int | `10` |  |
+| global.event-reporters.readinessProbe.successThreshold | int | `1` |  |
+| global.event-reporters.readinessProbe.timeoutSeconds | int | `10` |  |
+| global.event-reporters.replicaCount | int | `2` |  |
+| global.event-reporters.resources.requests.cpu | string | `"100m"` |  |
+| global.event-reporters.resources.requests.memory | string | `"128Mi"` |  |
+| global.event-reporters.service.ports.http.port | int | `8088` |  |
+| global.event-reporters.service.ports.http.targetPort | int | `8088` |  |
+| global.event-reporters.service.ports.metrics.port | int | `8087` |  |
+| global.event-reporters.service.ports.metrics.targetPort | int | `8087` |  |
+| global.event-reporters.service.type | string | `"ClusterIP"` |  |
+| global.event-reporters.serviceAccount.create | bool | `true` |  |
+| global.event-reporters.serviceMonitor.enabled | bool | `false` |  |
+| global.event-reporters.serviceMonitor.interval | string | `"30s"` |  |
+| global.event-reporters.serviceMonitor.labels | object | `{}` |  |
+| global.event-reporters.serviceMonitor.scrapeTimeout | string | `"10s"` |  |
+| global.event-reporters.tolerations | list | `[]` |  |
+| global.external-argo-cd | object | `{"repoServer":{"port":8081,"svc":"argocd-repo-server"},"server":{"port":80,"rootpath":"","svc":"argocd-server"}}` | Configuration for external ArgoCD Should be used when `argo-cd.enabled` is set to false |
 | global.external-argo-cd.repoServer.port | int | `8081` | Port of the ArgoCD repo server |
 | global.external-argo-cd.repoServer.svc | string | `"argocd-repo-server"` | Service name of the ArgoCD repo server |
 | global.external-argo-cd.server | object | `{"port":80,"rootpath":"","svc":"argocd-server"}` | ArgoCD server settings |
@@ -630,16 +633,19 @@ redis-ha:
 | global.external-argo-rollouts.rollout-reporter.enabled | bool | `false` | Enable or disable rollout reporter Configuration is defined at .Values.event-reporters.rollout |
 | global.httpProxy | string | `""` | global HTTP_PROXY for all components |
 | global.httpsProxy | string | `""` | global HTTPS_PROXY for all components |
+| global.imageRegistry | string | `""` |  |
+| global.integrations.argo-cd.server.auth | object | `{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"}` | How GitOps Runtime should authenticate with ArgoCD server |
+| global.integrations.argo-cd.server.auth.password | string | `""` | ArgoCD password in plain text |
+| global.integrations.argo-cd.server.auth.passwordSecretKeyRef | object | `{"key":"password","name":"argocd-initial-admin-secret"}` | ArgoCD password referenced by an existing secret |
+| global.integrations.argo-cd.server.auth.token | string | `""` | ArgoCD token in plain text |
+| global.integrations.argo-cd.server.auth.tokenSecretKeyRef | object | `{}` | ArgoCD token referenced by an existing secret |
+| global.integrations.argo-cd.server.auth.type | string | `"password"` | Authentication type. Can be password or token |
+| global.integrations.argo-cd.server.auth.username | string | `"admin"` | ArgoCD username in plain text |
 | global.noProxy | string | `""` | global NO_PROXY for all components |
 | global.nodeSelector | object | `{}` | Global nodeSelector for all components |
-| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"eventBus":{"annotations":{},"jetstream":{"affinity":{},"containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","metadata":{"labels":{"app.kubernetes.io/name":"codefresh-eventbus"}},"nodeSelector":{},"replicas":3,"tolerations":[],"version":"latest"},"name":"","nats":{"native":{"affinity":{},"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","metadata":{"labels":{"app.kubernetes.io/name":"codefresh-eventbus"}},"nodeSelector":{},"replicas":3,"tolerations":[]}},"pdb":{"enabled":true,"minAvailable":2},"type":"nats"},"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
+| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
-| global.runtime.eventBus | object | `{"annotations":{},"jetstream":{"affinity":{},"containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","metadata":{"labels":{"app.kubernetes.io/name":"codefresh-eventbus"}},"nodeSelector":{},"replicas":3,"tolerations":[],"version":"latest"},"name":"","nats":{"native":{"affinity":{},"auth":"token","containerTemplate":{"resources":{"limits":{"cpu":"500m","ephemeral-storage":"2Gi","memory":"4Gi"},"requests":{"cpu":"200m","ephemeral-storage":"2Gi","memory":"1Gi"}}},"maxPayload":"4MB","metadata":{"labels":{"app.kubernetes.io/name":"codefresh-eventbus"}},"nodeSelector":{},"replicas":3,"tolerations":[]}},"pdb":{"enabled":true,"minAvailable":2},"type":"nats"}` | Runtime eventbus |
-| global.runtime.eventBus.annotations | object | `{}` | Annotations on EventBus resource |
-| global.runtime.eventBus.name | string | `""` | Eventbus name |
-| global.runtime.eventBus.pdb | object | `{"enabled":true,"minAvailable":2}` | Pod disruption budget for the eventbus |
-| global.runtime.eventBus.pdb.minAvailable | int | `2` | Minimum number of available eventbus pods. For eventbus to stay functional the majority of its replicas should always be available. |
 | global.runtime.gitCredentials | object | `{"password":{"secretKeyRef":{},"value":null},"username":"username"}` | Git credentials runtime. Runtime is not fully functional without those credentials. If not provided through the installation, they must be provided through the Codefresh UI. |
 | global.runtime.gitCredentials.password | object | `{"secretKeyRef":{},"value":null}` | Password. If using GitHub token, please provide it here. |
 | global.runtime.gitCredentials.password.secretKeyRef | object | `{}` | secretKeyReference for Git credentials password. Provide name and key fields. |
@@ -710,10 +716,26 @@ redis-ha:
 | redis-ha.hardAntiAffinity | bool | `true` | Whether the Redis server pods should be forced to run on separate nodes. |
 | redis-ha.image.repository | string | `"public.ecr.aws/docker/library/redis"` | Redis repository |
 | redis-ha.image.tag | string | `"8.2.1-alpine"` | Redis tag |
+| redis-ha.livenessProbe.failureThreshold | int | `3` |  |
+| redis-ha.livenessProbe.initialDelaySeconds | int | `10` |  |
+| redis-ha.livenessProbe.periodSeconds | int | `10` |  |
+| redis-ha.livenessProbe.successThreshold | int | `1` |  |
+| redis-ha.livenessProbe.timeoutSeconds | int | `10` |  |
 | redis-ha.persistentVolume.enabled | bool | `false` | Configures persistence on Redis nodes |
+| redis-ha.readinessProbe.failureThreshold | int | `3` |  |
+| redis-ha.readinessProbe.initialDelaySeconds | int | `10` |  |
+| redis-ha.readinessProbe.periodSeconds | int | `10` |  |
+| redis-ha.readinessProbe.successThreshold | int | `1` |  |
+| redis-ha.readinessProbe.timeoutSeconds | int | `10` |  |
 | redis-ha.redis.config | object | See [values.yaml] | Any valid redis config options in this section will be applied to each server (see `redis-ha` chart) |
 | redis-ha.redis.config.save | string | `'""'` | Will save the DB if both the given number of seconds and the given number of write operations against the DB occurred. `""`  is disabled |
 | redis-ha.redis.masterGroupName | string | `"gitops-runtime"` | Redis convention for naming the cluster group: must match `^[\\w-\\.]+$` and can be templated |
+| redis-ha.service.type | string | `"ClusterIP"` |  |
+| redis-ha.serviceAccount.create | bool | `true` |  |
+| redis-ha.serviceMonitor.enabled | bool | `false` |  |
+| redis-ha.serviceMonitor.interval | string | `"30s"` |  |
+| redis-ha.serviceMonitor.labels | object | `{}` |  |
+| redis-ha.serviceMonitor.scrapeTimeout | string | `"10s"` |  |
 | redis-ha.tolerations | list | `[]` | [Tolerations] for use with node taints for Redis pods. |
 | redis-ha.topologySpreadConstraints | object | `{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}` | Assign custom [TopologySpreadConstraints] rules to the Redis pods. |
 | redis-ha.topologySpreadConstraints.enabled | bool | `false` | Enable Redis HA topology spread constraints |
