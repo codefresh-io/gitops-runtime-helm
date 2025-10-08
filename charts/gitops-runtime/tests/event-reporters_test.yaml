@@ -30,6 +30,21 @@ tests:
           path: metadata.name
           value: runtime-event-reporter
 
+  - it: Runtime Reporter ConfigMap should have valid data
+    template: event-reporters/runtime-event-reporter/configmap.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - equal:
+          path: data["argocd.server"]
+          value: argo-cd-server:80
+      - equal:
+          path: data["redis.server"]
+          value: runtime-redis:6379
+      - equal:
+          path: data["repo.server"]
+          value: argo-cd-repo-server:8081
+
   - it: Runtime Reporter ConfigMap should have valid redis-ha url
     template: event-reporters/runtime-event-reporter/configmap.yaml
     values:
@@ -40,7 +55,7 @@ tests:
     asserts:
       - equal:
           path: data["redis.server"]
-          value: redis-ha-haproxy:6379
+          value: runtime-redis-ha-haproxy:6379
 
   - it: Runtime Reporter should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secret.create is true
     template: event-reporters/runtime-event-reporter/deployment.yaml

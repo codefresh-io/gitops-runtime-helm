@@ -714,6 +714,7 @@ redis-secret-init:
 # Will be replaced by redis-ha subchart when `redis-ha.enabled=true`
 redis:
   enabled: true
+  fullnameOverride: "runtime-redis"
   # -- Redis image
   image:
     registry: public.ecr.aws
@@ -809,7 +810,7 @@ redis-ha:
   # -- Enables the Redis HA subchart and disables the custom Redis single node deployment
   enabled: false
   # -- Full name of the Redis HA Resources
-  fullnameOverride: "redis-ha"
+  fullnameOverride: "runtime-redis-ha"
   ## Redis image
   image:
     # -- Redis repository
