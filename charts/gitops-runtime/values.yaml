@@ -626,6 +626,8 @@ gitops-operator:
     workflowMonitorPollingInterval: 10s
     # -- Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime)
     maxConcurrentReleases: 100
+    # -- Maximum number of reconcile retries on promotion-related resources before failing a promotion task
+    maxReconcileRetries: 10
     # -- An optional template for the promotion wrapper (empty default will use the embedded one)
     promotionWrapperTemplate: ''
   image:
