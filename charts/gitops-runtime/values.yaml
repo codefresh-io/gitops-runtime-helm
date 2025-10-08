@@ -894,8 +894,6 @@ redis-ha:
   # @default -- See [values.yaml]
   containerSecurityContext:
     readOnlyRootFilesystem: true
-    minAvailable: "50%"
-    maxUnavailable: ""
   service:
     type: ClusterIP
   serviceAccount:
