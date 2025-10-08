@@ -29,12 +29,15 @@ tests:
   values:
   - ./values/mandatory-values.yaml
   set:
-    argo-cd.fullnameOverride: argo-cd-test
-    argo-cd.configs.params.server\.insecure: false
+    argo-cd:
+      fullnameOverride: argo-cd-testasd
+      configs:
+        params:
+          "server.insecure": false
   asserts:
   - equal:
       path: data.argoCdUrl
-      value: https://argo-cd-test-server:443
+      value: https://argo-cd-testasd-server:443
 
 # ------------------------------------------------------------------------------------------
 # Argo Workflows
@@ -105,18 +108,3 @@ tests:
   - equal:
       path: data.argoWorkflowsUrl
       value: https://argo-test-server:2746
-# ------------------------------------------------------------------------------------------
-# Argo rollouts
-# Affected templates - rollouts reporter clusterrolebinding
-# ------------------------------------------------------------------------------------------
-- it: test rollout reporter ClusterRoleBinding to argo rollouts role
-  template: 'event-reporters/rollout-reporter/clusterrolebinding.yaml'
-  values:
-  - ./values/mandatory-values.yaml
-  set:
-    argo-rollouts.enabled: true
-    argo-rollouts.fullnameOverride: rollouts-test
-  asserts:
-  - equal:
-      path: roleRef.name
-      value: rollouts-test

@@ -78,59 +78,31 @@ global:
         value:
         # -- secretKeyReference for Git credentials password. Provide name and key fields.
         secretKeyRef: {}
-    # -- Runtime eventbus
-    eventBus:
-      # -- Eventbus name
-      name: ''
-      # -- Annotations on EventBus resource
-      annotations: {}
-      # -- Pod disruption budget for the eventbus
-      pdb:
-        enabled: true
-        # -- Minimum number of available eventbus pods. For eventbus to stay functional the majority of its replicas should always be available.
-        minAvailable: 2
-      type: nats # -- Eventbus type. Can be nats or jetstream.
-      nats:
-        native:
-          metadata:
-            labels:
-              app.kubernetes.io/name: codefresh-eventbus
-          nodeSelector: {}
-          tolerations: []
-          affinity: {}
-          replicas: 3
-          auth: token
-          maxPayload: "4MB"
-          containerTemplate:
-            resources:
-              limits:
-                cpu: 500m
-                memory: 4Gi
-                ephemeral-storage: 2Gi
-              requests:
-                cpu: 200m
-                memory: 1Gi
-                ephemeral-storage: 2Gi
-      jetstream:
-        metadata:
-          labels:
-            app.kubernetes.io/name: codefresh-eventbus
-        version: latest
-        nodeSelector: {}
-        tolerations: []
-        affinity: {}
-        replicas: 3
-        maxPayload: "4MB"
-        containerTemplate:
-          resources:
-            limits:
-              cpu: 500m
-              memory: 4Gi
-              ephemeral-storage: 2Gi
-            requests:
-              cpu: 200m
-              memory: 1Gi
-              ephemeral-storage: 2Gi
+  integrations:
+    argo-cd:
+      server:
+        # -- How GitOps Runtime should authenticate with ArgoCD server
+        auth:
+          # -- Authentication type. Can be password or token
+          type: password
+          # If `auth.type=password` is set
+          # -- ArgoCD username in plain text
+          username: "admin"
+          # -- ArgoCD password in plain text
+          password: ""
+          # -- ArgoCD password referenced by an existing secret
+          passwordSecretKeyRef:
+            name: argocd-initial-admin-secret
+            key: password
+          # If `auth.type=token` is set
+          # -- ArgoCD token in plain text
+          token: ""
+          # -- ArgoCD token referenced by an existing secret
+          tokenSecretKeyRef: {}
+          # e.g:
+          # tokenSecretKeyRef:
+          #   name: argocd-token
+          #   key: token
   # -- Configuration for external ArgoCD
   # Should be used when `argo-cd.enabled` is set to false
   external-argo-cd:
@@ -149,29 +121,6 @@ global:
       svc: argocd-repo-server
       # -- Port of the ArgoCD repo server
       port: 8081
-      # -- ArgoCD username in plain text
-    # -- How GitOps Runtime should authenticate with ArgoCD
-    auth:
-      # -- Authentication type. Can be password or token
-      type: password
-      # If `auth.type=password` is set
-      # -- ArgoCD username in plain text
-      username: "admin"
-      # -- ArgoCD password in plain text
-      password: ""
-      # -- ArgoCD password referenced by an existing secret
-      passwordSecretKeyRef:
-        name: argocd-initial-admin-secret
-        key: password
-      # If `auth.type=token` is set
-      # -- ArgoCD token in plain text
-      token: ""
-      # -- ArgoCD token referenced by an existing secret
-      tokenSecretKeyRef: {}
-      # e.g:
-      # tokenSecretKeyRef:
-      #   name: argocd-token
-      #   key: token
   # -- Configuration for external Argo Rollouts
   external-argo-rollouts:
     # -- Rollout reporter settings
@@ -189,6 +138,55 @@ global:
   httpsProxy: ''
   # -- global NO_PROXY for all components
   noProxy: ''
+  imageRegistry: ""
+
+  event-reporters:
+    replicaCount: 2
+    image:
+      registry: quay.io
+      repository: codefresh/cf-argocd-extras
+      tag: 695977c
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+    pdb:
+      enabled: true
+      minAvailable: "50%"
+      maxUnavailable: ""
+    service:
+      type: ClusterIP
+      ports:
+        http:
+          port: 8088
+          targetPort: 8088
+        metrics:
+          port: 8087
+          targetPort: 8087
+    serviceAccount:
+      create: true
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 10
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 10
+    serviceMonitor:
+      enabled: false
+      interval: 30s
+      scrapeTimeout: 10s
+      labels: {}
+    config: {}
+
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
@@ -276,6 +274,7 @@ argo-cd:
 # Argo Events
 #-----------------------------------------------------------------------------------------------------------------------
 argo-events:
+  enabled: false
   fullnameOverride: argo-events
   crds:
     install: false
@@ -331,94 +330,6 @@ argo-rollouts:
   controller:
     replicas: 1
   installCRDs: true
-#-----------------------------------------------------------------------------------------------------------------------
-# Event reporters
-#-----------------------------------------------------------------------------------------------------------------------
-event-reporters:
-  rollout:
-    serviceAccount:
-      create: true
-    eventSource:
-      replicas: 1
-      resources: {}
-      tolerations: []
-      nodeSelector: {}
-      affinity: {}
-    sensor:
-      # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
-      logging:
-        enabled: false
-        intervalSeconds: 0
-      # -- At Least Once
-      atLeastOnce: true
-      # -- Retry strategy for events sent to Codefresh
-      retryStrategy:
-        # -- Number of retries
-        steps: 3
-        # -- The initial duration, use strings like "2s", "1m"
-        duration: 0
-        # -- Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative
-        factor: 1.0
-        # -- The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`.
-        jitter: 1
-      policy:
-        status:
-          allow:
-            - 200
-            - 201
-            - 204
-            - 400
-            - 401
-            - 404
-      replicas: 1
-      resources: {}
-      # -- Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs
-      env: {}
-      tolerations: []
-      nodeSelector: {}
-      affinity: {}
-  workflow:
-    serviceAccount:
-      create: true
-    eventSource:
-      replicas: 1
-      resources: {}
-      tolerations: []
-      nodeSelector: {}
-      affinity: {}
-    sensor:
-      # -- Set to true to enable logging. Set intervalSeconds to add logging interval to moderate log flow.
-      logging:
-        enabled: false
-        intervalSeconds: 0
-      # -- At Least Once
-      atLeastOnce: true
-      # -- Retry strategy for events sent to Codefresh
-      retryStrategy:
-        # -- Number of retries
-        steps: 3
-        # -- The initial duration, use strings like "2s", "1m"
-        duration: 0
-        # -- Duration is multiplied by factor each retry, if factor is not zero and steps limit has not been reached. Should not be negative
-        factor: 1.0
-        # -- The sleep between each retry is the duration plus an additional amount chosen uniformly at random from the interval between zero and `jitter * duration`.
-        jitter: 1
-      policy:
-        status:
-          allow:
-            - 200
-            - 201
-            - 204
-            - 400
-            - 401
-            - 404
-      replicas: 1
-      resources: {}
-      # -- Environment variables for sensor pods - add DEBUG_LOG: "true" to add debug level logs
-      env: {}
-      tolerations: []
-      nodeSelector: {}
-      affinity: {}
 #-----------------------------------------------------------------------------------------------------------------------
 # Internal router
 #-----------------------------------------------------------------------------------------------------------------------
@@ -559,14 +470,14 @@ app-proxy:
           tag: 1.1.16-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3772.0
+    tag: 1.3806.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3772.0
+      tag: 1.3806.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -608,8 +519,8 @@ app-proxy:
   nameOverride: ""
   fullnameOverride: "cap-app-proxy"
   config:
-    # -- ArgoCD user to be used by app-proxy
-    argoCdUsername: "admin"
+    # -- deprecated. use `global.external-argo-cd.auth.username` instead
+    argoCdUsername: ""
     # -- ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to
     argoCdUrl:
     # -- Workflows server url. Determined by chart logic. Do not change unless you are certain you need to
@@ -721,7 +632,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: 3ac2676
+    tag: a1316ff
   env:
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
@@ -745,36 +656,25 @@ gitops-operator:
     enabled: false
     minAvailable: 1
     maxUnavailable: ""
-#-----------------------------------------------------------------------------------------------------------------------
-# cf-argocd-extras
-#-----------------------------------------------------------------------------------------------------------------------
-# -- Codefresh extra services for ArgoCD
-cf-argocd-extras:
-  eventReporter:
+
+argo-gateway:
+  image:
+    registry: quay.io
+    repository: codefresh/cf-argocd-extras
+    tag: 695977c
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+  hpa:
     enabled: true
-    container:
-      image:
-        registry: quay.io
-        repository: codefresh/cf-argocd-extras
-        tag: "1556733"
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-    resources:
-      requests:
-        memory: "128Mi"
-        cpu: "100m"
-    pdb:
-      # -- Enable PDB for event-reporter
-      enabled: false
-      minAvailable: "50%"
-      maxUnavailable: ""
-    serviceMonitor:
-      main:
-        # -- Enable ServiceMonitor for event reporter
-        enabled: false
-  # -- Sources server configuration
-  sourcesServer:
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+  pdb:
     enabled: true
     container:
       image:
@@ -990,3 +890,30 @@ redis-ha:
   # @default -- See [values.yaml]
   containerSecurityContext:
     readOnlyRootFilesystem: true
+    minAvailable: "50%"
+    maxUnavailable: ""
+  service:
+    type: ClusterIP
+  serviceAccount:
+    create: true
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 10
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    scrapeTimeout: 10s
+    labels: {}
+
+event-reporters:
+  cluster-event-reporter: {}
+  runtime-event-reporter: {}

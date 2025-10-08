@@ -1,0 +1,23 @@
+{{- define "cluster-event-reporter.resources.configmap.defaults" }}
+argocd.server: {{ include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . }}
+redis.server: {{ include "codefresh-gitops-runtime.argocd.redis.url" . }}
+repo.server: {{ include "codefresh-gitops-runtime.argocd.reposerver.url" . }}
+argo-gateway.server: http://argo-gateway
+resource.threadiness: '100'
+app.queue.size: '1000'
+max.app.retries: '5'
+threadiness: '100'
+{{- end }}
+
+{{- $defaultConfig := (include "cluster-event-reporter.resources.configmap.defaults" . | fromYaml ) }}
+{{- $globalOverrides := index .Values "global" "event-reporters" "config" | default dict }}
+{{- $reporterOverrides := index .Values "event-reporters" "cluster-event-reporter" "config" | default dict }}
+{{- $mergedConfig := mergeOverwrite $defaultConfig $globalOverrides $reporterOverrides }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-event-reporter-cmd-params-cm
+  labels:
+    {{- include "cluster-event-reporter.labels" . | nindent 4 }}
+data:
+  {{- $mergedConfig | toYaml | nindent 2 }}

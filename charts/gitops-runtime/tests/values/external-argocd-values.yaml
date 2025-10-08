@@ -1,5 +1,5 @@
 global:
-  external-argo-cd: 
+  external-argo-cd:
     server:
       protocol: http
       svc: my-argocd-server
@@ -13,20 +13,6 @@ global:
     repoServer:
       svc: my-argocd-repo-server
       port: 8081
-    auth:
-      type: password
-
-      username: "admin"
-      password: ""
-      passwordSecretKeyRef:
-        name: argocd-initial-admin-secret
-        key: password
-      
-      token: ""
-      tokenSecretKeyRef:
-        name: ""
-        key: ""
 
 argo-cd:
   enabled: false
-

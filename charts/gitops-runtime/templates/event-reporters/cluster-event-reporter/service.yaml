@@ -1,0 +1,21 @@
+{{- $context := deepCopy . }}
+{{- $_ := set $context "Values" (deepCopy (get (index .Values "global") "event-reporters")) }}
+{{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
+{{- $valuesOverrides := index .Values "event-reporters" "cluster-event-reporter" }}
+{{- $_ := mergeOverwrite $context.Values $valuesOverrides | set $context "Values" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cluster-event-reporter.fullname" . }}
+  labels:
+    {{- include "cluster-event-reporter.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+{{- range $name, $port := $context.Values.service.ports }}
+  - name: {{ $name }}
+    port: {{ $port.port }}
+    targetPort: {{ $port.targetPort }}
+{{- end }}
+  selector:
+    {{- include "cluster-event-reporter.selectorLabels" . | nindent 4 }}

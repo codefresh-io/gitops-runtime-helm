@@ -77,6 +77,16 @@ spec:
                   properties:
                     getPromotionValues:
                       properties:
+                        commitAuthorId:
+                          properties:
+                            email:
+                              type: string
+                            username:
+                              type: string
+                          required:
+                          - email
+                          - username
+                          type: object
                         commitSha:
                           maxLength: 40
                           minLength: 7
@@ -155,7 +165,6 @@ spec:
                                       minLength: 1
                                       type: string
                                     value:
-                                      minLength: 1
                                       type: string
                                   required:
                                   - path
@@ -212,7 +221,6 @@ spec:
                                       minLength: 1
                                       type: string
                                     value:
-                                      minLength: 1
                                       type: string
                                   required:
                                   - path
@@ -258,6 +266,13 @@ spec:
                           additionalProperties:
                             type: string
                           type: object
+                        stage:
+                          type: string
+                        uid:
+                          maxLength: 36
+                          minLength: 36
+                          pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+                          type: string
                         workflowTemplateName:
                           maxLength: 253
                           minLength: 1
@@ -388,6 +403,8 @@ spec:
                       type: string
                     getPromotionValues:
                       properties:
+                        commitAuthorAvatarUrl:
+                          type: string
                         phase:
                           description: GetPromotionValuesStatusPhase
                           enum:
@@ -409,7 +426,6 @@ spec:
                                       minLength: 1
                                       type: string
                                     value:
-                                      minLength: 1
                                       type: string
                                   required:
                                   - path
@@ -526,9 +542,12 @@ spec:
                                 description: NodePhase is a label for the condition
                                   of a node at the current time.
                                 type: string
+                              templateName:
+                                type: string
                             required:
                             - name
                             - phase
+                            - templateName
                             type: object
                           type: array
                         phase:

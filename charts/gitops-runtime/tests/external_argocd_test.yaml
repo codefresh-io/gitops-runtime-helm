@@ -3,8 +3,8 @@ templates:
   - app-proxy/config.yaml
   - app-proxy/deployment.yaml
   - gitops-operator/*
-  - cf-argocd-extras/*
-  - _components/cf-argocd-extras/*
+  - event-reporters/**/*.yaml
+  - argo-gateway/**
   - _components/gitops-operator/*
   - app-proxy/external-argocd-token.yaml
   - codefresh-cm.yaml
@@ -19,7 +19,7 @@ tests:
           path: data.argoCdUrl
           value: http://my-argocd-server
 
-  - it: app-proxy ConfigMap should have valid ArgoCd Username
+  - it: app-proxy ConfigMap should have valid default ArgoCd Username
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -35,25 +35,80 @@ tests:
       - ./values/external-argocd-values.yaml
     template: app-proxy/config.yaml
     set:
-      global.external-argo-cd.auth.username: adminoverride
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                username: adminoverride
     asserts:
       - equal:
           path: data.argoCdUsername
           value: adminoverride
+
+  - it: app-proxy ConfigMap override priority should prefer value from app-proxy.config (for backward compatibility)
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/config.yaml
+    set:
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                username: external-adminoverride
+      app-proxy:
+        config:
+          argoCdUsername: app-proxy-adminoverride
+    asserts:
+      - equal:
+          path: data.argoCdUsername
+          value: app-proxy-adminoverride
+
+  - it: app-proxy ConfigMap should *not* have username, if auth.type is token
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/config.yaml
+    set:
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: some-token
+    asserts:
+      - notExists:
+          path: data.argoCdUsername
 
   - it: app-proxy ConfigMap should have isExternalArgoCD key set to true
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     template: app-proxy/config.yaml
-    set:
-      global.external-argo-cd.auth.username: adminoverride
     asserts:
       - equal:
           path: data.isExternalArgoCD
           value: "true"
 
-  - it: app-proxy Deployment should have valid ARGO_CD_PASSWORD env var set via passwordSecretKeyRef
+  - it: app-proxy Deployment should have valid deafult ARGO_CD_USERNAME env var if auth.type is password
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                key: argoCdUsername
+                name: cap-app-proxy-cm
+
+  - it: app-proxy Deployment should have valid deafult ARGO_CD_PASSWORD env var set via passwordSecretKeyRef
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -68,14 +123,42 @@ tests:
                 key: password
                 name: argocd-initial-admin-secret
 
+  - it: app-proxy Deployment should have valid ARGO_CD_PASSWORD env var set via passwordSecretKeyRef override
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/deployment.yaml
+    set:
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                passwordSecretKeyRef:
+                  name: name-override
+                  key: key-override
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: key-override
+                name: name-override
+
   - it: app-proxy Deploymeny should have valid ARGO_CD_PASSWORD env var set via plaintext password
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     template: app-proxy/deployment.yaml
     set:
-      global.external-argo-cd.auth.passwordSecretKeyRef: []
-      global.external-argo-cd.auth.password: token
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                password: token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -86,38 +169,57 @@ tests:
                 key: token
                 name: gitops-runtime-argo-cd-password
 
-  - it: app-proxy Deployment should have valid ARGO_CD_USERNAME env var set via plaintext username
+  - it: app-proxy Deployment should *not* have ARGO_CD_TOKEN env var if auth.type is password
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     template: app-proxy/deployment.yaml
-    set:
-      global.external-argo-cd.auth.username: adminoverride
     asserts:
-      - contains:
-          path: spec.template.spec.containers[0].env
-          content:
-            name: ARGO_CD_USERNAME
-            value: adminoverride
-
-  - it: app-proxy Deployment should have valid ARGO_CD_TOKEN env var set via tokenSecretKeyRef
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    template: app-proxy/deployment.yaml
-    set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.tokenSecretKeyRef.name: my-argocd-secret
-      global.external-argo-cd.auth.tokenSecretKeyRef.key: my-token
-    asserts:
-      - contains:
+      - notContains:
+          any: true
           path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN
-            valueFrom:
-              secretKeyRef:
-                key: my-token
-                name: my-argocd-secret
+
+  - it: app-proxy Deployment should *not* have ARGO_CD_USERNAME env var if auth.type is token
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/deployment.yaml
+    set:
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: plaintexttoken
+    asserts:
+      - notContains:
+          any: true
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_USERNAME
+
+  - it: app-proxy Deployment should *not* have ARGO_CD_PASSWORD env var if auth.type is token
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/deployment.yaml
+    set:
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: plaintexttoken
+    asserts:
+      - notContains:
+          any: true
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_PASSWORD
 
   - it: app-proxy Deployment should have valid ARGO_CD_TOKEN env var set via plaintext token
     values:
@@ -125,8 +227,13 @@ tests:
       - ./values/external-argocd-values.yaml
     template: app-proxy/deployment.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.token: "plaintexttoken"
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: plaintexttoken
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -137,21 +244,52 @@ tests:
                 key: token
                 name: gitops-runtime-argo-cd-token
 
+  - it: app-proxy Deployment should have valid ARGO_CD_TOKEN env var set via tokenSecretKeyRef
+    values:
+      - ./values/mandatory-values-ingress.yaml
+      - ./values/external-argocd-values.yaml
+    template: app-proxy/deployment.yaml
+    set:
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-secret
+                  key: my-token
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: my-argocd-secret
+                key: my-token
+
   - it: gitops-operator Deployment should have valid ARGO_CD_TOKEN_SECRET_NAME env var set via tokenSecretKeyRef
     values:
       - ./values/mandatory-values.yaml
       - ./values/external-argocd-values.yaml
     template: gitops-operator/deployment.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.tokenSecretKeyRef.name: my-argocd-token-secret
-      global.external-argo-cd.auth.tokenSecretKeyRef.key: my-token
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-secret
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN_SECRET_NAME
-            value: my-argocd-token-secret
+            value: my-argocd-secret
 
   - it: gitops-operator Deployment should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via tokenSecretKeyRef
     values:
@@ -159,9 +297,15 @@ tests:
       - ./values/external-argocd-values.yaml
     template: gitops-operator/deployment.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.tokenSecretKeyRef.name: my-argocd-token-secret
-      global.external-argo-cd.auth.tokenSecretKeyRef.key: my-token
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-secret
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -175,8 +319,13 @@ tests:
       - ./values/external-argocd-values.yaml
     template: gitops-operator/deployment.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.token: "plaintexttoken"
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -190,8 +339,13 @@ tests:
       - ./values/external-argocd-values.yaml
     template: gitops-operator/deployment.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.token: "plaintexttoken"
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -235,8 +389,8 @@ tests:
             name: ARGO_CD_URL
             value: my-argocd-server:80
 
-  - it: event-reporter ConfigMap should have valid ArgoCd URL
-    template: cf-argocd-extras/event-reporter/configmap.yaml
+  - it: runtime-event-reporter ConfigMap should have valid ArgoCd URL
+    template: event-reporters/runtime-event-reporter/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -245,8 +399,8 @@ tests:
           path: data["argocd.server"]
           value: my-argocd-server:80
 
-  - it: event-reporter ConfigMap should have valid Redis URL
-    template: cf-argocd-extras/event-reporter/configmap.yaml
+  - it: runtime-event-reporter ConfigMap should have valid Redis URL
+    template: event-reporters/runtime-event-reporter/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -255,18 +409,18 @@ tests:
           path: data["redis.server"]
           value: redis:6379
 
-  - it: event-reporter ConfigMap should have valid Sources Server address
-    template: cf-argocd-extras/event-reporter/configmap.yaml
+  - it: runtime-event-reporter ConfigMap should have valid Sources Server address
+    template: event-reporters/runtime-event-reporter/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     asserts:
       - equal:
-          path: data["sources.server"]
-          value: http://sources-server
+          path: data["argo-gateway.server"]
+          value: http://argo-gateway
 
-  - it: event-reporte ConfigMap should have valid Repo Server URL
-    template: cf-argocd-extras/event-reporter/configmap.yaml
+  - it: runtime-event-reporter ConfigMap should have valid Repo Server URL
+    template: event-reporters/runtime-event-reporter/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -275,8 +429,8 @@ tests:
           path: data["repo.server"]
           value: my-argocd-repo-server:8081
 
-  - it: event-reporter StatefulSet should have valid default ARGO_CD_TOKEN_SECRET_NAME env var
-    template: cf-argocd-extras/event-reporter/statefulset.yaml
+  - it: runtime-event-reporter Deployment should have valid default ARGO_CD_TOKEN_SECRET_NAME env var
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -287,8 +441,8 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_NAME
             value: argocd-token
 
-  - it: event-reporter StatefulSet should have valid default ARGO_CD_TOKEN_SECRET_KEY env var
-    template: cf-argocd-extras/event-reporter/statefulset.yaml
+  - it: runtime-event-reporter Deployment should have valid default ARGO_CD_TOKEN_SECRET_KEY env var
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -299,31 +453,43 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: token
 
-  - it: event-reporter StatefulSet should have valid ARGO_CD_TOKEN_SECRET_NAME env var set via tokenSecretKeyRef
-    template: cf-argocd-extras/event-reporter/statefulset.yaml
+  - it: runtime-event-reporter Deployment should have valid ARGO_CD_TOKEN_SECRET_NAME env var set via tokenSecretKeyRef
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.tokenSecretKeyRef.name: my-argocd-token-secret
-      global.external-argo-cd.auth.tokenSecretKeyRef.key: my-token
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-token
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN_SECRET_NAME
-            value: my-argocd-token-secret
+            value: my-argocd-token
 
-  - it: event-reporter StatefulSet should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via tokenSecretKeyRef
-    template: cf-argocd-extras/event-reporter/statefulset.yaml
+  - it: runtime-event-reporter Deployment should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via tokenSecretKeyRef
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.tokenSecretKeyRef.name: my-argocd-token-secret
-      global.external-argo-cd.auth.tokenSecretKeyRef.key: my-token
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-token
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -331,14 +497,19 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: my-token
 
-  - it: event-reporter StatefulSet should have valid ARGO_CD_TOKEN_SECRET_NAME env var set via plaintext token
-    template: cf-argocd-extras/event-reporter/statefulset.yaml
+  - it: runtime-event-reporter Deployment should have valid ARGO_CD_TOKEN_SECRET_NAME env var set via plaintext token
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.token: "plaintexttoken"
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -346,14 +517,19 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_NAME
             value: gitops-runtime-argo-cd-token
 
-  - it: event-reporter StatefulSet should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via plaintext token
-    template: cf-argocd-extras/event-reporter/statefulset.yaml
+  - it: runtime-event-reporter Deployment should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via plaintext token
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.token: "plaintexttoken"
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -361,8 +537,8 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: token
 
-  - it: sources-server ConfigMap should have valid ArgoCd URL
-    template: cf-argocd-extras/sources-server/configmap.yaml
+  - it: argo-gateway ConfigMap should have valid ArgoCd URL
+    template: argo-gateway/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -371,8 +547,8 @@ tests:
           path: data["argocd.server"]
           value: my-argocd-server:80
 
-  - it: sources-server ConfigMap should have valid Redis URL
-    template: cf-argocd-extras/sources-server/configmap.yaml
+  - it: argo-gateway ConfigMap should have valid Redis URL
+    template: argo-gateway/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -381,8 +557,8 @@ tests:
           path: data["redis.server"]
           value: redis:6379
 
-  - it: sources-server ConfigMap should have valid Repo Server URL
-    template: cf-argocd-extras/sources-server/configmap.yaml
+  - it: argo-gateway ConfigMap should have valid Repo Server URL
+    template: argo-gateway/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -391,8 +567,8 @@ tests:
           path: data["repo.server"]
           value: my-argocd-repo-server:8081
 
-  - it: sources-server Deployment should have valid default ARGO_CD_TOKEN_SECRET_NAME env var
-    template: cf-argocd-extras/sources-server/deployment.yaml
+  - it: argo-gateway Deployment should have valid default ARGO_CD_TOKEN_SECRET_NAME env var
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -403,8 +579,8 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_NAME
             value: argocd-token
 
-  - it: sources-server Deployment should have valid default ARGO_CD_TOKEN_SECRET_KEY env var
-    template: cf-argocd-extras/sources-server/deployment.yaml
+  - it: argo-gateway Deployment should have valid default ARGO_CD_TOKEN_SECRET_KEY env var
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -415,31 +591,43 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: token
 
-  - it: sources-server Deployment should have valid ARGO_CD_TOKEN_SECRET_NAME env var set via tokenSecretKeyRef
-    template: cf-argocd-extras/sources-server/deployment.yaml
+  - it: argo-gateway Deployment should have valid ARGO_CD_TOKEN_SECRET_NAME env var set via tokenSecretKeyRef
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.tokenSecretKeyRef.name: my-argocd-token-secret
-      global.external-argo-cd.auth.tokenSecretKeyRef.key: my-token
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-token
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
           content:
             name: ARGO_CD_TOKEN_SECRET_NAME
-            value: my-argocd-token-secret
+            value: my-argocd-token
 
-  - it: sources-server Deployment should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via tokenSecretKeyRef
-    template: cf-argocd-extras/sources-server/deployment.yaml
+  - it: argo-gateway Deployment should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via tokenSecretKeyRef
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.tokenSecretKeyRef.name: my-argocd-token-secret
-      global.external-argo-cd.auth.tokenSecretKeyRef.key: my-token
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                tokenSecretKeyRef:
+                  name: my-argocd-token
+                  key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -447,14 +635,19 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: my-token
 
-  - it: sources-server Deployment should have valid ARGO_CD_TOKEN_SECRET_NAME env var set via plaintext token
-    template: cf-argocd-extras/sources-server/deployment.yaml
+  - it: argo-gateway Deployment should have valid ARGO_CD_TOKEN_SECRET_NAME env var set via plaintext token
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.token: "plaintexttoken"
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -462,14 +655,19 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_NAME
             value: gitops-runtime-argo-cd-token
 
-  - it: sources-server Deployment should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via plaintext token
-    template: cf-argocd-extras/sources-server/deployment.yaml
+  - it: argo-gateway Deployment should have valid ARGO_CD_TOKEN_SECRET_KEY env var set via plaintext token
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.token: "plaintexttoken"
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: "plaintexttoken"
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -477,26 +675,26 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: token
 
-  - it: should require ArgoCd password if auth.type=password is set and no password is provided
+  - it: should require ArgoCd redis address if it's not provided
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
-    template: app-proxy/deployment.yaml
     set:
-      global.external-argo-cd.auth.type: password
-      global.external-argo-cd.auth.password: null
-      global.external-argo-cd.auth.passwordSecretKeyRef: []
+      global:
+        external-argo-cd:
+          redis: null
     asserts:
       - failedTemplate:
-          errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.auth.password or .Values.global.external-argo-cd.auth.passwordSecretKeyRef is not set"
+          errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.redis is not set"
 
   - it: should require ArgoCd repoServer address if it's not provided
-    template: cf-argocd-extras/sources-server/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.repoServer: null
+      global:
+        external-argo-cd:
+          repoServer: null
     asserts:
       - failedTemplate:
           errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer is not set"
@@ -505,20 +703,27 @@ tests:
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
-    template: app-proxy/deployment.yaml
     set:
-      global.external-argo-cd.auth.type: invalid
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: invalid
     asserts:
       - failedTemplate:
-          errorMessage: "Invalid value for .Values.global.external-argo-cd.auth.type: invalid. Allowed values are: [password token]"
+          errorMessage: "Invalid value for .Values.global.integrations.argo-cd.server.auth.type: invalid. Allowed values are: [password token]"
 
-  - it: event-reporter StatefulSet should have valid ARGOCD_SERVER_ROOTPATH env var
-    template: cf-argocd-extras/event-reporter/statefulset.yaml
+  - it: runtime-event-reporter Deployment should have valid ARGOCD_SERVER_ROOTPATH env var
+    template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.server.rootpath: /argocd
+      global:
+        external-argo-cd:
+          server:
+            rootpath: /argocd
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -526,13 +731,16 @@ tests:
             name: ARGOCD_SERVER_ROOTPATH
             value: /argocd
 
-  - it: sources-server Deployment should have valid ARGOCD_SERVER_ROOTPATH env var
-    template: cf-argocd-extras/sources-server/deployment.yaml
+  - it: argo-gateway Deployment should have valid ARGOCD_SERVER_ROOTPATH env var
+    template: argo-gateway/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.server.rootpath: /argocd
+      global:
+        external-argo-cd:
+          server:
+            rootpath: /argocd
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -546,7 +754,10 @@ tests:
       - ./values/external-argocd-values.yaml
     template: app-proxy/config.yaml
     set:
-      global.external-argo-cd.server.rootpath: /argocd
+      global:
+        external-argo-cd:
+          server:
+            rootpath: /argocd
     asserts:
       - equal:
           path: data.argoCdUrl
@@ -558,7 +769,10 @@ tests:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.server.rootpath: /argocd
+      global:
+        external-argo-cd:
+          server:
+            rootpath: /argocd
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -572,8 +786,13 @@ tests:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.token: mytoken
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: mytoken
     asserts:
       - isKind:
           of: Secret
@@ -589,8 +808,13 @@ tests:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.auth.type: password
-      global.external-argo-cd.auth.password: mypassword
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: password
+                password: mypassword
     asserts:
       - isKind:
           of: Secret
@@ -600,7 +824,7 @@ tests:
       - isNotNullOrEmpty:
           path: stringData.token
 
-  - it: codefresh-cm ConfigMap should have event-reporter and sources-server
+  - it: codefresh-cm ConfigMap should have runtime-event-reporter and sources-server
     template: codefresh-cm.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -611,29 +835,35 @@ tests:
           pattern: "name: event-reporter"
       - matchRegex:
           path: data.components
-          pattern: "name: sources-server"
+          pattern: "name: argo-gateway"
 
   - it: should require ArgoCd token if auth.type=token is set and no token is provided
-    template: cf-argocd-extras/sources-server/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.auth.type: token
-      global.external-argo-cd.auth.token: null
-      global.external-argo-cd.auth.tokenSecretKeyRef.name: null
-      global.external-argo-cd.auth.tokenSecretKeyRef.key: null
+      global:
+        integrations:
+          argo-cd:
+            server:
+              auth:
+                type: token
+                token: null
+                tokenSecretKeyRef:
+                  name: null
+                  key: null
     asserts:
       - failedTemplate:
-          errorMessage: ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required"
+          errorMessage: ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.server.auth.tokenSecretKeyRef.name is required"
 
   - it: should require ArgoCd server address if it's not provided
-    template: cf-argocd-extras/sources-server/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
     set:
-      global.external-argo-cd.server: null
+      global:
+        external-argo-cd:
+          server: null
     asserts:
       - failedTemplate:
           errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set"

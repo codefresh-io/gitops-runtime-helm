@@ -1,0 +1,189 @@
+{{- define "cluster-event-reporter.resources.environment-variables.calculated" }}
+HTTP_PROXY: {{ .Values.global.httpProxy | squote}}
+HTTPS_PROXY: {{ .Values.global.httpsProxy | squote }}
+NO_PROXY: {{ .Values.global.noProxy | squote }}
+
+{{- if and (eq (index .Values "global" "integrations" "argo-cd" "server" "auth" "type") "token") }}
+  {{- if not (index .Values "global" "integrations" "argo-cd" "server" "auth" "token") }}
+ARGO_CD_TOKEN_SECRET_NAME: {{ required ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.server.auth.tokenSecretKeyRef.name is required" (index .Values "global" "integrations" "argo-cd" "server" "auth" "tokenSecretKeyRef" "name") }}
+ARGO_CD_TOKEN_SECRET_KEY: {{ required ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.server.auth.tokenSecretKeyRef.key is required" (index .Values "global" "integrations" "argo-cd" "server" "auth" "tokenSecretKeyRef" "key" ) }}
+  {{- else }}
+ARGO_CD_TOKEN_SECRET_NAME: "gitops-runtime-argo-cd-token"
+ARGO_CD_TOKEN_SECRET_KEY: "token"
+  {{- end }}
+{{- end }}
+
+ARGOCD_SERVER_ROOTPATH: {{ dig "server" "rootpath" "/" (index .Values "global" "external-argo-cd") | quote }}
+
+{{- if or .Values.global.codefresh.tls.caCerts.secret.create (and .Values.global.codefresh.tls.caCerts.secretKeyRef.key .Values.global.codefresh.tls.caCerts.secretKeyRef.name) }}
+  {{- $secretKey := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
+CODEFRESH_SSL_CERT_PATH: {{ printf "/app/config/codefresh-tls-certs/%s" $secretKey }}
+{{- end }}
+
+{{- end }}
+
+{{- define "cluster-event-reporter.resources.environment-variables.defaults" -}}
+REPORTER_MODE: resource
+APP_QUEUE_SIZE:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: app.queue.size
+ARGOCD_APPLICATION_NAMESPACES:
+  valueFrom:
+    configMapKeyRef:
+      name: argocd-cmd-params-cm
+      key: application.namespaces
+      optional: true
+ARGOCD_SERVER:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: argocd.server
+ARGOCD_SERVER_ROOTPATH:
+  valueFrom:
+    configMapKeyRef:
+      name: argocd-cmd-params-cm
+      key: server.rootpath
+      optional: true
+ARGO_CD_TOKEN_SECRET_NAME: argocd-token
+ARGO_CD_TOKEN_SECRET_KEY: token
+BINARY_NAME: event-reporter
+CODEFRESH_SSL_CERT_PATH: ""
+CODEFRESH_TLS_INSECURE:
+  valueFrom:
+    configMapKeyRef:
+      name: argocd-cmd-params-cm
+      key: codefresh.tls.insecure
+      optional: true
+CODEFRESH_TOKEN:
+  valueFrom:
+    secretKeyRef:
+      name: codefresh-token
+      key: token
+CODEFRESH_URL:
+  valueFrom:
+    configMapKeyRef:
+      key: base-url
+      name: codefresh-cm
+EVENT_REPORTER_REPLICAS: 1
+INSECURE:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: insecure
+      optional: true
+LISTEN_ADDRESS:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: listen.address
+      optional: true
+LOG_FORMAT:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: log.format
+      optional: true
+LOG_LEVEL:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: log.level
+      optional: true
+MAX_APP_RETRIES:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: max.app.retries
+METRICS_LISTEN_ADDRESS:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: metrics.listen.address
+      optional: true
+OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: otlp.address
+      optional: true
+REDISDB:
+  valueFrom:
+    configMapKeyRef:
+      name: argocd-cmd-params-cm
+      key: redis.db
+      optional: true
+REDIS_COMPRESSION:
+  valueFrom:
+    configMapKeyRef:
+      name: argocd-cmd-params-cm
+      key: redis.compression
+      optional: true
+REDIS_PASSWORD:
+  valueFrom:
+    secretKeyRef:
+      name: argocd-redis
+      key: auth
+REDIS_SERVER:
+  valueFrom:
+    configMapKeyRef:
+      name: argocd-cmd-params-cm
+      key: redis.server
+REDIS_USERNAME:
+  valueFrom:
+    secretKeyRef:
+      name: argocd-redis
+      key: redis-username
+      optional: true
+REPO_SERVER:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: repo.server
+REPO_SERVER_PLAINTEXT:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: repo.server.plaintext
+      optional: true
+REPO_SERVER_STRICT_TLS:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: repo.server.strict.tls
+      optional: true
+REPO_SERVER_TIMEOUT_SECONDS:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: repo.server.timeout.seconds
+      optional: true
+RUNTIME_VERSION:
+  valueFrom:
+    configMapKeyRef:
+      name: codefresh-cm
+      key: version
+SHARDING_ALGORITHM:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: sharding.algorithm
+      optional: true
+ARGO_GATEWAY_URL:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: argo-gateway.server
+THREADINESS:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: threadiness
+RESOURCE_THREADINESS:
+  valueFrom:
+    configMapKeyRef:
+      name: cluster-event-reporter-cmd-params-cm
+      key: resource.threadiness
+SERVICE_NAME: {{ include "cluster-event-reporter.fullname" . }}
+{{- end -}}
