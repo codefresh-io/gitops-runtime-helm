@@ -14,7 +14,7 @@ tests:
       - containsDocument:
           kind: Deployment
           apiVersion: apps/v1
-          name: redis
+          name: runtime-redis
 
   - it: Redis HA StatefulSet should be created when redis-ha.enabled is true
     template: charts/redis-ha/templates/redis-ha-statefulset.yaml
@@ -26,11 +26,11 @@ tests:
       - containsDocument:
           kind: StatefulSet
           apiVersion: apps/v1
-          name: redis-ha-server
+          name: runtime-redis-ha-server
       - containsDocument:
           kind: Deployment
           apiVersion: apps/v1
-          name: redis
+          name: runtime-redis
         not: true
 
   - it: App-Proxy should have CACHE_ environment variables (standalone Redis)
@@ -40,7 +40,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_HOST")].value
-          value: redis
+          value: runtime-redis
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PORT")].value
           value: "6379"
@@ -60,7 +60,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_HOST")].value
-          value: redis-ha-haproxy
+          value: runtime-redis-ha-haproxy
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PORT")].value
           value: "6379"
