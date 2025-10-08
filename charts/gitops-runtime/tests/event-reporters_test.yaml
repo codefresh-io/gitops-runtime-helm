@@ -167,3 +167,25 @@ tests:
           value:
             cpu: 200m
             memory: 256Mi
+
+  - it: Runtime Reporter should have correct REDIS_ environment variables
+    template: event-reporters/runtime-event-reporter/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: REDIS_SERVER
+            valueFrom:
+              configMapKeyRef:
+                name: runtime-event-reporter-cmd-params-cm
+                key: redis.server
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: gitops-runtime-redis
+                key: auth
