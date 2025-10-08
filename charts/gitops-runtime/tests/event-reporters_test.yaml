@@ -35,13 +35,12 @@ tests:
     values:
       - ./values/mandatory-values-ingress.yaml
     set:
-      argo-cd:
-        redis-ha:
-          enabled: true
+      redis-ha:
+        enabled: true
     asserts:
       - equal:
           path: data["redis.server"]
-          value: RELEASE-NAME-redis-ha-haproxy:6379
+          value: redis-ha-haproxy:6379
 
   - it: Runtime Reporter should have CODEFRESH_SSL_CERT_PATH env var when .Values.global.codefresh.tls.caCerts.secret.create is true
     template: event-reporters/runtime-event-reporter/deployment.yaml
