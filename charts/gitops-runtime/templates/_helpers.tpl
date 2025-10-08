@@ -236,8 +236,20 @@ Determine argocd server url witout the protocol. Must be called with chart root 
 {{- end}}
 
 {{- define "codefresh-gitops-runtime.argocd-auth" -}}
+  {{- $internalArgoCd := (index $.Values "argo-cd" "enabled") }}
   {{- $authValues := (index .Values "global" "external-argo-cd" "auth") }}
-  {{- if (eq $authValues.type "password") }}
+  {{- if $internalArgoCd }}
+ARGO_CD_USERNAME:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: argoCdUsername
+ARGO_CD_PASSWORD:
+  valueFrom:
+    secretKeyRef:
+      name: argocd-initial-admin-secret
+      key: password
+  {{- else if (eq $authValues.type "password") }}
 ARGO_CD_USERNAME:
   valueFrom:
     configMapKeyRef:

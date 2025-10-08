@@ -8,16 +8,18 @@
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 {{- $_ := set $context.Values "app-proxy" (deepCopy (get .Values "app-proxy")) }}
 
-{{- $argoCdAuth := (index .Values "global" "external-argo-cd" "auth") }}
-{{- if (eq $argoCdAuth.type "token") }}
-  {{- if $argoCdAuth.token }}
-    {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_NAME" "gitops-runtime-argo-cd-token" }}
-    {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_KEY" "token" }}
-  {{- else if $argoCdAuth.tokenSecretKeyRef }}
-    {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required" $argoCdAuth.tokenSecretKeyRef.name) }}
-    {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.key is required" $argoCdAuth.tokenSecretKeyRef.key) }}
-  {{- else }}
-    {{ fail ".Values.global.external-argo-cd.auth.type is 'token' and .Values.global.external-argo-cd.auth.token or .Values.global.external-argo-cd.auth.tokenSecretKeyRef are not set" }}
+{{- if not (index .Values "argo-cd" "enabled") }}
+  {{- $argoCdAuth := (index .Values "global" "external-argo-cd" "auth") }}
+  {{- if (eq $argoCdAuth.type "token") }}
+    {{- if $argoCdAuth.token }}
+      {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_NAME" "gitops-runtime-argo-cd-token" }}
+      {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_KEY" "token" }}
+    {{- else if $argoCdAuth.tokenSecretKeyRef }}
+      {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_NAME" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.name is required" $argoCdAuth.tokenSecretKeyRef.name) }}
+      {{- $_ := set $context.Values.env "ARGO_CD_TOKEN_SECRET_KEY" (required ".Values.global.external-argo-cd.auth.type is set to 'token' therefore .Values.global.external-argo-cd.auth.tokenSecretKeyRef.key is required" $argoCdAuth.tokenSecretKeyRef.key) }}
+    {{- else }}
+      {{ fail ".Values.global.external-argo-cd.auth.type is 'token' and .Values.global.external-argo-cd.auth.token or .Values.global.external-argo-cd.auth.tokenSecretKeyRef are not set" }}
+    {{- end }}
   {{- end }}
 {{- end }}
 

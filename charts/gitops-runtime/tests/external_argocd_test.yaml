@@ -117,6 +117,50 @@ tests:
                 key: password
                 name: argocd-initial-admin-secret
 
+  - it: app-proxy Deployment should have valid deafult ARGO_CD_USERNAME env var if auth.type is password with internal argo-cd
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        external-argo-cd:
+          auth:
+            type: token
+            tokenSecretKeyRef:
+              name: my-argocd-token
+              key: my-token
+    template: app-proxy/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                key: argoCdUsername
+                name: cap-app-proxy-cm
+
+  - it: app-proxy Deployment should have valid deafult ARGO_CD_PASSWORD env var set via passwordSecretKeyRef with internal argo-cd
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        external-argo-cd:
+          auth:
+            type: token
+            tokenSecretKeyRef:
+              name: my-argocd-token
+              key: my-token
+    template: app-proxy/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: argocd-initial-admin-secret
+
   - it: app-proxy Deployment should have valid ARGO_CD_PASSWORD env var set via passwordSecretKeyRef override
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -351,6 +395,44 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: token
 
+  - it: gitops-operator Deployment should have valid default ARGO_CD_TOKEN_SECRET_NAME env var with internal argo-cd
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        external-argo-cd:
+          auth:
+            type: token
+            tokenSecretKeyRef:
+              name: my-argocd-token
+              key: my-token
+    template: gitops-operator/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_TOKEN_SECRET_NAME
+            value: argocd-token
+
+  - it: gitops-operator Deployment should have valid default ARGO_CD_TOKEN_SECRET_KEY env var with internal argo-cd
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        external-argo-cd:
+          auth:
+            type: token
+            tokenSecretKeyRef:
+              name: my-argocd-token
+              key: my-token
+    template: gitops-operator/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_TOKEN_SECRET_KEY
+            value: token
+
   - it: gitops-operator Deployment should have valid ARGO_CD_URL env var
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -420,6 +502,44 @@ tests:
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_TOKEN_SECRET_KEY
+            value: token
+
+  - it: event-reporter StatefulSet should have valid default ARGO_CD_TOKEN_SECRET_NAME env var with internal argo-cd
+    template: cf-argocd-extras/event-reporter/statefulset.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        external-argo-cd:
+          auth:
+            type: token
+            tokenSecretKeyRef:
+              name: my-argocd-token
+              key: my-token
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_TOKEN_SECRET_NAME
+            value: argocd-token
+
+  - it: event-reporter StatefulSet should have valid default ARGO_CD_TOKEN_SECRET_KEY env var
+    template: cf-argocd-extras/event-reporter/statefulset.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        external-argo-cd:
+          auth:
+            type: token
+            tokenSecretKeyRef:
+              name: my-argocd-token
+              key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -550,6 +670,44 @@ tests:
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_TOKEN_SECRET_KEY
+            value: token
+
+  - it: sources-server Deployment should have valid default ARGO_CD_TOKEN_SECRET_NAME env var with internal argo-cd
+    template: cf-argocd-extras/sources-server/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        external-argo-cd:
+          auth:
+            type: token
+            tokenSecretKeyRef:
+              name: my-argocd-token
+              key: my-token
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ARGO_CD_TOKEN_SECRET_NAME
+            value: argocd-token
+
+  - it: sources-server Deployment should have valid default ARGO_CD_TOKEN_SECRET_KEY env var with internal argo-cd
+    template: cf-argocd-extras/sources-server/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      global:
+        external-argo-cd:
+          auth:
+            type: token
+            tokenSecretKeyRef:
+              name: my-argocd-token
+              key: my-token
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -822,3 +980,4 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set"
+
