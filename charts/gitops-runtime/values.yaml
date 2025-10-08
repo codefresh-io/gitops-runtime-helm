@@ -894,24 +894,3 @@ redis-ha:
   # @default -- See [values.yaml]
   containerSecurityContext:
     readOnlyRootFilesystem: true
-  service:
-    type: ClusterIP
-  serviceAccount:
-    create: true
-  readinessProbe:
-    failureThreshold: 3
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 10
-  livenessProbe:
-    failureThreshold: 3
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 10
-  serviceMonitor:
-    enabled: false
-    interval: 30s
-    scrapeTimeout: 10s
-    labels: {}

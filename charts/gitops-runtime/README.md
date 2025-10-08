@@ -716,26 +716,10 @@ redis-ha:
 | redis-ha.hardAntiAffinity | bool | `true` | Whether the Redis server pods should be forced to run on separate nodes. |
 | redis-ha.image.repository | string | `"public.ecr.aws/docker/library/redis"` | Redis repository |
 | redis-ha.image.tag | string | `"8.2.1-alpine"` | Redis tag |
-| redis-ha.livenessProbe.failureThreshold | int | `3` |  |
-| redis-ha.livenessProbe.initialDelaySeconds | int | `10` |  |
-| redis-ha.livenessProbe.periodSeconds | int | `10` |  |
-| redis-ha.livenessProbe.successThreshold | int | `1` |  |
-| redis-ha.livenessProbe.timeoutSeconds | int | `10` |  |
 | redis-ha.persistentVolume.enabled | bool | `false` | Configures persistence on Redis nodes |
-| redis-ha.readinessProbe.failureThreshold | int | `3` |  |
-| redis-ha.readinessProbe.initialDelaySeconds | int | `10` |  |
-| redis-ha.readinessProbe.periodSeconds | int | `10` |  |
-| redis-ha.readinessProbe.successThreshold | int | `1` |  |
-| redis-ha.readinessProbe.timeoutSeconds | int | `10` |  |
 | redis-ha.redis.config | object | See [values.yaml] | Any valid redis config options in this section will be applied to each server (see `redis-ha` chart) |
 | redis-ha.redis.config.save | string | `'""'` | Will save the DB if both the given number of seconds and the given number of write operations against the DB occurred. `""`  is disabled |
 | redis-ha.redis.masterGroupName | string | `"gitops-runtime"` | Redis convention for naming the cluster group: must match `^[\\w-\\.]+$` and can be templated |
-| redis-ha.service.type | string | `"ClusterIP"` |  |
-| redis-ha.serviceAccount.create | bool | `true` |  |
-| redis-ha.serviceMonitor.enabled | bool | `false` |  |
-| redis-ha.serviceMonitor.interval | string | `"30s"` |  |
-| redis-ha.serviceMonitor.labels | object | `{}` |  |
-| redis-ha.serviceMonitor.scrapeTimeout | string | `"10s"` |  |
 | redis-ha.tolerations | list | `[]` | [Tolerations] for use with node taints for Redis pods. |
 | redis-ha.topologySpreadConstraints | object | `{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}` | Assign custom [TopologySpreadConstraints] rules to the Redis pods. |
 | redis-ha.topologySpreadConstraints.enabled | bool | `false` | Enable Redis HA topology spread constraints |
