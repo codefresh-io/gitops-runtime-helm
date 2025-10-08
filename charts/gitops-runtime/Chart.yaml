@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: bump app-proxy to 788a8d5 (#782)'
+      description: 'chore: bump app-proxy to 788a8d5 (#782) - fix app-proxy argocd-token monitoring'
     - kind: changed
       description: 'fix: update image-enrichment images (#779)'
     - kind: changed
