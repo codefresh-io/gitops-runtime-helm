@@ -1,6 +1,22 @@
 ## Codefresh gitops runtime
 ![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
 
+## Table of Content
+
+- [Prerequisites](#prerequisites)
+- [Get Chart Info](#get-chart-info)
+- [Codefresh official documentation](#codefresh-official-documentation)
+- [Argo-workflows artifact and log storage](#argo-workflows-artifact-and-log-storage)
+- [Installation with External ArgoCD](#installation-with-external-argocd)
+- [Installation with External Argo Rollouts](#installation-with-external-argo-rollouts)
+- [Using with private registries - Helper utility](#using-with-private-registries---helper-utility)
+- [Openshift](#openshift)
+- [High Availability](#high-availability)
+  - [HA mode with autoscaling](#ha-mode-with-autoscaling)
+- [Upgrading](#upgrading)
+  - [To 0.23.x](#to-023x)
+  - [> 0.24.x](#-024x)
+
 ## Prerequisites
 
 - Helm **3.11.0+**
