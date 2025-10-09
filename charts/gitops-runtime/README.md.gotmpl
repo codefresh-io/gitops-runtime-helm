@@ -1,6 +1,22 @@
 ## Codefresh gitops runtime
 {{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
 
+## Table of Content
+
+- [Prerequisites](#prerequisites)
+- [Get Chart Info](#get-chart-info)
+- [Codefresh official documentation](#codefresh-official-documentation)
+- [Argo-workflows artifact and log storage](#argo-workflows-artifact-and-log-storage)
+- [Installation with External ArgoCD](#installation-with-external-argocd)
+- [Installation with External Argo Rollouts](#installation-with-external-argo-rollouts)
+- [Using with private registries - Helper utility](#using-with-private-registries---helper-utility)
+- [Openshift](#openshift)
+- [High Availability](#high-availability)
+  - [HA mode with autoscaling](#ha-mode-with-autoscaling)
+- [Upgrading](#upgrading)
+  - [To 0.23.x](#to-023x)
+  - [> 0.24.x](#-024x)
+
 ## Prerequisites
 
 - Helm **3.11.0+**
@@ -209,6 +225,11 @@ global:
       topologyKey: kubernetes.io/hostname
       whenUnsatisfiable: DoNotSchedule
 
+  event-reporters:
+    pdb:
+      enabled: true
+      minAvailable: 1
+
 app-proxy:
   replicaCount: 2
   pdb:
@@ -248,29 +269,20 @@ internal-router:
         matchLabels:
           app: internal-router
 
-cf-argocd-extras:
-  sourcesServer:
-    hpa:
-      enabled: true
-      minReplicas: 2
-    pdb:
-      enabled: true
-      minAvailable: 1
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/component: sources-server
-  eventReporter:
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/component: event-reporter
+argo-gateway:
+  hpa:
+    enabled: true
+    minReplicas: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/component: argo-gateway
 
 argo-cd:
   redis-ha:
@@ -311,34 +323,6 @@ argo-workflows:
     pdb:
       enabled: true
       minAvailable: 1
-
-event-reporters:
-  workflow:
-    sensor:
-      replicas: 2
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: sensor-name
-                    operator: In
-                    values:
-                      - workflow-reporter
-              topologyKey: "kubernetes.io/hostname"
-  rollout:
-    sensor:
-      replicas: 2
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: sensor-name
-                    operator: In
-                    values:
-                      - rollout-reporter
-              topologyKey: "kubernetes.io/hostname"
 ```
 
 ## Upgrading
@@ -364,7 +348,7 @@ gitops-operator:
     tag: vX.Y.Z
 ```
 
-### To 0.24.x
+### > 0.24.x
 
 ####  Affected values
 
@@ -378,6 +362,41 @@ redis:
 # Enabled Redis High Availability (StatefulSet with Proxy)
 redis-ha:
   enabled: false
+```
+
+- `.Values.cf-argocd-extras.eventReporter` was updated to `.Values.global.event-reporters`
+
+```yaml
+# Before:
+cf-argocd-extras:
+  eventReporter:
+    image:
+      ...
+  ...
+
+# After:
+global:
+  event-reporters:
+    image:
+      ...
+  ...
+```
+
+- `.Values.cf-argocd-extras.sourcesServer` was updated to `.Values.argo-gateway`
+
+```yaml
+# Before:
+cf-argocd-extras:
+  sourcesServer:
+    image:
+      ...
+  ...
+
+# After:
+argo-gateway:
+  image:
+      ...
+  ...
 ```
 
 {{ template "chart.valuesSection" . }}

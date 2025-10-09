@@ -140,6 +140,8 @@ global:
   noProxy: ''
   imageRegistry: ""
 
+  # -- Global settings for event reporters
+  # Event reporters are used for reporting runtime and cluster resources to Codefresh platform
   event-reporters:
     replicaCount: 2
     image:
@@ -657,6 +659,8 @@ gitops-operator:
     minAvailable: 1
     maxUnavailable: ""
 
+# -- Argo Gateway
+# Argo Gateway is used to perform operations on ArgoCD from Codefresh platform
 argo-gateway:
   image:
     registry: quay.io
@@ -710,7 +714,7 @@ redis-secret-init:
   tolerations: []
   affinity: {}
 
-# -- Enable standalone redis deployment
+# -- Standalone redis deployment
 # Will be replaced by redis-ha subchart when `redis-ha.enabled=true`
 redis:
   enabled: true
@@ -804,7 +808,7 @@ event-reporters:
   cluster-event-reporter: {}
   runtime-event-reporter: {}
 
-## Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true`
+# -- Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true`
 # Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
 redis-ha:
   # -- Enables the Redis HA subchart and disables the custom Redis single node deployment
