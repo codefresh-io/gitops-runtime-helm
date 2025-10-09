@@ -295,3 +295,27 @@ tests:
   - equal:
       path: spec.template.spec.containers[0].name
       value: cap-app-proxy
+
+- it: app-proxy configmap should have cors from .Values.app-proxy.config.cors
+  template: 'app-proxy/config.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.url: "https://g.codefresh.io"
+    app-proxy.config.cors: "https://local.codefresh.io"
+  asserts:
+  - equal:
+      path: data.cors
+      value: "https://local.codefresh.io"
+
+- it: app-proxy configmap should have fallback to cors from .Values.global.codefresh.url
+  template: 'app-proxy/config.yaml'
+  values:
+  - ./values/mandatory-values.yaml
+  set:
+    global.codefresh.url: "https://g.codefresh.io"
+    app-proxy.config.cors: null
+  asserts:
+  - equal:
+      path: data.cors
+      value: "https://g.codefresh.io"
