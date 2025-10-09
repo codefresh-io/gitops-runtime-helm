@@ -205,6 +205,11 @@ global:
       topologyKey: kubernetes.io/hostname
       whenUnsatisfiable: DoNotSchedule
 
+  event-reporters:
+    pdb:
+      enabled: true
+      minAvailable: 1
+
 app-proxy:
   replicaCount: 2
   pdb:
@@ -244,29 +249,20 @@ internal-router:
         matchLabels:
           app: internal-router
 
-cf-argocd-extras:
-  sourcesServer:
-    hpa:
-      enabled: true
-      minReplicas: 2
-    pdb:
-      enabled: true
-      minAvailable: 1
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/component: sources-server
-  eventReporter:
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/component: event-reporter
+argo-gateway:
+  hpa:
+    enabled: true
+    minReplicas: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/component: argo-gateway
 
 argo-cd:
   redis-ha:
@@ -307,34 +303,6 @@ argo-workflows:
     pdb:
       enabled: true
       minAvailable: 1
-
-event-reporters:
-  workflow:
-    sensor:
-      replicas: 2
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: sensor-name
-                    operator: In
-                    values:
-                      - workflow-reporter
-              topologyKey: "kubernetes.io/hostname"
-  rollout:
-    sensor:
-      replicas: 2
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: sensor-name
-                    operator: In
-                    values:
-                      - rollout-reporter
-              topologyKey: "kubernetes.io/hostname"
 ```
 
 ## Upgrading
