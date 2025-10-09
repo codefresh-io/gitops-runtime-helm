@@ -308,7 +308,7 @@ tests:
       path: data.cors
       value: "https://local.codefresh.io"
 
-- it: app-proxy configmap should have fallback cors from .Values.global.codefresh.url
+- it: app-proxy configmap should have fallback to cors from .Values.global.codefresh.url
   template: 'app-proxy/config.yaml'
   values:
   - ./values/mandatory-values.yaml
