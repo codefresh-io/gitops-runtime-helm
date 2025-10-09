@@ -38,3 +38,7 @@ dependencies:
   version: 0.1.22
   alias: tunnel-client
   condition: tunnel-client.enabled
+- name: redis-ha
+  version: 4.33.4
+  repository: https://dandydeveloper.github.io/charts/
+  condition: redis-ha.enabled

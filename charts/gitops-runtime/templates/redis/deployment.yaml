@@ -1,0 +1,156 @@
+{{- $redisHa := index .Values "redis-ha" }}
+{{- if and .Values.redis.enabled (not $redisHa.enabled) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "redis.fullname" . }}
+  labels:
+    {{- include "redis.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{-  include "redis.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.redis.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "redis.selectorLabels" . | nindent 8 }}
+        {{- with .Values.redis.podLabels }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.redis.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "redis.serviceAccountName" . }}
+      securityContext:
+      {{- toYaml .Values.redis.podSecurityContext | nindent 8 }}
+      containers:
+      - name: {{ include "redis.fullname" . }}
+        securityContext:
+          {{- toYaml .Values.redis.securityContext | nindent 12 }}
+        image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" .Values.redis.image "context" .) }}
+        imagePullPolicy: {{ .Values.redis.image.pullPolicy | default "IfNotPresent" }}
+        args:
+        {{- with .Values.redis.extraArgs }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        - --save
+        - ""
+        - --appendonly
+        - "no"
+        - --requirepass $(REDIS_PASSWORD)
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gitops-runtime-redis
+              key: auth
+        {{- include "codefresh-gitops-runtime.env-vars" (dict "Values" .Values.redis.env "context" .) | nindent 8 }}
+        {{- with .Values.redis.envFrom }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.redis.livenessProbe.enabled }}
+        livenessProbe:
+          initialDelaySeconds: {{ .Values.redis.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.redis.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.redis.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.redis.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.redis.livenessProbe.failureThreshold }}
+          exec:
+            command:
+              - sh
+              - -c
+              - /health/redis_liveness.sh
+        {{- end }}
+        {{- if .Values.redis.readinessProbe.enabled }}
+        readinessProbe:
+          initialDelaySeconds: {{ .Values.redis.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.redis.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.redis.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.redis.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.redis.readinessProbe.failureThreshold }}
+          exec:
+            command:
+              - sh
+              - -c
+              - /health/redis_readiness.sh
+        {{- end }}
+        ports:
+        - name: redis
+          containerPort: {{ .Values.redis.service.ports.redis.targetPort }}
+          protocol: TCP
+        resources:
+          {{- toYaml .Values.redis.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /health
+          name: health
+      {{- if .Values.redis.metrics.enabled }}
+      - name: metrics
+        image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" .Values.redis.metrics.image "context" .) }}
+        imagePullPolicy: {{ .Values.redis.metrics.image.pullPolicy | default "IfNotPresent" }}
+        env:
+        - name: REDIS_ADDR
+          value: {{ printf "redis://localhost:%v" .Values.redis.service.ports.redis.targetPort }}
+        - name: REDIS_EXPORTER_WEB_LISTEN_ADDRESS
+          value: {{ printf "0.0.0.0:%v" .Values.redis.service.ports.metrics.targetPort }}
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gitops-runtime-redis
+              key: auth
+        {{- include "codefresh-gitops-runtime.env-vars" (dict "Values" .Values.redis.metrics.env "context" .) | nindent 8 }}
+        {{- with .Values.redis.metrics.envFrom }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        ports:
+        - name: metrics
+          containerPort: {{ .Values.redis.service.ports.metrics.targetPort }}
+        {{- if .Values.redis.metrics.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: {{ .Values.redis.service.ports.metrics.targetPort }}
+          initialDelaySeconds: {{ .Values.redis.metrics.livenessProbe.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.redis.metrics.livenessProbe.timeoutSeconds }}
+          periodSeconds: {{ .Values.redis.metrics.livenessProbe.periodSeconds }}
+          successThreshold: {{ .Values.redis.metrics.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.redis.metrics.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.redis.metrics.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: {{ .Values.redis.service.ports.metrics.targetPort }}
+          initialDelaySeconds: {{ .Values.redis.metrics.readinessProbe.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.redis.metrics.readinessProbe.timeoutSeconds }}
+          periodSeconds: {{ .Values.redis.metrics.readinessProbe.periodSeconds }}
+          successThreshold: {{ .Values.redis.metrics.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.redis.metrics.readinessProbe.failureThreshold }}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.redis.metrics.resources | nindent 10 }}
+      {{- end }}
+      {{- with .Values.redis.nodeSelector | default .Values.global.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.redis.tolerations | default .Values.global.tolerations }}
+      tolerations: {{ toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.redis.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.redis.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "codefresh-gitops-runtime.tplrender" (dict "Values" . "context" .) | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: health
+        configMap:
+          name: {{ include "redis.fullname" . }}-health
+          defaultMode: 493
+{{- end }}

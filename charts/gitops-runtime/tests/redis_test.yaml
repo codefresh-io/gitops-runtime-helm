@@ -1,0 +1,72 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: redis tests
+templates:
+  - cf-argocd-extras/**/*.yaml
+  - app-proxy/deployment.yaml
+  - redis/**
+  - charts/redis-ha/**
+tests:
+  - it: Standalone Redis Deployment should be created by default
+    template: redis/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - containsDocument:
+          kind: Deployment
+          apiVersion: apps/v1
+          name: runtime-redis
+
+  - it: Redis HA StatefulSet should be created when redis-ha.enabled is true
+    template: charts/redis-ha/templates/redis-ha-statefulset.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      redis-ha.enabled: true
+    asserts:
+      - containsDocument:
+          kind: StatefulSet
+          apiVersion: apps/v1
+          name: runtime-redis-ha-server
+      - containsDocument:
+          kind: Deployment
+          apiVersion: apps/v1
+          name: runtime-redis
+        not: true
+
+  - it: App-Proxy should have CACHE_ environment variables (standalone Redis)
+    template: app-proxy/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name=="CACHE_HOST")].value
+          value: runtime-redis
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PORT")].value
+          value: "6379"
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PASSWORD")].valueFrom
+          value:
+            secretKeyRef:
+              name: gitops-runtime-redis
+              key: auth
+
+  - it: App-Proxy should have CACHE_ environment variables (Redis HA)
+    template: app-proxy/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      redis-ha.enabled: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name=="CACHE_HOST")].value
+          value: runtime-redis-ha-haproxy
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PORT")].value
+          value: "6379"
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PASSWORD")].valueFrom
+          value:
+            secretKeyRef:
+              name: gitops-runtime-redis
+              key: auth
