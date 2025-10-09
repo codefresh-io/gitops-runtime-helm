@@ -360,7 +360,7 @@ gitops-operator:
     tag: vX.Y.Z
 ```
 
-### To 0.24.x
+### > 0.24.x
 
 ####  Affected values
 
@@ -376,6 +376,41 @@ redis-ha:
   enabled: false
 ```
 
+- `.Values.cf-argocd-extras.eventReporter` was updated to `.Values.global.event-reporters`
+
+```yaml
+# Before:
+cf-argocd-extras:
+  eventReporter:
+    image:
+      ...
+  ...
+
+# After:
+global:
+  event-reporters:
+    image:
+      ...
+  ...
+```
+
+- `.Values.cf-argocd-extras.sourcesServer` was updated to `.Values.argo-gateway`
+
+```yaml
+# Before:
+cf-argocd-extras:
+  sourcesServer:
+    image:
+      ...
+  ...
+
+# After:
+argo-gateway:
+  image:
+      ...
+  ...
+```
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -386,7 +421,7 @@ redis-ha:
 | app-proxy.config.argoWorkflowsInsecure | string | `"true"` |  |
 | app-proxy.config.argoWorkflowsUrl | string | `nil` | Workflows server url. Determined by chart logic. Do not change unless you are certain you need to |
 | app-proxy.config.clusterChunkSize | int | `50` | define cluster list size per request to report the cluster state to platform, e.g. if you have 90 clusters and set clusterChunkSize: 40, it means cron job will report cluster state to platform in 3 iterations (40,40,10) - reduce this value if you have a lot of clusters and the cron job is failing with payload too large error - use 0 to sync all clusters at once |
-| app-proxy.config.cors | string | `"https://g.codefresh.io"` | Cors settings for app-proxy. This is the list of allowed domains for platform. |
+| app-proxy.config.cors | string | `"https://g.codefresh.io"` | Cors settings for app-proxy. This is the list of allowed domains for platform (comma separated). |
 | app-proxy.config.env | string | `"production"` |  |
 | app-proxy.config.logLevel | string | `"info"` | Log Level |
 | app-proxy.config.skipGitPermissionValidation | string | `"false"` | Skit git permissions validation |
@@ -394,13 +429,13 @@ redis-ha:
 | app-proxy.extraVolumeMounts | list | `[]` | Extra volume mounts for main container |
 | app-proxy.extraVolumes | list | `[]` | extra volumes |
 | app-proxy.fullnameOverride | string | `"cap-app-proxy"` |  |
-| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.16-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.16-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.16-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
-| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.16-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.16-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.16-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
+| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.17-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.17-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.17-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
+| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.17-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.17-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.17-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
 | app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds | int | `5` | Client heartbeat interval in seconds for image enrichemnt workflow |
 | app-proxy.image-enrichment.config.concurrencyCmKey | string | `"imageReportExecutor"` | The name of the key in the configmap to use as synchronization semaphore |
 | app-proxy.image-enrichment.config.concurrencyCmName | string | `"workflow-synchronization-semaphores"` | The name of the configmap to use as synchronization semaphore, see https://argoproj.github.io/argo-workflows/synchronization/ |
-| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.16-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.16-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.16-main"}}` | Enrichemnt images |
-| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.16-main"}` | Report image enrichment task image |
+| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.17-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.17-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.17-main"}}` | Enrichemnt images |
+| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.17-main"}` | Report image enrichment task image |
 | app-proxy.image-enrichment.config.podGcStrategy | string | `"OnWorkflowCompletion"` | Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes. |
 | app-proxy.image-enrichment.config.ttlActiveInSeconds | int | `900` | Maximum allowed runtime for the enrichment workflow |
 | app-proxy.image-enrichment.config.ttlAfterCompletionInSeconds | int | `86400` | Number of seconds to live after completion |
@@ -497,37 +532,7 @@ redis-ha:
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.enabled | bool | `false` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
-| argo-gateway.affinity | object | `{}` |  |
-| argo-gateway.hpa.enabled | bool | `true` |  |
-| argo-gateway.hpa.maxReplicas | int | `10` |  |
-| argo-gateway.hpa.minReplicas | int | `1` |  |
-| argo-gateway.hpa.targetCPUUtilizationPercentage | int | `70` |  |
-| argo-gateway.image.registry | string | `"quay.io"` |  |
-| argo-gateway.image.repository | string | `"codefresh/cf-argocd-extras"` |  |
-| argo-gateway.image.tag | string | `"695977c"` |  |
-| argo-gateway.livenessProbe.failureThreshold | int | `3` |  |
-| argo-gateway.livenessProbe.initialDelaySeconds | int | `10` |  |
-| argo-gateway.livenessProbe.periodSeconds | int | `10` |  |
-| argo-gateway.livenessProbe.successThreshold | int | `1` |  |
-| argo-gateway.livenessProbe.timeoutSeconds | int | `10` |  |
-| argo-gateway.nodeSelector | object | `{}` |  |
-| argo-gateway.pdb.enabled | bool | `true` |  |
-| argo-gateway.pdb.maxUnavailable | string | `""` |  |
-| argo-gateway.pdb.minAvailable | string | `"50%"` |  |
-| argo-gateway.readinessProbe.failureThreshold | int | `3` |  |
-| argo-gateway.readinessProbe.initialDelaySeconds | int | `10` |  |
-| argo-gateway.readinessProbe.periodSeconds | int | `10` |  |
-| argo-gateway.readinessProbe.successThreshold | int | `1` |  |
-| argo-gateway.readinessProbe.timeoutSeconds | int | `10` |  |
-| argo-gateway.resources.requests.cpu | string | `"100m"` |  |
-| argo-gateway.resources.requests.memory | string | `"128Mi"` |  |
-| argo-gateway.service.type | string | `"ClusterIP"` |  |
-| argo-gateway.serviceAccount.create | bool | `true` |  |
-| argo-gateway.serviceMonitor.enabled | bool | `false` |  |
-| argo-gateway.serviceMonitor.interval | string | `"30s"` |  |
-| argo-gateway.serviceMonitor.labels | object | `{}` |  |
-| argo-gateway.serviceMonitor.scrapeTimeout | string | `"10s"` |  |
-| argo-gateway.tolerations | list | `[]` |  |
+| argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"695977c"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway |
 | argo-rollouts.controller.replicas | int | `1` |  |
 | argo-rollouts.enabled | bool | `true` |  |
 | argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
@@ -588,39 +593,7 @@ redis-ha:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.event-reporters.affinity | object | `{}` |  |
-| global.event-reporters.config | object | `{}` |  |
-| global.event-reporters.image.registry | string | `"quay.io"` |  |
-| global.event-reporters.image.repository | string | `"codefresh/cf-argocd-extras"` |  |
-| global.event-reporters.image.tag | string | `"695977c"` |  |
-| global.event-reporters.livenessProbe.failureThreshold | int | `3` |  |
-| global.event-reporters.livenessProbe.initialDelaySeconds | int | `10` |  |
-| global.event-reporters.livenessProbe.periodSeconds | int | `10` |  |
-| global.event-reporters.livenessProbe.successThreshold | int | `1` |  |
-| global.event-reporters.livenessProbe.timeoutSeconds | int | `10` |  |
-| global.event-reporters.nodeSelector | object | `{}` |  |
-| global.event-reporters.pdb.enabled | bool | `true` |  |
-| global.event-reporters.pdb.maxUnavailable | string | `""` |  |
-| global.event-reporters.pdb.minAvailable | string | `"50%"` |  |
-| global.event-reporters.readinessProbe.failureThreshold | int | `3` |  |
-| global.event-reporters.readinessProbe.initialDelaySeconds | int | `10` |  |
-| global.event-reporters.readinessProbe.periodSeconds | int | `10` |  |
-| global.event-reporters.readinessProbe.successThreshold | int | `1` |  |
-| global.event-reporters.readinessProbe.timeoutSeconds | int | `10` |  |
-| global.event-reporters.replicaCount | int | `2` |  |
-| global.event-reporters.resources.requests.cpu | string | `"100m"` |  |
-| global.event-reporters.resources.requests.memory | string | `"128Mi"` |  |
-| global.event-reporters.service.ports.http.port | int | `8088` |  |
-| global.event-reporters.service.ports.http.targetPort | int | `8088` |  |
-| global.event-reporters.service.ports.metrics.port | int | `8087` |  |
-| global.event-reporters.service.ports.metrics.targetPort | int | `8087` |  |
-| global.event-reporters.service.type | string | `"ClusterIP"` |  |
-| global.event-reporters.serviceAccount.create | bool | `true` |  |
-| global.event-reporters.serviceMonitor.enabled | bool | `false` |  |
-| global.event-reporters.serviceMonitor.interval | string | `"30s"` |  |
-| global.event-reporters.serviceMonitor.labels | object | `{}` |  |
-| global.event-reporters.serviceMonitor.scrapeTimeout | string | `"10s"` |  |
-| global.event-reporters.tolerations | list | `[]` |  |
+| global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"695977c"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
 | global.external-argo-cd | object | `{"repoServer":{"port":8081,"svc":"argocd-repo-server"},"server":{"port":80,"rootpath":"","svc":"argocd-server"}}` | Configuration for external ArgoCD Should be used when `argo-cd.enabled` is set to false |
 | global.external-argo-cd.repoServer.port | int | `8081` | Port of the ArgoCD repo server |
 | global.external-argo-cd.repoServer.svc | string | `"argocd-repo-server"` | Service name of the ArgoCD repo server |
@@ -695,7 +668,8 @@ redis-ha:
 | internal-router.serviceAccount.create | bool | `true` |  |
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
-| redis | object | `{"affinity":{},"enabled":true,"env":{},"envFrom":[],"extraArgs":[],"fullnameOverride":"runtime-redis","image":{"registry":"public.ecr.aws","repository":"docker/library/redis","tag":"8.2.1-alpine"},"imagePullSecrets":[],"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"metrics":{"enabled":true,"env":{},"envFrom":[],"image":{"registry":"ghcr.io","repository":"oliver006/redis_exporter","tag":"v1.72.1"},"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"serviceMonitor":{"enabled":false}},"nodeSelector":{},"pdb":{"annotations":{},"enabled":false,"labels":{},"maxUnavailable":"","minAvailable":1},"podAnnotations":{},"podLabels":{},"podSecurityContext":{},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"securityContext":{},"service":{"annotations":{},"labels":{},"ports":{"metrics":{"port":9121,"targetPort":9121},"redis":{"port":6379,"targetPort":6379}},"type":"ClusterIP"},"serviceAccount":{"annotations":{},"create":true,"name":""},"tolerations":[],"topologySpreadConstraints":[]}` | Enable standalone redis deployment Will be replaced by redis-ha subchart when `redis-ha.enabled=true` |
+| redis | object | `{"affinity":{},"enabled":true,"env":{},"envFrom":[],"extraArgs":[],"fullnameOverride":"runtime-redis","image":{"registry":"public.ecr.aws","repository":"docker/library/redis","tag":"8.2.1-alpine"},"imagePullSecrets":[],"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"metrics":{"enabled":true,"env":{},"envFrom":[],"image":{"registry":"ghcr.io","repository":"oliver006/redis_exporter","tag":"v1.72.1"},"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"serviceMonitor":{"enabled":false}},"nodeSelector":{},"pdb":{"annotations":{},"enabled":false,"labels":{},"maxUnavailable":"","minAvailable":1},"podAnnotations":{},"podLabels":{},"podSecurityContext":{},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"securityContext":{},"service":{"annotations":{},"labels":{},"ports":{"metrics":{"port":9121,"targetPort":9121},"redis":{"port":6379,"targetPort":6379}},"type":"ClusterIP"},"serviceAccount":{"annotations":{},"create":true,"name":""},"tolerations":[],"topologySpreadConstraints":[]}` | Standalone redis deployment Will be replaced by redis-ha subchart when `redis-ha.enabled=true` |
+| redis-ha | object | `{"additionalAffinities":{},"affinity":"","auth":true,"containerSecurityContext":{"readOnlyRootFilesystem":true},"enabled":false,"existingSecret":"gitops-runtime-redis","exporter":{"enabled":false,"image":"ghcr.io/oliver006/redis_exporter","tag":"v1.69.0"},"fullnameOverride":"runtime-redis-ha","haproxy":{"additionalAffinities":{},"affinity":"","containerSecurityContext":{"readOnlyRootFilesystem":true},"enabled":true,"hardAntiAffinity":true,"metrics":{"enabled":true},"tolerations":[]},"hardAntiAffinity":true,"image":{"repository":"public.ecr.aws/docker/library/redis","tag":"8.2.1-alpine"},"persistentVolume":{"enabled":false},"redis":{"config":{"save":"\"\""},"masterGroupName":"gitops-runtime"},"tolerations":[],"topologySpreadConstraints":{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}}` | Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true` Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml |
 | redis-ha.additionalAffinities | object | `{}` | Additional affinities to add to the Redis server pods. |
 | redis-ha.affinity | string | `""` | Assign custom [affinity] rules to the Redis pods. |
 | redis-ha.auth | bool | `true` | Configures redis-ha with AUTH |

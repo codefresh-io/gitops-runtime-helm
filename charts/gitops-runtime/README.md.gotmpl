@@ -364,7 +364,7 @@ gitops-operator:
     tag: vX.Y.Z
 ```
 
-### To 0.24.x
+### > 0.24.x
 
 ####  Affected values
 
@@ -378,6 +378,41 @@ redis:
 # Enabled Redis High Availability (StatefulSet with Proxy)
 redis-ha:
   enabled: false
+```
+
+- `.Values.cf-argocd-extras.eventReporter` was updated to `.Values.global.event-reporters`
+
+```yaml
+# Before:
+cf-argocd-extras:
+  eventReporter:
+    image:
+      ...
+  ...
+
+# After:
+global:
+  event-reporters:
+    image:
+      ...
+  ...
+```
+
+- `.Values.cf-argocd-extras.sourcesServer` was updated to `.Values.argo-gateway`
+
+```yaml
+# Before:
+cf-argocd-extras:
+  sourcesServer:
+    image:
+      ...
+  ...
+
+# After:
+argo-gateway:
+  image:
+      ...
+  ...
 ```
 
 {{ template "chart.valuesSection" . }}
