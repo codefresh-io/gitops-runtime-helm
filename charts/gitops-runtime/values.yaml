@@ -660,6 +660,7 @@ gitops-operator:
     maxUnavailable: ""
 
 # -- Argo Gateway
+# Argo Gateway is used to perform operations on ArgoCD from Codefresh platform
 argo-gateway:
   image:
     registry: quay.io
