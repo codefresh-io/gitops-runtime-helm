@@ -139,7 +139,6 @@ global:
   # -- global NO_PROXY for all components
   noProxy: ''
   imageRegistry: ""
-
   # -- Global settings for event reporters
   # Event reporters are used for reporting runtime and cluster resources to Codefresh platform
   event-reporters:
@@ -188,7 +187,6 @@ global:
       scrapeTimeout: 10s
       labels: {}
     config: {}
-
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
@@ -634,7 +632,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: a1316ff
+    tag: 52fb9a7
   env:
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
@@ -658,7 +656,6 @@ gitops-operator:
     enabled: false
     minAvailable: 1
     maxUnavailable: ""
-
 # -- Argo Gateway
 # Argo Gateway is used to perform operations on ArgoCD from Codefresh platform
 argo-gateway:
@@ -703,7 +700,6 @@ argo-gateway:
     interval: 30s
     scrapeTimeout: 10s
     labels: {}
-
 # -- Enable hook job to create redis secret
 redis-secret-init:
   image:
@@ -713,7 +709,6 @@ redis-secret-init:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-
 # -- Standalone redis deployment
 # Will be replaced by redis-ha subchart when `redis-ha.enabled=true`
 redis:
@@ -803,11 +798,9 @@ redis:
     create: true
     name: ""
     annotations: {}
-
 event-reporters:
   cluster-event-reporter: {}
   runtime-event-reporter: {}
-
 # -- Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true`
 # Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
 redis-ha:
@@ -854,33 +847,26 @@ redis-ha:
     # -- Additional affinities to add to the haproxy pods.
     additionalAffinities: {}
     # -- Assign custom [affinity] rules to the haproxy pods.
-    affinity: |
-
+    affinity: ""
     # -- [Tolerations] for use with node taints for haproxy pods.
     tolerations: []
     # -- HAProxy container-level security context
     # @default -- See [values.yaml]
     containerSecurityContext:
       readOnlyRootFilesystem: true
-
   # -- Configures redis-ha with AUTH
   auth: true
   # -- Existing Secret to use for redis-ha authentication.
   # By default the redis-secret-init Job is generating this Secret.
   existingSecret: gitops-runtime-redis
-
   # -- Whether the Redis server pods should be forced to run on separate nodes.
   hardAntiAffinity: true
-
   # -- Additional affinities to add to the Redis server pods.
   additionalAffinities: {}
-
   # -- Assign custom [affinity] rules to the Redis pods.
-  affinity: |
-
+  affinity: ""
   # -- [Tolerations] for use with node taints for Redis pods.
   tolerations: []
-
   # -- Assign custom [TopologySpreadConstraints] rules to the Redis pods.
   ## https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
   topologySpreadConstraints:
