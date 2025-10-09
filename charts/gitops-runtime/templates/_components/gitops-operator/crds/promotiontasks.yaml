@@ -381,6 +381,22 @@ spec:
               createdAt:
                 format: date-time
                 type: string
+              failure:
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  stepIndex:
+                    type: integer
+                  while:
+                    type: string
+                required:
+                - code
+                - message
+                - stepIndex
+                - while
+                type: object
               observedGeneration:
                 format: int64
                 type: integer
@@ -399,8 +415,6 @@ spec:
                 items:
                   description: StepStatus
                   properties:
-                    failureSummary:
-                      type: string
                     getPromotionValues:
                       properties:
                         commitAuthorAvatarUrl:
@@ -633,6 +647,32 @@ spec:
               updatedAt:
                 format: date-time
                 type: string
+              warnings:
+                items:
+                  properties:
+                    count:
+                      type: integer
+                    error:
+                      properties:
+                        code:
+                          type: string
+                        message:
+                          type: string
+                        stepIndex:
+                          type: integer
+                        while:
+                          type: string
+                      required:
+                      - code
+                      - message
+                      - stepIndex
+                      - while
+                      type: object
+                  required:
+                  - count
+                  - error
+                  type: object
+                type: array
             required:
             - createdAt
             - phase
