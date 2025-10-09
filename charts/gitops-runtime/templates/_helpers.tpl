@@ -306,18 +306,18 @@ Determine argocd server username ConfigMap.
 Determine argocd redis url
 */}}
 {{- define "codefresh-gitops-runtime.argocd.redis.url" -}}
-{{- $argoCDValues := (get .Values "argo-cd") }}
-{{- if (index .Values "argo-cd" "enabled") }}
-  {{- $serviceName := include "codefresh-gitops-runtime.argocd.redis.servicename" . }}
-  {{- $port := include "codefresh-gitops-runtime.argocd.redis.serviceport" . }}
-  {{- printf "%s:%s" $serviceName $port }}
-{{- else if (index .Values "global" "external-argo-cd" "redis") }}
-  {{- $redis := (index .Values "global" "external-argo-cd" "redis") }}
-  {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.redis.svc is not set" $redis.svc }}
-  {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.redis.port is not set" $redis.port }}
-  {{- printf "%s:%v" $svc $port }}
+{{- if and (index .Values "redis-ha" "enabled") (index .Values "redis-ha" "haproxy" "enabled") }}
+  {{- $redisHa := (index .Values "redis-ha") -}}
+  {{- $redisHaContext := dict "Chart" (dict "Name" "redis-ha") "Release" .Release "Values" $redisHa -}}
+  {{- $serverName := printf "%s-haproxy" (include "redis-ha.fullname" $redisHaContext) | trunc 63 | trimSuffix "-" -}}
+  {{- $port := $redisHa.haproxy.servicePort -}}
+  {{- printf "%s:%v" $serverName $port }}
+{{- else if .Values.redis.enabled }}
+  {{- $serviceName := include "redis.fullname" . }}
+  {{- $port := .Values.redis.service.ports.redis.port }}
+  {{- printf "%s:%v" $serviceName $port }}
 {{- else }}
-  {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.redis is not set" }}
+  {{- fail "ERROR: .Values.redis or .Values.redis-ha must be enabled!" }}
 {{- end }}
 {{- end}}
 
@@ -515,7 +515,6 @@ NO_PROXY: {{ .Values.global.noProxy | quote }}
 
 {{- printf "%s" $eventBusName }}
 {{- end }}
-
 
 {{- define "codefresh-gitops-runtime.image.name" -}}
   {{/* Restoring root $ context */}}

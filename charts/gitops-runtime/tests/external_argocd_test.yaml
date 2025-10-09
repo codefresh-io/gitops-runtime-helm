@@ -407,7 +407,7 @@ tests:
     asserts:
       - equal:
           path: data["redis.server"]
-          value: my-argocd-redis:6379
+          value: runtime-redis:6379
 
   - it: runtime-event-reporter ConfigMap should have valid Sources Server address
     template: event-reporters/runtime-event-reporter/configmap.yaml
@@ -555,7 +555,7 @@ tests:
     asserts:
       - equal:
           path: data["redis.server"]
-          value: my-argocd-redis:6379
+          value: runtime-redis:6379
 
   - it: argo-gateway ConfigMap should have valid Repo Server URL
     template: argo-gateway/configmap.yaml
@@ -674,18 +674,6 @@ tests:
           content:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: token
-
-  - it: should require ArgoCd redis address if it's not provided
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    set:
-      global:
-        external-argo-cd:
-          redis: null
-    asserts:
-      - failedTemplate:
-          errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.redis is not set"
 
   - it: should require ArgoCd repoServer address if it's not provided
     values:
