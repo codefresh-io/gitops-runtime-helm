@@ -322,6 +322,8 @@ spec:
           status:
             description: PromotionTaskStatus defines the observed state of PromotionTask
             properties:
+              complete:
+                type: boolean
               conditions:
                 items:
                   description: Condition contains details for one aspect of the current
