@@ -476,8 +476,8 @@ app-proxy:
   extraVolumeMounts: []
   initContainer:
     image:
-      repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3806.0
+      repository: quay.io/codefresh/dev/cap-app-proxy-init
+      tag: 1.3816.0-cr-30407-cluster-remove-f7731a0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
