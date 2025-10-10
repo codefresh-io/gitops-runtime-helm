@@ -17,6 +17,7 @@ LEADER_ELECT: true
 LEADER_ELECT: false
   {{- end }}
 MAX_CONCURRENT_RELEASES: {{ .Values.config.maxConcurrentReleases }}
+MAX_RECONCILE_RETRIES: {{ .Values.config.maxReconcileRetries }}
 PROMOTION_WRAPPER_TEMPLATE: {{ .Values.config.promotionWrapperTemplate | quote }}
 RUNTIME: {{ .Values.global.runtime.name }}
 TASK_POLLING_INTERVAL: {{ .Values.config.taskPollingInterval }}
@@ -44,6 +45,4 @@ RUNTIME_VERSION:
     configMapKeyRef:
       name: codefresh-cm
       key: version
-SOURCES_SERVER_URL: http://argo-gateway # TODO: remove and leave only ARGO_GATEWAY_URL
-ARGO_GATEWAY_URL: http://argo-gateway
 {{- end -}}
