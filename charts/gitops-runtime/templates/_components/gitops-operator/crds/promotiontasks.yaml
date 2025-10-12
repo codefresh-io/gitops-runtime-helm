@@ -482,12 +482,12 @@ spec:
                       properties:
                         appStatus:
                           properties:
-                            appRevision:
-                              type: string
                             health:
                               description: Represents resource health status
                               type: string
                             healthMessage:
+                              type: string
+                            revision:
                               type: string
                             sync:
                               description: SyncStatusCode is a type which represents
@@ -522,12 +522,12 @@ spec:
                       properties:
                         appStatus:
                           properties:
-                            appRevision:
-                              type: string
                             health:
                               description: Represents resource health status
                               type: string
                             healthMessage:
+                              type: string
+                            revision:
                               type: string
                             sync:
                               description: SyncStatusCode is a type which represents
@@ -612,12 +612,12 @@ spec:
                       properties:
                         appStatus:
                           properties:
-                            appRevision:
-                              type: string
                             health:
                               description: Represents resource health status
                               type: string
                             healthMessage:
+                              type: string
+                            revision:
                               type: string
                             sync:
                               description: SyncStatusCode is a type which represents
