@@ -482,6 +482,8 @@ spec:
                       properties:
                         appStatus:
                           properties:
+                            appRevision:
+                              type: string
                             health:
                               description: Represents resource health status
                               type: string
@@ -520,6 +522,8 @@ spec:
                       properties:
                         appStatus:
                           properties:
+                            appRevision:
+                              type: string
                             health:
                               description: Represents resource health status
                               type: string
@@ -608,6 +612,8 @@ spec:
                       properties:
                         appStatus:
                           properties:
+                            appRevision:
+                              type: string
                             health:
                               description: Represents resource health status
                               type: string
