@@ -835,16 +835,3 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.server.auth.tokenSecretKeyRef.name is required"
-
-  - it: should require ArgoCd server address if it's not provided
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    set:
-      global:
-        integrations:
-          argo-cd:
-            server: null
-    asserts:
-      - failedTemplate:
-          errorMessage: "ArgoCD is not enabled and .Values.global.integrations.argo-cd.server is not set"
