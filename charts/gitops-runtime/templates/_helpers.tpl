@@ -93,28 +93,18 @@ Determine argocd redis service name. Must be called with chart root context
 Determine argocd repo server service name. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.reposerver.servicename" -}}
-{{/* For now use template from ArgoCD chart until better approach */}}
-  {{- if (index .Subcharts "argo-cd") }}
-    {{- template "argo-cd.repoServer.fullname" (dict "Values" (get .Values "argo-cd") "Release" .Release ) }}
-  {{- else }}
-    {{- $repoServer := index .Values "global" "external-argo-cd" "repoServer" }}
-    {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.svc is not set" $repoServer.svc }}
-    {{- printf "%s" $svc }}
-  {{- end }}
+  {{- $repoServer := index .Values "global" "integrations" "argo-cd" "repoServer" }}
+  {{- $svc := required ".Values.global.integrations.argo-cd.repoServer.svc is not set" $repoServer.svc }}
+  {{- printf "%s" $svc }}
 {{- end }}
 
 {{/*
 Determine argocd argocd repo server port
 */}}
 {{- define "codefresh-gitops-runtime.argocd.reposerver.serviceport" -}}
-{{/* For now use template from ArgoCD chart until better approach */}}
-  {{- if (index .Subcharts "argo-cd") }}
-    {{- index .Values "argo-cd" "repoServer" "service" "port" }}
-  {{- else }}
-    {{- $repoServer := index .Values "global" "external-argo-cd" "repoServer" }}
-    {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.svc is not set" $repoServer.port }}
-    {{- printf "%v" $port }}
-  {{- end }}
+  {{- $repoServer := index .Values "global" "integrations" "argo-cd" "repoServer" }}
+  {{- $port := required ".Values.global.integrations.argo-cd.repoServer.svc is not set" $repoServer.port }}
+  {{- printf "%v" $port }}
 {{- end }}
 
 
@@ -122,19 +112,9 @@ Determine argocd argocd repo server port
 Determine argocd repoServer url
 */}}
 {{- define "codefresh-gitops-runtime.argocd.reposerver.url" -}}
-{{- $argoCDValues := (get .Values "argo-cd") }}
-{{- if (index .Values "argo-cd" "enabled") }}
-  {{- $serviceName := include "codefresh-gitops-runtime.argocd.reposerver.servicename" . }}
-  {{- $port := include "codefresh-gitops-runtime.argocd.reposerver.serviceport" . }}
-  {{- printf "%s:%s" $serviceName $port }}
-{{- else if (index .Values "global" "external-argo-cd" "repoServer") }}
-  {{- $repoServer := (index .Values "global" "external-argo-cd" "repoServer") }}
-  {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.svc is not set" $repoServer.svc }}
-  {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer.port is not set" $repoServer.port }}
-  {{- printf "%s:%v" $svc $port }}
-{{- else }}
-  {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer is not set" }}
-{{- end }}
+  {{- $repoServer := (index .Values "global" "integrations" "argo-cd" "repoServer") }}
+  {{- $svc := required ".Values.global.integrations.argo-cd.repoServer.svc is not set" $repoServer.svc }}
+  {{- $port := required ".Values.global.integrations.argo-cd.repoServer.port is not set" $repoServer.port }}
 {{- end}}
 
 
@@ -190,27 +170,15 @@ Determine argocd redis service port. Must be called with chart root context
 Determine argocd server url. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.server.url" -}}
-  {{- if (index .Values "argo-cd" "enabled") }}
-    {{- $protocol := "https" }}
-    {{- $port := include "codefresh-gitops-runtime.argocd.server.serviceport" . }}
-    {{- if (eq $port "80") }}
-      {{- $protocol = "http" }}
-    {{- end }}
-    {{- $url := include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . }}
-    {{- printf "%s://%s" $protocol $url }}
-  {{- else if (index .Values "global" "external-argo-cd" "server") }}
-    {{- $argoCDSrv := (index .Values "global" "external-argo-cd" "server") }}
-    {{- $protocol := "http" }}
-    {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.svc is not set" $argoCDSrv.svc }}
-    {{- $port := (required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.port is not port" $argoCDSrv.port) | toString }}
-    {{- $rootpath := (index .Values "global" "external-argo-cd" "server" "rootpath") }}
-    {{- if (eq $port "80") }}
-      {{- printf "%s://%s%s" $protocol $svc $rootpath }}
-    {{- else }}
-      {{- printf "%s://%s:%s%s" $protocol $svc $port $rootpath }}
-    {{- end }}
+  {{- $argoCDSrv := (index .Values "global" "integrations" "argo-cd" "server") }}
+  {{- $protocol := "http" }}
+  {{- $svc := required ".Values.global.integrations.argo-cd.server.svc is not set" $argoCDSrv.svc }}
+  {{- $port := (required ".Values.global.integrations.argo-cd.server.port is not set" $argoCDSrv.port) | toString }}
+  {{- $rootpath := (index .Values "global" "integrations" "argo-cd" "server" "rootpath") }}
+  {{- if (eq $port "80") }}
+    {{- printf "%s://%s%s" $protocol $svc $rootpath }}
   {{- else }}
-    {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set" }}
+    {{- printf "%s://%s:%s%s" $protocol $svc $port $rootpath }}
   {{- end }}
 {{- end}}
 
@@ -218,21 +186,11 @@ Determine argocd server url. Must be called with chart root context
 Determine argocd server url witout the protocol. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.server.no-protocol-url" -}}
-{{- $argoCDValues := (get .Values "argo-cd") }}
-{{- if (index .Values "argo-cd" "enabled") }}
-  {{- $serverName := include "codefresh-gitops-runtime.argocd.server.servicename" . }}
-  {{- $port := include "codefresh-gitops-runtime.argocd.server.serviceport" . }}
-  {{- $path := (get $argoCDValues.configs.params "server.rootpath") }}
-  {{- printf "%s:%s%s" $serverName $port $path }}
-{{- else if (index .Values "global" "external-argo-cd" "server") }}
-  {{- $argoCDSrv := (index .Values "global" "external-argo-cd" "server") }}
-  {{- $svc := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.svc is not set" $argoCDSrv.svc }}
-  {{- $port := required "ArgoCD is not enabled and .Values.global.external-argo-cd.server.port is not set" $argoCDSrv.port }}
-  {{- $rootpath := (index .Values "global" "external-argo-cd" "server" "rootpath") }}
+  {{- $argoCDSrv := (index .Values "global" "integrations" "argo-cd" "server") }}
+  {{- $svc := required "ArgoCD is not enabled and .Values.global.integrations.argo-cd.server.svc is not set" $argoCDSrv.svc }}
+  {{- $port := required "ArgoCD is not enabled and .Values.global.integrations.argo-cd.server.port is not set" $argoCDSrv.port }}
+  {{- $rootpath := (index .Values "global" "integrations" "argo-cd" "server" "rootpath") }}
   {{- printf "%s:%v%s" $svc $port $rootpath }}
-{{- else }}
-  {{- fail "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set" }}
-{{- end }}
 {{- end}}
 
 {{- define "codefresh-gitops-runtime.argocd-auth" -}}

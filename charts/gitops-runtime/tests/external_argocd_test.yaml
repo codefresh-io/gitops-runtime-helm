@@ -681,11 +681,12 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          repoServer: null
+        integrations:
+          argo-cd:
+            repoServer: null
     asserts:
       - failedTemplate:
-          errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer is not set"
+          errorMessage: ".Values.global.integrations.argo-cd.repoServer is not set"
 
   - it: should required only allowed auth type for external ArgoCd
     values:
@@ -709,9 +710,10 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          server:
-            rootpath: /argocd
+        integrations:
+          argo-cd:
+            server:
+              rootpath: /argocd
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -726,9 +728,10 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          server:
-            rootpath: /argocd
+        integrations:
+          argo-cd:
+            server:
+              rootpath: /argocd
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -743,9 +746,10 @@ tests:
     template: app-proxy/config.yaml
     set:
       global:
-        external-argo-cd:
-          server:
-            rootpath: /argocd
+        integrations:
+          argo-cd:
+            server:
+              rootpath: /argocd
     asserts:
       - equal:
           path: data.argoCdUrl
@@ -758,9 +762,10 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          server:
-            rootpath: /argocd
+        integrations:
+          argo-cd:
+            server:
+              rootpath: /argocd
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -850,8 +855,9 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          server: null
+        integrations:
+          argo-cd:
+            server: null
     asserts:
       - failedTemplate:
-          errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set"
+          errorMessage: "ArgoCD is not enabled and .Values.global.integrations.argo-cd.server is not set"
