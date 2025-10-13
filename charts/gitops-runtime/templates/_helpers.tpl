@@ -155,7 +155,7 @@ Determine argocd server service port. Must be called with chart root context
     {{- end }}
   {{- end }}
 {{- end }}
-{{- print $port }}
+{{- printf "%v" $port }}
 {{- end}}
 
 {{/*
@@ -164,7 +164,7 @@ Determine argocd redis service port. Must be called with chart root context
 {{- define "codefresh-gitops-runtime.argocd.redis.serviceport" -}}
 {{- $argoCDValues := (get .Values "argo-cd") }}
 {{- $port := $argoCDValues.redis.servicePort }}
-{{- print $port }}
+{{- printf "%v" $port }}
 {{- end}}
 
 {{/*
