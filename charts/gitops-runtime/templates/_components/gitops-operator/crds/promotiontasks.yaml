@@ -385,19 +385,27 @@ spec:
                 type: string
               failure:
                 properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-                  stepIndex:
-                    type: integer
-                  while:
+                  error:
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      stepIndex:
+                        type: integer
+                      while:
+                        type: string
+                    required:
+                    - code
+                    - message
+                    - stepIndex
+                    - while
+                    type: object
+                  timestamp:
+                    format: date-time
                     type: string
                 required:
-                - code
-                - message
-                - stepIndex
-                - while
+                - error
                 type: object
               observedGeneration:
                 format: int64
@@ -670,9 +678,15 @@ spec:
                       - stepIndex
                       - while
                       type: object
+                    timestamps:
+                      items:
+                        format: date-time
+                        type: string
+                      type: array
                   required:
                   - count
                   - error
+                  - timestamps
                   type: object
                 type: array
             required:

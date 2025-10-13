@@ -470,14 +470,14 @@ app-proxy:
           tag: 1.1.17-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3806.0
+    tag: 1.3816.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3806.0
+      tag: 1.3816.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -634,7 +634,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: 4d0942a
+    tag: "6881890"
   env:
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
