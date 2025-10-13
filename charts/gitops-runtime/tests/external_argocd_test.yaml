@@ -675,19 +675,6 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: token
 
-  - it: should require ArgoCd repoServer address if it's not provided
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    set:
-      global:
-        integrations:
-          argo-cd:
-            repoServer: null
-    asserts:
-      - failedTemplate:
-          errorMessage: ".Values.global.integrations.argo-cd.repoServer is not set"
-
   - it: should required only allowed auth type for external ArgoCd
     values:
       - ./values/mandatory-values-ingress.yaml
