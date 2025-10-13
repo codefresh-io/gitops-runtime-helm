@@ -703,6 +703,9 @@ spec:
         required:
         - spec
         type: object
+    selectableFields:
+    - jsonPath: status.complete
+    - jsonPath: status.phase
     served: true
     storage: true
     subresources:
