@@ -115,7 +115,7 @@ Determine argocd repoServer url
   {{- $repoServer := (index .Values "global" "integrations" "argo-cd" "repoServer") }}
   {{- $svc := required ".Values.global.integrations.argo-cd.repoServer.svc is not set" $repoServer.svc }}
   {{- $port := required ".Values.global.integrations.argo-cd.repoServer.port is not set" $repoServer.port }}
-  {{- printf "%s:%s" $svc $port }}
+  {{- printf "%s:%v" $svc $port }}
 {{- end}}
 
 
@@ -179,7 +179,7 @@ Determine argocd server url. Must be called with chart root context
   {{- if (eq $port "80") }}
     {{- printf "%s://%s%s" $protocol $svc $rootpath }}
   {{- else }}
-    {{- printf "%s://%s:%s%s" $protocol $svc $port $rootpath }}
+    {{- printf "%s://%s:%v%s" $protocol $svc $port $rootpath }}
   {{- end }}
 {{- end}}
 
