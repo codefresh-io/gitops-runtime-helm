@@ -115,6 +115,7 @@ Determine argocd repoServer url
   {{- $repoServer := (index .Values "global" "integrations" "argo-cd" "repoServer") }}
   {{- $svc := required ".Values.global.integrations.argo-cd.repoServer.svc is not set" $repoServer.svc }}
   {{- $port := required ".Values.global.integrations.argo-cd.repoServer.port is not set" $repoServer.port }}
+  {{- printf "%s:%s" $svc $port }}
 {{- end}}
 
 
