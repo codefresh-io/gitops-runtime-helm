@@ -77,16 +77,7 @@ Create the name of the service account to use
 Determine argocd server service name. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.server.servicename" -}}
-{{/* For now use template from ArgoCD chart until better approach */}}
-{{- template "argo-cd.server.fullname" (dict "Values" (get .Values "argo-cd") "Release" .Release ) }}
-{{- end }}
-
-{{/*
-Determine argocd redis service name. Must be called with chart root context
-*/}}
-{{- define "codefresh-gitops-runtime.argocd.redis.servicename" -}}
-{{/* For now use template from ArgoCD chart until better approach */}}
-{{- template "argo-cd.redis.fullname" (dict "Values" (get .Values "argo-cd") "Release" .Release ) }}
+{{- printf "%s-%s" (index .Values "argo-cd" "fullnameOverride") (index .Values "argo-cd" "server" "name") }}
 {{- end }}
 
 {{/*
@@ -94,7 +85,7 @@ Determine argocd repo server service name. Must be called with chart root contex
 */}}
 {{- define "codefresh-gitops-runtime.argocd.reposerver.servicename" -}}
   {{- if (index .Subcharts "argo-cd") }}
-    {{- template "argo-cd.repoServer.fullname" (dict "Values" (get .Values "argo-cd") "Release" .Release ) }}
+    {{- printf "%s-%s" (index .Values "argo-cd" "fullnameOverride") (index .Values "argo-cd" "repoServer" "name") }}
   {{- else }}
     {{- $repoServer := index .Values "global" "integrations" "argo-cd" "repoServer" }}
     {{- $svc := required ".Values.global.integrations.argo-cd.repoServer.svc is not set" $repoServer.svc }}
@@ -132,15 +123,6 @@ Determine argocd repoServer url
   {{- end }}
 {{- end}}
 
-
-{{/*
-Determine argocd servicename. Must be called with chart root context
-*/}}
-{{- define "codefresh-gitops-runtime.argocd.appcontroller.serviceAccountName" -}}
-{{/* For now use template from ArgoCD chart until better approach */}}
-{{- template "argo-cd.controllerServiceAccountName" (dict "Values" (get .Values "argo-cd") "Release" .Release ) }}
-{{- end }}
-
 {{/*
 Determine rollouts name
 */}}
@@ -152,7 +134,6 @@ Determine rollouts name
     {{- printf "argo-rollouts" }}
   {{- end }}
 {{- end }}
-
 
 {{/*
 Determine argocd server service port. Must be called with chart root context
@@ -219,8 +200,8 @@ Determine argocd server url witout the protocol. Must be called with chart root 
     {{- printf "%s:%s%s" $serverName $port $path }}
   {{- else }}
     {{- $argoCDSrv := (index .Values "global" "integrations" "argo-cd" "server") }}
-    {{- $svc := required "ArgoCD is not enabled and .Values.global.integrations.argo-cd.server.svc is not set" $argoCDSrv.svc }}
-    {{- $port := required "ArgoCD is not enabled and .Values.global.integrations.argo-cd.server.port is not set" $argoCDSrv.port }}
+    {{- $svc := required ".Values.global.integrations.argo-cd.server.svc is not set" $argoCDSrv.svc }}
+    {{- $port := required ".Values.global.integrations.argo-cd.server.port is not set" $argoCDSrv.port }}
     {{- $rootpath := (index .Values "global" "integrations" "argo-cd" "server" "rootpath") }}
     {{- printf "%s:%v%s" $svc $port $rootpath }}
   {{- end }}

@@ -10,13 +10,13 @@ tests:
     asserts:
       - equal:
           path: data["argocd.server"]
-          value: argo-cd-server:80
+          value: argocd-server:80
       - equal:
           path: data["redis.server"]
           value: runtime-redis:6379
       - equal:
           path: data["repo.server"]
-          value: argo-cd-repo-server:8081
+          value: argocd-repo-server:8081
 
   - it: Argo Api Gateway Deployment should have valid matchLabel selectors
     template: argo-gateway/deployment.yaml
