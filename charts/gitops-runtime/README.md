@@ -395,6 +395,27 @@ argo-gateway:
   ...
 ```
 
+- `.Values.global.external-argo-cd` was changed to `.Values.global.integrations.argo-cd`
+
+```yaml
+# Before:
+global:
+  external-argo-cd:
+    server:
+      svc: argocd-server
+      port: 80
+    ...
+
+# After:
+global:
+  integrations:
+    argo-cd:
+      server:
+        svc: argocd-server
+        port: 80
+      ...
+```
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -430,14 +451,14 @@ argo-gateway:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3806.0"` |  |
+| app-proxy.image.tag | string | `"1.3820.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3806.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3820.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -502,9 +523,13 @@ argo-gateway:
 | argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
 | argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
+| argo-cd.configs.params."server.rootpath" | string | `""` |  |
 | argo-cd.crds.install | bool | `true` |  |
 | argo-cd.enabled | bool | `true` |  |
-| argo-cd.fullnameOverride | string | `"argo-cd"` |  |
+| argo-cd.fullnameOverride | string | `"argocd"` |  |
+| argo-cd.repoServer.name | string | `"repo-server"` |  |
+| argo-cd.repoServer.service.port | int | `8081` |  |
+| argo-cd.server.name | string | `"server"` |  |
 | argo-events.configs.jetstream.versions[0].configReloaderImage | string | `"natsio/nats-server-config-reloader:0.19.1"` |  |
 | argo-events.configs.jetstream.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.17.3"` |  |
 | argo-events.configs.jetstream.versions[0].natsImage | string | `"nats:2.11.4"` |  |
@@ -534,6 +559,7 @@ argo-gateway:
 | gitops-operator.affinity | object | `{}` |  |
 | gitops-operator.config.commitStatusPollingInterval | string | `"10s"` | Commit status polling interval |
 | gitops-operator.config.maxConcurrentReleases | int | `100` | Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime) |
+| gitops-operator.config.maxReconcileRetries | int | `10` | Maximum number of reconcile retries on promotion-related resources before failing a promotion task |
 | gitops-operator.config.promotionWrapperTemplate | string | `""` | An optional template for the promotion wrapper (empty default will use the embedded one) |
 | gitops-operator.config.taskPollingInterval | string | `"10s"` | Task polling interval |
 | gitops-operator.config.workflowMonitorPollingInterval | string | `"10s"` | Workflow monitor polling interval |
@@ -547,7 +573,7 @@ argo-gateway:
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.registry | string | `"quay.io"` | defaults |
 | gitops-operator.image.repository | string | `"codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"a1316ff"` |  |
+| gitops-operator.image.tag | string | `"6881890"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
@@ -578,19 +604,14 @@ argo-gateway:
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
 | global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"695977c"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
-| global.external-argo-cd | object | `{"repoServer":{"port":8081,"svc":"argocd-repo-server"},"server":{"port":80,"rootpath":"","svc":"argocd-server"}}` | Configuration for external ArgoCD Should be used when `argo-cd.enabled` is set to false |
-| global.external-argo-cd.repoServer.port | int | `8081` | Port of the ArgoCD repo server |
-| global.external-argo-cd.repoServer.svc | string | `"argocd-repo-server"` | Service name of the ArgoCD repo server |
-| global.external-argo-cd.server | object | `{"port":80,"rootpath":"","svc":"argocd-server"}` | ArgoCD server settings |
-| global.external-argo-cd.server.port | int | `80` | Port of the ArgoCD server |
-| global.external-argo-cd.server.rootpath | string | `""` | Set if Argo CD is running behind reverse proxy under subpath different from / e.g. rootpath: '/argocd' |
-| global.external-argo-cd.server.svc | string | `"argocd-server"` | Service name of the ArgoCD server |
 | global.external-argo-rollouts | object | `{"rollout-reporter":{"enabled":false}}` | Configuration for external Argo Rollouts |
 | global.external-argo-rollouts.rollout-reporter | object | `{"enabled":false}` | Rollout reporter settings |
 | global.external-argo-rollouts.rollout-reporter.enabled | bool | `false` | Enable or disable rollout reporter Configuration is defined at .Values.event-reporters.rollout |
 | global.httpProxy | string | `""` | global HTTP_PROXY for all components |
 | global.httpsProxy | string | `""` | global HTTPS_PROXY for all components |
 | global.imageRegistry | string | `""` |  |
+| global.integrations.argo-cd.repoServer.port | int | `8081` | Port of the ArgoCD repo server |
+| global.integrations.argo-cd.repoServer.svc | string | `"argocd-repo-server"` | Service name of the ArgoCD repo server |
 | global.integrations.argo-cd.server.auth | object | `{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"}` | How GitOps Runtime should authenticate with ArgoCD server |
 | global.integrations.argo-cd.server.auth.password | string | `""` | ArgoCD password in plain text |
 | global.integrations.argo-cd.server.auth.passwordSecretKeyRef | object | `{"key":"password","name":"argocd-initial-admin-secret"}` | ArgoCD password referenced by an existing secret |
@@ -598,6 +619,9 @@ argo-gateway:
 | global.integrations.argo-cd.server.auth.tokenSecretKeyRef | object | `{}` | ArgoCD token referenced by an existing secret |
 | global.integrations.argo-cd.server.auth.type | string | `"password"` | Authentication type. Can be password or token |
 | global.integrations.argo-cd.server.auth.username | string | `"admin"` | ArgoCD username in plain text |
+| global.integrations.argo-cd.server.port | int | `80` | Port of the ArgoCD server |
+| global.integrations.argo-cd.server.rootpath | string | `""` | Set if Argo CD is running behind reverse proxy under subpath different from / e.g. rootpath: '/argocd' |
+| global.integrations.argo-cd.server.svc | string | `"argocd-server"` | Service name of the ArgoCD server |
 | global.noProxy | string | `""` | global NO_PROXY for all components |
 | global.nodeSelector | object | `{}` | Global nodeSelector for all components |
 | global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
