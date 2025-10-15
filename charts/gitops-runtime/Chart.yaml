@@ -15,11 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: bump app-proxy to 788a8d5 (#782) - fix app-proxy argocd-token monitoring'
-    - kind: changed
-      description: 'fix: update image-enrichment images (#779)'
-    - kind: changed
-      description: 'feat: added runtime label to codefresh cm (#781)'
+      description: 'chore[app-proxy]: bumps app-proxy to version 5aaaae7 (#809)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
