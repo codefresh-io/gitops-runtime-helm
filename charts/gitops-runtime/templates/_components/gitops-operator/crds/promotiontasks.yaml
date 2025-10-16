@@ -487,6 +487,8 @@ spec:
                               type: string
                             healthMessage:
                               type: string
+                            revision:
+                              type: string
                             sync:
                               description: SyncStatusCode is a type which represents
                                 possible comparison results
@@ -524,6 +526,8 @@ spec:
                               description: Represents resource health status
                               type: string
                             healthMessage:
+                              type: string
+                            revision:
                               type: string
                             sync:
                               description: SyncStatusCode is a type which represents
@@ -612,6 +616,8 @@ spec:
                               description: Represents resource health status
                               type: string
                             healthMessage:
+                              type: string
+                            revision:
                               type: string
                             sync:
                               description: SyncStatusCode is a type which represents
