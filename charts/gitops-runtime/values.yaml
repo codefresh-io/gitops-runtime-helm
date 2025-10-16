@@ -887,3 +887,14 @@ redis-ha:
   # @default -- See [values.yaml]
   containerSecurityContext:
     readOnlyRootFilesystem: true
+cf-argocd-extras:
+  eventReporter:
+    container:
+      image:
+        repository: codefresh/cf-argocd-extras
+        tag: e746a97
+  sourcesServer:
+    container:
+      image:
+        repository: codefresh/cf-argocd-extras
+        tag: e746a97
