@@ -15,6 +15,12 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'chore: update argocd-extras (#807)'
+    - kind: changed
+      description: 'chore[app-proxy]: bumps app-proxy to version 9621fba (#811)'
+    - kind: changed
+      description: 'chore[app-proxy]: bumps app-proxy to version 0eb07df (#810)'
+    - kind: changed
       description: 'chore[app-proxy]: bumps app-proxy to version 5aaaae7 (#809)'
     - kind: changed
       description: 'prepare-version(0.24.4): prepare chart content for release (#783)'
