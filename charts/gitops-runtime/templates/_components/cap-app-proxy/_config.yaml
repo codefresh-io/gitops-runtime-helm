@@ -5,7 +5,6 @@ cors: {{ .Values.config.cors | default .Values.global.codefresh.url }}
 isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote }}
 isExternalArgoCD: {{ .Values.global.runtime.isExternalArgoCD | quote }}
 runtimeName: {{ required "global.runtime.name is required" .Values.global.runtime.name | quote}}
-# Test CI
 isNamespacedRuntime: {{ .Values.global.runtime.singleNamespace | quote }}
 logLevel: {{ .Values.config.logLevel | quote }}
   {{- $enrichmentValues := get .Values "image-enrichment" }}
