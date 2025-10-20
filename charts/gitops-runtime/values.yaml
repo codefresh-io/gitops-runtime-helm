@@ -232,11 +232,15 @@ argo-cd:
   enabled: true
   fullnameOverride: argo-cd
 
+  notifications:
+    enabled: false
+
   configs:
     cm:
       timeout.reconciliation: 20s
       accounts.admin: apiKey,login
       application.resourceTrackingMethod: annotation+label
+      application.instanceLabelKey: ""
     params:
       server.insecure: true
       application.namespaces: 'cf-*'
