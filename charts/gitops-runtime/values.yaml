@@ -231,45 +231,15 @@ sealed-secrets:
 argo-cd:
   enabled: true
   fullnameOverride: argo-cd
-  crds:
-    install: true
+
   configs:
     cm:
       timeout.reconciliation: 20s
       accounts.admin: apiKey,login
       application.resourceTrackingMethod: annotation+label
-      resource.customizations.actions.argoproj.io_Rollout: |
-        mergeBuiltinActions: true
-        discovery.lua: |
-          actions = {}
-          local fullyPromoted = obj.status.currentPodHash == obj.status.stableRS
-          actions["pause"] = {["disabled"] = fullyPromoted or obj.spec.paused == true}
-          actions["skip-current-step"] = {["disabled"] = obj.spec.strategy.canary == nil or obj.spec.strategy.canary.steps == nil or obj.status.currentStepIndex == table.getn(obj.spec.strategy.canary.steps)}
-          return actions
-        definitions:
-        - name: pause
-          action.lua: |
-            obj.spec.paused = true
-            return obj
-        - name: skip-current-step
-          action.lua: |
-            if obj.status ~= nil then
-                if obj.spec.strategy.canary ~= nil and obj.spec.strategy.canary.steps ~= nil and obj.status.currentStepIndex < table.getn(obj.spec.strategy.canary.steps) then
-                    if obj.status.pauseConditions ~= nil and table.getn(obj.status.pauseConditions) > 0 then
-                        obj.status.pauseConditions = nil
-                    end
-                    obj.status.currentStepIndex = obj.status.currentStepIndex + 1
-                end
-            end
-            return obj
     params:
       server.insecure: true
       application.namespaces: 'cf-*'
-  applicationVersioning:
-    # -- Enable application versioning
-    enabled: true
-    # -- Extract application version based on ApplicationConfiguration CRD
-    useApplicationConfiguration: true
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Events
 #-----------------------------------------------------------------------------------------------------------------------
