@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.75
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: '0.24.5'
+version: '0.25.0'
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,16 +15,18 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: bump app-proxy to 788a8d5 (#782) - fix app-proxy argocd-token monitoring'
+      description: chore: sync our fork to 3.1.5 sync branch (#428)
     - kind: changed
-      description: 'fix: update image-enrichment images (#779)'
+      description: fix: restore GetChangeRevision API method (#430)
     - kind: changed
-      description: 'feat: added runtime label to codefresh cm (#781)'
+      description: feat: backport monorepocontroller annotations to acr controller (#433)
+    - kind: security
+      description: 'feat: fixed CVEs related to webhook and repository credentials in argo-cd dependency'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
     condition: argo-cd.enabled
-    version: 8.0.6-9-cap-v3.0.2-2025-09-08-9b30d922
+    version: 8.0.6-12-cap-v3.1.5-2025-10-21-b3254810
   - name: argo-events
     repository: https://codefresh-io.github.io/argo-helm
     version: 2.4.9-cap-CR-30841
