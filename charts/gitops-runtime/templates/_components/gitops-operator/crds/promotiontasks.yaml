@@ -648,11 +648,29 @@ spec:
                           - healthMessage
                           - sync
                           type: object
-                        commitSha:
-                          maxLength: 40
-                          minLength: 7
-                          pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
-                          type: string
+                        commitInfo:
+                          properties:
+                            commitAuthorId:
+                              properties:
+                                email:
+                                  type: string
+                                username:
+                                  type: string
+                              required:
+                              - email
+                              - username
+                              type: object
+                            commitDate:
+                              format: date-time
+                              type: string
+                            commitMessage:
+                              type: string
+                            commitSha:
+                              maxLength: 40
+                              minLength: 7
+                              pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
+                              type: string
+                          type: object
                         phase:
                           description: RevertPromotionCommitPhase
                           enum:
