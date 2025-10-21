@@ -22,6 +22,17 @@ PROMOTION_WRAPPER_TEMPLATE: {{ .Values.config.promotionWrapperTemplate | quote }
 RUNTIME: {{ .Values.global.runtime.name }}
 TASK_POLLING_INTERVAL: {{ .Values.config.taskPollingInterval }}
 WORKFLOW_MONITOR_POLLING_INTERVAL: {{ .Values.config.workflowMonitorPollingInterval }}
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $otelResourceAttributes := printf "service.name=gitops-operator,cf.account.id=%s,cf.gitops.runtime.name=%s" $accountId $runtimeName -}}
+OTEL_RESOURCE_ATTRIBUTES: {{ $otelResourceAttributes }}
+A_CF_TOKEN:
+  valueFrom:
+    secretKeyRef:
+      name: codefresh-token
+      key: token
+      optional: true
+OTEL_EXPORTER_OTLP_HEADERS: "Authorization=$(A_CF_TOKEN)"
 {{- end }}
 
 {{- define "gitops-operator.resources.environment-variables.defaults" -}}
@@ -45,15 +56,4 @@ RUNTIME_VERSION:
     configMapKeyRef:
       name: codefresh-cm
       key: version
-{{- $accountId := .Values.global.codefresh.accountId -}}
-{{- $runtimeName := .Values.global.runtime.name -}}
-{{- $otelResourceAttributes := printf "service.name=gitops-operator,cf.account.id=%s,cf.gitops.runtime.name=%s" $accountId $runtimeName -}}
-OTEL_RESOURCE_ATTRIBUTES: {{ $otelResourceAttributes }}
-A_CF_TOKEN:
-  valueFrom:
-    secretKeyRef:
-      name: codefresh-token
-      key: token
-      optional: true
-OTEL_EXPORTER_OTLP_HEADERS: "Authorization=$(A_CF_TOKEN)"
 {{- end -}}
