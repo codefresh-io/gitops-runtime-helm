@@ -226,7 +226,13 @@ CACHE_PASSWORD:
 {{- $runtimeName := .Values.global.runtime.name -}}
 {{- $otelResourceAttributes := printf "service.name=app-proxy,cf.account.id=%s,cf.gitops.runtime.name=%s" $accountId $runtimeName -}}
 OTEL_RESOURCE_ATTRIBUTES: {{ $otelResourceAttributes }}
-OTEL_EXPORTER_OTLP_HEADERS: "Authorization=Bearer $(RUNTIME_TOKEN)"
+A_RUNTIME_TOKEN:
+  valueFrom:
+    secretKeyRef:
+      name: codefresh-token
+      key: token
+      optional: true
+OTEL_EXPORTER_OTLP_HEADERS: "Authorization=$(A_RUNTIME_TOKEN)"
 {{- end -}}
 
 {{/*

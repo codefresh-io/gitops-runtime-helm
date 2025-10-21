@@ -49,5 +49,11 @@ RUNTIME_VERSION:
 {{- $runtimeName := .Values.global.runtime.name -}}
 {{- $otelResourceAttributes := printf "service.name=gitops-operator,cf.account.id=%s,cf.gitops.runtime.name=%s" $accountId $runtimeName -}}
 OTEL_RESOURCE_ATTRIBUTES: {{ $otelResourceAttributes }}
-OTEL_EXPORTER_OTLP_HEADERS: "Authorization=Bearer $(CF_TOKEN)"
+A_CF_TOKEN:
+  valueFrom:
+    secretKeyRef:
+      name: codefresh-token
+      key: token
+      optional: true
+OTEL_EXPORTER_OTLP_HEADERS: "Authorization=$(A_CF_TOKEN)"
 {{- end -}}
