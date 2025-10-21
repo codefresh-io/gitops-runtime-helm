@@ -222,6 +222,14 @@ CACHE_PASSWORD:
       name: gitops-runtime-redis
       key: auth
 {{ include "codefresh-gitops-runtime.get-proxy-env-vars" . }}
+
+{{- $serviceVersion := printf "%s@%s" (index .Values "app-proxy" "image" "tag") (index .Values "app-proxy" "image" "digest") -}}
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $otelResourceAttributes := printf "service.name=app-proxy,service.version=%s,cf.account.id=%s,cf.gitops.runtime.name=%s" $serviceVersion $accountId $runtimeName -}}
+OTEL_RESOURCE_ATTRIBUTES: {{- $otelResourceAttributes -}}
+OTEL_EXPORTER_OTLP_HEADERS: "Authorization=Bearer $(RUNTIME_TOKEN)"
+
 {{- end -}}
 
 {{/*
