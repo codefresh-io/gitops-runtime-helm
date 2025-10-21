@@ -653,6 +653,17 @@ spec:
                           minLength: 7
                           pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
                           type: string
+                        phase:
+                          description: RevertPromotionCommitPhase
+                          enum:
+                          - Unknown
+                          - Pending
+                          - RevertDone
+                          - Syncing
+                          - Complete
+                          type: string
+                      required:
+                      - phase
                       type: object
                     runWorkflow:
                       properties:
