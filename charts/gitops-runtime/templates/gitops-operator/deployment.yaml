@@ -25,4 +25,14 @@
   {{- $_ := set $context.Values.global.codefresh.tls.caCerts.secretKeyRef "key" ($context.Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" $context.Values.global.codefresh.tls.caCerts.secret.key) $context.Values.global.codefresh.tls.caCerts.secretKeyRef.key) }}
 {{- end }}
 
+{{- $serviceVersion := printf "%s@%s" (index .Values "gitops-operator" "image" "tag") (index .Values "gitops-operator" "image" "digest") -}}
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $otelResourceAttributes := printf "service.name=gitops-operator,service.version=%s,cf.account.id=%s,cf.gitops.runtime.name=%s" $serviceVersion $accountId $runtimeName -}}
+{{- $__ := set $context.Values.env "OTEL_RESOURCE_ATTRIBUTES" $otelResourceAttributes -}}
+
+{{- $token := .Values.global.codefresh.userToken.token -}}
+{{- $otelExporterOtlpHeaders := printf "Authorization=Bearer %s" $token -}}
+{{- $___ := set $context.Values.env "OTEL_EXPORTER_OTLP_HEADERS" $otelExporterOtlpHeaders -}}
+
 {{- include "gitops-operator.resources.deployment" $context }}

@@ -23,4 +23,14 @@
   {{- $_ := set $appProxyContext.Values.initContainer "extraVolumeMounts" $initContainerExtraVolumeMounts }}
 {{- end }}
 
+{{- $serviceVersion := printf "%s@%s" (index .Values "app-proxy" "image" "tag") (index .Values "app-proxy" "image" "digest") -}}
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $otelResourceAttributes := printf "service.name=app-proxy,service.version=%s,cf.account.id=%s,cf.gitops.runtime.name=%s" $serviceVersion $accountId $runtimeName -}}
+{{- $__ := set $appProxyContext.Values.env "OTEL_RESOURCE_ATTRIBUTES" $otelResourceAttributes -}}
+
+{{- $token := .Values.global.codefresh.userToken.token -}}
+{{- $otelExporterOtlpHeaders := printf "Authorization=Bearer %s" $token -}}
+{{- $___ := set $appProxyContext.Values.env "OTEL_EXPORTER_OTLP_HEADERS" $otelExporterOtlpHeaders -}}
+
 {{- include "cap-app-proxy.resources.deployment" $appProxyContext }}
