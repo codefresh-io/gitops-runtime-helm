@@ -45,10 +45,9 @@ RUNTIME_VERSION:
     configMapKeyRef:
       name: codefresh-cm
       key: version
-{{- $serviceVersion := printf "%s@%s" (index .Values "gitops-operator" "image" "tag") (index .Values "gitops-operator" "image" "digest") -}}
 {{- $accountId := .Values.global.codefresh.accountId -}}
 {{- $runtimeName := .Values.global.runtime.name -}}
-{{- $otelResourceAttributes := printf "service.name=gitops-operator,service.version=%s,cf.account.id=%s,cf.gitops.runtime.name=%s" $serviceVersion $accountId $runtimeName -}}
+{{- $otelResourceAttributes := printf "service.name=gitops-operator,cf.account.id=%s,cf.gitops.runtime.name=%s" $accountId $runtimeName -}}
 OTEL_RESOURCE_ATTRIBUTES: {{- $otelResourceAttributes -}}
 OTEL_EXPORTER_OTLP_HEADERS: "Authorization=Bearer $(CF_TOKEN)"
 {{- end -}}
