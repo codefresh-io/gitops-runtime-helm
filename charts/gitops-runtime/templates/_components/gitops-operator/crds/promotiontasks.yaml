@@ -337,8 +337,9 @@ spec:
                   type: object
                   x-kubernetes-validations:
                   - message: exactly one of the fields in [runWorkflow promoteAppWithCommit
-                      promoteAppWithPR verifyApp getPromotionValues] must be set
-                    rule: '[has(self.runWorkflow),has(self.promoteAppWithCommit),has(self.promoteAppWithPR),has(self.verifyApp),has(self.getPromotionValues)].filter(x,x==true).size()
+                      promoteAppWithPR verifyApp getPromotionValues revertPromotionCommit]
+                      must be set
+                    rule: '[has(self.runWorkflow),has(self.promoteAppWithCommit),has(self.promoteAppWithPR),has(self.verifyApp),has(self.getPromotionValues),has(self.revertPromotionCommit)].filter(x,x==true).size()
                       == 1'
                 maxItems: 100
                 minItems: 1
@@ -440,7 +441,6 @@ spec:
               phase:
                 description: PromotionTaskPhase
                 enum:
-                - Pending
                 - Executing
                 - Terminating
                 - Succeeded
@@ -497,7 +497,6 @@ spec:
                     phase:
                       description: PromotionTaskPhase
                       enum:
-                      - Pending
                       - Executing
                       - Terminating
                       - Succeeded
@@ -781,8 +780,9 @@ spec:
                   type: object
                   x-kubernetes-validations:
                   - message: exactly one of the fields in [runWorkflow promoteAppWithCommit
-                      promoteAppWithPR verifyApp getPromotionValues] must be set
-                    rule: '[has(self.runWorkflow),has(self.promoteAppWithCommit),has(self.promoteAppWithPR),has(self.verifyApp),has(self.getPromotionValues)].filter(x,x==true).size()
+                      promoteAppWithPR verifyApp getPromotionValues revertPromotionCommit]
+                      must be set
+                    rule: '[has(self.runWorkflow),has(self.promoteAppWithCommit),has(self.promoteAppWithPR),has(self.verifyApp),has(self.getPromotionValues),has(self.revertPromotionCommit)].filter(x,x==true).size()
                       == 1'
                 maxItems: 100
                 minItems: 1
