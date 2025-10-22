@@ -637,6 +637,8 @@ gitops-operator:
     tag: "6881890"
   env:
     GITOPS_OPERATOR_VERSION: 0.11.1
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=gitops-operator,cf.account.id=6422abe703c720761a07f3e0,cf.gitops.runtime.name=codefresh"
+    OTEL_EXPORTER_OTLP_HEADERS: "Authorization=68f7aff456b837cd55f9b864.2f9d8e981549798caedf0ced5dbb6a2f"
   serviceAccount:
     create: true
     annotations: {}
