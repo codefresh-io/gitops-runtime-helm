@@ -15,17 +15,6 @@ SSL_CERT_FILE: /app/config/codefresh-tls-certs/{{ $customCASecretKey }}
   {{- end }}
 USER_TOKEN:
   {{- include "codefresh-gitops-runtime.installation-token-env-var-value" . | nindent 2 }}
-{{- $accountId := .Values.global.codefresh.accountId -}}
-{{- $runtimeName := .Values.global.runtime.name -}}
-{{- $otelResourceAttributes := printf "service.name=pre-uninstall,cf.account.id=%s,cf.gitops.runtime.name=%s" $accountId $runtimeName -}}
-OTEL_RESOURCE_ATTRIBUTES: {{ $otelResourceAttributes }}
-A_RUNTIME_TOKEN:
-  valueFrom:
-    secretKeyRef:
-      name: codefresh-token
-      key: token
-      optional: true
-OTEL_EXPORTER_OTLP_HEADERS: "Authorization=$(A_RUNTIME_TOKEN)"
 {{- end -}}
 
 {{- define "installer.delete-runtime-from-platform.environment-variables" -}}

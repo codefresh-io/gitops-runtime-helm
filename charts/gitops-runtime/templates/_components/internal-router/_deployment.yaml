@@ -34,12 +34,6 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          {{- $accountId := .Values.global.codefresh.accountId -}}
-          {{- $runtimeName := .Values.global.runtime.name -}}
-          {{- $otelResourceAttributes := printf "service.name=app-proxy,cf.account.id=%s,cf.gitops.runtime.name=%s" $accountId $runtimeName -}}
-          {{- $_ := set .Values.env "OTEL_RESOURCE_ATTRIBUTES" $otelResourceAttributes }}
-          {{- $_ := set .Values.env "A_RUNTIME_TOKEN" (dict "valueFrom" (dict "secretKeyRef" (dict "name" "codefresh-token" "key" "token" "optional" true ))) }}
-          {{- $_ := set .Values.env "OTEL_EXPORTER_OTLP_HEADERS" "Authorization=$(A_RUNTIME_TOKEN)" }}
           {{- include "codefresh-gitops-runtime.components.common_helpers.container-templates.env-vars" .Values.env | nindent 10 }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
