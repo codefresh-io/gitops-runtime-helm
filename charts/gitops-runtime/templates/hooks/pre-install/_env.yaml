@@ -23,6 +23,17 @@ NAMESPACE:
     fieldRef:
       fieldPath: metadata.namespace
 REQUIRED_VERSION_CONSTRAINT: ">=2.12 <3.1"
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $otelResourceAttributes := printf "service.name=pre-install,cf.account.id=%s,cf.gitops.runtime.name=%s" $accountId $runtimeName -}}
+OTEL_RESOURCE_ATTRIBUTES: {{ $otelResourceAttributes }}
+A_RUNTIME_TOKEN:
+  valueFrom:
+    secretKeyRef:
+      name: codefresh-token
+      key: token
+      optional: true
+OTEL_EXPORTER_OTLP_HEADERS: "Authorization=$(A_RUNTIME_TOKEN)"
 {{- end -}}
 
 {{- define "installer.validate-values.environment-variables" -}}

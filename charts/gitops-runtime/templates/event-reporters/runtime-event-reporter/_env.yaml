@@ -20,6 +20,17 @@ ARGOCD_SERVER_ROOTPATH: {{ dig "server" "rootpath" "/" (index .Values "global" "
 CODEFRESH_SSL_CERT_PATH: {{ printf "/app/config/codefresh-tls-certs/%s" $secretKey }}
 {{- end }}
 
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $otelResourceAttributes := printf "service.name=runtime-event-reporter,cf.account.id=%s,cf.gitops.runtime.name=%s" $accountId $runtimeName -}}
+OTEL_RESOURCE_ATTRIBUTES: {{ $otelResourceAttributes }}
+A_CODEFRESH_TOKEN:
+  valueFrom:
+    secretKeyRef:
+      key: token
+      name: codefresh-token
+OTEL_EXPORTER_OTLP_HEADERS: "Authorization=$(A_CODEFRESH_TOKEN)"
+
 {{- end }}
 
 {{- define "runtime-event-reporter.resources.environment-variables.defaults" -}}
