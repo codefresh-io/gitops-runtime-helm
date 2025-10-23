@@ -413,7 +413,6 @@ spec:
               phase:
                 description: PromotionTaskPhase
                 enum:
-                - Pending
                 - Executing
                 - Terminating
                 - Succeeded
@@ -470,7 +469,6 @@ spec:
                     phase:
                       description: PromotionTaskPhase
                       enum:
-                      - Pending
                       - Executing
                       - Terminating
                       - Succeeded
