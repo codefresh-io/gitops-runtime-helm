@@ -276,7 +276,7 @@ argo-cd:
 # Argo Events
 #-----------------------------------------------------------------------------------------------------------------------
 argo-events:
-  enabled: false
+  enabled: true
   fullnameOverride: argo-events
   crds:
     install: false
