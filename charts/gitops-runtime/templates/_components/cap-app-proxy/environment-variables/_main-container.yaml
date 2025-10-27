@@ -1,9 +1,9 @@
 {{- define "cap-app-proxy.environment-variables.defaults" -}}
-{{- $accountId := include "global.codefresh.accountId" . -}}
-{{- $chartVersion := coalesce .Values.version .Chart.Version -}}
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $chartVersion := .Chart.Version -}}
 {{- $runtimeVersion := .Chart.AppVersion -}}
-{{- $runtimeName := include "global.runtime.name" . -}}
-{{- $appProxyVersion := coalesce .Values.app-proxy.image.tag "latest" -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $appProxyVersion := .Values.image.tag | default "latest" -}}
 ARGO_CD_URL:
   valueFrom:
     configMapKeyRef:
@@ -228,9 +228,9 @@ CACHE_PASSWORD:
     secretKeyRef:
       name: gitops-runtime-redis
       key: auth
+OTEL_RESOURCE_ATTRIBUTES: {{ printf "service.name=%s,service.version=%s,service.namespace=%s,cf.account.id=%s,cf.gitops.runtime.name=%s,cf.gitops.runtime.version=%s,cf.gitops.runtime.chart.version=%s" "cf-gitops-app-proxy" $appProxyVersion "cf-gitops-runtime" $accountId $runtimeName $runtimeVersion $chartVersion }}
 {{ include "codefresh-gitops-runtime.get-proxy-env-vars" . }}
 {{- end -}}
-OTEL_RESOURCE_ATTRIBUTES: {{ printf "service.name=%s,service.version=%s,service.namespace=%s,cf.account.id=%s,cf.gitops.runtime.name=%s,cf.gitops.runtime.version=%s,cf.gitops.runtime.chart.version=%s" "cf-gitops-app-proxy" $appProxyVersion "cf-gitops-runtime" $accountId "$runtimeName" "$runtimeVersion" "$chartVersion" }}
 
 {{/*
 Read defaults from the template above and merge with the values provided in values file
