@@ -1,7 +1,7 @@
 {{- define "cap-app-proxy.resources.configmap-documented-configs" }}
 argoWorkflowsInsecure: {{ .Values.config.argoWorkflowsInsecure | quote }}
 clusterChunkSize: {{ .Values.config.clusterChunkSize | quote }}
-cors: {{ .Values.global.codefresh.url }}
+cors: {{ .Values.config.cors | default .Values.global.codefresh.url }}
 isConfigurationRuntime: {{ .Values.global.runtime.isConfigurationRuntime | quote }}
 isExternalArgoCD: {{ .Values.global.runtime.isExternalArgoCD | quote }}
 runtimeName: {{ required "global.runtime.name is required" .Values.global.runtime.name | quote}}
