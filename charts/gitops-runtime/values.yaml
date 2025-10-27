@@ -193,7 +193,7 @@ global:
 anchors:
   common-envs:
       # -- Telemetry configuration
-    - &telemetry-config
+    - &otel-config
       # -- Base endpoint URL for all OpenTelemetry signals.
       # Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/
       OTEL_EXPORTER_OTLP_ENDPOINT: 'http://localhost:4317'
@@ -581,7 +581,7 @@ app-proxy:
     cors: "https://g.codefresh.io"
   env:
     <<:
-      - *telemetry-config
+      - *otel-config
     # -- Level of logging for app-proxy
     CF_TELEMETRY_LOGS_LEVEL: 'info'
     # -- Level for logging HTTP requests
@@ -701,7 +701,7 @@ gitops-operator:
     tag: "2784cd5"
   env:
     <<:
-      - *telemetry-config
+      - *otel-config
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
     create: true
@@ -870,11 +870,11 @@ event-reporters:
   cluster-event-reporter:
     env:
       <<:
-        - *telemetry-config
+        - *otel-config
   runtime-event-reporter:
     env:
       <<:
-        - *telemetry-config
+        - *otel-config
 # -- Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true`
 # Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
 redis-ha:
