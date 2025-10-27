@@ -487,6 +487,8 @@ spec:
                               type: string
                             healthMessage:
                               type: string
+                            revision:
+                              type: string
                             sync:
                               description: SyncStatusCode is a type which represents
                                 possible comparison results
@@ -500,11 +502,29 @@ spec:
                           - healthMessage
                           - sync
                           type: object
-                        commitSha:
-                          maxLength: 40
-                          minLength: 7
-                          pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
-                          type: string
+                        commitInfo:
+                          properties:
+                            commitAuthorId:
+                              properties:
+                                email:
+                                  type: string
+                                username:
+                                  type: string
+                              required:
+                              - email
+                              - username
+                              type: object
+                            commitDate:
+                              format: date-time
+                              type: string
+                            commitMessage:
+                              type: string
+                            commitSha:
+                              maxLength: 40
+                              minLength: 7
+                              pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
+                              type: string
+                          type: object
                         phase:
                           description: PromoteAppWithCommitPhase
                           enum:
@@ -525,6 +545,8 @@ spec:
                               type: string
                             healthMessage:
                               type: string
+                            revision:
+                              type: string
                             sync:
                               description: SyncStatusCode is a type which represents
                                 possible comparison results
@@ -537,6 +559,29 @@ spec:
                           - health
                           - healthMessage
                           - sync
+                          type: object
+                        commitInfo:
+                          properties:
+                            commitAuthorId:
+                              properties:
+                                email:
+                                  type: string
+                                username:
+                                  type: string
+                              required:
+                              - email
+                              - username
+                              type: object
+                            commitDate:
+                              format: date-time
+                              type: string
+                            commitMessage:
+                              type: string
+                            commitSha:
+                              maxLength: 40
+                              minLength: 7
+                              pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
+                              type: string
                           type: object
                         phase:
                           description: PromoteAppWithPRPhase
@@ -612,6 +657,8 @@ spec:
                               description: Represents resource health status
                               type: string
                             healthMessage:
+                              type: string
+                            revision:
                               type: string
                             sync:
                               description: SyncStatusCode is a type which represents
