@@ -148,7 +148,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: e746a97
+      tag: d4fefcb
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -194,27 +194,6 @@ anchors:
   common-envs:
       # -- Telemetry configuration
     - &telemetry-config
-      # -- Level of logging for app-proxy
-      CF_TELEMETRY_LOGS_LEVEL: 'info'
-      # -- Level for logging HTTP requests
-      CF_TELEMETRY_LOGS_LEVEL_HTTP: 'debug'
-      # -- Enable OpenTelemetry signals (logs, metrics, traces)
-      CF_TELEMETRY_OTEL_ENABLE: 'false'
-      # -- Enable OTel HTTP instrumentation.
-      # Make sure to sanitize `url.full` and `url.query` span attributes on collector before enabling this flag, as it may contain sensitive information.
-      CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION: 'false'
-      # -- Enable Prometheus server
-      CF_TELEMETRY_PROMETHEUS_ENABLE: 'false'
-      # -- Enable collecting process metrics
-      CF_TELEMETRY_PROMETHEUS_ENABLE_PROCESS_METRICS: 'false'
-      # -- Host for Prometheus metrics server
-      CF_TELEMETRY_PROMETHEUS_HOST: '0.0.0.0'
-      # -- Port for Prometheus metrics server
-      CF_TELEMETRY_PROMETHEUS_PORT: '9100'
-      # -- Enable Pyroscope profiling. If enabled, the Pyroscope server address must be set in PYROSCOPE_SERVER_ADDRESS.
-      CF_TELEMETRY_PYROSCOPE_ENABLE: 'false'
-      # -- Pyroscope server address
-      PYROSCOPE_SERVER_ADDRESS: ''
       # -- Base endpoint URL for all OpenTelemetry signals.
       # Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/
       OTEL_EXPORTER_OTLP_ENDPOINT: 'http://localhost:4317'
@@ -336,7 +315,7 @@ argo-cd:
 # Argo Events
 #-----------------------------------------------------------------------------------------------------------------------
 argo-events:
-  enabled: false
+  enabled: true
   fullnameOverride: argo-events
   crds:
     install: false
@@ -603,6 +582,27 @@ app-proxy:
   env:
     <<:
       - *telemetry-config
+    # -- Level of logging for app-proxy
+    CF_TELEMETRY_LOGS_LEVEL: 'info'
+    # -- Level for logging HTTP requests
+    CF_TELEMETRY_LOGS_LEVEL_HTTP: 'debug'
+    # -- Enable OpenTelemetry signals (logs, metrics, traces)
+    CF_TELEMETRY_OTEL_ENABLE: 'false'
+    # -- Enable OTel HTTP instrumentation.
+    # Make sure to sanitize `url.full` and `url.query` span attributes on collector before enabling this flag, as it may contain sensitive information.
+    CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION: 'false'
+    # -- Enable Prometheus server
+    CF_TELEMETRY_PROMETHEUS_ENABLE: 'false'
+    # -- Enable collecting process metrics
+    CF_TELEMETRY_PROMETHEUS_ENABLE_PROCESS_METRICS: 'false'
+    # -- Host for Prometheus metrics server
+    CF_TELEMETRY_PROMETHEUS_HOST: '0.0.0.0'
+    # -- Port for Prometheus metrics server
+    CF_TELEMETRY_PROMETHEUS_PORT: '9100'
+    # -- Enable Pyroscope profiling. If enabled, the Pyroscope server address must be set in PYROSCOPE_SERVER_ADDRESS.
+    CF_TELEMETRY_PYROSCOPE_ENABLE: 'false'
+    # -- Pyroscope server address
+    PYROSCOPE_SERVER_ADDRESS: ''
   serviceAccount:
     create: true
     annotations: {}
@@ -730,7 +730,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: e746a97
+    tag: d4fefcb
   nodeSelector: {}
   tolerations: []
   affinity: {}
