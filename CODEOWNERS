@@ -7,4 +7,4 @@
 /charts/gitops-runtime/tests     @codefresh-io/DevOps
 
 # gitops operator crd changes can be approved by some other people
-/charts/gitops-runtime/templates/_components/gitops-operator/crds @codefresh-io/DevOps @danielm-codefresh @eti-codefresh @chen-keinan @scme0
+/charts/gitops-runtime/templates/_components/gitops-operator/crds @codefresh-io/DevOps @dmaizel @eti-codefresh @chen-keinan @scme0
