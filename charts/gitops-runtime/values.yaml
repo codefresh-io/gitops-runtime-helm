@@ -49,6 +49,8 @@ global:
     cluster: https://kubernetes.default.svc
     # -- Defines whether this is a Codefresh hosted runtime. Should not be changed.
     codefreshHosted: false
+    # -- Defines if runtime is namespace scoped. Required for running multiple runtimes in the same cluster
+    singleNamespace: false
     # -- Ingress settings
     ingress:
       # -- if set to true, the pre-install hook will validate the existance of appropriate values, but *will not* attempt to make a web request to the ingress host
@@ -146,7 +148,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: 695977c
+      tag: d4fefcb
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -634,7 +636,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: "6881890"
+    tag: "2784cd5"
   env:
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
@@ -664,7 +666,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: 695977c
+    tag: d4fefcb
   nodeSelector: {}
   tolerations: []
   affinity: {}
