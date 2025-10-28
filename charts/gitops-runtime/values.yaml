@@ -276,7 +276,7 @@ argo-cd:
 # Argo Events
 #-----------------------------------------------------------------------------------------------------------------------
 argo-events:
-  enabled: false
+  enabled: true
   fullnameOverride: argo-events
   crds:
     install: false
@@ -636,7 +636,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: "2784cd5"
+    tag: "32dce59"
   env:
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
