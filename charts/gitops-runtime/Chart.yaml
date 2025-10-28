@@ -15,19 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: bumps argo-helm chart to the version that bumps redis version to 8.2.2 (#844)
-    - kind: changed
-      description: upd cli-v2 , debian for installer (#850)
-    - kind: changed
-      description: use explicit app-proxy config.cors value if exist (#847)
-    - kind: changed
-      description: 'chore: update argocd-extras (#807)'
-    - kind: changed
-      description: 'chore[app-proxy]: bumps app-proxy to version 9621fba (#811)'
-    - kind: changed
-      description: 'chore[app-proxy]: bumps app-proxy to version 0eb07df (#810)'
-    - kind: changed
-      description: 'chore[app-proxy]: bumps app-proxy to version 5aaaae7 (#809)'
+      description: 'chore(CR-31388): upd gitops-operator with security fixes (#859)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
