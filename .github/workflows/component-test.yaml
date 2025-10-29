@@ -63,7 +63,6 @@ jobs:
           chmod 700 get_helm.sh
 
           ./get_helm.sh
-          helm repo add gitea-charts https://dl.gitea.com/charts/
           helm repo add mockserver https://www.mock-server.com
 
 

@@ -235,7 +235,7 @@ sealed-secrets:
       cpu: 200m
       memory: 512Mi
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-cd-8.0.6-8-cap-v3.0.2-2025-09-07-cdf75df5/charts/argo-cd
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-cd-8.0.6-9-cap-v3.0.2-2025-09-08-9b30d922/charts/argo-cd
 # *********************************************************************************************************************
 argo-cd:
   enabled: true
@@ -280,7 +280,7 @@ argo-cd:
     # -- Extract application version based on ApplicationConfiguration CRD
     useApplicationConfiguration: true
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-events-2.4.8-cap-CR-29689/charts/argo-events
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-events-2.4.9-cap-CR-30841/charts/argo-events
 # *********************************************************************************************************************
 argo-events:
   fullnameOverride: argo-events
@@ -300,7 +300,7 @@ argo-events:
           configReloaderImage: natsio/nats-server-config-reloader:0.19.1
           startCommand: /nats-server
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-workflows-0.45.15-v3.6.7-cap-CR-28355/charts/argo-workflows
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-workflows-0.45.16-v3.6.7-cap-CR-30835/charts/argo-workflows
 # *********************************************************************************************************************
 argo-workflows:
   fullnameOverride: argo
@@ -330,7 +330,7 @@ codefreshWorkflowLogStoreCM:
   endpoint: gitops-workflow-logs.codefresh.io
   insecure: false
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-rollouts-2.37.3-6-v1.7.2-cap-CR-29629/charts/argo-rollouts
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-rollouts-2.37.3-7-v1.7.2-cap-OSS-697/charts/argo-rollouts
 # *********************************************************************************************************************
 argo-rollouts:
   enabled: true
@@ -552,27 +552,27 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.16-main
+          tag: 1.1.17-main
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.16-main
+          tag: 1.1.17-main
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.16-main
+          tag: 1.1.17-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: d0f2de1
+    tag: 9621fba
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3750.0
+      tag: 1.3791.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -614,8 +614,8 @@ app-proxy:
   nameOverride: ""
   fullnameOverride: "cap-app-proxy"
   config:
-    # -- ArgoCD user to be used by app-proxy
-    argoCdUsername: "admin"
+    # -- deprecated. use `global.external-argo-cd.auth.username` instead
+    argoCdUsername: ""
     # -- ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to
     argoCdUrl:
     # -- Workflows server url. Determined by chart logic. Do not change unless you are certain you need to
@@ -728,7 +728,7 @@ gitops-operator:
   image:
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: b9481f8
+    tag: 6cad5ad
   env:
     GITOPS_OPERATOR_VERSION: 0.10.1 # hacky workaround, since our tags are no longer semver compliant
   serviceAccount:
@@ -763,7 +763,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/cf-argocd-extras
-        tag: c74d94c
+        tag: 5a607d5
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -787,7 +787,7 @@ cf-argocd-extras:
       image:
         registry: quay.io
         repository: codefresh/cf-argocd-extras
-        tag: c74d94c
+        tag: 5a607d5
     nodeSelector: {}
     tolerations: []
     affinity: {}
