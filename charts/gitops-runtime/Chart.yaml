@@ -14,9 +14,9 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: changed
+    - kind: security
       description: upd cap-app-proxy (#864)
-    - kind: changed
+    - kind: security
       description: 'chore(CR-31388): upd gitops-operator with security fixes (#859)'
 dependencies:
   - name: argo-cd
