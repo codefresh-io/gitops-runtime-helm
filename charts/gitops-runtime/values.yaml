@@ -245,6 +245,14 @@ argo-cd:
       # -- Redis tag
       tag: 8.2.2-alpine
 
+  redis-ha:
+    ## Redis-ha image
+    image:
+      # -- Redis repository
+      repository: ecr-public.aws.com/docker/library/redis
+      # -- Redis tag
+      tag: 8.2.2-alpine
+
   configs:
     cm:
       timeout.reconciliation: 20s
