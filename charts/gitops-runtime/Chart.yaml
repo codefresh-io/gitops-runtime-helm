@@ -14,10 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: security
-      description: upd cap-app-proxy (#864)
-    - kind: security
-      description: 'chore(CR-31388): upd gitops-operator with security fixes (#859)'
+    - kind: changed
+      description: 'fix(app-proxy): added missing eventbus list permissions (#865)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
