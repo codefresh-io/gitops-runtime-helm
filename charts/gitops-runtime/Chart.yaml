@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.75
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: '0.24.7'
+version: '0.25.0'
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -20,7 +20,7 @@ dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
     condition: argo-cd.enabled
-    version: 8.0.6-10-cap-3.0.2-2025-10-24-afba3263
+    version: 8.0.6-14-cap-v3.1.5-2025-10-30-b969c2d8
   - name: argo-events
     repository: https://codefresh-io.github.io/argo-helm
     version: 2.4.9-cap-CR-30841
