@@ -420,6 +420,7 @@ spec:
                 - Failed
                 - Terminated
                 - Suspended
+                - Skipped
                 type: string
               steps:
                 items:
@@ -477,6 +478,7 @@ spec:
                       - Failed
                       - Terminated
                       - Suspended
+                      - Skipped
                       type: string
                     promoteAppWithCommit:
                       properties:
