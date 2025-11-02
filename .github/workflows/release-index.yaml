@@ -33,7 +33,7 @@ jobs:
 
       - name: Build Release Index
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
         run: node build-releases.js
         timeout-minutes: 2
 
@@ -49,7 +49,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         if: success()
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.TOKEN_GITHUB }}
           publish_dir: ./releases
           publish_branch: gh-pages
           user_name: "github-actions[bot]"
