@@ -27,17 +27,21 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+          cache-dependency-path: .github/scripts/release-index/package-lock.json
 
       - name: Install dependencies
+        working-directory: .github/scripts/release-index
         run: npm ci
 
       - name: Build Release Index
+        working-directory: .github/scripts/release-index
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
         run: node build-releases.js
         timeout-minutes: 2
 
       - name: Verify output
+        working-directory: .github/scripts/release-index
         run: |
           if [ ! -f releases/releases.json ]; then
             echo "Error: releases.json not generated"
@@ -50,7 +54,7 @@ jobs:
         if: success()
         with:
           github_token: ${{ secrets.TOKEN_GITHUB }}
-          publish_dir: ./releases
+          publish_dir: .github/scripts/release-index/releases
           publish_branch: gh-pages
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
