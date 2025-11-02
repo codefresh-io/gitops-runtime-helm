@@ -1,6 +1,12 @@
 name: Update Release Index
 
 on:
+  push:
+    branches:
+      - 'CR-*'
+    paths:
+      - '.github/workflows/release-index.yaml'
+      - '.github/scripts/release-index/**'
   release:
     types: [published, edited]
   workflow_dispatch:
