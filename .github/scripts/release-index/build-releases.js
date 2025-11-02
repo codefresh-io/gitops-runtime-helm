@@ -1,35 +1,36 @@
-const { Octokit } = require('@octokit/rest')
-const semver = require('semver')
-const fs = require('fs')
-const path = require('path')
-const { load } = require('js-yaml')
+const { Octokit } = require("@octokit/rest");
+const semver = require("semver");
+const fs = require("fs");
+const path = require("path");
+const { load } = require("js-yaml");
 
-const OWNER = 'codefresh-io'
-const REPO = 'gitops-runtime-helm'
-const LATEST_PATTERN = /^(\d{4})\.(\d{1,2})-(\d+)$/
-const TOKEN = process.env.GITHUB_TOKEN
-const SECURITY_FIXES_STRING = process.env.SECURITY_FIXES_STRING || '### Security Fixes:'
-const MAX_RELEASES_PER_CHANNEL = 10
-const MAX_GITHUB_RELEASES = 1000
-const CHART_PATH = 'charts/gitops-runtime/Chart.yaml'
-const DEFAULT_APP_VERSION = '0.0.0'
+const OWNER = "codefresh-io";
+const REPO = "gitops-runtime-helm";
+const LATEST_PATTERN = /^(\d{4})\.(\d{1,2})-(\d+)$/;
+const TOKEN = process.env.GITHUB_TOKEN;
+const SECURITY_FIXES_STRING =
+  process.env.SECURITY_FIXES_STRING || "### Security Fixes:";
+const MAX_RELEASES_PER_CHANNEL = 10;
+const MAX_GITHUB_RELEASES = 1000;
+const CHART_PATH = "charts/gitops-runtime/Chart.yaml";
+const DEFAULT_APP_VERSION = "0.0.0";
 
 if (!TOKEN) {
-  console.error('❌ GITHUB_TOKEN environment variable is required')
-  process.exit(1)
+  console.error("❌ GITHUB_TOKEN environment variable is required");
+  process.exit(1);
 }
 
-const octokit = new Octokit({ auth: TOKEN })
+const octokit = new Octokit({ auth: TOKEN });
 
 function detectChannel(version) {
-  const match = version.match(LATEST_PATTERN)
+  const match = version.match(LATEST_PATTERN);
   if (match) {
-    const month = Number(match[2])
+    const month = Number(match[2]);
     if (month >= 1 && month <= 12) {
-      return 'latest'
+      return "latest";
     }
   }
-  return 'stable'
+  return "stable";
 }
 
 /**
@@ -37,29 +38,28 @@ function detectChannel(version) {
  * Converts: 2025.01-1 → 2025.1.1
  */
 function normalizeVersion(version, channel) {
-  if (channel === 'latest') {
-    const match = version.match(LATEST_PATTERN)
+  if (channel === "latest") {
+    const match = version.match(LATEST_PATTERN);
     if (match) {
-      const year = match[1]
-      const month = Number(match[2])
-      const patch = match[3]
-      return `${year}.${month}.${patch}`
+      const year = match[1];
+      const month = Number(match[2]);
+      const patch = match[3];
+      return `${year}.${month}.${patch}`;
     }
   }
-  return version
+  return version;
 }
 
-
 function isValidVersion(normalized) {
-  return !!semver.valid(normalized)
+  return !!semver.valid(normalized);
 }
 
 function compareVersions(normA, normB) {
   try {
-    return semver.compare(normA, normB)
+    return semver.compare(normA, normB);
   } catch (error) {
-    console.warn(`Failed to compare versions:`, error.message)
-    return 0
+    console.warn(`Failed to compare versions:`, error.message);
+    return 0;
   }
 }
 
@@ -71,24 +71,24 @@ async function getAppVersionFromChart(tag) {
       path: CHART_PATH,
       ref: tag,
       mediaType: {
-        format: 'raw',
+        format: "raw",
       },
-    })
-    
-    const chart = load(data)
-    return chart.appVersion || DEFAULT_APP_VERSION
+    });
+
+    const chart = load(data);
+    return chart.appVersion || DEFAULT_APP_VERSION;
   } catch (error) {
-    console.warn(`  ⚠️  Failed to get appVersion for ${tag}:`, error.message)
-    return DEFAULT_APP_VERSION
+    console.warn(`  ⚠️  Failed to get appVersion for ${tag}:`, error.message);
+    return DEFAULT_APP_VERSION;
   }
 }
 
 async function fetchReleases() {
-  console.log('📦 Fetching releases from GitHub using Octokit...')
-  
-  const allReleases = []
-  let page = 0
-  
+  console.log("📦 Fetching releases from GitHub using Octokit...");
+
+  const allReleases = [];
+  let page = 0;
+
   try {
     for await (const response of octokit.paginate.iterator(
       octokit.rest.repos.listReleases,
@@ -98,60 +98,65 @@ async function fetchReleases() {
         per_page: 100,
       }
     )) {
-      page++
-      const releases = response.data
-      
-      allReleases.push(...releases)
-      console.log(`  Fetched page ${page} (${releases.length} releases)`)
-      
+      page++;
+      const releases = response.data;
+
+      allReleases.push(...releases);
+      console.log(`  Fetched page ${page} (${releases.length} releases)`);
+
       if (allReleases.length >= MAX_GITHUB_RELEASES) {
-        console.log(`  Reached ${MAX_GITHUB_RELEASES} releases limit, stopping...`)
-        break
+        console.log(
+          `  Reached ${MAX_GITHUB_RELEASES} releases limit, stopping...`
+        );
+        break;
       }
     }
   } catch (error) {
-    console.error('Error fetching releases:', error.message)
-    throw error
+    console.error("Error fetching releases:", error.message);
+    throw error;
   }
-  
-  console.log(`✅ Fetched ${allReleases.length} total releases`)
-  return allReleases
+
+  console.log(`✅ Fetched ${allReleases.length} total releases`);
+  return allReleases;
 }
 
 function processReleases(rawReleases) {
-  console.log('\n🔍 Processing releases...')
-  
-  const releases = []
-  const channels = { stable: [], latest: [] }
-  
-  let skipped = 0
-  
+  console.log("\n🔍 Processing releases...");
+
+  const releases = [];
+  const channels = { stable: [], latest: [] };
+
+  let skipped = 0;
+
   for (const release of rawReleases) {
     if (release.draft || release.prerelease) {
-      skipped++
-      console.log(`  ⚠️  Skipping draft or prerelease: ${release.tag_name}`)
-      continue
+      skipped++;
+      console.log(`  ⚠️  Skipping draft or prerelease: ${release.tag_name}`);
+      continue;
     }
-    
-    const version = release.tag_name || release.name
+
+    const version = release.tag_name || release.name;
     if (!version) {
-      skipped++
-      console.log(`  ⚠️  Skipping release without version: ${release.tag_name}`)
-      continue
+      skipped++;
+      console.log(
+        `  ⚠️  Skipping release without version: ${release.tag_name}`
+      );
+      continue;
     }
-    
-    const channel = detectChannel(version)
-    
-    const normalized = normalizeVersion(version, channel)
-    
+
+    const channel = detectChannel(version);
+
+    const normalized = normalizeVersion(version, channel);
+
     if (!isValidVersion(normalized)) {
-      console.log(`  ⚠️  Skipping invalid version: ${version}`)
-      skipped++
-      continue
+      console.log(`  ⚠️  Skipping invalid version: ${version}`);
+      skipped++;
+      continue;
     }
-    
-    const hasSecurityFixes = release.body?.includes(SECURITY_FIXES_STRING) || false
-    
+
+    const hasSecurityFixes =
+      release.body?.includes(SECURITY_FIXES_STRING) || false;
+
     const releaseData = {
       version,
       normalized,
@@ -160,71 +165,77 @@ function processReleases(rawReleases) {
       publishedAt: release.published_at,
       url: release.html_url,
       createdAt: release.created_at,
-    }
-    
-    releases.push(releaseData)
-    channels[channel].push(releaseData)
+    };
+
+    releases.push(releaseData);
+    channels[channel].push(releaseData);
   }
-  
-  console.log(`✅ Processed ${releases.length} valid releases (skipped ${skipped})`)
-  console.log(`   Stable: ${channels.stable.length}`)
-  console.log(`   Latest: ${channels.latest.length}`)
-  
-  return { releases, channels }
+
+  console.log(
+    `✅ Processed ${releases.length} valid releases (skipped ${skipped})`
+  );
+  console.log(`   Stable: ${channels.stable.length}`);
+  console.log(`   Latest: ${channels.latest.length}`);
+
+  return { releases, channels };
 }
 
 async function buildChannelData(channelReleases, channelName) {
   const sorted = channelReleases.sort((a, b) => {
-    return compareVersions(b.normalized, a.normalized)
-  })
-  
-  const latestWithSecurityFixes = sorted.find(r => r.hasSecurityFixes)?.version || null
-  const topReleases = sorted.slice(0, MAX_RELEASES_PER_CHANNEL)
-  
-  console.log(`  Fetching appVersion for ${topReleases.length} ${channelName} releases...`)
+    return compareVersions(b.normalized, a.normalized);
+  });
+
+  const latestWithSecurityFixes =
+    sorted.find((r) => r.hasSecurityFixes)?.version || null;
+  const topReleases = sorted.slice(0, MAX_RELEASES_PER_CHANNEL);
+
+  console.log(
+    `  Fetching appVersion for ${topReleases.length} ${channelName} releases...`
+  );
   for (const release of topReleases) {
-    release.appVersion = await getAppVersionFromChart(release.version)
+    release.appVersion = await getAppVersionFromChart(release.version);
   }
-  
-  const latestVersion = sorted[0]?.version
-  const latestSecureIndex = latestWithSecurityFixes 
-    ? sorted.findIndex(r => r.version === latestWithSecurityFixes)
-    : -1
-  
+
+  const latestVersion = sorted[0]?.version;
+  const latestSecureIndex = latestWithSecurityFixes
+    ? sorted.findIndex((r) => r.version === latestWithSecurityFixes)
+    : -1;
+
   topReleases.forEach((release, index) => {
-    release.upgradeAvailable = release.version !== latestVersion
-    release.hasSecurityVulnerabilities = latestSecureIndex >= 0 && index > latestSecureIndex
-  })
-  
+    release.upgradeAvailable = release.version !== latestVersion;
+    release.hasSecurityVulnerabilities =
+      latestSecureIndex >= 0 && index > latestSecureIndex;
+  });
+
   return {
     releases: topReleases,
     latestChartVersion: sorted[0]?.version || null,
     latestWithSecurityFixes,
-  }
+  };
 }
 
 async function buildIndex() {
-  console.log('🚀 Building release index...\n')
-  console.log(`📍 Repository: ${OWNER}/${REPO}\n`)
-  
+  console.log("🚀 Building release index...\n");
+  console.log(`📍 Repository: ${OWNER}/${REPO}\n`);
+
   try {
-    const rawReleases = await fetchReleases()
-    
-    const { releases, channels } = processReleases(rawReleases)
-    
-    console.log('\n📊 Building channel data...')
-    const stable = await buildChannelData(channels.stable, 'stable')
-    const latest = await buildChannelData(channels.latest, 'latest')
-    
-    console.log(`   Stable latest: ${stable.latest || 'none'}`)
-    console.log(`   Latest latest: ${latest.latest || 'none'}`)
+    const rawReleases = await fetchReleases();
+
+    const { releases, channels } = processReleases(rawReleases);
+
+    console.log("\n📊 Building channel data...");
+    const stable = await buildChannelData(channels.stable, "stable");
+    const latest = await buildChannelData(channels.latest, "latest");
+
+    console.log(`   Stable latest: ${stable.latest || "none"}`);
+    console.log(`   Latest latest: ${latest.latest || "none"}`);
     if (stable.latestWithSecurityFixes) {
-      console.log(`   🔒 Stable security: ${stable.latestWithSecurityFixes}`)
+      console.log(`   🔒 Stable security: ${stable.latestWithSecurityFixes}`);
     }
     if (latest.latestWithSecurityFixes) {
-      console.log(`   🔒 Latest security: ${latest.latestWithSecurityFixes}`)
+      console.log(`   🔒 Latest security: ${latest.latestWithSecurityFixes}`);
     }
-    
+
     const index = {
       generatedAt: new Date().toISOString(),
       repository: `${OWNER}/${REPO}`,
@@ -244,42 +255,49 @@ async function buildIndex() {
         totalReleases: releases.length,
         stableSecure: stable.latestWithSecurityFixes || null,
         latestSecure: latest.latestWithSecurityFixes || null,
-      }
-    }
-    
-    console.log('\n💾 Writing index file...')
-    const outDir = path.join(process.cwd(), 'releases')
+      },
+    };
+
+    console.log("\n💾 Writing index file...");
+    const outDir = path.join(process.cwd(), "releases");
     if (!fs.existsSync(outDir)) {
-      fs.mkdirSync(outDir, { recursive: true })
+      fs.mkdirSync(outDir, { recursive: true });
     }
-    
-    const outputPath = path.join(outDir, 'releases.json')
-    fs.writeFileSync(
-      outputPath,
-      JSON.stringify(index, null, 2)
-    )
-    
-    console.log('\n✅ Release index built successfully!')
-    console.log('\n📋 Summary:')
-    console.log(`   Total releases: ${index.stats.totalReleases}`)
-    console.log(`\n   🟢 Stable Channel:`)
-    console.log(`      Latest: ${index.channels.stable.latestChartVersion || 'none'}`)
-    console.log(`      Latest secure: ${index.channels.stable.latestWithSecurityFixes || 'none'}`)
-    console.log(`\n   🔵 Latest Channel:`)
-    console.log(`      Latest: ${index.channels.latest.latestChartVersion || 'none'}`)
-    console.log(`      Latest secure: ${index.channels.latest.latestWithSecurityFixes || 'none'}`)
-    console.log(`\n📁 Files created:`)
-    console.log(`   ${outputPath}`)
-    
+
+    const outputPath = path.join(outDir, "releases.json");
+    fs.writeFileSync(outputPath, JSON.stringify(index, null, 2));
+
+    console.log("\n✅ Release index built successfully!");
+    console.log("\n📋 Summary:");
+    console.log(`   Total releases: ${index.stats.totalReleases}`);
+    console.log(`\n   🟢 Stable Channel:`);
+    console.log(
+      `      Latest: ${index.channels.stable.latestChartVersion || "none"}`
+    );
+    console.log(
+      `      Latest secure: ${
+        index.channels.stable.latestWithSecurityFixes || "none"
+      }`
+    );
+    console.log(`\n   🔵 Latest Channel:`);
+    console.log(
+      `      Latest: ${index.channels.latest.latestChartVersion || "none"}`
+    );
+    console.log(
+      `      Latest secure: ${
+        index.channels.latest.latestWithSecurityFixes || "none"
+      }`
+    );
+    console.log(`\n📁 Files created:`);
+    console.log(`   ${outputPath}`);
   } catch (error) {
-    console.error('\n❌ Error building index:', error.message)
+    console.error("\n❌ Error building index:", error.message);
     if (error.status) {
-      console.error(`   GitHub API Status: ${error.status}`)
+      console.error(`   GitHub API Status: ${error.status}`);
     }
-    console.error(error.stack)
-    process.exit(1)
+    console.error(error.stack);
+    process.exit(1);
   }
 }
 
-
-buildIndex()
+buildIndex();
