@@ -55,6 +55,13 @@ jobs:
           fi
           echo "✓ Release index generated successfully"
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-index
+          path: .github/scripts/release-index/releases/releases.json
+          retention-days: 30
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: success()
