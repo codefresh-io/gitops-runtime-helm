@@ -15,15 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: "Synchronize the ArgoCD fork to OSS version 3.1.5"
-    - kind: deprecated
-      description: "Argo Events will be removed in the next release, replaced by dedicated event reporters for improved performance and reliability"
-    - kind: deprecated
-      description: "Argo Rollouts deprecation notice: will be disabled by default in next release, completely removed from chart in February 2026"
-    - kind: changed
-      description: "Argo Workflows will transition to namespace-scoped installation in the next release to avoid conflicts with other cluster instances"
-    - kind: deprecated
-      description: "Transition to OSS ArgoCD in next release to support BYOCD approach and enhance compatibility"
+      description: 'fix: update release branches for components (#881)'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
