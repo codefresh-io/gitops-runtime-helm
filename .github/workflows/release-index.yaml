@@ -1,17 +1,9 @@
 name: Update Release Index
 
 on:
-  push:
-    branches:
-      - 'CR-*'
-    paths:
-      - '.github/workflows/release-index.yaml'
-      - '.github/scripts/release-index/**'
   release:
     types: [published, edited]
   workflow_dispatch:
-  schedule:
-    - cron: "0 */6 * * *"
 
 concurrency:
   group: release-index
@@ -42,7 +34,7 @@ jobs:
       - name: Build Release Index
         working-directory: .github/scripts/release-index
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node build-releases.js
         timeout-minutes: 2
 
@@ -55,18 +47,11 @@ jobs:
           fi
           echo "✓ Release index generated successfully"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-index
-          path: .github/scripts/release-index/releases/releases.json
-          retention-days: 30
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: success()
         with:
-          github_token: ${{ secrets.TOKEN_GITHUB }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .github/scripts/release-index/releases
           publish_branch: gh-pages
           user_name: "github-actions[bot]"
