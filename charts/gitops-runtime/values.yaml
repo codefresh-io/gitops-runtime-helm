@@ -49,6 +49,8 @@ global:
     cluster: https://kubernetes.default.svc
     # -- Defines whether this is a Codefresh hosted runtime. Should not be changed.
     codefreshHosted: false
+    # -- Defines if runtime is namespace scoped. Required for running multiple runtimes in the same cluster
+    singleNamespace: false
     # -- Ingress settings
     ingress:
       # -- if set to true, the pre-install hook will validate the existance of appropriate values, but *will not* attempt to make a web request to the ingress host
@@ -141,7 +143,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: 695977c
+      tag: d4fefcb
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -225,58 +227,41 @@ sealed-secrets:
 #-----------------------------------------------------------------------------------------------------------------------
 argo-cd:
   enabled: true
-  fullnameOverride: argocd
-  server:
-    name: server
-  repoServer:
-    name: repo-server
-    service:
-      port: 8081
-  crds:
-    install: true
+  fullnameOverride: argo-cd
+
+  notifications:
+    enabled: false
+
+  redis:
+    ## Redis image
+    image:
+      # -- Redis repository
+      repository: ecr-public.aws.com/docker/library/redis
+      # -- Redis tag
+      tag: 8.2.2-alpine
+
+  redis-ha:
+    ## Redis-ha image
+    image:
+      # -- Redis repository
+      repository: ecr-public.aws.com/docker/library/redis
+      # -- Redis tag
+      tag: 8.2.2-alpine
+
   configs:
     cm:
       timeout.reconciliation: 20s
       accounts.admin: apiKey,login
       application.resourceTrackingMethod: annotation+label
-      resource.customizations.actions.argoproj.io_Rollout: |
-        mergeBuiltinActions: true
-        discovery.lua: |
-          actions = {}
-          local fullyPromoted = obj.status.currentPodHash == obj.status.stableRS
-          actions["pause"] = {["disabled"] = fullyPromoted or obj.spec.paused == true}
-          actions["skip-current-step"] = {["disabled"] = obj.spec.strategy.canary == nil or obj.spec.strategy.canary.steps == nil or obj.status.currentStepIndex == table.getn(obj.spec.strategy.canary.steps)}
-          return actions
-        definitions:
-        - name: pause
-          action.lua: |
-            obj.spec.paused = true
-            return obj
-        - name: skip-current-step
-          action.lua: |
-            if obj.status ~= nil then
-                if obj.spec.strategy.canary ~= nil and obj.spec.strategy.canary.steps ~= nil and obj.status.currentStepIndex < table.getn(obj.spec.strategy.canary.steps) then
-                    if obj.status.pauseConditions ~= nil and table.getn(obj.status.pauseConditions) > 0 then
-                        obj.status.pauseConditions = nil
-                    end
-                    obj.status.currentStepIndex = obj.status.currentStepIndex + 1
-                end
-            end
-            return obj
+      application.instanceLabelKey: ""
     params:
       server.insecure: true
       application.namespaces: 'cf-*'
-      server.rootpath: ''
-  applicationVersioning:
-    # -- Enable application versioning
-    enabled: true
-    # -- Extract application version based on ApplicationConfiguration CRD
-    useApplicationConfiguration: true
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Events
 #-----------------------------------------------------------------------------------------------------------------------
 argo-events:
-  enabled: false
+  enabled: true
   fullnameOverride: argo-events
   crds:
     install: false
@@ -472,14 +457,14 @@ app-proxy:
           tag: 1.1.17-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3820.0
+    tag: 1.3883.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3820.0
+      tag: 1.3883.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -636,7 +621,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: "6881890"
+    tag: "293f24f"
   env:
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
@@ -666,7 +651,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: 695977c
+    tag: d4fefcb
   nodeSelector: {}
   tolerations: []
   affinity: {}

@@ -70,6 +70,12 @@ cf-argocd-extras:
 argo-cd:
   redis-ha:
     enabled: true
+      ## Redis image
+    image:
+      # -- Redis repository
+      repository: ecr-public.aws.com/docker/library/redis
+      # -- Redis tag
+      tag: 8.2.2-alpine
 
   controller:
     replicas: 1
