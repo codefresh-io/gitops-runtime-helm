@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.25.0](https://img.shields.io/badge/Version-0.25.0-informational?style=flat-square) ![AppVersion: 0.1.75](https://img.shields.io/badge/AppVersion-0.1.75-informational?style=flat-square)
+![Version: 0.25.0](https://img.shields.io/badge/Version-0.25.0-informational?style=flat-square) ![AppVersion: 0.1.76](https://img.shields.io/badge/AppVersion-0.1.76-informational?style=flat-square)
 
 ## Prerequisites
 
@@ -323,7 +323,7 @@ gitops-operator:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"9621fba"` |  |
+| app-proxy.image.tag | string | `"ac9a365"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
