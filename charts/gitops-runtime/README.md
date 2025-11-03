@@ -451,14 +451,14 @@ global:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3820.0"` |  |
+| app-proxy.image.tag | string | `"1.3883.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3820.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.3883.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -515,21 +515,19 @@ global:
 | app-proxy.serviceMonitor.labels | object | `{}` |  |
 | app-proxy.serviceMonitor.name | string | `""` |  |
 | app-proxy.tolerations | list | `[]` |  |
-| argo-cd.applicationVersioning.enabled | bool | `true` | Enable application versioning |
-| argo-cd.applicationVersioning.useApplicationConfiguration | bool | `true` | Extract application version based on ApplicationConfiguration CRD |
 | argo-cd.configs.cm."accounts.admin" | string | `"apiKey,login"` |  |
+| argo-cd.configs.cm."application.instanceLabelKey" | string | `""` |  |
 | argo-cd.configs.cm."application.resourceTrackingMethod" | string | `"annotation+label"` |  |
-| argo-cd.configs.cm."resource.customizations.actions.argoproj.io_Rollout" | string | `"mergeBuiltinActions: true\ndiscovery.lua: |\n  actions = {}\n  local fullyPromoted = obj.status.currentPodHash == obj.status.stableRS\n  actions[\"pause\"] = {[\"disabled\"] = fullyPromoted or obj.spec.paused == true}\n  actions[\"skip-current-step\"] = {[\"disabled\"] = obj.spec.strategy.canary == nil or obj.spec.strategy.canary.steps == nil or obj.status.currentStepIndex == table.getn(obj.spec.strategy.canary.steps)}\n  return actions\ndefinitions:\n- name: pause\n  action.lua: |\n    obj.spec.paused = true\n    return obj\n- name: skip-current-step\n  action.lua: |\n    if obj.status ~= nil then\n        if obj.spec.strategy.canary ~= nil and obj.spec.strategy.canary.steps ~= nil and obj.status.currentStepIndex < table.getn(obj.spec.strategy.canary.steps) then\n            if obj.status.pauseConditions ~= nil and table.getn(obj.status.pauseConditions) > 0 then\n                obj.status.pauseConditions = nil\n            end\n            obj.status.currentStepIndex = obj.status.currentStepIndex + 1\n        end\n    end\n    return obj\n"` |  |
 | argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
 | argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
-| argo-cd.configs.params."server.rootpath" | string | `""` |  |
-| argo-cd.crds.install | bool | `true` |  |
 | argo-cd.enabled | bool | `true` |  |
 | argo-cd.fullnameOverride | string | `"argocd"` |  |
-| argo-cd.repoServer.name | string | `"repo-server"` |  |
-| argo-cd.repoServer.service.port | int | `8081` |  |
-| argo-cd.server.name | string | `"server"` |  |
+| argo-cd.notifications.enabled | bool | `false` |  |
+| argo-cd.redis-ha.image.repository | string | `"ecr-public.aws.com/docker/library/redis"` | Redis repository |
+| argo-cd.redis-ha.image.tag | string | `"8.2.2-alpine"` | Redis tag |
+| argo-cd.redis.image.repository | string | `"ecr-public.aws.com/docker/library/redis"` | Redis repository |
+| argo-cd.redis.image.tag | string | `"8.2.2-alpine"` | Redis tag |
 | argo-events.configs.jetstream.versions[0].configReloaderImage | string | `"natsio/nats-server-config-reloader:0.19.1"` |  |
 | argo-events.configs.jetstream.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.17.3"` |  |
 | argo-events.configs.jetstream.versions[0].natsImage | string | `"nats:2.11.4"` |  |
@@ -539,9 +537,9 @@ global:
 | argo-events.configs.nats.versions[0].natsStreamingImage | string | `"nats-streaming:0.25.6"` |  |
 | argo-events.configs.nats.versions[0].version | string | `"0.22.1"` |  |
 | argo-events.crds.install | bool | `false` |  |
-| argo-events.enabled | bool | `false` |  |
+| argo-events.enabled | bool | `true` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
-| argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"695977c"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
+| argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"d4fefcb"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
 | argo-rollouts.controller.replicas | int | `1` |  |
 | argo-rollouts.enabled | bool | `true` |  |
 | argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
@@ -573,7 +571,7 @@ global:
 | gitops-operator.fullnameOverride | string | `""` |  |
 | gitops-operator.image.registry | string | `"quay.io"` | defaults |
 | gitops-operator.image.repository | string | `"codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"6881890"` |  |
+| gitops-operator.image.tag | string | `"293f24f"` |  |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
@@ -603,7 +601,7 @@ global:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"695977c"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
+| global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"d4fefcb"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
 | global.external-argo-rollouts | object | `{"rollout-reporter":{"enabled":false}}` | Configuration for external Argo Rollouts |
 | global.external-argo-rollouts.rollout-reporter | object | `{"enabled":false}` | Rollout reporter settings |
 | global.external-argo-rollouts.rollout-reporter.enabled | bool | `false` | Enable or disable rollout reporter Configuration is defined at .Values.event-reporters.rollout |
@@ -624,7 +622,7 @@ global:
 | global.integrations.argo-cd.server.svc | string | `"argocd-server"` | Service name of the ArgoCD server |
 | global.noProxy | string | `""` | global NO_PROXY for all components |
 | global.nodeSelector | object | `{}` | Global nodeSelector for all components |
-| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null}` | Runtime level settings |
+| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null,"singleNamespace":false}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
 | global.runtime.gitCredentials | object | `{"password":{"secretKeyRef":{},"value":null},"username":"username"}` | Git credentials runtime. Runtime is not fully functional without those credentials. If not provided through the installation, they must be provided through the Codefresh UI. |
@@ -640,6 +638,7 @@ global:
 | global.runtime.ingressUrl | string | `""` | Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false) |
 | global.runtime.isConfigurationRuntime | bool | `false` | is the runtime set as a "configuration runtime". |
 | global.runtime.name | string | `nil` | Runtime name. Must be unique per platform account. |
+| global.runtime.singleNamespace | bool | `false` | Defines if runtime is namespace scoped. Required for running multiple runtimes in the same cluster |
 | global.tolerations | list | `[]` | Global tolerations for all components |
 | installer | object | `{"affinity":{},"argoCdVersionCheck":{"argoServerLabels":{"app.kubernetes.io/component":"server","app.kubernetes.io/part-of":"argocd"}},"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""},"nodeSelector":{},"skipUsageValidation":false,"skipValidation":false,"tolerations":[]}` | Runtime installer used for running hooks and checks on the release |
 | installer.skipUsageValidation | bool | `false` | if set to true, pre-install hook will *not* run |
