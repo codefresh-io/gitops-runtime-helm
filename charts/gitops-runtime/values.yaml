@@ -227,7 +227,7 @@ sealed-secrets:
 #-----------------------------------------------------------------------------------------------------------------------
 argo-cd:
   enabled: true
-  fullnameOverride: argo-cd
+  fullnameOverride: argocd
 
   notifications:
     enabled: false
