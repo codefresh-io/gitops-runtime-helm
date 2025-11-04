@@ -39,11 +39,14 @@ spec:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- end }}
       containers:
-      {{- if not .Values.debug.enabled }}
       - name: manager
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        {{- $imageContext := deepCopy .Values.image }}
+        {{- if .Values.debug.enabled }}
+          {{- $imageContext := deepCopy .Values.debug.image }}
+        {{- else }}
+          {{- $imageContext := deepCopy .Values.image }}
+        {{- end }}
         {{- if not (get $imageContext "tag") }}
           {{- $_ := set $imageContext "tag" .Chart.AppVersion }}
         {{- end }}
@@ -91,12 +94,6 @@ spec:
         {{- with .Values.extraVolumeMounts }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
-      {{- end }}
-      {{- if .Values.debug.enabled }}
-      - name: debug
-        {{- $imageContext := deepCopy .Values.debug.image }}
-        image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" $imageContext "context" .) }}
-      {{- end }}
       {{- with .Values.nodeSelector | default .Values.global.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
