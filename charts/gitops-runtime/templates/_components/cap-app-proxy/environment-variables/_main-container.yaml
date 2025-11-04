@@ -1,4 +1,10 @@
 {{- define "cap-app-proxy.environment-variables.defaults" -}}
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $chartVersion := .Chart.Version -}}
+{{- $runtimeVersion := .Chart.AppVersion -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $appProxyName := "app-proxy" -}}
+{{- $appProxyVersion := .Values.image.tag | default "latest" -}}
 ARGO_CD_URL:
   valueFrom:
     configMapKeyRef:
@@ -221,6 +227,10 @@ CACHE_PASSWORD:
     secretKeyRef:
       name: gitops-runtime-redis
       key: auth
+CF_SERVICE_NAME: {{ $appProxyName }}
+CF_SERVICE_VERSION: {{ $appProxyVersion }}
+OTEL_SERVICE_NAME: {{ $appProxyName }}
+OTEL_RESOURCE_ATTRIBUTES: {{ printf "service.name=%s,service.version=%s,service.namespace=%s,cf.account.id=%s,cf.gitops.runtime.name=%s,cf.gitops.runtime.version=%s,cf.gitops.runtime.chart.version=%s" $appProxyName $appProxyVersion "cf-gitops-runtime" $accountId $runtimeName $runtimeVersion $chartVersion }}
 {{ include "codefresh-gitops-runtime.get-proxy-env-vars" . }}
 {{- end -}}
 
