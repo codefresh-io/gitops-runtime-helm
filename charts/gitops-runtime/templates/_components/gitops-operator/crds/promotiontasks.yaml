@@ -420,6 +420,7 @@ spec:
                 - Failed
                 - Terminated
                 - Suspended
+                - Skipped
                 type: string
               steps:
                 items:
@@ -477,6 +478,7 @@ spec:
                       - Failed
                       - Terminated
                       - Suspended
+                      - Skipped
                       type: string
                     promoteAppWithCommit:
                       properties:
@@ -522,7 +524,7 @@ spec:
                             commitSha:
                               maxLength: 40
                               minLength: 7
-                              pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
+                              pattern: (^[A-Fa-f0-9]+$|^<no-changes>$)
                               type: string
                           type: object
                         phase:
@@ -580,7 +582,7 @@ spec:
                             commitSha:
                               maxLength: 40
                               minLength: 7
-                              pattern: (^[A-Fa-f0-9]+$|^<any-commit>$)
+                              pattern: (^[A-Fa-f0-9]+$|^<no-changes>$)
                               type: string
                           type: object
                         phase:
