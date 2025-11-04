@@ -3,7 +3,7 @@
 {{- $chartVersion := .Chart.Version -}}
 {{- $runtimeVersion := .Chart.AppVersion -}}
 {{- $runtimeName := .Values.global.runtime.name -}}
-{{- $appProxyName := "cf-gitops-app-proxy" -}}
+{{- $appProxyName := "app-proxy" -}}
 {{- $appProxyVersion := .Values.image.tag | default "latest" -}}
 ARGO_CD_URL:
   valueFrom:

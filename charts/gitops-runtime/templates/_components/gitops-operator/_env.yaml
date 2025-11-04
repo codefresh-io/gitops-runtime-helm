@@ -30,7 +30,7 @@ WORKFLOW_MONITOR_POLLING_INTERVAL: {{ .Values.config.workflowMonitorPollingInter
 {{- $runtimeVersion := .Chart.AppVersion -}}
 {{- $runtimeName := .Values.global.runtime.name -}}
 {{- $gitopsOperatorVersion := .Values.image.tag | default "latest" -}}
-{{- $gitopsOperatorName := "cf-gitops-gitops-operator" -}}
+{{- $gitopsOperatorName := "gitops-operator" -}}
 AP_URL: http://cap-app-proxy:3017
 ARGO_CD_URL: argo-cd-server:80
 ARGO_WF_URL: http://argo-server:2746

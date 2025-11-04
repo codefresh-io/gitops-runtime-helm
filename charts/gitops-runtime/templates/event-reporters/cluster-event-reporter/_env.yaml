@@ -28,7 +28,7 @@ CODEFRESH_SSL_CERT_PATH: {{ printf "/app/config/codefresh-tls-certs/%s" $secretK
 {{- $runtimeVersion := .Chart.AppVersion -}}
 {{- $runtimeName := .Values.global.runtime.name -}}
 {{- $eventReporterVersion := .Values.image.tag | default "latest" -}}
-{{- $eventReporterName := "cf-gitops-cluster-event-reporter" -}}
+{{- $eventReporterName := "cluster-event-reporter" -}}
 REPORTER_MODE: resource
 APP_QUEUE_SIZE:
   valueFrom:
