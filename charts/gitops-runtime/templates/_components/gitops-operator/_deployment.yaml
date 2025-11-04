@@ -52,9 +52,9 @@ spec:
         image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" $imageContext "context" .) }}
         env: {{- include "codefresh-gitops-runtime.env-vars" (dict "Values" $mergedValues "context" .) | nindent 8 }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- with .Values.command }}
         command:
-        {{- if .Values.command }}
-        {{- .Values.command | toYaml | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
         {{- end }}
         {{- with .Values.extraArgs }}
         args:

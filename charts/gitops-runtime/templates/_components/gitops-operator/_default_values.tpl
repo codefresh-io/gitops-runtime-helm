@@ -79,8 +79,7 @@ securityContext:
   capabilities:
     drop:
       - "ALL"
-command:
-  - /manager
+command: []
 extraArgs: []
 nodeSelector: {}
 tolerations: []
