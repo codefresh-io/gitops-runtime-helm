@@ -39,16 +39,15 @@ spec:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- end }}
       containers:
-      - name: {{ ternary .Values.debug.enabled "debug" "manager" }}
+      - name: {{ ternary "debug" "manager" .Values.debug.enabled }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
+        {{- $imageContext := deepCopy .Values.image }}
+        {{- if not (get $imageContext "tag") }}
+          {{- $_ := set $imageContext "tag" .Chart.AppVersion }}
+        {{- end }}
         {{- if .Values.debug.enabled }}
-          {{- $imageContext := deepCopy .Values.debug.image }}
-        {{- else }}
-          {{- $imageContext := deepCopy .Values.image }}
-          {{- if not (get $imageContext "tag") }}
-            {{- $_ := set $imageContext "tag" .Chart.AppVersion }}
-          {{- end }}
+          {{- $imageContext = deepCopy .Values.debug.image }}
         {{- end }}
         image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" $imageContext "context" .) }}
         env: {{- include "codefresh-gitops-runtime.env-vars" (dict "Values" $mergedValues "context" .) | nindent 8 }}
