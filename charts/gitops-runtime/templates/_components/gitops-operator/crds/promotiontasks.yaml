@@ -589,7 +589,7 @@ spec:
                           description: PromoteAppWithPRPhase
                           enum:
                           - Pending
-                          - PRCreated
+                          - Suspended
                           - Syncing
                           - Complete
                           type: string
