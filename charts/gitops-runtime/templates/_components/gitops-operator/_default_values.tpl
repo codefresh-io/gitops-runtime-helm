@@ -89,7 +89,7 @@ extraVolumeMounts: []
 affinity: {}
 
 debug:
-  enabled: false
+  enabled: true
   image:
     registry: registry.k8s.io
     repository: pause

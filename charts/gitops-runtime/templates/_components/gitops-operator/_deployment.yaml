@@ -46,9 +46,9 @@ spec:
           {{- $imageContext := deepCopy .Values.debug.image }}
         {{- else }}
           {{- $imageContext := deepCopy .Values.image }}
-        {{- end }}
-        {{- if not (get $imageContext "tag") }}
-          {{- $_ := set $imageContext "tag" .Chart.AppVersion }}
+          {{- if not (get $imageContext "tag") }}
+            {{- $_ := set $imageContext "tag" .Chart.AppVersion }}
+          {{- end }}
         {{- end }}
         image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" $imageContext "context" .) }}
         env: {{- include "codefresh-gitops-runtime.env-vars" (dict "Values" $mergedValues "context" .) | nindent 8 }}
