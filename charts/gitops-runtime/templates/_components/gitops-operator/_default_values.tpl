@@ -79,13 +79,21 @@ securityContext:
   capabilities:
     drop:
       - "ALL"
-command: []
+command:
+  - /manager
 extraArgs: []
 nodeSelector: {}
 tolerations: []
 extraVolumes: []
 extraVolumeMounts: []
 affinity: {}
+
+debug:
+  enabled: true
+  image:
+    registry: registry.k8s.io
+    repository: pause
+    tag: 3.10
 
 resources:
   limits: {}

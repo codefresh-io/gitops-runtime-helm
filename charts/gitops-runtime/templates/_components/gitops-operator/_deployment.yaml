@@ -33,8 +33,13 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "gitops-operator.serviceAccountName" . }}
       securityContext:
+      {{- if .Values.debug.enabled }}
+        runAsNonRoot: false
+      {{- else }}
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- end }}
       containers:
+      {{- if not .Values.debug.enabled }}
       - name: manager
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
@@ -45,12 +50,9 @@ spec:
         image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" $imageContext "context" .) }}
         env: {{- include "codefresh-gitops-runtime.env-vars" (dict "Values" $mergedValues "context" .) | nindent 8 }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command:
         {{- if .Values.command }}
-        command:
         {{- .Values.command | toYaml | nindent 8 }}
-        {{- else }}
-        command:
-        - /manager
         {{- end }}
         {{- with .Values.extraArgs }}
         args:
@@ -89,6 +91,12 @@ spec:
         {{- with .Values.extraVolumeMounts }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
+      {{- end }}
+      {{- if .Values.debug.enabled }}
+      - name: debug
+        {{- $imageContext := deepCopy .Values.debug.image }}
+        image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" $imageContext "context" .) }}
+      {{- end }}
       {{- with .Values.nodeSelector | default .Values.global.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
