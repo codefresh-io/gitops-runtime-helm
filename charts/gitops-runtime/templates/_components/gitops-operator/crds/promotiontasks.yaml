@@ -541,6 +541,8 @@ spec:
                     promoteAppWithPR:
                       properties:
                         appStatus:
+                          description: APPStatus holds the status of the application
+                            after the PR was merged
                           properties:
                             health:
                               description: Represents resource health status
@@ -563,6 +565,8 @@ spec:
                           - sync
                           type: object
                         commitInfo:
+                          description: CommitInfo holds information about the commit
+                            that was created when the PR was merged
                           properties:
                             commitAuthorId:
                               properties:
@@ -593,21 +597,62 @@ spec:
                           - Syncing
                           - Complete
                           type: string
-                        prStatus:
+                        prInfo:
+                          description: PRInfo holds information about the created
+                            pull request
                           properties:
-                            isClosed:
-                              description: |-
-                                IsClosed is true if either the PR is merged or closed without merging. If the PR is merged, MergeCommitSHA will
-                                also be set.
+                            author:
+                              description: Pull request author
+                              type: string
+                            avatarUrl:
+                              description: Pull request author avatar url
+                              type: string
+                            baseBranch:
+                              description: Pull request base branch
+                              type: string
+                            createdAt:
+                              description: Pull request created at
+                              format: date-time
+                              type: string
+                            description:
+                              description: Pull request description
+                              type: string
+                            headBranch:
+                              description: Pull request head branch
+                              type: string
+                            id:
+                              description: Pull request id
+                              type: integer
+                            isMerged:
+                              description: Is pull request merged
                               type: boolean
                             mergeCommitSha:
+                              description: Commit sha from the pull request merge
+                              maxLength: 40
+                              minLength: 7
+                              pattern: ^[A-Fa-f0-9]+$
+                              type: string
+                            repo:
+                              description: Pull request repo name
+                              type: string
+                            state:
+                              description: Pull request state
+                              enum:
+                              - Open
+                              - Closed
+                              type: string
+                            title:
+                              description: Pull request title
+                              type: string
+                            url:
+                              description: Pull request url
+                              format: uri
                               type: string
                           required:
-                          - isClosed
+                          - isMerged
+                          - state
+                          - url
                           type: object
-                        prUrl:
-                          format: uri
-                          type: string
                       required:
                       - phase
                       type: object
