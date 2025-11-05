@@ -388,6 +388,26 @@ spec:
                   error:
                     properties:
                       code:
+                        description: PromotionTaskErrorCode
+                        enum:
+                        - Unknown
+                        - FailedGettingApplication
+                        - FailedGettingPromotableProperties
+                        - FailedGettingAppStatusForCommitSha
+                        - FailedGettingArgoCDClient
+                        - FailedGettingArgoCDAppClient
+                        - FailedSyncingAppExplicitly
+                        - FailedPushingCommitWithValues
+                        - AlreadyFailedOrTerminated
+                        - FailedSendingStatusToPlatform
+                        - AppFailedToSync
+                        - AppBecameDegraded
+                        - FailedToSubmitWorkflow
+                        - WorkflowFailed
+                        - FailedToStopWorkflow
+                        - FailedToGetWorkflowByUID
+                        - FailedToResumeWorkflow
+                        - FailedToUpdateTaskStatus
                         type: string
                       message:
                         type: string
@@ -771,6 +791,26 @@ spec:
                     error:
                       properties:
                         code:
+                          description: PromotionTaskErrorCode
+                          enum:
+                          - Unknown
+                          - FailedGettingApplication
+                          - FailedGettingPromotableProperties
+                          - FailedGettingAppStatusForCommitSha
+                          - FailedGettingArgoCDClient
+                          - FailedGettingArgoCDAppClient
+                          - FailedSyncingAppExplicitly
+                          - FailedPushingCommitWithValues
+                          - AlreadyFailedOrTerminated
+                          - FailedSendingStatusToPlatform
+                          - AppFailedToSync
+                          - AppBecameDegraded
+                          - FailedToSubmitWorkflow
+                          - WorkflowFailed
+                          - FailedToStopWorkflow
+                          - FailedToGetWorkflowByUID
+                          - FailedToResumeWorkflow
+                          - FailedToUpdateTaskStatus
                           type: string
                         message:
                           type: string
