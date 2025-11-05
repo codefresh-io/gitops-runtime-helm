@@ -33,24 +33,28 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "gitops-operator.serviceAccountName" . }}
       securityContext:
+      {{- if .Values.debug.enabled }}
+        runAsNonRoot: false
+      {{- else }}
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- end }}
       containers:
-      - name: manager
+      - name: {{ ternary "debug" "manager" .Values.debug.enabled }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         {{- $imageContext := deepCopy .Values.image }}
         {{- if not (get $imageContext "tag") }}
           {{- $_ := set $imageContext "tag" .Chart.AppVersion }}
         {{- end }}
+        {{- if .Values.debug.enabled }}
+          {{- $imageContext = deepCopy .Values.debug.image }}
+        {{- end }}
         image: {{ include "codefresh-gitops-runtime.image.name" (dict "image" $imageContext "context" .) }}
         env: {{- include "codefresh-gitops-runtime.env-vars" (dict "Values" $mergedValues "context" .) | nindent 8 }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        {{- if .Values.command }}
+        {{- with .Values.command }}
         command:
-        {{- .Values.command | toYaml | nindent 8 }}
-        {{- else }}
-        command:
-        - /manager
+        {{- . | toYaml | nindent 8 }}
         {{- end }}
         {{- with .Values.extraArgs }}
         args:
@@ -61,6 +65,7 @@ spec:
           containerPort: 8080
         - name: http-health
           containerPort: 8081
+        {{- if not .Values.debug.enabled }}
         readinessProbe:
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
@@ -79,6 +84,7 @@ spec:
           httpGet:
             port: http-health
             path: /healthz
+        {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         volumeMounts:
