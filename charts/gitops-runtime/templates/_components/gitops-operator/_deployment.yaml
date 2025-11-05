@@ -65,6 +65,7 @@ spec:
           containerPort: 8080
         - name: http-health
           containerPort: 8081
+        {{- if not .Values.debug.enabled }}
         readinessProbe:
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
@@ -83,6 +84,7 @@ spec:
           httpGet:
             port: http-health
             path: /healthz
+        {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         volumeMounts:
