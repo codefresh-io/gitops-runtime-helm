@@ -15,11 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix(app-proxy 0655469): with applicationLogs subscription fix (#886)'
+      description: 'fix(app-proxy): with applicationLogs subscription fix (#886)'
     - kind: changed
-      description: 'fix: update release branches for components (#881)'
-    - kind: changed
-      description: 'fix: updated cf-root-app-project to allow all resources'
+      description: 'fix(app-proxy): updated cf-root-app-project to allow all resources'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
