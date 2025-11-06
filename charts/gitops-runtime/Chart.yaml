@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'application logs graphql subscription not working (#886)'
+      description: 'fix(app-proxy): application logs graphql subscription not working (#886)'
     - kind: changed
       description: 'fix(app-proxy): updated cf-root-app-project to allow all resources'
 dependencies:
