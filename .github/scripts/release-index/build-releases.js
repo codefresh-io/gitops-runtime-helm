@@ -210,6 +210,7 @@ async function buildChannelData(channelReleases, channelName) {
   return {
     releases: topReleases,
     latestChartVersion: sorted[0]?.version || null,
+    latestAppVersion: sorted[0]?.appVersion || null,
     latestWithSecurityFixes,
   };
 }
@@ -244,11 +245,13 @@ async function buildIndex() {
           releases: stable.releases,
           latestChartVersion: stable.latestChartVersion,
           latestWithSecurityFixes: stable.latestWithSecurityFixes,
+          latestAppVersion: stable.latestAppVersion,
         },
         latest: {
           releases: latest.releases,
           latestChartVersion: latest.latestChartVersion,
           latestWithSecurityFixes: latest.latestWithSecurityFixes,
+          latestAppVersion: latest.latestAppVersion,
         },
       },
       stats: {
@@ -275,6 +278,11 @@ async function buildIndex() {
       `      Latest: ${index.channels.stable.latestChartVersion || "none"}`
     );
     console.log(
+      `      Latest app version: ${
+        index.channels.stable.latestAppVersion || "none"
+      }`
+    );
+    console.log(
       `      Latest secure: ${
         index.channels.stable.latestWithSecurityFixes || "none"
       }`
@@ -282,6 +290,11 @@ async function buildIndex() {
     console.log(`\n   🔵 Latest Channel:`);
     console.log(
       `      Latest: ${index.channels.latest.latestChartVersion || "none"}`
+    );
+    console.log(
+      `      Latest app version: ${
+        index.channels.latest.latestAppVersion || "none"
+      }`
     );
     console.log(
       `      Latest secure: ${
