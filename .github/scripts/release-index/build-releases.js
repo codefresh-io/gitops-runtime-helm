@@ -212,6 +212,7 @@ async function buildChannelData(channelReleases, channelName) {
     latestChartVersion: sorted[0]?.version || null,
     latestAppVersion: sorted[0]?.appVersion || null,
     latestWithSecurityFixes,
+    latestUrl: sorted[0]?.url || null,
   };
 }
 
@@ -246,12 +247,14 @@ async function buildIndex() {
           latestChartVersion: stable.latestChartVersion,
           latestWithSecurityFixes: stable.latestWithSecurityFixes,
           latestAppVersion: stable.latestAppVersion,
+          latestUrl: stable.latestUrl,
         },
         latest: {
           releases: latest.releases,
           latestChartVersion: latest.latestChartVersion,
           latestWithSecurityFixes: latest.latestWithSecurityFixes,
           latestAppVersion: latest.latestAppVersion,
+          latestUrl: latest.latestUrl,
         },
       },
       stats: {
