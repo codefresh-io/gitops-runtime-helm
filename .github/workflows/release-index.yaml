@@ -1,4 +1,4 @@
-name: Update Release Index
+name: update-release-index
 
 on:
   release:
