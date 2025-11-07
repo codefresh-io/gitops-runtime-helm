@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-11-07T13:19:35.566Z",
+  "generatedAt": "2025-11-07T16:17:48.812Z",
   "repository": "codefresh-io/gitops-runtime-helm",
   "channels": {
     "stable": {
@@ -125,15 +125,24 @@
           "hasSecurityVulnerabilities": false
         }
       ],
-      "latestChartVersion": "0.25.1",
-      "latestWithSecurityFixes": null,
-      "latestAppVersion": "0.1.77"
+      "latestRelease": {
+        "version": "0.25.1",
+        "normalized": "0.25.1",
+        "channel": "stable",
+        "hasSecurityFixes": false,
+        "publishedAt": "2025-11-06T10:31:16Z",
+        "url": "https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.25.1",
+        "createdAt": "2025-11-06T10:28:31Z",
+        "appVersion": "0.1.77",
+        "upgradeAvailable": false,
+        "hasSecurityVulnerabilities": false
+      },
+      "latestWithSecurityFixes": null
     },
     "latest": {
       "releases": [],
-      "latestChartVersion": null,
-      "latestWithSecurityFixes": null,
-      "latestAppVersion": null
+      "latestRelease": null,
+      "latestWithSecurityFixes": null
     }
   },
   "stats": {
