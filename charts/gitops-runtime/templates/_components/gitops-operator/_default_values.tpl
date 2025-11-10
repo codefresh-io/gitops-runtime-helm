@@ -87,6 +87,13 @@ extraVolumes: []
 extraVolumeMounts: []
 affinity: {}
 
+debug:
+  enabled: false
+  image:
+    registry: registry.k8s.io
+    repository: pause
+    tag: 3.10
+
 resources:
   limits: {}
   requests:

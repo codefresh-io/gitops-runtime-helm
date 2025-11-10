@@ -23,6 +23,12 @@ CODEFRESH_SSL_CERT_PATH: {{ printf "/app/config/codefresh-tls-certs/%s" $secretK
 {{- end }}
 
 {{- define "runtime-event-reporter.resources.environment-variables.defaults" -}}
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $chartVersion := .Chart.Version -}}
+{{- $runtimeVersion := .Chart.AppVersion -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $eventReporterVersion := .Values.image.tag | default "latest" -}}
+{{- $eventReporterName := "runtime-event-reporter" -}}
 REPORTER_MODE: app
 APP_QUEUE_SIZE:
   valueFrom:
@@ -186,4 +192,8 @@ RESOURCE_THREADINESS:
       name: runtime-event-reporter-cmd-params-cm
       key: resource.threadiness
 SERVICE_NAME: {{ include "runtime-event-reporter.fullname" . }}
+CF_SERVICE_NAME: {{ $eventReporterName }}
+CF_SERVICE_VERSION: {{ $eventReporterVersion }}
+OTEL_SERVICE_NAME: {{ $eventReporterName }}
+OTEL_RESOURCE_ATTRIBUTES: {{ printf "service.name=%s,service.version=%s,service.namespace=%s,cf.account.id=%s,cf.gitops.runtime.name=%s,cf.gitops.runtime.version=%s,cf.gitops.runtime.chart.version=%s" $eventReporterName $eventReporterVersion "cf-gitops-runtime" $accountId $runtimeName $runtimeVersion $chartVersion }}
 {{- end -}}

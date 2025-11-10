@@ -184,6 +184,43 @@ global:
       scrapeTimeout: 10s
       labels: {}
     config: {}
+anchors:
+  common-envs:
+    - &otel-config
+      # -- Telemetry configuration
+      # -- Base endpoint URL for all OpenTelemetry signals.
+      # Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/
+      OTEL_EXPORTER_OTLP_ENDPOINT: 'http://localhost:4317'
+      # -- Specifies the OTLP transport protocol to be used for all telemetry data.
+      # Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/
+      OTEL_EXPORTER_OTLP_PROTOCOL: 'grpc'
+      # -- Specifies the compression algorithm to be used for all telemetry data.
+      # Ref: https://opentelemetry.io/docs/specs/otel/protocol/exporter/
+      OTEL_EXPORTER_OTLP_COMPRESSION: 'gzip'
+      # -- OTel Logs exporter to be used.
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_LOGS_EXPORTER: 'none'
+      # -- OTel traces exporter to be used.
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_TRACES_EXPORTER: 'none'
+      # -- OTel sampler to be used for traces.
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_TRACES_SAMPLER: 'parentbased_always_on'
+      # -- OTel metrics exporter to be used. Set to "prometheus" to export metrics in Prometheus format. If set to "prometheus", it's recommended to set METRICS_SCRAPE_TIMEOUT_MS=4×scrape_interval.
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_METRICS_EXPORTER: 'none'
+      # -- The time interval (in milliseconds) between the start of two export attempts for push metric exporters, such as "otlp".
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_METRIC_EXPORT_INTERVAL: '10000'
+      # -- Maximum allowed time (in milliseconds) to export data for push metric exporters, such as "otlp".
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_METRIC_EXPORT_TIMEOUT: '5000'
+      # -- Host used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus
+      OTEL_EXPORTER_PROMETHEUS_HOST: '0.0.0.0'
+      # -- Port used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus
+      OTEL_EXPORTER_PROMETHEUS_PORT: '9464'
+      # -- Emit the stable HTTP and networking OTel conventions if CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION=true.
+      OTEL_SEMCONV_STABILITY_OPT_IN: 'http'
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
@@ -228,10 +265,8 @@ sealed-secrets:
 argo-cd:
   enabled: true
   fullnameOverride: argocd
-
   notifications:
     enabled: false
-
   redis:
     ## Redis image
     image:
@@ -239,7 +274,6 @@ argo-cd:
       repository: ecr-public.aws.com/docker/library/redis
       # -- Redis tag
       tag: 8.2.2-alpine
-
   redis-ha:
     ## Redis-ha image
     image:
@@ -247,7 +281,6 @@ argo-cd:
       repository: ecr-public.aws.com/docker/library/redis
       # -- Redis tag
       tag: 8.2.2-alpine
-
   configs:
     cm:
       timeout.reconciliation: 20s
@@ -457,14 +490,14 @@ app-proxy:
           tag: 1.1.17-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3883.0
+    tag: 1.3909.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3883.0
+      tag: 1.3909.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -525,7 +558,30 @@ app-proxy:
     clusterChunkSize: 50
     # -- Cors settings for app-proxy. This is the list of allowed domains for platform (comma separated).
     cors: "https://g.codefresh.io"
-  env: {}
+  env:
+    !!merge <<:
+      - *otel-config
+    # -- Level of logging for app-proxy
+    CF_TELEMETRY_LOGS_LEVEL: 'info'
+    # -- Level for logging HTTP requests
+    CF_TELEMETRY_LOGS_LEVEL_HTTP: 'debug'
+    # -- Enable OpenTelemetry signals (logs, metrics, traces)
+    CF_TELEMETRY_OTEL_ENABLE: 'false'
+    # -- Enable OTel HTTP instrumentation.
+    # Make sure to sanitize `url.full` and `url.query` span attributes on collector before enabling this flag, as it may contain sensitive information.
+    CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION: 'false'
+    # -- Enable Prometheus server
+    CF_TELEMETRY_PROMETHEUS_ENABLE: 'false'
+    # -- Enable collecting process metrics
+    CF_TELEMETRY_PROMETHEUS_ENABLE_PROCESS_METRICS: 'false'
+    # -- Host for Prometheus metrics server
+    CF_TELEMETRY_PROMETHEUS_HOST: '0.0.0.0'
+    # -- Port for Prometheus metrics server
+    CF_TELEMETRY_PROMETHEUS_PORT: '9100'
+    # -- Enable Pyroscope profiling. If enabled, the Pyroscope server address must be set in PYROSCOPE_SERVER_ADDRESS.
+    CF_TELEMETRY_PYROSCOPE_ENABLE: 'false'
+    # -- Pyroscope server address
+    PYROSCOPE_SERVER_ADDRESS: ''
   serviceAccount:
     create: true
     annotations: {}
@@ -621,8 +677,10 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: "293f24f"
+    tag: "fd2f89a"
   env:
+    !!merge <<:
+      - *otel-config
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
     create: true
@@ -788,8 +846,14 @@ redis:
     name: ""
     annotations: {}
 event-reporters:
-  cluster-event-reporter: {}
-  runtime-event-reporter: {}
+  cluster-event-reporter:
+    env:
+      !!merge <<:
+        - *otel-config
+  runtime-event-reporter:
+    env:
+      !!merge <<:
+        - *otel-config
 # -- Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true`
 # Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
 redis-ha:
