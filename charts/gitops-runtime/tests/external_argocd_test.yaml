@@ -121,7 +121,7 @@ tests:
             valueFrom:
               secretKeyRef:
                 key: password
-                name: argocd-initial-admin-secret
+                name: argo-cd-initial-admin-secret
 
   - it: app-proxy Deployment should have valid ARGO_CD_PASSWORD env var set via passwordSecretKeyRef override
     values:
