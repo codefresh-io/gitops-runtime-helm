@@ -105,24 +105,19 @@ global:
           # tokenSecretKeyRef:
           #   name: argocd-token
           #   key: token
-  # -- Configuration for external ArgoCD
-  # Should be used when `argo-cd.enabled` is set to false
-  external-argo-cd:
-    # -- ArgoCD server settings
-    server:
-      # -- Service name of the ArgoCD server
-      svc: argocd-server
-      # -- Port of the ArgoCD server
-      port: 80
-      # -- Set if Argo CD is running behind reverse proxy under subpath different from /
-      # e.g.
-      # rootpath: '/argocd'
-      rootpath: ''
-    repoServer:
-      # -- Service name of the ArgoCD repo server
-      svc: argocd-repo-server
-      # -- Port of the ArgoCD repo server
-      port: 8081
+        # -- Service name of the ArgoCD server
+        svc: argocd-server
+        # -- Port of the ArgoCD server
+        port: 80
+        # -- Set if Argo CD is running behind reverse proxy under subpath different from /
+        # e.g.
+        # rootpath: '/argocd'
+        rootpath: ''
+      repoServer:
+        # -- Service name of the ArgoCD repo server
+        svc: argocd-repo-server
+        # -- Port of the ArgoCD repo server
+        port: 8081
   # -- Configuration for external Argo Rollouts
   external-argo-rollouts:
     # -- Rollout reporter settings
@@ -269,7 +264,7 @@ sealed-secrets:
 #-----------------------------------------------------------------------------------------------------------------------
 argo-cd:
   enabled: true
-  fullnameOverride: argo-cd
+  fullnameOverride: argocd
   notifications:
     enabled: false
   redis:
@@ -682,7 +677,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: "fd2f89a"
+    tag: "9e6a5c2"
   env:
     !!merge <<:
       - *otel-config
