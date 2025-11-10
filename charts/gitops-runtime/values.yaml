@@ -94,7 +94,7 @@ global:
           password: ""
           # -- ArgoCD password referenced by an existing secret
           passwordSecretKeyRef:
-            name: argo-cd-initial-admin-secret
+            name: argocd-initial-admin-secret
             key: password
           # If `auth.type=token` is set
           # -- ArgoCD token in plain text
