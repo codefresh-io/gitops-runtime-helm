@@ -16,6 +16,10 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: dummy PR (#909)
+    - kind: changed
+      description: 'chore: update app version and chart version in Chart.yaml to 1.0.0-rc.1 and 25.11-0 respectively'
+    - kind: changed
       description: 'feat: set fullnameoverride for argocd (#907)'
     - kind: changed
       description: 'fix: allow "<no-changes>" as prUrl value (#906)'
