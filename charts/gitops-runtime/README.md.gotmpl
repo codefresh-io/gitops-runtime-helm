@@ -399,4 +399,25 @@ argo-gateway:
   ...
 ```
 
+- `.Values.global.external-argo-cd` was changed to `.Values.global.integrations.argo-cd`
+
+```yaml
+# Before:
+global:
+  external-argo-cd:
+    server:
+      svc: argocd-server
+      port: 80
+    ...
+
+# After:
+global:
+  integrations:
+    argo-cd:
+      server:
+        svc: argocd-server
+        port: 80
+      ...
+```
+
 {{ template "chart.valuesSection" . }}
