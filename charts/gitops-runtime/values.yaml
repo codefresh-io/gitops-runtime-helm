@@ -677,7 +677,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: "305e13e"
+    tag: "0b213b5"
   env:
     !!merge <<:
       - *otel-config
