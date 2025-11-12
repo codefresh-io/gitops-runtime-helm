@@ -196,7 +196,8 @@ async function buildChannelData(channelReleases, channelName) {
     release.appVersion = await getAppVersionFromChart(release.version);
   }
 
-  const latestVersion = sorted[0]?.version;
+  const latestRelease = sorted[0] || null;
+  const latestVersion = latestRelease?.version;
   const latestSecureIndex = latestWithSecurityFixes
     ? sorted.findIndex((r) => r.version === latestWithSecurityFixes)
     : -1;
@@ -209,8 +210,8 @@ async function buildChannelData(channelReleases, channelName) {
 
   return {
     releases: topReleases,
-    latestChartVersion: sorted[0]?.version || null,
     latestWithSecurityFixes,
+    latestRelease,
   };
 }
 
@@ -242,12 +243,12 @@ async function buildIndex() {
       channels: {
         stable: {
           releases: stable.releases,
-          latestChartVersion: stable.latestChartVersion,
+          latestRelease: stable.latestRelease,
           latestWithSecurityFixes: stable.latestWithSecurityFixes,
         },
         latest: {
           releases: latest.releases,
-          latestChartVersion: latest.latestChartVersion,
+          latestRelease: latest.latestRelease,
           latestWithSecurityFixes: latest.latestWithSecurityFixes,
         },
       },
@@ -272,7 +273,12 @@ async function buildIndex() {
     console.log(`   Total releases: ${index.stats.totalReleases}`);
     console.log(`\n   🟢 Stable Channel:`);
     console.log(
-      `      Latest: ${index.channels.stable.latestChartVersion || "none"}`
+      `      Latest chart: ${index.channels.stable.latestRelease?.version || "none"}`
+    );
+    console.log(
+      `      Latest app: ${
+        index.channels.stable.latestRelease?.appVersion || "none"
+      }`
     );
     console.log(
       `      Latest secure: ${
@@ -281,7 +287,12 @@ async function buildIndex() {
     );
     console.log(`\n   🔵 Latest Channel:`);
     console.log(
-      `      Latest: ${index.channels.latest.latestChartVersion || "none"}`
+      `      Latest chart: ${index.channels.latest.latestRelease?.version || "none"}`
+    );
+    console.log(
+      `      Latest app: ${
+        index.channels.latest.latestRelease?.appVersion || "none"
+      }`
     );
     console.log(
       `      Latest secure: ${
