@@ -344,8 +344,10 @@ codefreshWorkflowLogStoreCM:
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo rollouts
 #-----------------------------------------------------------------------------------------------------------------------
+# -- Argo Rollouts is deprecated and disabled by default. It will be completely removed in February 2026.
+# If you require Argo Rollouts, you can manually override this value to true in your Helm values files.
 argo-rollouts:
-  enabled: true
+  enabled: false
   fullnameOverride: argo-rollouts
   controller:
     replicas: 1
