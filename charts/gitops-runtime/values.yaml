@@ -317,6 +317,9 @@ argo-events:
 argo-workflows:
   fullnameOverride: argo
   enabled: true
+  # -- Restrict Argo Workflows to operate only in a single namespace (the namespace of the Helm release).
+  # This ensures it does not interfere with any other instances of Argo Workflows installed on your cluster.
+  singleNamespace: true
   server:
     # -- auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI
     authModes:
