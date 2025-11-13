@@ -69,6 +69,7 @@ argo-events:
     tolerations: *tolerations
 
 argo-rollouts:
+  enabled: true
   controller:
     nodeSelector: *nodeSelector
     tolerations: *tolerations
