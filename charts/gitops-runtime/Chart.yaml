@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.72
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 25.11-0
+version: 0.0.0
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -14,31 +14,31 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
 dependencies:
-  - name: argo-cd
-    repository: https://argoproj.github.io/argo-helm
-    condition: argo-cd.enabled
-    version: 9.0.2
-  - name: argo-events
-    repository: https://codefresh-io.github.io/argo-helm
-    version: 2.4.9-cap-CR-30841
-    condition: argo-events.enabled
-  - name: argo-workflows
-    repository: https://codefresh-io.github.io/argo-helm
-    version: 0.45.16-v3.6.7-cap-CR-30835
-    condition: argo-workflows.enabled
-  - name: argo-rollouts
-    repository: https://codefresh-io.github.io/argo-helm
-    version: 2.37.3-7-v1.7.2-cap-OSS-697
-    condition: argo-rollouts.enabled
-  - name: sealed-secrets
-    repository: https://bitnami-labs.github.io/sealed-secrets/
-    version: 2.17.2
-  - name: codefresh-tunnel-client
-    repository: oci://quay.io/codefresh/charts
-    version: 0.1.22
-    alias: tunnel-client
-    condition: tunnel-client.enabled
-  - name: redis-ha
-    version: 4.33.4
-    repository: https://dandydeveloper.github.io/charts/
-    condition: redis-ha.enabled
+- name: argo-cd
+  repository: https://argoproj.github.io/argo-helm
+  condition: argo-cd.enabled
+  version: 9.0.2
+- name: argo-events
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 2.4.9-cap-CR-30841
+  condition: argo-events.enabled
+- name: argo-workflows
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 0.45.16-v3.6.7-cap-CR-30835
+  condition: argo-workflows.enabled
+- name: argo-rollouts
+  repository: https://codefresh-io.github.io/argo-helm
+  version: 2.37.3-7-v1.7.2-cap-OSS-697
+  condition: argo-rollouts.enabled
+- name: sealed-secrets
+  repository: https://bitnami-labs.github.io/sealed-secrets/
+  version: 2.17.2
+- name: codefresh-tunnel-client
+  repository: oci://quay.io/codefresh/charts
+  version: 0.1.22
+  alias: tunnel-client
+  condition: tunnel-client.enabled
+- name: redis-ha
+  version: 4.33.4
+  repository: https://dandydeveloper.github.io/charts/
+  condition: redis-ha.enabled
