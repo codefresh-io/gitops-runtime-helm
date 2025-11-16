@@ -118,6 +118,11 @@ global:
         svc: argo-cd-repo-server
         # -- Port of the ArgoCD repo server
         port: 8081
+      redis:
+        # -- Service name of the ArgoCD Redis
+        svc: argo-cd-redis
+        # -- Port of the ArgoCD Redis
+        port: 6379
   # -- Configuration for external Argo Rollouts
   external-argo-rollouts:
     # -- Rollout reporter settings
@@ -759,7 +764,7 @@ redis-secret-init:
 # -- Standalone redis deployment
 # Will be replaced by redis-ha subchart when `redis-ha.enabled=true`
 redis:
-  enabled: true
+  enabled: false
   fullnameOverride: "runtime-redis"
   # -- Redis image
   image:

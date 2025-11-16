@@ -30,8 +30,26 @@ tests:
           path: metadata.name
           value: runtime-event-reporter
 
-  - it: Runtime Reporter ConfigMap should have valid data
+  - it: Runtime Reporter ConfigMap should have valid data (default)
     template: event-reporters/runtime-event-reporter/configmap.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - equal:
+          path: data["argocd.server"]
+          value: argo-cd-server:80
+      - equal:
+          path: data["redis.server"]
+          value: argo-cd-redis:6379
+      - equal:
+          path: data["repo.server"]
+          value: argo-cd-repo-server:8081
+
+  - it: Runtime Reporter ConfigMap should have valid data (.Values.redis.enabled=true)
+    template: event-reporters/runtime-event-reporter/configmap.yaml
+    set:
+      redis:
+        enabled: true
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
@@ -45,7 +63,7 @@ tests:
           path: data["repo.server"]
           value: argo-cd-repo-server:8081
 
-  - it: Runtime Reporter ConfigMap should have valid redis-ha url
+  - it: Runtime Reporter ConfigMap should have valid redis-ha url (.Values.redis-ha.enabled=true)
     template: event-reporters/runtime-event-reporter/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -168,8 +186,33 @@ tests:
             cpu: 200m
             memory: 256Mi
 
-  - it: Runtime Reporter should have correct REDIS_ environment variables
+  - it: Runtime Reporter should have correct REDIS_ environment variables (default)
     template: event-reporters/runtime-event-reporter/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: REDIS_SERVER
+            valueFrom:
+              configMapKeyRef:
+                name: runtime-event-reporter-cmd-params-cm
+                key: redis.server
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: argocd-redis
+                key: auth
+
+  - it: Runtime Reporter should have correct REDIS_ environment variables (.Values.redis.enabled=true or .Values.redis-ha.enabled=true)
+    template: event-reporters/runtime-event-reporter/deployment.yaml
+    set:
+      redis:
+        enabled: true
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:

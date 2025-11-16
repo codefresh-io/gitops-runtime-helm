@@ -75,7 +75,7 @@ REDIS_COMPRESSION:
 REDIS_PASSWORD:
   valueFrom:
     secretKeyRef:
-      name: gitops-runtime-redis
+      name: {{ ternary "gitops-runtime-redis" "argocd-redis" (or .Values.redis.enabled (index .Values "redis-ha" "enabled")) }}
       key: auth
 REDIS_SERVER:
   valueFrom:

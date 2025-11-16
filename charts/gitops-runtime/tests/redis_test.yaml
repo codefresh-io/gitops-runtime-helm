@@ -6,7 +6,10 @@ templates:
   - redis/**
   - charts/redis-ha/**
 tests:
-  - it: Standalone Redis Deployment should be created by default
+  - it: Standalone Redis Deployment should be created when redis.enabled is true
+    set:
+      redis:
+        enabled: true
     template: redis/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -33,14 +36,14 @@ tests:
           name: runtime-redis
         not: true
 
-  - it: App-Proxy should have CACHE_ environment variables (standalone Redis)
+  - it: App-Proxy should have CACHE_ environment variables (ArgoCD Redis)
     template: app-proxy/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_HOST")].value
-          value: runtime-redis
+          value: argo-cd-redis
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PORT")].value
           value: "6379"
@@ -48,7 +51,7 @@ tests:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PASSWORD")].valueFrom
           value:
             secretKeyRef:
-              name: gitops-runtime-redis
+              name: argocd-redis
               key: auth
 
   - it: App-Proxy should have CACHE_ environment variables (Redis HA)
@@ -61,6 +64,26 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_HOST")].value
           value: runtime-redis-ha-haproxy
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PORT")].value
+          value: "6379"
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PASSWORD")].valueFrom
+          value:
+            secretKeyRef:
+              name: gitops-runtime-redis
+              key: auth
+
+  - it: App-Proxy should have CACHE_ environment variables (Standalone Redis)
+    template: app-proxy/deployment.yaml
+    set:
+      redis.enabled: true
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[?(@.name=="CACHE_HOST")].value
+          value: runtime-redis
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PORT")].value
           value: "6379"
