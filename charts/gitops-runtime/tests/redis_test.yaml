@@ -6,8 +6,10 @@ templates:
   - redis/**
   - charts/redis-ha/**
 tests:
-  - it: Standalone Redis Deployment should be created by default
+  - it: Standalone Redis Deployment should be created by when redis.enabled is true
     template: redis/deployment.yaml
+    set:
+      redis.enabled: true
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
@@ -33,14 +35,35 @@ tests:
           name: runtime-redis
         not: true
 
-  - it: App-Proxy should have CACHE_ environment variables (standalone Redis)
+  - it: App-Proxy should NOT have CACHE_ environment variables by default
     template: app-proxy/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
     asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: CACHE_HOST
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: CACHE_PORT
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: CACHE_PASSWORD
+
+  - it: App-Proxy should have CACHE_ environment variables when Redis HA is enabled and replicaCount > 1
+    template: app-proxy/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      redis-ha.enabled: true
+      app-proxy.replicaCount: 2
+    asserts:
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_HOST")].value
-          value: runtime-redis
+          value: runtime-redis-ha-haproxy
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PORT")].value
           value: "6379"
@@ -51,16 +74,18 @@ tests:
               name: gitops-runtime-redis
               key: auth
 
-  - it: App-Proxy should have CACHE_ environment variables (Redis HA)
+
+  - it: App-Proxy should have CACHE_ environment variables when Standalone Redis is enabled and replicaCount > 1
     template: app-proxy/deployment.yaml
+    set:
+      redis.enabled: true
+      app-proxy.replicaCount: 2
     values:
       - ./values/mandatory-values-ingress.yaml
-    set:
-      redis-ha.enabled: true
     asserts:
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_HOST")].value
-          value: runtime-redis-ha-haproxy
+          value: runtime-redis
       - equal:
           path: spec.template.spec.containers[0].env[?(@.name=="CACHE_PORT")].value
           value: "6379"

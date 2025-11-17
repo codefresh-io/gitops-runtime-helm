@@ -1,5 +1,7 @@
 {{- $context := deepCopy . }}
 {{- $_ := set $context "Values" (deepCopy (get (index .Values "global") "event-reporters")) }}
+{{- $_ := set $context.Values "redis" (deepCopy (get .Values "redis")) }}
+{{- $_ := set $context.Values "redis-ha" (deepCopy (get .Values "redis-ha")) }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 {{/* Merge .Values.event-reporters.<event-reporter-name> with .Values.global.event-reporters */}}
 {{- $valuesOverrides := index .Values "event-reporters" "runtime-event-reporter" }}

@@ -1,5 +1,7 @@
 {{- $context := deepCopy . }}
 {{- $_ := set $context "Values" (deepCopy (get .Values "argo-gateway")) }}
+{{- $_ := set $context.Values "redis" (deepCopy (get .Values "redis")) }}
+{{- $_ := set $context.Values "redis-ha" (deepCopy (get .Values "redis-ha")) }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 {{/* Merge environment variables from calculated, defaults and overwrites */}}
 {{- $defaults := (include "argo-gateway.resources.environment-variables.defaults" $context | fromYaml) }}
