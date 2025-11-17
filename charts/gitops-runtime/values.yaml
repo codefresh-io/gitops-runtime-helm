@@ -495,14 +495,14 @@ app-proxy:
           tag: 1.1.17-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3911.0
+    tag: 592eb04
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3911.0
+      tag: 592eb04
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -682,7 +682,7 @@ gitops-operator:
     # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: "305e13e"
+    tag: "c0f50e0"
   env:
     !!merge <<:
       - *otel-config
