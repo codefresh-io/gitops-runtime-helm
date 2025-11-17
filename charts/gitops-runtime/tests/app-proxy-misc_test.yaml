@@ -274,6 +274,7 @@ tests:
   - ./values/mandatory-values.yaml
   set:
     app-proxy.replicaCount: 2
+    redis.enabled: true
   asserts:
   - lengthEqual:
       path: spec.template.spec.containers
