@@ -46,7 +46,7 @@ tests:
           value: argo-cd-repo-server:8081
 
 
-  - it: Runtime Reporter ConfigMap should have valid redis url
+  - it: Runtime Reporter ConfigMap should have valid redis url when Redis is enabled
     template: event-reporters/runtime-event-reporter/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -58,7 +58,7 @@ tests:
           path: data["redis.server"]
           value: runtime-redis:6379
 
-  - it: Runtime Reporter ConfigMap should have valid redis-ha url
+  - it: Runtime Reporter ConfigMap should have valid redis-ha url when Redis HA is enabled
     template: event-reporters/runtime-event-reporter/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml

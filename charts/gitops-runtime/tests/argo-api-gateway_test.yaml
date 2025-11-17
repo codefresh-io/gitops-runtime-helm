@@ -18,7 +18,7 @@ tests:
           path: data["repo.server"]
           value: argo-cd-repo-server:8081
 
-  - it: Argo Api Gateway ConfigMap should have valid redis url
+  - it: Argo Api Gateway ConfigMap should have valid redis url when Redis is enabled
     set:
       redis:
         enabled: true
@@ -84,7 +84,7 @@ tests:
           path: metadata.name
           value: argo-gateway
 
-  - it: Argo Api Gateway ConfigMap should have valid redis-ha url
+  - it: Argo Api Gateway ConfigMap should have valid redis-ha url when Redis HA is enabled
     template: argo-gateway/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
