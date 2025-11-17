@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'feat: add branch data to pullrequest info (#932)'
+    - kind: changed
       description: 'feat: disable Argo Rollouts by default and enable namespace-scoped Argo Workflows (#917)'
     - kind: changed
       description: '[gitops-operator]fix: set transient error (#923)'
