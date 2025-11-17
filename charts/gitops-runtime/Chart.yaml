@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'feat: disable Argo Rollouts by default and enable namespace-scoped Argo Workflows (#917)'
+    - kind: changed
       description: '[gitops-operator]fix: set transient error (#923)'
     - kind: changed
       description: 'fix: retry on notFound before updating resource status  (#914)'
