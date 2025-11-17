@@ -20,6 +20,37 @@ ARGOCD_SERVER_ROOTPATH: {{ dig "server" "rootpath" "/" (index .Values "global" "
 CODEFRESH_SSL_CERT_PATH: {{ printf "/app/config/codefresh-tls-certs/%s" $secretKey }}
 {{- end }}
 
+{{- if or .Values.redis.enabled (index .Values "redis-ha" "enabled") }}
+REDISDB:
+  valueFrom:
+    configMapKeyRef:
+      name: runtime-event-reporter-cmd-params-cm
+      key: redis.db
+      optional: true
+REDIS_COMPRESSION:
+  valueFrom:
+    configMapKeyRef:
+      name: runtime-event-reporter-cmd-params-cm
+      key: redis.compression
+      optional: true
+REDIS_PASSWORD:
+  valueFrom:
+    secretKeyRef:
+      name: gitops-runtime-redis
+      key: auth
+REDIS_SERVER:
+  valueFrom:
+    configMapKeyRef:
+      name: runtime-event-reporter-cmd-params-cm
+      key: redis.server
+REDIS_USERNAME:
+  valueFrom:
+    secretKeyRef:
+      name: runtime-event-reporter-cmd-params-cm
+      key: redis-username
+      optional: true
+{{- end }}
+
 {{- end }}
 
 {{- define "runtime-event-reporter.resources.environment-variables.defaults" -}}
@@ -113,34 +144,6 @@ OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:
     configMapKeyRef:
       name: runtime-event-reporter-cmd-params-cm
       key: otlp.address
-      optional: true
-REDISDB:
-  valueFrom:
-    configMapKeyRef:
-      name: runtime-event-reporter-cmd-params-cm
-      key: redis.db
-      optional: true
-REDIS_COMPRESSION:
-  valueFrom:
-    configMapKeyRef:
-      name: runtime-event-reporter-cmd-params-cm
-      key: redis.compression
-      optional: true
-REDIS_PASSWORD:
-  valueFrom:
-    secretKeyRef:
-      name: gitops-runtime-redis
-      key: auth
-REDIS_SERVER:
-  valueFrom:
-    configMapKeyRef:
-      name: runtime-event-reporter-cmd-params-cm
-      key: redis.server
-REDIS_USERNAME:
-  valueFrom:
-    secretKeyRef:
-      name: runtime-event-reporter-cmd-params-cm
-      key: redis-username
       optional: true
 REPO_SERVER:
   valueFrom:

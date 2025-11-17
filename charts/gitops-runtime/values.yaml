@@ -764,7 +764,7 @@ redis-secret-init:
 # -- Standalone redis deployment
 # Will be replaced by redis-ha subchart when `redis-ha.enabled=true`
 redis:
-  enabled: true
+  enabled: false
   fullnameOverride: "runtime-redis"
   # -- Redis image
   image:
