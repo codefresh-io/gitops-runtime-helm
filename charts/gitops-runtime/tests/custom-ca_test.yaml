@@ -4,9 +4,13 @@ templates:
   - tls-custom-ca/codefresh-tls-certs.yaml
   - tls-custom-ca/workflow-pipelines-git-webhooks.yaml
   - app-proxy/deployment.yaml
+  - app-proxy/config.yaml
   - hooks/pre-uninstall/delete-runtime-from-platform.yaml
   - gitops-operator/*
   - _components/gitops-operator/*
+  - _components/cap-app-proxy/_deployment.yaml
+  - _components/cap-app-proxy/_config.yaml
+  - codefresh-cm.yaml
 tests:
 
 - it: test chart created secret contents - default secret key
