@@ -29,7 +29,7 @@ tests:
     global.codefresh.accountId: ""
   asserts:
   - failedTemplate:
-      errorMessage: 'global.codefresh.accountId must be provided for hosted runtimes'
+      errorMessage: 'global.codefresh.accountId is required for tunnel based runtime'
 
 - it: accountId appears in app-proxy env and runtime type is HELM_HOSTED
   template: 'app-proxy/deployment.yaml'
