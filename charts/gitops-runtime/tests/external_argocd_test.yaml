@@ -401,6 +401,9 @@ tests:
 
   - it: runtime-event-reporter ConfigMap should have valid Redis URL
     template: event-reporters/runtime-event-reporter/configmap.yaml
+    set:
+      redis:
+        enabled: true
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -549,6 +552,9 @@ tests:
 
   - it: argo-gateway ConfigMap should have valid Redis URL
     template: argo-gateway/configmap.yaml
+    set:
+      redis:
+        enabled: true
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml

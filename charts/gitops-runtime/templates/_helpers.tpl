@@ -289,7 +289,7 @@ Determine argocd redis url
   {{- $port := .Values.redis.service.ports.redis.port }}
   {{- printf "%s:%v" $serviceName $port }}
 {{- else }}
-  {{- fail "ERROR: .Values.redis or .Values.redis-ha must be enabled!" }}
+  {{- printf "" }}
 {{- end }}
 {{- end}}
 

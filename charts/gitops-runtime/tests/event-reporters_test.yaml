@@ -40,12 +40,25 @@ tests:
           value: argo-cd-server:80
       - equal:
           path: data["redis.server"]
-          value: runtime-redis:6379
+          value: null
       - equal:
           path: data["repo.server"]
           value: argo-cd-repo-server:8081
 
-  - it: Runtime Reporter ConfigMap should have valid redis-ha url
+
+  - it: Runtime Reporter ConfigMap should have valid redis url when Redis is enabled
+    template: event-reporters/runtime-event-reporter/configmap.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    set:
+      redis:
+        enabled: true
+    asserts:
+      - equal:
+          path: data["redis.server"]
+          value: runtime-redis:6379
+
+  - it: Runtime Reporter ConfigMap should have valid redis-ha url when Redis HA is enabled
     template: event-reporters/runtime-event-reporter/configmap.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -168,10 +181,13 @@ tests:
             cpu: 200m
             memory: 256Mi
 
-  - it: Runtime Reporter should have correct REDIS_ environment variables
+  - it: Runtime Reporter should have REDIS_ environment variables when redis is enabled
     template: event-reporters/runtime-event-reporter/deployment.yaml
     values:
       - ./values/mandatory-values-ingress.yaml
+    set:
+      redis:
+        enabled: true
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -189,3 +205,17 @@ tests:
               secretKeyRef:
                 name: gitops-runtime-redis
                 key: auth
+
+  - it: Runtime Reporter should NOT have REDIS_ environment variables by default
+    template: event-reporters/runtime-event-reporter/deployment.yaml
+    values:
+      - ./values/mandatory-values-ingress.yaml
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: REDIS_SERVER
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: REDIS_PASSWORD
