@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: '[cf-argocd-extras]chore: update depencencies (argo-cd 3.2) (#930)'
+    - kind: changed
       description: 'feat: disable runtime redis by default (#927) (#934)'
     - kind: changed
       description: 'feat: add branch data to pullrequest info (#932)'
