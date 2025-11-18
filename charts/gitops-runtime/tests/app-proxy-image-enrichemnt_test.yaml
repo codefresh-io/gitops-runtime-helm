@@ -5,6 +5,9 @@ templates:
   - app-proxy/enrichment/sa.yaml
   - app-proxy/enrichment/rbac.yaml
   - app-proxy/enrichment/enforce-workflows-enabled.yaml
+  - _components/cap-app-proxy/_deployment.yaml
+  - _components/cap-app-proxy/_config.yaml
+  - codefresh-cm.yaml
 tests:
 - it: Fail template if enrichment is enabled and workflows disabled
   template: 'app-proxy/enrichment/enforce-workflows-enabled.yaml'

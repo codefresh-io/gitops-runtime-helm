@@ -1,7 +1,11 @@
 suite: test installation token in app proxy
 templates:
   - app-proxy/deployment.yaml
+  - app-proxy/config.yaml
   - installation-token-secret.yaml
+  - _components/cap-app-proxy/_deployment.yaml
+  - _components/cap-app-proxy/_config.yaml
+  - codefresh-cm.yaml
 
 tests:
 - it: app proxy plain string value

@@ -3,6 +3,9 @@ suite: misc tests on app-proxy templates generation
 templates:
   - app-proxy/deployment.yaml
   - app-proxy/config.yaml
+  - _components/cap-app-proxy/_deployment.yaml
+  - _components/cap-app-proxy/_config.yaml
+  - codefresh-cm.yaml
 tests:
 - it: overriding of environment variables on main container
   template: 'app-proxy/deployment.yaml'
@@ -222,7 +225,7 @@ tests:
         mountPath: /my-secret
 
 - it: Fail template if runtime name not provided
-  template: 'app-proxy/config.yaml'
+  template: 'app-proxy/deployment.yaml'
   set:
     global.codefresh.userToken.token: dummy
     global.codefresh.accountId: asddd

@@ -21,8 +21,10 @@ spec:
       {{- include "argo-gateway.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with $context.Values.podAnnotations }}
       annotations:
+        checksum/config-argo-gateway: {{ include (print $.Template.BasePath "/argo-gateway/configmap.yaml") . | sha256sum }}
+        checksum/config-codefresh-cm: {{ include (print $.Template.BasePath "/codefresh-cm.yaml") . | sha256sum }}
+      {{- with $context.Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:

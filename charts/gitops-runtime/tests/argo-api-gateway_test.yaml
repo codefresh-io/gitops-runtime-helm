@@ -2,6 +2,7 @@
 suite: argo-gateway tests
 templates:
   - argo-gateway/**
+  - codefresh-cm.yaml
 tests:
   - it: Argo Api Gateway ConfigMap should have valid data
     template: argo-gateway/configmap.yaml

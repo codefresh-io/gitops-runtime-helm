@@ -15,8 +15,3 @@ metadata:
     {{- include "argo-gateway.labels" . | nindent 4 }}
 data:
   {{- $mergedConfig | toYaml | nindent 2 }}
-  {{- if index .Values "argo-cd" "enabled" }}
-  foo: bar
-  {{- else }}
-  baz: qux
-  {{- end }}
