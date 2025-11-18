@@ -2,6 +2,9 @@ suite: Test hosted runtime flow in app-proxy
 templates:
   - app-proxy/deployment.yaml
   - app-proxy/config.yaml
+  - _components/cap-app-proxy/_deployment.yaml
+  - _components/cap-app-proxy/_config.yaml
+  - codefresh-cm.yaml
 tests:
 - it: accountId appears in app-proxy env if provided - used in hosted
   template: 'app-proxy/deployment.yaml'
