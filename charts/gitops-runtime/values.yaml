@@ -49,7 +49,7 @@ global:
     cluster: https://kubernetes.default.svc
     # -- Defines whether this is a Codefresh hosted runtime. Should not be changed.
     codefreshHosted: false
-    # -- Defines if runtime is namespace scoped. Required for running multiple runtimes in the same cluster
+    # -- Runtime single namespace mode. When true, runtime operates in single namespace scope.
     singleNamespace: false
     # -- Ingress settings
     ingress:
@@ -665,6 +665,7 @@ gitops-operator:
     annotations: {}
     # -- Additional labels for gitops operator CRDs
     additionalLabels: {}
+  # -- GitOps operator configuration
   config:
     # -- Task polling interval
     taskPollingInterval: 10s
@@ -678,8 +679,8 @@ gitops-operator:
     maxReconcileRetries: 10
     # -- An optional template for the promotion wrapper (empty default will use the embedded one)
     promotionWrapperTemplate: ''
+  # -- GitOps operator image
   image:
-    # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
     tag: "ff25956"

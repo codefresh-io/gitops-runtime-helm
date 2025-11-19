@@ -11,7 +11,7 @@ metadata:
     {{- include "runtime-event-reporter.labels" . | nindent 4 }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: {{ $context.Values.global.runtime.singleNamespace | ternary "Role" "ClusterRole" }}
 metadata:
   name: {{ include "runtime-event-reporter.fullname" . }}
   labels:
@@ -29,14 +29,14 @@ rules:
     - '*'
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: {{ $context.Values.global.runtime.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
 metadata:
   name: {{ include "runtime-event-reporter.fullname" . }}
   labels:
     {{- include "runtime-event-reporter.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: {{ $context.Values.global.runtime.singleNamespace | ternary "Role" "ClusterRole" }}
   name: {{ include "runtime-event-reporter.fullname" . }}
 subjects:
   - kind: ServiceAccount
