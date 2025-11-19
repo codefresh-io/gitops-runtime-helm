@@ -68,6 +68,7 @@ jobs:
           helm repo add mockserver https://www.mock-server.com
 
 
+
       - name: Run KUTTL tests
         run: |
           cd tests/component-tests && ./../../bin/kuttl test --parallel 1 --start-kind=false --namespace e2e-test --config startup.yaml
