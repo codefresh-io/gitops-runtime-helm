@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'feat: multi-runtime installation (#939) (#946)'
+    - kind: changed
       description: '[app-proxy]fix(app-proxy): update autoDetectArgoCd to use new values structure (#943)'
     - kind: changed
       description: 'feat: checksum annotations (#938) (#942)'
