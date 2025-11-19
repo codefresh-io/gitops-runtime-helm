@@ -347,8 +347,6 @@ codefreshWorkflowLogStoreCM:
 # *********************************************************************************************************************
 # DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-rollouts-2.37.3-7-v1.7.2-cap-OSS-697/charts/argo-rollouts
 # *********************************************************************************************************************
-# -- Argo Rollouts is deprecated and disabled by default. It will be completely removed in February 2026.
-# If you require Argo Rollouts, you can manually override this value to true in your Helm values files.
 argo-rollouts:
   enabled: false
   fullnameOverride: argo-rollouts
