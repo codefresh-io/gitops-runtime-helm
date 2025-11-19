@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: '[app-proxy]fix(app-proxy): update autoDetectArgoCd to use new values structure (#943)'
+    - kind: changed
       description: 'feat: checksum annotations (#938) (#942)'
     - kind: changed
       description: 'fix: update REQUIRED_VERSION_CONSTRAINT for Argo CD compatibility (#937) (#941)'
