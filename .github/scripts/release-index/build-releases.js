@@ -6,7 +6,8 @@ const { load } = require("js-yaml");
 
 const OWNER = "codefresh-io";
 const REPO = "gitops-runtime-helm";
-const LATEST_PATTERN = /^(\d{4})\.(\d{1,2})-(\d+)$/;
+const LATEST_PATTERN = /^(\d{2})\.(\d{1,2})-(\d+)$/; // Format: YY.MM-patch (e.g., 25.04-1)
+const MIN_STABLE_VERSION = "1.0.0";
 const TOKEN = process.env.GITHUB_TOKEN;
 const SECURITY_FIXES_STRING =
   process.env.SECURITY_FIXES_STRING || "### Security Fixes:";
@@ -22,6 +23,11 @@ if (!TOKEN) {
 
 const octokit = new Octokit({ auth: TOKEN });
 
+/**
+ * Detect channel based on version format
+ * - Latest: YY.MM-patch format (e.g., 25.04-1)
+ * - Stable: Semver format starting from 1.0.0 (e.g., 1.2.3)
+ */
 function detectChannel(version) {
   const match = version.match(LATEST_PATTERN);
   if (match) {
@@ -30,12 +36,26 @@ function detectChannel(version) {
       return "latest";
     }
   }
+  
   return "stable";
+}
+
+function isValidChannelVersion(normalized, channel) {
+  if (!semver.valid(normalized)) {
+    return false;
+  }
+  
+  if (channel === "stable") {
+    return semver.gte(normalized, MIN_STABLE_VERSION);
+  }
+  
+  return true;
 }
 
 /**
  * Normalize version for semver validation
- * Converts: 2025.01-1 → 2025.1.1
+ * - Latest channel: 25.01-1 → 25.1.1
+ * - Stable channel: 1.2.3 → 1.2.3 (no change)
  */
 function normalizeVersion(version, channel) {
   if (channel === "latest") {
@@ -48,10 +68,6 @@ function normalizeVersion(version, channel) {
     }
   }
   return version;
-}
-
-function isValidVersion(normalized) {
-  return !!semver.valid(normalized);
 }
 
 function compareVersions(normA, normB) {
@@ -145,11 +161,14 @@ function processReleases(rawReleases) {
     }
 
     const channel = detectChannel(version);
-
     const normalized = normalizeVersion(version, channel);
 
-    if (!isValidVersion(normalized)) {
-      console.log(`  ⚠️  Skipping invalid version: ${version}`);
+    if (!isValidChannelVersion(normalized, channel)) {
+      const reason =
+        channel === "stable"
+          ? `not valid semver >= ${MIN_STABLE_VERSION}`
+          : "not valid semver";
+      console.log(`  ⚠️  Skipping invalid ${channel} version: ${version} (${reason})`);
       skipped++;
       continue;
     }
