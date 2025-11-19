@@ -9,7 +9,7 @@ metadata:
     {{- include "argo-gateway.labels" . | nindent 4 }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: {{ $context.Values.global.runtime.singleNamespace | ternary "Role" "ClusterRole" }}
 metadata:
   name: {{ include "argo-gateway.fullname" . }}
   labels:
@@ -49,14 +49,14 @@ rules:
     - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: {{ $context.Values.global.runtime.singleNamespace | ternary "RoleBinding" "ClusterRoleBinding" }}
 metadata:
   name: {{ include "argo-gateway.fullname" . }}
   labels:
     {{- include "argo-gateway.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: {{ $context.Values.global.runtime.singleNamespace | ternary "Role" "ClusterRole" }}
   name: {{ include "argo-gateway.fullname" . }}
 subjects:
   - kind: ServiceAccount

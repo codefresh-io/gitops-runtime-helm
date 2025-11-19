@@ -1,5 +1,7 @@
 {{- $context := deepCopy . }}
 {{- $_ := set $context "Values" (deepCopy (get .Values "argo-gateway")) }}
+{{- $_ := set $context.Values "redis" (deepCopy (get .Values "redis")) }}
+{{- $_ := set $context.Values "redis-ha" (deepCopy (get .Values "redis-ha")) }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 {{/* Merge environment variables from calculated, defaults and overwrites */}}
 {{- $defaults := (include "argo-gateway.resources.environment-variables.defaults" $context | fromYaml) }}
@@ -19,8 +21,10 @@ spec:
       {{- include "argo-gateway.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with $context.Values.podAnnotations }}
       annotations:
+        checksum/config-argo-gateway: {{ include (print $.Template.BasePath "/argo-gateway/configmap.yaml") . | sha256sum }}
+        checksum/config-codefresh-cm: {{ include (print $.Template.BasePath "/codefresh-cm.yaml") . | sha256sum }}
+      {{- with $context.Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:

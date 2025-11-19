@@ -1,5 +1,7 @@
 {{- $context := deepCopy . }}
 {{- $_ := set $context "Values" (deepCopy (get (index .Values "global") "event-reporters")) }}
+{{- $_ := set $context.Values "redis" (deepCopy (get .Values "redis")) }}
+{{- $_ := set $context.Values "redis-ha" (deepCopy (get .Values "redis-ha")) }}
 {{- $_ := set $context.Values "global" (deepCopy (get .Values "global")) }}
 {{/* Merge .Values.event-reporters.<event-reporter-name> with .Values.global.event-reporters */}}
 {{- $valuesOverrides := index .Values "event-reporters" "runtime-event-reporter" }}
@@ -23,8 +25,13 @@ spec:
       {{- include "runtime-event-reporter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with $context.Values.podAnnotations }}
       annotations:
+        checksum/config-event-reporter: {{ include (print $.Template.BasePath "/event-reporters/runtime-event-reporter/configmap.yaml") . | sha256sum }}
+        checksum/config-codefresh-cm: {{ include (print $.Template.BasePath "/codefresh-cm.yaml") . | sha256sum }}
+        {{- if index .Values "argo-cd" "enabled" }}
+        checksum/config-argocd: {{ include ("argo-cd.config.params") (index .Subcharts "argo-cd") | sha256sum }}
+        {{- end }}
+      {{- with $context.Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:

@@ -6,6 +6,9 @@
 {{- $_ := set $appProxyContext.Values "redis" (get .Values "redis") }}
 {{- $_ := set $appProxyContext.Values "redis-ha" (get .Values "redis-ha") }}
 
+{{- $_ := set $appProxyContext.Values.podAnnotations "checksum/config-codefresh-cm" (include (print $.Template.BasePath "/codefresh-cm.yaml") . | sha256sum) }}
+{{- $_ := set $appProxyContext.Values.podAnnotations "checksum/config-cap-app-proxy" (include (print $.Template.BasePath "/app-proxy/config.yaml") . | sha256sum) }}
+
 {{/* Merge environment variables with the ones in _app-proxy-env.yaml */}}
 {{- $mainContainerMergedValues := mergeOverwrite $appProxyContext.Values.env (include "codefresh-gitops-runtime.app-proxy.calculated-env-vars" . | fromYaml) }}
 {{- $_ := set $appProxyContext.Values "env" $mainContainerMergedValues }}

@@ -89,6 +89,12 @@ IS_EXTERNAL_ARGOCD:
       name: cap-app-proxy-cm
       key: isExternalArgoCD
       optional: true
+IS_NAMESPACED_RUNTIME:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: isNamespacedRuntime
+      optional: true
 MANAGED: false
 NAMESPACE:
   valueFrom:
@@ -213,13 +219,14 @@ IRW_JIRA_ENRICHMENT_TASK_IMAGE:
       name: cap-app-proxy-cm
       key: enrichmentJiraEnrichmentImage
       optional: true
+
 NODE_EXTRA_CA_CERTS: /app/config/all/all.cer
 {{- if gt (int .Values.replicaCount) 1 }}
 LEADER_ID:
   valueFrom:
     fieldRef:
       fieldPath: metadata.name
-{{- end }}
+{{- if or .Values.redis.enabled (index .Values "redis-ha" "enabled") }}
 CACHE_HOST: {{ (splitList ":" (include "codefresh-gitops-runtime.argocd.redis.url" .) | first) }}
 CACHE_PORT: {{ (splitList ":" (include "codefresh-gitops-runtime.argocd.redis.url" .) | last) }}
 CACHE_PASSWORD:
@@ -227,6 +234,12 @@ CACHE_PASSWORD:
     secretKeyRef:
       name: gitops-runtime-redis
       key: auth
+{{- else }}
+  {{- fail ".Values.redis.enabled or .Values.redis-ha.enabled must be true when .Values.app-proxy.replicaCount > 1" }}
+{{- end }}
+{{- end }}
+
+
 CF_SERVICE_NAME: {{ $appProxyName }}
 CF_SERVICE_VERSION: {{ $appProxyVersion }}
 OTEL_SERVICE_NAME: {{ $appProxyName }}

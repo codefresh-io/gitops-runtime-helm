@@ -289,7 +289,7 @@ Determine argocd redis url
   {{- $port := .Values.redis.service.ports.redis.port }}
   {{- printf "%s:%v" $serviceName $port }}
 {{- else }}
-  {{- fail "ERROR: .Values.redis or .Values.redis-ha must be enabled!" }}
+  {{- printf "" }}
 {{- end }}
 {{- end}}
 
@@ -378,11 +378,14 @@ Get ingress url for both tunnel based and ingress based runtimes
 Output comma separated list of installed runtime components
 */}}
 {{- define "codefresh-gitops-runtime.component-list"}}
-  {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
   {{- $internalRouter := dict "name" "internal-router" "version" .Chart.AppVersion }}
   {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
   {{- $argoApiGateway := dict "name" "argo-gateway" "version" (get .Values "argo-gateway").image.tag }}
-  {{- $comptList := list $appProxy $sealedSecrets $internalRouter $argoApiGateway }}
+  {{- $comptList := list $appProxy $internalRouter $argoApiGateway }}
+  {{- if and (index .Values "sealed-secrets" "enabled") }}
+    {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
+    {{- $comptList = append $comptList $sealedSecrets }}
+  {{- end }}
   {{- if and (index .Values "argo-cd" "enabled") }}
     {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
     {{- $comptList = append $comptList $argoCD }}

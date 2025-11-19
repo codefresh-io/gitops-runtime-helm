@@ -49,7 +49,7 @@ global:
     cluster: https://kubernetes.default.svc
     # -- Defines whether this is a Codefresh hosted runtime. Should not be changed.
     codefreshHosted: false
-    # -- Defines if runtime is namespace scoped. Required for running multiple runtimes in the same cluster
+    # -- Runtime single namespace mode. When true, runtime operates in single namespace scope.
     singleNamespace: false
     # -- Ingress settings
     ingress:
@@ -143,7 +143,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: d4fefcb
+      tag: 2cb6f85
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -317,6 +317,9 @@ argo-events:
 argo-workflows:
   fullnameOverride: argo
   enabled: true
+  # -- Restrict Argo Workflows to operate only in a single namespace (the namespace of the Helm release).
+  # This ensures it does not interfere with any other instances of Argo Workflows installed on your cluster.
+  singleNamespace: true
   server:
     # -- auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI
     authModes:
@@ -344,8 +347,10 @@ codefreshWorkflowLogStoreCM:
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo rollouts
 #-----------------------------------------------------------------------------------------------------------------------
+# -- Argo Rollouts is deprecated and disabled by default. It will be completely removed in February 2026.
+# If you require Argo Rollouts, you can manually override this value to true in your Helm values files.
 argo-rollouts:
-  enabled: true
+  enabled: false
   fullnameOverride: argo-rollouts
   controller:
     replicas: 1
@@ -490,14 +495,14 @@ app-proxy:
           tag: 1.1.17-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3911.0
+    tag: 1.3943.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3911.0
+      tag: 1.3943.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -660,6 +665,7 @@ gitops-operator:
     annotations: {}
     # -- Additional labels for gitops operator CRDs
     additionalLabels: {}
+  # -- GitOps operator configuration
   config:
     # -- Task polling interval
     taskPollingInterval: 10s
@@ -673,11 +679,11 @@ gitops-operator:
     maxReconcileRetries: 10
     # -- An optional template for the promotion wrapper (empty default will use the embedded one)
     promotionWrapperTemplate: ''
+  # -- GitOps operator image
   image:
-    # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: "3274011"
+    tag: "6d2b82a"
   env:
     !!merge <<:
       - *otel-config
@@ -709,7 +715,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: d4fefcb
+    tag: 2cb6f85
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -759,7 +765,7 @@ redis-secret-init:
 # -- Standalone redis deployment
 # Will be replaced by redis-ha subchart when `redis-ha.enabled=true`
 redis:
-  enabled: true
+  enabled: false
   fullnameOverride: "runtime-redis"
   # -- Redis image
   image:
