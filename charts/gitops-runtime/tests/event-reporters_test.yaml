@@ -2,6 +2,7 @@
 suite: argo-gateway tests
 templates:
   - event-reporters/**/*.yaml
+  - codefresh-cm.yaml
 tests:
   - it: Runtime Reporter should be deployed with forked ArgoCD
     template: event-reporters/runtime-event-reporter/deployment.yaml

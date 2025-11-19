@@ -1,6 +1,7 @@
 suite: Test global constraints (nodeSelector, tolerations)
 templates:
   - app-proxy/deployment.yaml
+  - app-proxy/config.yaml
   - gitops-operator/*
   - event-reporters/**
   - argo-gateway/**
@@ -15,6 +16,9 @@ templates:
   - charts/argo-events/*
   - charts/argo-rollouts/*
   - charts/argo-workflows/*
+  - _components/cap-app-proxy/_deployment.yaml
+  - _components/cap-app-proxy/_config.yaml
+  - codefresh-cm.yaml
 values:
   - ./values/mandatory-values.yaml
 tests:
