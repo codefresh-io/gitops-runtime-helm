@@ -3,8 +3,12 @@ suite: redis tests
 templates:
   - cf-argocd-extras/**/*.yaml
   - app-proxy/deployment.yaml
+  - app-proxy/config.yaml
   - redis/**
   - charts/redis-ha/**
+  - _components/cap-app-proxy/_deployment.yaml
+  - _components/cap-app-proxy/_config.yaml
+  - codefresh-cm.yaml
 tests:
   - it: Standalone Redis Deployment should be created by when redis.enabled is true
     template: redis/deployment.yaml

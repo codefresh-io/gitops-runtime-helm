@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: checksum tests
+templates:
+  - event-reporters/**/deployment.yaml
+  - event-reporters/**/configmap.yaml
+  - argo-gateway/deployment.yaml
+  - argo-gateway/configmap.yaml
+  - app-proxy/deployment.yaml
+  - app-proxy/config.yaml
+  - _components/cap-app-proxy/_deployment.yaml
+  - _components/cap-app-proxy/_config.yaml
+  - codefresh-cm.yaml
+tests:
+- it: default checksum annotations is present
+  values:
+  - ./values/mandatory-values-ingress.yaml
+  asserts:
+  - exists:
+      path: spec.template.metadata.annotations["checksum/config-argo-gateway"]
+    template: argo-gateway/deployment.yaml
+  - exists:
+      path: spec.template.metadata.annotations["checksum/config-event-reporter"]
+    template: event-reporters/cluster-event-reporter/deployment.yaml
+  - exists:
+      path: spec.template.metadata.annotations["checksum/config-argocd"]
+    template: event-reporters/cluster-event-reporter/deployment.yaml
+  - exists:
+      path: spec.template.metadata.annotations["checksum/config-cap-app-proxy"]
+    template: app-proxy/deployment.yaml

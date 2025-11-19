@@ -25,8 +25,13 @@ spec:
       {{- include "cluster-event-reporter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with $context.Values.podAnnotations }}
       annotations:
+        checksum/config-event-reporter: {{ include (print $.Template.BasePath "/event-reporters/cluster-event-reporter/configmap.yaml") . | sha256sum }}
+        checksum/config-codefresh-cm: {{ include (print $.Template.BasePath "/codefresh-cm.yaml") . | sha256sum }}
+        {{- if index .Values "argo-cd" "enabled" }}
+        checksum/config-argocd: {{ include ("argo-cd.config.params") (index .Subcharts "argo-cd") | sha256sum }}
+        {{- end }}
+      {{- with $context.Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
