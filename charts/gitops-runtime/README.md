@@ -31,6 +31,68 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
+## Multi Runtime Installation
+You can install multiple Codefresh GitOps Runtimes in the same cluster, as long as each Runtime is deployed in its own namespace and manages only the applications in that namespace.
+To achieve this, configure your Runtimes to run in namespaced mode by setting `global.runtime.singleNamespace=true`. See the values.yaml example below:
+```yaml
+global:
+  runtime:
+    singleNamespace: true
+sealed-secrets:
+  enabled: false
+argo-cd:
+  createClusterRoles: false
+  crds:
+    install: false
+  configs:
+    params:
+      application.namespaces: ''
+argo-events:
+  controller:
+    rbac:
+      namespaced: true
+argo-workflows:
+  crds:
+    install: false
+  singleNamespace: true
+  createAggregateRoles: false
+  controller:
+    clusterWorkflowTemplates:
+      enabled: false
+  server:
+    clusterWorkflowTemplates:
+      enabled: false
+argo-rollouts:
+  enabled: false
+tunnel-client:
+  enabled: false
+gitops-operator:
+  crds:
+    install: false
+```
+
+Note that for the first runtime in the cluster, you have to configure it to install the CRDs, with setting these values:
+```yaml
+global:
+  runtime:
+    isConfigurationRuntime: true
+argo-cd:
+  crds:
+    install: true
+argo-workflows:
+  crds:
+    install: true
+argo-rollouts:
+  installCRDs: true
+gitops-operator:
+  crds:
+    install: true
+```
+
+> [!WARNING]
+> If you want more than one runtime in your cluster, make sure that all of the runtimes in your cluster are configured with `global.runtime.singleNamespace=true`.
+> If you already have a runtime installed in the cluster without this setting, multi runtime installation is not supported.
+
 ## Argo-workflows artifact and log storage
 Codefresh provides a SaaS object storage based solution for Argo workflows logs storage. The chart deploys a configmap named `codefresh-workflows-log-store` with the repository configuration.
 If you want to utilize the Codefresh SaaS solution for log storage for all workflows in the runtime please set the following values:
@@ -555,6 +617,7 @@ global:
 | event-reporters.cluster-event-reporter | object | `{}` |  |
 | event-reporters.runtime-event-reporter | object | `{}` |  |
 | gitops-operator.affinity | object | `{}` |  |
+| gitops-operator.config | object | `{"commitStatusPollingInterval":"10s","maxConcurrentReleases":100,"promotionWrapperTemplate":"","taskPollingInterval":"10s","workflowMonitorPollingInterval":"10s"}` | GitOps operator configuration |
 | gitops-operator.config.commitStatusPollingInterval | string | `"10s"` | Commit status polling interval |
 | gitops-operator.config.maxConcurrentReleases | int | `100` | Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime) |
 | gitops-operator.config.maxReconcileRetries | int | `10` | Maximum number of reconcile retries on promotion-related resources before failing a promotion task |
@@ -638,7 +701,7 @@ global:
 | global.runtime.ingressUrl | string | `""` | Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false) |
 | global.runtime.isConfigurationRuntime | bool | `false` | is the runtime set as a "configuration runtime". |
 | global.runtime.name | string | `nil` | Runtime name. Must be unique per platform account. |
-| global.runtime.singleNamespace | bool | `false` | Defines if runtime is namespace scoped. Required for running multiple runtimes in the same cluster |
+| global.runtime.singleNamespace | bool | `false` | Runtime single namespace mode. When true, runtime operates in single namespace scope. |
 | global.tolerations | list | `[]` | Global tolerations for all components |
 | installer | object | `{"affinity":{},"argoCdVersionCheck":{"argoServerLabels":{"app.kubernetes.io/component":"server","app.kubernetes.io/part-of":"argocd"}},"image":{"pullPolicy":"IfNotPresent","repository":"quay.io/codefresh/gitops-runtime-installer","tag":""},"nodeSelector":{},"skipUsageValidation":false,"skipValidation":false,"tolerations":[]}` | Runtime installer used for running hooks and checks on the release |
 | installer.skipUsageValidation | bool | `false` | if set to true, pre-install hook will *not* run |
