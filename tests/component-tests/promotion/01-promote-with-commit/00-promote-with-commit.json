@@ -1,0 +1,53 @@
+[
+    {
+      "httpRequest": {
+        "method": "GET",
+        "path": "/2.0/api/promotion-orchestrator/promotion/desired-promotion-tasks"
+      },
+      "httpResponse": {
+        "statusCode": 200,
+        "body": [
+          {
+            "promotionTaskId": "635ae4b1a8d4ea001297e0e8",
+            "name": "prod-codefresh-simple-prod-68ea7699e1e47d0cd666f6b9",
+            "promotionId": "68ea7699e1e47d0cd666f6b8",
+            "productName": "echo",
+            "environment": "prod",
+            "applicationId": {
+              "name": "simple-prod",
+              "namespace": "codefresh"
+            },
+            "spec": {
+              "phase": "PENDING",
+              "steps": [
+                {
+                  "type": "promoteAppWithCommit",
+                  "targetApplication": {
+                    "name": "simple-prod",
+                    "namespace": "codefresh"
+                  },
+                  "commitMessage": "promote to codefresh/simple-prod",
+                  "commitDescription": "codefresh promotion link.io/to/promotion",
+                  "PromotionValues": [
+                    {
+                      "file": "values.yaml",
+                      "properties": [
+                        {
+                          "path": "/image/tag",
+                          "value": "0.1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "times": {
+        "remainingTimes": 1,
+        "unlimited": false
+      }
+    }
+  ]

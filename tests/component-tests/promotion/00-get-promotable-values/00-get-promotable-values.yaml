@@ -15,5 +15,5 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestStep
 commands:
-   - script: ./00-app-sync.sh
+   - script: ./00-get-promotable-values.sh
 timeout: 30

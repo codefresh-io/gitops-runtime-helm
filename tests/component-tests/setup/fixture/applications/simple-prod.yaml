@@ -6,7 +6,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io/foreground
   annotations:
-    codefresh.io/product: simple-app
+    codefresh.io/product: echo
 spec:
   project: default
   destination:
