@@ -102,8 +102,12 @@ describe('VersionManager', () => {
 describe('ReleaseProcessor', () => {
   let processor;
   let mockVersionManager;
+  let consoleSpy;
 
   beforeEach(() => {
+    // Mock console to suppress logs during tests
+    consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    
     mockVersionManager = {
       detectChannel: jest.fn((v) => (v.includes('-') ? 'latest' : 'stable')),
       normalizeVersion: jest.fn((v) => v),
@@ -113,6 +117,10 @@ describe('ReleaseProcessor', () => {
     };
 
     processor = new ReleaseProcessor(mockVersionManager, '### Security Fixes:');
+  });
+
+  afterEach(() => {
+    consoleSpy.mockRestore();
   });
 
   describe('processReleases', () => {
@@ -138,13 +146,11 @@ describe('ReleaseProcessor', () => {
         },
       ];
 
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
       const result = processor.processReleases(rawReleases);
 
       expect(result.releases).toHaveLength(2);
       expect(result.channels.stable).toHaveLength(1);
       expect(result.channels.latest).toHaveLength(1);
-      consoleSpy.mockRestore();
     });
 
     it('should skip draft and prerelease', () => {
@@ -153,11 +159,9 @@ describe('ReleaseProcessor', () => {
         { tag_name: '1.0.1', draft: false, prerelease: true },
       ];
 
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
       const result = processor.processReleases(rawReleases);
 
       expect(result.releases).toHaveLength(0);
-      consoleSpy.mockRestore();
     });
 
     it('should detect security fixes', () => {
@@ -173,11 +177,9 @@ describe('ReleaseProcessor', () => {
         },
       ];
 
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
       const result = processor.processReleases(rawReleases);
 
       expect(result.releases[0].hasSecurityFixes).toBe(true);
-      consoleSpy.mockRestore();
     });
 
     it('should skip invalid versions', () => {
@@ -195,11 +197,9 @@ describe('ReleaseProcessor', () => {
         },
       ];
 
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
       const result = processor.processReleases(rawReleases);
 
       expect(result.releases).toHaveLength(0);
-      consoleSpy.mockRestore();
     });
   });
 
@@ -215,7 +215,6 @@ describe('ReleaseProcessor', () => {
         getAppVersionFromChart: jest.fn().mockResolvedValue('1.2.3'),
       };
 
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
       const result = await processor.buildChannelData(
         releases,
         'stable',
@@ -226,7 +225,6 @@ describe('ReleaseProcessor', () => {
       expect(result.releases[0].version).toBe('1.0.2'); // Sorted desc
       expect(result.latestWithSecurityFixes).toBe('1.0.2');
       expect(result.latestRelease.version).toBe('1.0.2');
-      consoleSpy.mockRestore();
     });
 
     it('should mark upgrade available correctly', async () => {
@@ -239,7 +237,6 @@ describe('ReleaseProcessor', () => {
         getAppVersionFromChart: jest.fn().mockResolvedValue('1.2.3'),
       };
 
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
       const result = await processor.buildChannelData(
         releases,
         'stable',
@@ -249,7 +246,6 @@ describe('ReleaseProcessor', () => {
 
       expect(result.releases[0].upgradeAvailable).toBe(false); // Latest
       expect(result.releases[1].upgradeAvailable).toBe(true); // Not latest
-      consoleSpy.mockRestore();
     });
 
     it('should mark security vulnerabilities correctly', async () => {
@@ -263,7 +259,6 @@ describe('ReleaseProcessor', () => {
         getAppVersionFromChart: jest.fn().mockResolvedValue('1.2.3'),
       };
 
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
       const result = await processor.buildChannelData(
         releases,
         'stable',
@@ -274,7 +269,6 @@ describe('ReleaseProcessor', () => {
       expect(result.releases[0].hasSecurityVulnerabilities).toBe(false);
       expect(result.releases[1].hasSecurityVulnerabilities).toBe(false);
       expect(result.releases[2].hasSecurityVulnerabilities).toBe(true);
-      consoleSpy.mockRestore();
     });
 
     it('should limit releases to maxReleases', async () => {
@@ -290,7 +284,6 @@ describe('ReleaseProcessor', () => {
         getAppVersionFromChart: jest.fn().mockResolvedValue('1.2.3'),
       };
 
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
       const result = await processor.buildChannelData(
         releases,
         'stable',
@@ -299,7 +292,6 @@ describe('ReleaseProcessor', () => {
       );
 
       expect(result.releases).toHaveLength(5);
-      consoleSpy.mockRestore();
     });
   });
 });
