@@ -9,7 +9,7 @@ const CONFIG = {
   owner: "codefresh-io",
   repo: "gitops-runtime-helm",
   latestPattern: /^(\d{2})\.(\d{1,2})-(\d+)$/, // Format: YY.MM-patch (e.g., 25.04-1)
-  minStableVersion: "1.0.0", // Stable versions start from 1.0.0
+  minStableVersion: "1.0.0",
   securityFixesString: process.env.SECURITY_FIXES_STRING || "### Security Fixes:",
   maxReleasesPerChannel: 10,
   maxGithubReleases: 1000,
@@ -32,7 +32,6 @@ class VersionManager {
     const match = version.match(this.latestPattern);
     if (match) {
       const month = Number(match[2]);
-      // Validate month is 1-12
       if (month >= 1 && month <= 12) {
         return "latest";
       }
@@ -55,7 +54,6 @@ class VersionManager {
         return `${year}.${month}.${patch}`;
       }
     }
-    // Stable versions are already in semver format
     return version;
   }
 
@@ -224,7 +222,6 @@ class ReleaseProcessor {
       release.appVersion = await githubClient.getAppVersionFromChart(release.version);
     }
 
-    // Mark upgrade availability and security vulnerabilities
     const latestRelease = sorted[0] || null;
     const latestVersion = latestRelease?.version;
     const latestSecureIndex = latestWithSecurityFixes
@@ -361,14 +358,12 @@ class ReleaseIndexBuilder {
 }
 
 async function main() {
-  // Validate token
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
     console.error("❌ GITHUB_TOKEN environment variable is required");
     process.exit(1);
   }
 
-  // Initialize dependencies
   const octokit = new Octokit({ auth: token });
   const versionManager = new VersionManager(CONFIG.latestPattern, CONFIG.minStableVersion);
   const githubClient = new GitHubReleaseClient(
@@ -381,7 +376,6 @@ async function main() {
   const releaseProcessor = new ReleaseProcessor(versionManager, CONFIG.securityFixesString);
   const builder = new ReleaseIndexBuilder(CONFIG, githubClient, releaseProcessor, versionManager);
 
-  // Build index
   try {
     await builder.build();
   } catch (error) {

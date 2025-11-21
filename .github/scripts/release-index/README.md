@@ -22,7 +22,9 @@ flowchart TD
     style AcceptS fill:#87CEEB,stroke:#003d5c
     style Reject fill:#ffcccb,stroke:#8b0000
     style Latest fill:#e1f5ff,stroke:#0066cc
-    style Stable fill:#f0fff0,stroke:#006400### Examples
+    style Stable fill:#f0fff0,stroke:#006400
+
+### Examples
 
 | Input Version | Matches Pattern? | Month Valid? | Channel | Normalized | Valid? | Result |
 |--------------|------------------|--------------|---------|------------|--------|--------|
