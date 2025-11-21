@@ -1,5 +1,6 @@
 ## Channel Classification Flow
 
+```mermaid
 flowchart TD
     Start([Version Input]) --> Check{Matches<br/>YY.MM-patch?}
     
@@ -23,6 +24,7 @@ flowchart TD
     style Reject fill:#ffcccb,stroke:#8b0000
     style Latest fill:#e1f5ff,stroke:#0066cc
     style Stable fill:#f0fff0,stroke:#006400
+```
 
 ### Examples
 
