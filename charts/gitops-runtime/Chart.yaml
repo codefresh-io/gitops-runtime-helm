@@ -28,7 +28,7 @@ dependencies:
     version: 2.4.9-cap-CR-30841
   - name: argo-workflows
     repository: https://codefresh-io.github.io/argo-helm
-    version: 0.45.16-v3.6.7-cap-CR-30835
+    version: 0.45.17-v3.6.7-cap-CR-31761
     condition: argo-workflows.enabled
   - name: argo-rollouts
     repository: https://codefresh-io.github.io/argo-helm
