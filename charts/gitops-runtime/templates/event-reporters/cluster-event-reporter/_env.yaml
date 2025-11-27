@@ -2,6 +2,7 @@
 HTTP_PROXY: {{ .Values.global.httpProxy | squote}}
 HTTPS_PROXY: {{ .Values.global.httpsProxy | squote }}
 NO_PROXY: {{ .Values.global.noProxy | squote }}
+IS_NAMESPACED_RUNTIME: {{ .Values.global.runtime.singleNamespace }}
 
 {{- if and (eq (index .Values "global" "integrations" "argo-cd" "server" "auth" "type") "token") }}
   {{- if not (index .Values "global" "integrations" "argo-cd" "server" "auth" "token") }}
