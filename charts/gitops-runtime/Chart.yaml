@@ -13,11 +13,15 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
+  artifacthub.io/containsSecurityUpdates: "true"
+  # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix(app-proxy): application logs graphql subscription not working (#886)'
+      description: 'Update \"argo-workflows\" to 0.45.17-v3.6.7-cap-CR-31761'
+    - kind: security
+      description: 'Fix security vulnerabilities in \"argo-workflows\"'
     - kind: changed
-      description: 'fix(app-proxy): updated cf-root-app-project to allow all resources'
+      description: 'Update \"cap-app-proxy\" to e840ed4'
 dependencies:
   - name: argo-cd
     repository: https://codefresh-io.github.io/argo-helm
