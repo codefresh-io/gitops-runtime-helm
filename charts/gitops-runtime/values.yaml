@@ -300,7 +300,7 @@ argo-events:
           configReloaderImage: natsio/nats-server-config-reloader:0.19.1
           startCommand: /nats-server
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-workflows-0.45.16-v3.6.7-cap-CR-30835/charts/argo-workflows
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-workflows-0.45.17-v3.6.7-cap-CR-31761/charts/argo-workflows
 # *********************************************************************************************************************
 argo-workflows:
   fullnameOverride: argo
