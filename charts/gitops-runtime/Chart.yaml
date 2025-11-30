@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 1.0.0-rc.1
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 25.11-0
+version: 0.26.0
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -13,6 +13,223 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: 'fix: update gitops-operator image tag to 8cbca33 (#979)'
+    - kind: changed
+      description: 'fix: update namespace handling in cluster resource reporter (#964)'
+    - kind: changed
+      description: 'feat: ensure default-git-source exists on every app-proxy restart (#956)'
+    - kind: changed
+      description: '[gitops-operator]fix: remove git commit statuses (monthly/25.11) (#947)'
+    - kind: changed
+      description: 'feat: multi-runtime installation (#939) (#946)'
+    - kind: changed
+      description: '[app-proxy]fix(app-proxy): update autoDetectArgoCd to use new values structure (#943)'
+    - kind: changed
+      description: 'feat: checksum annotations (#938) (#942)'
+    - kind: changed
+      description: 'fix: update REQUIRED_VERSION_CONSTRAINT for Argo CD compatibility (#937) (#941)'
+    - kind: changed
+      description: '[cf-argocd-extras]chore: update depencencies (argo-cd 3.2) (#930)'
+    - kind: changed
+      description: 'feat: disable runtime redis by default (#927) (#934)'
+    - kind: changed
+      description: 'feat: add branch data to pullrequest info (#932)'
+    - kind: changed
+      description: 'feat: disable Argo Rollouts by default and enable namespace-scoped Argo Workflows (#917)'
+    - kind: changed
+      description: '[gitops-operator]fix: set transient error (#923)'
+    - kind: changed
+      description: 'fix: retry on notFound before updating resource status  (#914)'
+    - kind: changed
+      description: dummy PR (#909)
+    - kind: changed
+      description: 'chore: update app version and chart version in Chart.yaml to 1.0.0-rc.1 and 25.11-0 respectively'
+    - kind: changed
+      description: 'feat: set fullnameoverride for argocd (#907)'
+    - kind: changed
+      description: 'fix: allow "<no-changes>" as prUrl value (#906)'
+    - kind: changed
+      description: '[gitops-operator]fix: skip promotion task if terminated before created (#904)'
+    - kind: changed
+      description: '[gitops-operator]fix: CR-32246 - adjusted error handling to work with string errors (#903)'
+    - kind: changed
+      description: 'feat: external argocd unders .values.global.integrations (#808)'
+    - kind: changed
+      description: 'fix(app-proxy): add tini to manage zombie processes (#902)'
+    - kind: changed
+      description: 'fix(app-proxy): add timeout to prevent git process accumulation (#901)'
+    - kind: changed
+      description: 'chore: bump gitops-operator tag to fd2f89a (#900)'
+    - kind: changed
+      description: '[gitops-operator]fix: isMerged is missing in platform (#896)'
+    - kind: changed
+      description: 'feat: wait with termination until failed or completed (#892)'
+    - kind: changed
+      description: '[gitops-operator]fix: ensure releases are created if trigger commit causes sync failure (#890)'
+    - kind: changed
+      description: 'feat: support promotion with pull request (#880)'
+    - kind: changed
+      description: 'feat(gitops-operator): add debug flag (#883)'
+    - kind: changed
+      description: 'feat: add automated release index generator and GitHub Pages deployment (#879)'
+    - kind: changed
+      description: 'build: add telemetry configs (#848)'
+    - kind: changed
+      description: 'app-proxy: 1.3883.0 with application logs supported in non-controller namespace (#878)'
+    - kind: changed
+      description: 'feat: update promotion task crd (#872)'
+    - kind: changed
+      description: 'feat: switched to OSS Argo CD and Argo Helm, removed Argo CD CF specific values from va… (#823)'
+    - kind: changed
+      description: bump app proxy (#855)
+    - kind: changed
+      description: '[gitops-operator]chore: add pending status and initialise immediate after creation (#863)'
+    - kind: changed
+      description: 'fix: runtime: fix no-changes commit sha and pr url in crd (#854)'
+    - kind: changed
+      description: 'chore: update codeowners for gitops operator crds (#846)'
+    - kind: changed
+      description: upd gitops-operator (#860)
+    - kind: changed
+      description: upd cli-v2 , debian for installer (#849)
+    - kind: changed
+      description: 'fix: re-enabled argo-events (#843)'
+    - kind: changed
+      description: 'chore: extras d4fefcb with improved traces and fix for argo-cd server root path (#845)'
+    - kind: changed
+      description: 'chore: apply all operator crd changes and update operator tag (#833)'
+    - kind: changed
+      description: 'fix: app proxy isNamespaced returns nil in template failing the install on lower kubernetes versions (#820)'
+    - kind: changed
+      description: 'chore[cf-argocd-extras]: bumps cf-argocd-extras to version e746a97 (#819)'
+    - kind: changed
+      description: 'fix: update app-proxy image tags to 1.3820.0 (#804)'
+    - kind: changed
+      description: 'fix: update app-proxy image tags to 1.3819.0 (#802)'
+    - kind: changed
+      description: 'feat: runtime helm: add timestamps to failure and warnings (#796)'
+    - kind: changed
+      description: bump app proxy version (#795)
+    - kind: changed
+      description: 'fix: improve error handling (#791)'
+    - kind: changed
+      description: 'feat: remove sources server (#789)'
+    - kind: changed
+      description: 'fix: align reconciler requeue and error handling logic, add failure and warning error properties (#780)'
+    - kind: changed
+      description: update READE.md (#792)
+    - kind: changed
+      description: 'fix: app-proxy cors (#790)'
+    - kind: changed
+      description: 'feat: add separate redis for event-reporters/argo-gateway and app-proxy (#751)'
+    - kind: changed
+      description: 'fix: security vulnerabilities in enrichment images  (#788)'
+    - kind: changed
+      description: 'refactor(cf-argocd-extras): replace with argo-api-gateway, runtime and cluster event-reporters (#744)'
+    - kind: changed
+      description: 'feat: get commit author avatar url on getPromotionValues step (#778)'
+    - kind: changed
+      description: 'fix: promotion values can''t be empty (#772)'
+    - kind: changed
+      description: 'feat: add runWorkflow step handler (#785)'
+    - kind: changed
+      description: 'chore: move argo-cd auth values to global.integrations.argo-cd.server.auth (#768)'
+    - kind: changed
+      description: added runtime label to codefresh-cm (#763)
+    - kind: changed
+      description: bumps argo-cd helm chart for redis 8.2.1 upgrade (#765)
+    - kind: changed
+      description: bump app proxy version (#760)
+    - kind: changed
+      description: 'feat: add error messages for appStatus (#745)'
+    - kind: changed
+      description: '[gitops-operator]fix: promotions using pull requests do not resume after the pr has been merged (to main) (#752)'
+    - kind: changed
+      description: '[cf-argocd-extras]chore: add tests (#741)'
+    - kind: changed
+      description: update enrichment images tag (#746)
+    - kind: changed
+      description: 'feat: add promoteAppWithCommitHandler implementation [gitops-operator] (#738)'
+    - kind: changed
+      description: 'chore: disable component tests (#740)'
+    - kind: changed
+      description: 'chore: update cap-app-proxy image tags to 1.3772.0 (#737)'
+    - kind: changed
+      description: 'chore: security fixes for argo rollouts v1.7.2 (#730)'
+    - kind: changed
+      description: 'feat: add GetPromotionValuesHandler and VerifyAppHandler implementations (#736)'
+    - kind: changed
+      description: '[gitops-operator]fix: security vulnerability (#734)'
+    - kind: changed
+      description: 'feat: Add PromotionTaskReconciler (#677)'
+    - kind: changed
+      description: 'fix: service account for cleanup runtime resources (#726)'
+    - kind: changed
+      description: '[cf-argocd-extras]chore(CR-30961): security fix (#725)'
+    - kind: changed
+      description: updated sealed-secrets-controller (#723)
+    - kind: changed
+      description: 'chore: Fix security vulnerabilities for argo-workflows and argo-events (#716)'
+    - kind: changed
+      description: 'feat: update cap-app-proxy image tags to 1.3750.0'
+    - kind: changed
+      description: 'feat: bump evernt-reporter to 88898aa (#676)'
+    - kind: changed
+      description: 'feat: conditional registration of the rgs controller (#709)'
+    - kind: changed
+      description: 'feat: added sec advisory GHSA-786q-9hcg-v9ff bumped argocd to 8.0.6-9-cap-v… (#703)'
+    - kind: changed
+      description: updated cap-app-proxy with security fixes (#702)
+    - kind: changed
+      description: 'installer: updated cli-v2, kubectl (#697)'
+    - kind: changed
+      description: updated frpc (#693)
+    - kind: changed
+      description: update cli-v2 in installer - fix token validation code (#694)
+    - kind: changed
+      description: 'chore(app-proxy): update cap-app-proxy image tags to 1.3727.0 (#691)'
+    - kind: changed
+      description: updated prometheus-nats-exporter, nats-server-config-reloader for jetstream (#687)
+    - kind: changed
+      description: 'feat(conponent-tests): add release branches to pipeline trigger (#684)'
+    - kind: changed
+      description: updated nginx (#662)
+    - kind: changed
+      description: 'fix(app-proxy): update cap-app-proxy image tags to 1.3718.0 (#678)'
+    - kind: changed
+      description: 'fix(app-proxy): update cap-app-proxy image tags to 1.3709.0 - simplify user cache (#673)'
+    - kind: changed
+      description: 'chore: update README.md with HA example'
+    - kind: changed
+      description: 'chore: update values-ha example'
+    - kind: changed
+      description: bumped argocd to 8.0.6-8-cap-v3.0.2-2025-08-12-9c8dfae9 (#664)
+    - kind: changed
+      description: bumped app-proxy to 1.3707.0 closed ha gaps (#667)
+    - kind: changed
+      description: 'fix: remove checksum tests as they fail when chart version changes (#670)'
+    - kind: changed
+      description: updated codefresh-gitops-operator (#666)
+    - kind: changed
+      description: updated cli-v2, kubectl in runtime-installer (#661)
+    - kind: changed
+      description: using bitnamilegacy instead of bitnami (#653)
+    - kind: changed
+      description: 'chore(app-proxy): update cap-app-proxy image tags to 1.3702.0 (#659)'
+    - kind: changed
+      description: 'test: update platform mock(me) (#656)'
+    - kind: changed
+      description: 'fix: support failing release if app sync fails (#645)'
+    - kind: changed
+      description: 'chore(CR-30232): updated oauth2, golang.org/x/net, github.com/cloudflare (#639)'
+    - kind: changed
+      description: 'chore(app-proxy): update cap-app-proxy image tags to 1.3701.0 (#654)'
+    - kind: changed
+      description: updated cspd enrichers (#652)
+    - kind: changed
+      description: 'fix: update leader elector image tag to remove version prefix ''v'' (#651)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
