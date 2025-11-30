@@ -1,0 +1,5 @@
+monthly:
+  - base-branch: ["monthly"]
+
+stable:
+  - base-branch: ["stable"]
