@@ -143,7 +143,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: 5ad6886
+      tag: aca2645
     nodeSelector: {}
     tolerations: []
     affinity: {}
