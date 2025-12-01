@@ -1,0 +1,26 @@
+# Reference: https://github.com/actions/labeler
+name: PR labels
+
+on:
+  pull_request_target:
+
+jobs:
+  synchronize-labels:
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    runs-on: ubuntu-latest
+    steps:
+      - id: label-the-PR
+        uses: actions/labeler@634933edcd8ababfe52f92936142cc22ac488b1b # 6.0.1
+        with:
+          sync-labels: true
+
+      - id: print-labels
+        env:
+          NEW_LABELS: ${{ steps.label-the-PR.outputs.new-labels }}
+          ALL_LABELS: ${{ steps.label-the-PR.outputs.all-labels }}
+        run: |
+          echo "New labels: $NEW_LABELS"
+          echo "All labels: $ALL_LABELS"
