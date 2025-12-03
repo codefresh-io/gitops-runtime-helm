@@ -2,6 +2,7 @@
 HTTP_PROXY: {{ .Values.global.httpProxy | squote}}
 HTTPS_PROXY: {{ .Values.global.httpsProxy | squote }}
 NO_PROXY: {{ .Values.global.noProxy | squote }}
+IS_NAMESPACED_RUNTIME: {{ .Values.global.runtime.singleNamespace }}
 
 {{- if and (eq (index .Values "global" "integrations" "argo-cd" "server" "auth" "type") "token") }}
   {{- if not (index .Values "global" "integrations" "argo-cd" "server" "auth" "token") }}
@@ -13,16 +14,53 @@ ARGO_CD_TOKEN_SECRET_KEY: "token"
   {{- end }}
 {{- end }}
 
-ARGOCD_SERVER_ROOTPATH: {{ dig "server" "rootpath" "/" (index .Values "global" "external-argo-cd") | quote }}
+ARGOCD_SERVER_ROOTPATH: {{ dig "server" "rootpath" "/" (index .Values "global" "integrations" "argo-cd") | quote }}
 
 {{- if or .Values.global.codefresh.tls.caCerts.secret.create (and .Values.global.codefresh.tls.caCerts.secretKeyRef.key .Values.global.codefresh.tls.caCerts.secretKeyRef.name) }}
   {{- $secretKey := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
 CODEFRESH_SSL_CERT_PATH: {{ printf "/app/config/codefresh-tls-certs/%s" $secretKey }}
 {{- end }}
 
+{{- if or .Values.redis.enabled (index .Values "redis-ha" "enabled") }}
+REDISDB:
+  valueFrom:
+    configMapKeyRef:
+      name: runtime-event-reporter-cmd-params-cm
+      key: redis.db
+      optional: true
+REDIS_COMPRESSION:
+  valueFrom:
+    configMapKeyRef:
+      name: runtime-event-reporter-cmd-params-cm
+      key: redis.compression
+      optional: true
+REDIS_PASSWORD:
+  valueFrom:
+    secretKeyRef:
+      name: gitops-runtime-redis
+      key: auth
+REDIS_SERVER:
+  valueFrom:
+    configMapKeyRef:
+      name: runtime-event-reporter-cmd-params-cm
+      key: redis.server
+REDIS_USERNAME:
+  valueFrom:
+    secretKeyRef:
+      name: runtime-event-reporter-cmd-params-cm
+      key: redis-username
+      optional: true
+{{- end }}
+
 {{- end }}
 
 {{- define "runtime-event-reporter.resources.environment-variables.defaults" -}}
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $chartVersion := .Chart.Version -}}
+{{- $runtimeVersion := .Chart.AppVersion -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $eventReporterVersion := .Values.image.tag | default "latest" -}}
+{{- $eventReporterName := "runtime-event-reporter" -}}
 REPORTER_MODE: app
 APP_QUEUE_SIZE:
   valueFrom:
@@ -108,34 +146,6 @@ OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:
       name: runtime-event-reporter-cmd-params-cm
       key: otlp.address
       optional: true
-REDISDB:
-  valueFrom:
-    configMapKeyRef:
-      name: runtime-event-reporter-cmd-params-cm
-      key: redis.db
-      optional: true
-REDIS_COMPRESSION:
-  valueFrom:
-    configMapKeyRef:
-      name: runtime-event-reporter-cmd-params-cm
-      key: redis.compression
-      optional: true
-REDIS_PASSWORD:
-  valueFrom:
-    secretKeyRef:
-      name: gitops-runtime-redis
-      key: auth
-REDIS_SERVER:
-  valueFrom:
-    configMapKeyRef:
-      name: runtime-event-reporter-cmd-params-cm
-      key: redis.server
-REDIS_USERNAME:
-  valueFrom:
-    secretKeyRef:
-      name: runtime-event-reporter-cmd-params-cm
-      key: redis-username
-      optional: true
 REPO_SERVER:
   valueFrom:
     configMapKeyRef:
@@ -186,4 +196,8 @@ RESOURCE_THREADINESS:
       name: runtime-event-reporter-cmd-params-cm
       key: resource.threadiness
 SERVICE_NAME: {{ include "runtime-event-reporter.fullname" . }}
+CF_SERVICE_NAME: {{ $eventReporterName }}
+CF_SERVICE_VERSION: {{ $eventReporterVersion }}
+OTEL_SERVICE_NAME: {{ $eventReporterName }}
+OTEL_RESOURCE_ATTRIBUTES: {{ printf "service.name=%s,service.version=%s,service.namespace=%s,cf.account.id=%s,cf.gitops.runtime.name=%s,cf.gitops.runtime.version=%s,cf.gitops.runtime.chart.version=%s" $eventReporterName $eventReporterVersion "cf-gitops-runtime" $accountId $runtimeName $runtimeVersion $chartVersion }}
 {{- end -}}

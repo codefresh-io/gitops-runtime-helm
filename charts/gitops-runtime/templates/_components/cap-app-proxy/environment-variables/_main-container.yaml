@@ -1,4 +1,10 @@
 {{- define "cap-app-proxy.environment-variables.defaults" -}}
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $chartVersion := .Chart.Version -}}
+{{- $runtimeVersion := .Chart.AppVersion -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $appProxyName := "app-proxy" -}}
+{{- $appProxyVersion := .Values.image.tag | default "latest" -}}
 ARGO_CD_URL:
   valueFrom:
     configMapKeyRef:
@@ -82,6 +88,12 @@ IS_EXTERNAL_ARGOCD:
     configMapKeyRef:
       name: cap-app-proxy-cm
       key: isExternalArgoCD
+      optional: true
+IS_NAMESPACED_RUNTIME:
+  valueFrom:
+    configMapKeyRef:
+      name: cap-app-proxy-cm
+      key: isNamespacedRuntime
       optional: true
 MANAGED: false
 NAMESPACE:
@@ -207,13 +219,14 @@ IRW_JIRA_ENRICHMENT_TASK_IMAGE:
       name: cap-app-proxy-cm
       key: enrichmentJiraEnrichmentImage
       optional: true
+
 NODE_EXTRA_CA_CERTS: /app/config/all/all.cer
 {{- if gt (int .Values.replicaCount) 1 }}
 LEADER_ID:
   valueFrom:
     fieldRef:
       fieldPath: metadata.name
-{{- end }}
+{{- if or .Values.redis.enabled (index .Values "redis-ha" "enabled") }}
 CACHE_HOST: {{ (splitList ":" (include "codefresh-gitops-runtime.argocd.redis.url" .) | first) }}
 CACHE_PORT: {{ (splitList ":" (include "codefresh-gitops-runtime.argocd.redis.url" .) | last) }}
 CACHE_PASSWORD:
@@ -221,6 +234,16 @@ CACHE_PASSWORD:
     secretKeyRef:
       name: gitops-runtime-redis
       key: auth
+{{- else }}
+  {{- fail ".Values.redis.enabled or .Values.redis-ha.enabled must be true when .Values.app-proxy.replicaCount > 1" }}
+{{- end }}
+{{- end }}
+
+
+CF_SERVICE_NAME: {{ $appProxyName }}
+CF_SERVICE_VERSION: {{ $appProxyVersion }}
+OTEL_SERVICE_NAME: {{ $appProxyName }}
+OTEL_RESOURCE_ATTRIBUTES: {{ printf "service.name=%s,service.version=%s,service.namespace=%s,cf.account.id=%s,cf.gitops.runtime.name=%s,cf.gitops.runtime.version=%s,cf.gitops.runtime.chart.version=%s" $appProxyName $appProxyVersion "cf-gitops-runtime" $accountId $runtimeName $runtimeVersion $chartVersion }}
 {{ include "codefresh-gitops-runtime.get-proxy-env-vars" . }}
 {{- end -}}
 

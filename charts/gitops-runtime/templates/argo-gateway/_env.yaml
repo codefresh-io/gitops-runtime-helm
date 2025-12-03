@@ -13,11 +13,42 @@ ARGO_CD_TOKEN_SECRET_KEY: "token"
   {{- end }}
 {{- end }}
 
-ARGOCD_SERVER_ROOTPATH: {{ dig "server" "rootpath" "/" (index .Values "global" "external-argo-cd") | quote }}
+ARGOCD_SERVER_ROOTPATH: {{ dig "server" "rootpath" "/" (index .Values "global" "integrations" "argo-cd") | quote }}
 
 {{- if or .Values.global.codefresh.tls.caCerts.secret.create (and .Values.global.codefresh.tls.caCerts.secretKeyRef.key .Values.global.codefresh.tls.caCerts.secretKeyRef.name) }}
   {{- $secretKey := .Values.global.codefresh.tls.caCerts.secret.create | ternary (default "ca-bundle.crt" .Values.global.codefresh.tls.caCerts.secret.key) .Values.global.codefresh.tls.caCerts.secretKeyRef.key }}
 CODEFRESH_SSL_CERT_PATH: {{ printf "/app/config/codefresh-tls-certs/%s" $secretKey }}
+{{- end }}
+
+{{- if or .Values.redis.enabled (index .Values "redis-ha" "enabled") }}
+REDISDB:
+  valueFrom:
+    configMapKeyRef:
+      name: argo-gateway-cmd-params-cm
+      key: redis.db
+      optional: true
+REDIS_COMPRESSION:
+  valueFrom:
+    configMapKeyRef:
+      name: argo-gateway-cmd-params-cm
+      key: redis.compression
+      optional: true
+REDIS_PASSWORD:
+  valueFrom:
+    secretKeyRef:
+      name: gitops-runtime-redis
+      key: auth
+REDIS_SERVER:
+  valueFrom:
+    configMapKeyRef:
+      name: argo-gateway-cmd-params-cm
+      key: redis.server
+REDIS_USERNAME:
+  valueFrom:
+    secretKeyRef:
+      name: argo-gateway-cmd-params-cm
+      key: redis-username
+      optional: true
 {{- end }}
 
 {{- end }}
@@ -59,34 +90,6 @@ LISTEN_ADDRESS:
     configMapKeyRef:
       name: argo-gateway-cmd-params-cm
       key: server.listen.address
-      optional: true
-REDISDB:
-  valueFrom:
-    configMapKeyRef:
-      name: argo-gateway-cmd-params-cm
-      key: redis.db
-      optional: true
-REDIS_COMPRESSION:
-  valueFrom:
-    configMapKeyRef:
-      name: argo-gateway-cmd-params-cm
-      key: redis.compression
-      optional: true
-REDIS_PASSWORD:
-  valueFrom:
-    secretKeyRef:
-      name: gitops-runtime-redis
-      key: auth
-REDIS_SERVER:
-  valueFrom:
-    configMapKeyRef:
-      name: argo-gateway-cmd-params-cm
-      key: redis.server
-REDIS_USERNAME:
-  valueFrom:
-    secretKeyRef:
-      name: argo-gateway-cmd-params-cm
-      key: redis-username
       optional: true
 REPO_SERVER:
   valueFrom:

@@ -22,9 +22,16 @@ PROMOTION_WRAPPER_TEMPLATE: {{ .Values.config.promotionWrapperTemplate | quote }
 RUNTIME: {{ .Values.global.runtime.name }}
 TASK_POLLING_INTERVAL: {{ .Values.config.taskPollingInterval }}
 WORKFLOW_MONITOR_POLLING_INTERVAL: {{ .Values.config.workflowMonitorPollingInterval }}
+IS_NAMESPACED_RUNTIME: {{ .Values.global.runtime.singleNamespace }}
 {{- end }}
 
 {{- define "gitops-operator.resources.environment-variables.defaults" -}}
+{{- $accountId := .Values.global.codefresh.accountId -}}
+{{- $chartVersion := .Chart.Version -}}
+{{- $runtimeVersion := .Chart.AppVersion -}}
+{{- $runtimeName := .Values.global.runtime.name -}}
+{{- $gitopsOperatorVersion := .Values.image.tag | default "latest" -}}
+{{- $gitopsOperatorName := "gitops-operator" -}}
 AP_URL: http://cap-app-proxy:3017
 ARGO_CD_URL: argo-cd-server:80
 ARGO_WF_URL: http://argo-server:2746
@@ -40,9 +47,13 @@ NAMESPACE:
   valueFrom:
     fieldRef:
       fieldPath: metadata.namespace
-RUNTIME_VERSION: 
+RUNTIME_VERSION:
   valueFrom:
     configMapKeyRef:
       name: codefresh-cm
       key: version
+CF_SERVICE_NAME: {{ $gitopsOperatorName }}
+CF_SERVICE_VERSION: {{ $gitopsOperatorVersion }}
+OTEL_SERVICE_NAME: {{ $gitopsOperatorName }}
+OTEL_RESOURCE_ATTRIBUTES: {{ printf "service.name=%s,service.version=%s,service.namespace=%s,cf.account.id=%s,cf.gitops.runtime.name=%s,cf.gitops.runtime.version=%s,cf.gitops.runtime.chart.version=%s" $gitopsOperatorName $gitopsOperatorVersion "cf-gitops-runtime" $accountId $runtimeName $runtimeVersion $chartVersion }}
 {{- end -}}

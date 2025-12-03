@@ -49,6 +49,8 @@ global:
     cluster: https://kubernetes.default.svc
     # -- Defines whether this is a Codefresh hosted runtime. Should not be changed.
     codefreshHosted: false
+    # -- Runtime single namespace mode. When true, runtime operates in single namespace scope.
+    singleNamespace: false
     # -- Ingress settings
     ingress:
       # -- if set to true, the pre-install hook will validate the existance of appropriate values, but *will not* attempt to make a web request to the ingress host
@@ -103,24 +105,19 @@ global:
           # tokenSecretKeyRef:
           #   name: argocd-token
           #   key: token
-  # -- Configuration for external ArgoCD
-  # Should be used when `argo-cd.enabled` is set to false
-  external-argo-cd:
-    # -- ArgoCD server settings
-    server:
-      # -- Service name of the ArgoCD server
-      svc: argocd-server
-      # -- Port of the ArgoCD server
-      port: 80
-      # -- Set if Argo CD is running behind reverse proxy under subpath different from /
-      # e.g.
-      # rootpath: '/argocd'
-      rootpath: ''
-    repoServer:
-      # -- Service name of the ArgoCD repo server
-      svc: argocd-repo-server
-      # -- Port of the ArgoCD repo server
-      port: 8081
+        # -- Service name of the ArgoCD server
+        svc: argo-cd-server
+        # -- Port of the ArgoCD server
+        port: 80
+        # -- Set if Argo CD is running behind reverse proxy under subpath different from /
+        # e.g.
+        # rootpath: '/argocd'
+        rootpath: ''
+      repoServer:
+        # -- Service name of the ArgoCD repo server
+        svc: argo-cd-repo-server
+        # -- Port of the ArgoCD repo server
+        port: 8081
   # -- Configuration for external Argo Rollouts
   external-argo-rollouts:
     # -- Rollout reporter settings
@@ -146,7 +143,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: 695977c
+      tag: e6944d6
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -187,6 +184,43 @@ global:
       scrapeTimeout: 10s
       labels: {}
     config: {}
+anchors:
+  common-envs:
+    - &otel-config
+      # -- Telemetry configuration
+      # -- Base endpoint URL for all OpenTelemetry signals.
+      # Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/
+      OTEL_EXPORTER_OTLP_ENDPOINT: 'http://localhost:4317'
+      # -- Specifies the OTLP transport protocol to be used for all telemetry data.
+      # Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/
+      OTEL_EXPORTER_OTLP_PROTOCOL: 'grpc'
+      # -- Specifies the compression algorithm to be used for all telemetry data.
+      # Ref: https://opentelemetry.io/docs/specs/otel/protocol/exporter/
+      OTEL_EXPORTER_OTLP_COMPRESSION: 'gzip'
+      # -- OTel Logs exporter to be used.
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_LOGS_EXPORTER: 'none'
+      # -- OTel traces exporter to be used.
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_TRACES_EXPORTER: 'none'
+      # -- OTel sampler to be used for traces.
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_TRACES_SAMPLER: 'parentbased_always_on'
+      # -- OTel metrics exporter to be used. Set to "prometheus" to export metrics in Prometheus format. If set to "prometheus", it's recommended to set METRICS_SCRAPE_TIMEOUT_MS=4×scrape_interval.
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_METRICS_EXPORTER: 'none'
+      # -- The time interval (in milliseconds) between the start of two export attempts for push metric exporters, such as "otlp".
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_METRIC_EXPORT_INTERVAL: '10000'
+      # -- Maximum allowed time (in milliseconds) to export data for push metric exporters, such as "otlp".
+      # Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/
+      OTEL_METRIC_EXPORT_TIMEOUT: '5000'
+      # -- Host used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus
+      OTEL_EXPORTER_PROMETHEUS_HOST: '0.0.0.0'
+      # -- Port used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus
+      OTEL_EXPORTER_PROMETHEUS_PORT: '9464'
+      # -- Emit the stable HTTP and networking OTel conventions if CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION=true.
+      OTEL_SEMCONV_STABILITY_OPT_IN: 'http'
 # -------------------------------------------------------------------------------------------------------------------------
 # Installer
 # -------------------------------------------------------------------------------------------------------------------------
@@ -231,50 +265,36 @@ sealed-secrets:
 argo-cd:
   enabled: true
   fullnameOverride: argo-cd
-  crds:
-    install: true
+  notifications:
+    enabled: false
+  redis:
+    ## Redis image
+    image:
+      # -- Redis repository
+      repository: ecr-public.aws.com/docker/library/redis
+      # -- Redis tag
+      tag: 8.2.2-alpine
+  redis-ha:
+    ## Redis-ha image
+    image:
+      # -- Redis repository
+      repository: ecr-public.aws.com/docker/library/redis
+      # -- Redis tag
+      tag: 8.2.2-alpine
   configs:
     cm:
       timeout.reconciliation: 20s
       accounts.admin: apiKey,login
       application.resourceTrackingMethod: annotation+label
-      resource.customizations.actions.argoproj.io_Rollout: |
-        mergeBuiltinActions: true
-        discovery.lua: |
-          actions = {}
-          local fullyPromoted = obj.status.currentPodHash == obj.status.stableRS
-          actions["pause"] = {["disabled"] = fullyPromoted or obj.spec.paused == true}
-          actions["skip-current-step"] = {["disabled"] = obj.spec.strategy.canary == nil or obj.spec.strategy.canary.steps == nil or obj.status.currentStepIndex == table.getn(obj.spec.strategy.canary.steps)}
-          return actions
-        definitions:
-        - name: pause
-          action.lua: |
-            obj.spec.paused = true
-            return obj
-        - name: skip-current-step
-          action.lua: |
-            if obj.status ~= nil then
-                if obj.spec.strategy.canary ~= nil and obj.spec.strategy.canary.steps ~= nil and obj.status.currentStepIndex < table.getn(obj.spec.strategy.canary.steps) then
-                    if obj.status.pauseConditions ~= nil and table.getn(obj.status.pauseConditions) > 0 then
-                        obj.status.pauseConditions = nil
-                    end
-                    obj.status.currentStepIndex = obj.status.currentStepIndex + 1
-                end
-            end
-            return obj
+      application.instanceLabelKey: ""
     params:
       server.insecure: true
       application.namespaces: 'cf-*'
-  applicationVersioning:
-    # -- Enable application versioning
-    enabled: true
-    # -- Extract application version based on ApplicationConfiguration CRD
-    useApplicationConfiguration: true
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Events
 #-----------------------------------------------------------------------------------------------------------------------
 argo-events:
-  enabled: false
+  enabled: true
   fullnameOverride: argo-events
   crds:
     install: false
@@ -297,6 +317,9 @@ argo-events:
 argo-workflows:
   fullnameOverride: argo
   enabled: true
+  # -- Restrict Argo Workflows to operate only in a single namespace (the namespace of the Helm release).
+  # This ensures it does not interfere with any other instances of Argo Workflows installed on your cluster.
+  singleNamespace: true
   server:
     # -- auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI
     authModes:
@@ -324,8 +347,10 @@ codefreshWorkflowLogStoreCM:
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo rollouts
 #-----------------------------------------------------------------------------------------------------------------------
+# -- Argo Rollouts is deprecated and disabled by default. It will be completely removed in February 2026.
+# If you require Argo Rollouts, you can manually override this value to true in your Helm values files.
 argo-rollouts:
-  enabled: true
+  enabled: false
   fullnameOverride: argo-rollouts
   controller:
     replicas: 1
@@ -470,14 +495,14 @@ app-proxy:
           tag: 1.1.17-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.3820.0
+    tag: 1.3958.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.3820.0
+      tag: 1.3958.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -538,7 +563,30 @@ app-proxy:
     clusterChunkSize: 50
     # -- Cors settings for app-proxy. This is the list of allowed domains for platform (comma separated).
     cors: "https://g.codefresh.io"
-  env: {}
+  env:
+    !!merge <<:
+      - *otel-config
+    # -- Level of logging for app-proxy
+    CF_TELEMETRY_LOGS_LEVEL: 'info'
+    # -- Level for logging HTTP requests
+    CF_TELEMETRY_LOGS_LEVEL_HTTP: 'debug'
+    # -- Enable OpenTelemetry signals (logs, metrics, traces)
+    CF_TELEMETRY_OTEL_ENABLE: 'false'
+    # -- Enable OTel HTTP instrumentation.
+    # Make sure to sanitize `url.full` and `url.query` span attributes on collector before enabling this flag, as it may contain sensitive information.
+    CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION: 'false'
+    # -- Enable Prometheus server
+    CF_TELEMETRY_PROMETHEUS_ENABLE: 'false'
+    # -- Enable collecting process metrics
+    CF_TELEMETRY_PROMETHEUS_ENABLE_PROCESS_METRICS: 'false'
+    # -- Host for Prometheus metrics server
+    CF_TELEMETRY_PROMETHEUS_HOST: '0.0.0.0'
+    # -- Port for Prometheus metrics server
+    CF_TELEMETRY_PROMETHEUS_PORT: '9100'
+    # -- Enable Pyroscope profiling. If enabled, the Pyroscope server address must be set in PYROSCOPE_SERVER_ADDRESS.
+    CF_TELEMETRY_PYROSCOPE_ENABLE: 'false'
+    # -- Pyroscope server address
+    PYROSCOPE_SERVER_ADDRESS: ''
   serviceAccount:
     create: true
     annotations: {}
@@ -617,6 +665,7 @@ gitops-operator:
     annotations: {}
     # -- Additional labels for gitops operator CRDs
     additionalLabels: {}
+  # -- GitOps operator configuration
   config:
     # -- Task polling interval
     taskPollingInterval: 10s
@@ -630,12 +679,14 @@ gitops-operator:
     maxReconcileRetries: 10
     # -- An optional template for the promotion wrapper (empty default will use the embedded one)
     promotionWrapperTemplate: ''
+  # -- GitOps operator image
   image:
-    # -- defaults
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: "6881890"
+    tag: 8cbca33
   env:
+    !!merge <<:
+      - *otel-config
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
     create: true
@@ -664,7 +715,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: 695977c
+    tag: 2cb6f85
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -714,7 +765,7 @@ redis-secret-init:
 # -- Standalone redis deployment
 # Will be replaced by redis-ha subchart when `redis-ha.enabled=true`
 redis:
-  enabled: true
+  enabled: false
   fullnameOverride: "runtime-redis"
   # -- Redis image
   image:
@@ -801,8 +852,14 @@ redis:
     name: ""
     annotations: {}
 event-reporters:
-  cluster-event-reporter: {}
-  runtime-event-reporter: {}
+  cluster-event-reporter:
+    env:
+      !!merge <<:
+        - *otel-config
+  runtime-event-reporter:
+    env:
+      !!merge <<:
+        - *otel-config
 # -- Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true`
 # Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
 redis-ha:

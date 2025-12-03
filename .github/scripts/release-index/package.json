@@ -1,0 +1,36 @@
+{
+  "name": "gitops-runtime-helm-releases",
+  "version": "1.0.0",
+  "description": "Automated release index builder for Codefresh GitOps Runtime Helm charts",
+  "main": "build-releases.js",
+  "scripts": {
+    "build": "node build-releases.js",
+    "start": "npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codefresh-io/gitops-runtime-helm.git"
+  },
+  "keywords": [
+    "codefresh",
+    "gitops",
+    "helm",
+    "releases",
+    "kubernetes"
+  ],
+  "author": "Codefresh",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@octokit/rest": "^22.0.1",
+    "js-yaml": "^4.1.0",
+    "semver": "^7.7.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

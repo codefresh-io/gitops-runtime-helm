@@ -14,6 +14,9 @@ global:
 
 replicaCount: 1
 
+# -- Restrict the gitops operator to a single namespace (by the namespace of Helm release)
+singleNamespace: false
+
 # -- Codefresh gitops operator crds
 crds:
   # -- Whether or not to install CRDs
@@ -86,6 +89,13 @@ tolerations: []
 extraVolumes: []
 extraVolumeMounts: []
 affinity: {}
+
+debug:
+  enabled: false
+  image:
+    registry: registry.k8s.io
+    repository: pause
+    tag: 3.10
 
 resources:
   limits: {}

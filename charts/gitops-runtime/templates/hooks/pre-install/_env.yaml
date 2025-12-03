@@ -15,14 +15,14 @@ NAMESPACE:
 {{- define "installer.validate-values.environment-variables.defaults" -}}
 ARGOCD_CHECK_VERSION: {{ not (get .Values "argo-cd").enabled | quote }}
 ARGOCD_LABELS: "{{ range $k, $v := .Values.installer.argoCdVersionCheck.argoServerLabels }}{{ $k }}={{ $v }},{{ end }}"
-ARGOCD_SERVER_ROOTPATH: {{ dig "server" "rootpath" "/" (index .Values "global" "external-argo-cd") | quote }}
+ARGOCD_SERVER_ROOTPATH: {{ dig "server" "rootpath" "/" (index .Values "global" "integrations" "argo-cd") | quote }}
 ARGOCD_VERSION_PATH: "/api/version"
 CHART_VERSION: {{ .Chart.Version }}
 NAMESPACE:
   valueFrom:
     fieldRef:
       fieldPath: metadata.namespace
-REQUIRED_VERSION_CONSTRAINT: ">=2.12 <3.1"
+REQUIRED_VERSION_CONSTRAINT: ">=3 <=3.2"
 {{- end -}}
 
 {{- define "installer.validate-values.environment-variables" -}}

@@ -401,6 +401,9 @@ tests:
 
   - it: runtime-event-reporter ConfigMap should have valid Redis URL
     template: event-reporters/runtime-event-reporter/configmap.yaml
+    set:
+      redis:
+        enabled: true
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -549,6 +552,9 @@ tests:
 
   - it: argo-gateway ConfigMap should have valid Redis URL
     template: argo-gateway/configmap.yaml
+    set:
+      redis:
+        enabled: true
     values:
       - ./values/mandatory-values-ingress.yaml
       - ./values/external-argocd-values.yaml
@@ -675,18 +681,6 @@ tests:
             name: ARGO_CD_TOKEN_SECRET_KEY
             value: token
 
-  - it: should require ArgoCd repoServer address if it's not provided
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    set:
-      global:
-        external-argo-cd:
-          repoServer: null
-    asserts:
-      - failedTemplate:
-          errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.repoServer is not set"
-
   - it: should required only allowed auth type for external ArgoCd
     values:
       - ./values/mandatory-values-ingress.yaml
@@ -709,9 +703,10 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          server:
-            rootpath: /argocd
+        integrations:
+          argo-cd:
+            server:
+              rootpath: /argocd
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -726,9 +721,10 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          server:
-            rootpath: /argocd
+        integrations:
+          argo-cd:
+            server:
+              rootpath: /argocd
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -743,9 +739,10 @@ tests:
     template: app-proxy/config.yaml
     set:
       global:
-        external-argo-cd:
-          server:
-            rootpath: /argocd
+        integrations:
+          argo-cd:
+            server:
+              rootpath: /argocd
     asserts:
       - equal:
           path: data.argoCdUrl
@@ -758,9 +755,10 @@ tests:
       - ./values/external-argocd-values.yaml
     set:
       global:
-        external-argo-cd:
-          server:
-            rootpath: /argocd
+        integrations:
+          argo-cd:
+            server:
+              rootpath: /argocd
     asserts:
       - contains:
           path: spec.template.spec.containers[0].env
@@ -843,15 +841,3 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: ".Values.global.integrations.argo-cd.server.auth.type is set to 'token' therefore .Values.global.integrations.argo-cd.server.auth.tokenSecretKeyRef.name is required"
-
-  - it: should require ArgoCd server address if it's not provided
-    values:
-      - ./values/mandatory-values-ingress.yaml
-      - ./values/external-argocd-values.yaml
-    set:
-      global:
-        external-argo-cd:
-          server: null
-    asserts:
-      - failedTemplate:
-          errorMessage: "ArgoCD is not enabled and .Values.global.external-argo-cd.server is not set"

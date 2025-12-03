@@ -31,6 +31,69 @@ See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 ## Codefresh official documentation:
 Prior to running the installation please see the official documentation at: https://codefresh.io/docs/docs/installation/gitops/hybrid-gitops-helm-installation/
 
+## Multi Runtime Installation
+You can install multiple Codefresh GitOps Runtimes in the same cluster, as long as each Runtime is deployed in its own namespace and manages only the applications in that namespace.
+To achieve this, configure your Runtimes to run in namespaced mode by setting `global.runtime.singleNamespace=true`. See the values.yaml example below:
+```yaml
+global:
+  runtime:
+    singleNamespace: true
+sealed-secrets:
+  enabled: false
+argo-cd:
+  createClusterRoles: false
+  crds:
+    install: false
+  configs:
+    params:
+      application.namespaces: ''
+argo-events:
+  controller:
+    rbac:
+      namespaced: true
+argo-workflows:
+  crds:
+    install: false
+  singleNamespace: true
+  createAggregateRoles: false
+  controller:
+    clusterWorkflowTemplates:
+      enabled: false
+  server:
+    clusterWorkflowTemplates:
+      enabled: false
+argo-rollouts:
+  enabled: false
+tunnel-client:
+  enabled: false
+gitops-operator:
+  crds:
+    install: false
+```
+
+Note that for the first runtime in the cluster, you have to configure it to install the CRDs, with setting these values:
+```yaml
+global:
+  runtime:
+    isConfigurationRuntime: true
+argo-cd:
+  crds:
+    install: true
+argo-workflows:
+  crds:
+    install: true
+argo-rollouts:
+  installCRDs: true
+gitops-operator:
+  crds:
+    install: true
+```
+
+> [!WARNING]
+> If you want more than one runtime in your cluster, make sure that all of the runtimes in your cluster are configured with `global.runtime.singleNamespace=true`.
+> If you already have a runtime installed in the cluster without this setting, multi runtime installation is not supported.
+
+
 ## Argo-workflows artifact and log storage
 Codefresh provides a SaaS object storage based solution for Argo workflows logs storage. The chart deploys a configmap named `codefresh-workflows-log-store` with the repository configuration.
 If you want to utilize the Codefresh SaaS solution for log storage for all workflows in the runtime please set the following values:
@@ -397,6 +460,27 @@ argo-gateway:
   image:
       ...
   ...
+```
+
+- `.Values.global.external-argo-cd` was changed to `.Values.global.integrations.argo-cd`
+
+```yaml
+# Before:
+global:
+  external-argo-cd:
+    server:
+      svc: argocd-server
+      port: 80
+    ...
+
+# After:
+global:
+  integrations:
+    argo-cd:
+      server:
+        svc: argocd-server
+        port: 80
+      ...
 ```
 
 {{ template "chart.valuesSection" . }}

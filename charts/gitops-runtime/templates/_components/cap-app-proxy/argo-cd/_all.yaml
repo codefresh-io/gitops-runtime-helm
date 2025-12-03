@@ -1,0 +1,11 @@
+{{- define "argo-cd.namespaced-rbac.all" }}
+{{- if (index .Values "global" "runtime").singleNamespace }}
+{{- include "argo-cd.namespaced-rbac.serviceaccount" . }}
+---
+{{- include "argo-cd.namespaced-rbac.secret" . }}
+---
+{{- include "argo-cd.namespaced-rbac.role" . }}
+---
+{{- include "argo-cd.namespaced-rbac.rolebinding" . }}
+{{- end }}
+{{- end }}
