@@ -8,7 +8,7 @@ FROM debian:13-slim
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
-ARG CF_CLI_VERSION=v0.2.14
+ARG CF_CLI_VERSION=v0.2.16
 ARG TARGETARCH
 
 RUN apt-get update && apt-get install curl jq -y

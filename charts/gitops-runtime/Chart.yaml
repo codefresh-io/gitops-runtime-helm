@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 1.0.0-rc.1
+appVersion: 0.2.0
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.26.0
+version: 0.26.1
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -13,6 +13,41 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
+  artifacthub.io/changes: |
+    - kind: added
+      description: 'Multi-runtime installation support (#939, #946)'
+    - kind: added
+      description: 'Checksum annotations for improved change detection (#942)'
+    - kind: added
+      description: 'Namespace-scoped Argo Workflows support (#917)'
+    - kind: added
+      description: 'Telemetry configuration support (#848)'
+    - kind: changed
+      description: 'Migrated to OSS Argo CD and Argo Helm charts (#823)'
+    - kind: changed
+      description: 'Moved Argo CD auth values to global.integrations.argo-cd.server.auth (#768)'
+    - kind: changed
+      description: 'Refactored event-reporters: replaced argo-events runtime and cluster event-reporters, renamed sources-server to argo-gateway (#744)'
+    - kind: changed
+      description: 'Updated app-proxy with improvements: default-git-source initialization, autoDetectArgoCd values structure update, branch data in pull request info, git-source permissions for fine-grained tokens, and git process management fixes (#956, #943, #932, #737, #902, #901, #878, #804, #802, #795, #760)'
+    - kind: changed
+      description: 'Updated cf-argocd-extras: fixed resource attribute keys, unified event reporter values, removed sharding logic (#930, #845, #819)'
+    - kind: changed
+      description: 'Updated Argo CD version constraint for compatibility (#941)'
+    - kind: changed
+      description: 'Updated installer with latest CLI v2 and kubectl versions (#849, #697)'
+    - kind: changed
+      description: 'Disabled Argo Rollouts by default (#917)'
+    - kind: security
+      description: 'Fixed security vulnerabilities in app-proxy, cf-argocd-extras, argo-rollouts, argo-events, argo-workflows, and enrichment images (#702, #725, #730, #716, #788)'
+    - kind: changed
+      description: 'Updated Argo Rollouts chart to 2.37.3-7-v1.7.2-cap-OSS-697 (#730)'
+    - kind: changed
+      description: 'Updated Argo Events chart to 2.4.9-cap-CR-30841 (#716)'
+    - kind: changed
+      description: 'Updated Argo Workflows chart to 0.45.16-v3.6.7-cap-CR-30835 (#716)'
+    - kind: changed
+      description: 'Updated codefresh-tunnel-client chart to 0.1.22 (#693)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
@@ -28,7 +63,7 @@ dependencies:
     condition: argo-workflows.enabled
   - name: argo-rollouts
     repository: https://codefresh-io.github.io/argo-helm
-    version: 2.37.3-7-v1.7.2-cap-OSS-697
+    version: 2.37.3-8-v1.7.2-cap-CR-31756
     condition: argo-rollouts.enabled
   - name: sealed-secrets
     repository: https://bitnami-labs.github.io/sealed-secrets/

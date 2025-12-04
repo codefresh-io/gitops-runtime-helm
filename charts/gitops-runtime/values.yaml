@@ -242,9 +242,9 @@ installer:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-# -----------------------------------------------------------------------------------------------------------------------
-# Sealed secrets
-# -----------------------------------------------------------------------------------------------------------------------
+# *********************************************************************************************************************
+# DOCS: https://artifacthub.io/packages/helm/bitnami-labs/sealed-secrets/2.17.2?modal=values
+# *********************************************************************************************************************
 sealed-secrets:
   fullnameOverride: sealed-secrets-controller
   keyrenewperiod: "720h"
@@ -259,9 +259,9 @@ sealed-secrets:
     requests:
       cpu: 200m
       memory: 512Mi
-#-----------------------------------------------------------------------------------------------------------------------
-# ArgoCD
-#-----------------------------------------------------------------------------------------------------------------------
+# *********************************************************************************************************************
+# DOCS: https://artifacthub.io/packages/helm/argo/argo-cd/9.0.2?modal=values
+# *********************************************************************************************************************
 argo-cd:
   enabled: true
   fullnameOverride: argo-cd
@@ -290,9 +290,9 @@ argo-cd:
     params:
       server.insecure: true
       application.namespaces: 'cf-*'
-#-----------------------------------------------------------------------------------------------------------------------
-# Argo Events
-#-----------------------------------------------------------------------------------------------------------------------
+# *********************************************************************************************************************
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-events-2.4.9-cap-CR-30841/charts/argo-events
+# *********************************************************************************************************************
 argo-events:
   enabled: true
   fullnameOverride: argo-events
@@ -311,9 +311,9 @@ argo-events:
           metricsExporterImage: natsio/prometheus-nats-exporter:0.17.3
           configReloaderImage: natsio/nats-server-config-reloader:0.19.1
           startCommand: /nats-server
-#-----------------------------------------------------------------------------------------------------------------------
-# Argo Workflows
-#-----------------------------------------------------------------------------------------------------------------------
+# *********************************************************************************************************************
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-workflows-0.45.16-v3.6.7-cap-CR-30835/charts/argo-workflows
+# *********************************************************************************************************************
 argo-workflows:
   fullnameOverride: argo
   enabled: true
@@ -344,11 +344,9 @@ codefreshWorkflowLogStoreCM:
   enabled: true
   endpoint: gitops-workflow-logs.codefresh.io
   insecure: false
-#-----------------------------------------------------------------------------------------------------------------------
-# Argo rollouts
-#-----------------------------------------------------------------------------------------------------------------------
-# -- Argo Rollouts is deprecated and disabled by default. It will be completely removed in February 2026.
-# If you require Argo Rollouts, you can manually override this value to true in your Helm values files.
+# *********************************************************************************************************************
+# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-rollouts-2.37.3-7-v1.7.2-cap-OSS-697/charts/argo-rollouts
+# *********************************************************************************************************************
 argo-rollouts:
   enabled: false
   fullnameOverride: argo-rollouts
@@ -430,10 +428,9 @@ internal-router:
     minAvailable: 1
     # -- Set number of pods that are unavailable after eviction as number or percentage
     maxUnavailable: ""
-#-----------------------------------------------------------------------------------------------------------------------
-# tunnel client
-#-----------------------------------------------------------------------------------------------------------------------
-# -- Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes.
+# *********************************************************************************************************************
+# DOCS: https://github.com/codefresh-io/codefresh-tunnel-charts/blob/codefresh-tunnel-client-0.1.22-helm/codefresh-tunnel-client/values.yaml
+# *********************************************************************************************************************
 tunnel-client:
   # -- Will only be used if global.runtime.ingress.enabled = false
   enabled: true
@@ -495,14 +492,14 @@ app-proxy:
           tag: 1.1.17-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 28608a6
+    tag: ada904f
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 28608a6
+      tag: ada904f
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
