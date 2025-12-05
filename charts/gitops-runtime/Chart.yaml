@@ -15,13 +15,13 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore(CR-31388): updated gitops-operator with security fixes (#983)'
+      description: 'updated gitops-operator with security fixes: CVE-2025-5187'
     - kind: changed
-      description: 'chore: security fixes for k8s client in Argo Rollouts v1.7.2 (#987)'
+      description: 'updated Argo Rollouts to v1.7.2 with security fixes: CVE-2025-5187'
     - kind: changed
-      description: updated cli-v2 for fixing CVE-2024-25621 "github.com/containerd/containerd" (#994)
+      description: 'updated cli-v2 to v0.2.14 in runtime-installer with fixes: CVE-2024-25621'
     - kind: changed
-      description: 'chore(CR-31776): updated cap-app-proxy (#985)'
+      description: 'updated cap-app-proxy with security fixes'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
