@@ -49,6 +49,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: codefresh-gitops-runtime
 codefresh.io/runtime-name: {{ .Values.global.runtime.name | quote }}
+{{- with .Values.global.additionalLabels }}
+{{- toYaml . | nindent 0 }}
+{{- end }}
 {{- end }}
 
 {{/*

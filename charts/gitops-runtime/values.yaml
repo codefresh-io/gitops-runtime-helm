@@ -136,6 +136,12 @@ global:
   # -- global NO_PROXY for all components
   noProxy: ''
   imageRegistry: ""
+  # -- Additional labels applied to all resources
+  additionalLabels:
+    codefresh.io/runtime-component: true
+  # -- Additional labels applied to argo cd rollout reporter deployment
+  deploymentLabels:
+    codefresh.io/runtime-component: true
   # -- Global settings for event reporters
   # Event reporters are used for reporting runtime and cluster resources to Codefresh platform
   event-reporters:
@@ -248,6 +254,9 @@ installer:
 sealed-secrets:
   fullnameOverride: sealed-secrets-controller
   keyrenewperiod: "720h"
+  # -- Common labels applied to all sealed-secrets resources
+  commonLabels:
+    codefresh.io/runtime-component: true
   image:
     registry: 'quay.io'
     repository: 'codefresh/sealed-secrets-controller'
@@ -317,6 +326,9 @@ argo-events:
 argo-workflows:
   fullnameOverride: argo
   enabled: true
+  # -- Common labels applied to all argo-workflows resources
+  commonLabels:
+    codefresh.io/runtime-component: true
   # -- Restrict Argo Workflows to operate only in a single namespace (the namespace of the Helm release).
   # This ensures it does not interfere with any other instances of Argo Workflows installed on your cluster.
   singleNamespace: true
@@ -867,6 +879,9 @@ redis-ha:
   enabled: false
   # -- Full name of the Redis HA Resources
   fullnameOverride: "runtime-redis-ha"
+  # -- Extra selector labels applied to redis-ha resources
+  extraSelectorLabels:
+    codefresh.io/runtime-component: true
   ## Redis image
   image:
     # -- Redis repository

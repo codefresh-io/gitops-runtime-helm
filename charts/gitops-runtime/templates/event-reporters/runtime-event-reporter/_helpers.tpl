@@ -27,6 +27,9 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: runtime-event-reporter
 app.kubernetes.io/component: runtime-event-reporter
 codefresh.io/internal: "true"
+{{- with .Values.global.additionalLabels }}
+{{- toYaml . | nindent 0 }}
+{{- end }}
 {{- end }}
 
 {{/*

@@ -27,6 +27,9 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: argo-gateway
 app.kubernetes.io/component: argo-gateway
 codefresh.io/internal: "true"
+{{- with .Values.global.additionalLabels }}
+{{- toYaml . | nindent 0 }}
+{{- end }}
 {{- end }}
 
 {{/*
