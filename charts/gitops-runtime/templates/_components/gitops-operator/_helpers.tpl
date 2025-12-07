@@ -26,7 +26,6 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: gitops-operator
 codefresh.io/internal: "true"
-codefresh.io/runtime-name: {{ .Values.global.runtime.name | quote }}
 {{- end }}
 
 {{/*
