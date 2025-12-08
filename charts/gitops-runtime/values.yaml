@@ -138,7 +138,7 @@ global:
   imageRegistry: ""
   # -- Additional labels applied to all resources
   additionalLabels:
-    codefresh.io/runtime-component: true
+    codefresh.io/runtime-component: "true"
   # -- Additional labels applied to argo cd rollout reporter deployment
   # deploymentLabels:
   #   codefresh.io/runtime-component: true
@@ -256,7 +256,7 @@ sealed-secrets:
   keyrenewperiod: "720h"
   # -- Common labels applied to all sealed-secrets resources
   commonLabels:
-    codefresh.io/runtime-component: true
+    codefresh.io/runtime-component: "true"
   image:
     registry: 'quay.io'
     repository: 'codefresh/sealed-secrets-controller'
@@ -328,7 +328,7 @@ argo-workflows:
   enabled: true
   # -- Common labels applied to all argo-workflows resources
   commonLabels:
-    codefresh.io/runtime-component: true
+    codefresh.io/runtime-component: "true"
   # -- Restrict Argo Workflows to operate only in a single namespace (the namespace of the Helm release).
   # This ensures it does not interfere with any other instances of Argo Workflows installed on your cluster.
   singleNamespace: true
@@ -881,7 +881,7 @@ redis-ha:
   fullnameOverride: "runtime-redis-ha"
   # -- Extra selector labels applied to redis-ha resources
   extraSelectorLabels:
-    codefresh.io/runtime-component: true
+    codefresh.io/runtime-component: "true"
   ## Redis image
   image:
     # -- Redis repository
