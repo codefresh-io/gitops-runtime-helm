@@ -140,8 +140,8 @@ global:
   additionalLabels:
     codefresh.io/runtime-component: true
   # -- Additional labels applied to argo cd rollout reporter deployment
-  deploymentLabels:
-    codefresh.io/runtime-component: true
+  # deploymentLabels:
+  #   codefresh.io/runtime-component: true
   # -- Global settings for event reporters
   # Event reporters are used for reporting runtime and cluster resources to Codefresh platform
   event-reporters:
