@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.2.0
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.26.1
+version: 0.26.2
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -12,16 +12,13 @@ maintainers:
   - name: codefresh
     url: https://codefresh-io.github.io/
 annotations:
+  artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
-  artifacthub.io/changes: |-
+  artifacthub.io/changes: |
     - kind: changed
-      description: 'updated gitops-operator with security fixes: CVE-2025-5187'
-    - kind: changed
-      description: 'updated Argo Rollouts to v1.7.2 with security fixes: CVE-2025-5187'
-    - kind: changed
-      description: 'updated cli-v2 to v0.2.14 in runtime-installer with fixes: CVE-2024-25621'
-    - kind: changed
-      description: 'updated cap-app-proxy with security fixes'
+      description: 'Update "argo-workflows" to 0.45.17-v3.6.7-cap-CR-31761'
+    - kind: security
+      description: 'Fix security vulnerabilities in "argo-workflows"'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
@@ -33,7 +30,7 @@ dependencies:
     condition: argo-events.enabled
   - name: argo-workflows
     repository: https://codefresh-io.github.io/argo-helm
-    version: 0.45.16-v3.6.7-cap-CR-30835
+    version: 0.45.17-v3.6.7-cap-CR-31761
     condition: argo-workflows.enabled
   - name: argo-rollouts
     repository: https://codefresh-io.github.io/argo-helm
