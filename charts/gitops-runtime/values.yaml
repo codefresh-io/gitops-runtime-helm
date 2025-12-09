@@ -309,7 +309,7 @@ argo-events:
         - version: latest
           natsImage: nats:2.11.4
           metricsExporterImage: natsio/prometheus-nats-exporter:0.17.3
-          configReloaderImage: natsio/nats-server-config-reloader:0.19.1
+          configReloaderImage: natsio/nats-server-config-reloader:0.21.1
           startCommand: /nats-server
 # *********************************************************************************************************************
 # DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-workflows-0.45.17-v3.6.7-cap-CR-31761/charts/argo-workflows
