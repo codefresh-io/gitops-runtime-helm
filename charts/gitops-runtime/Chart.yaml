@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: updated nats-server-config-reloader (#1004)
+    - kind: changed
       description: 'fix: update app-proxy image tags to latest version 5f0a3d5 (#1001)'
 dependencies:
   - name: argo-cd
