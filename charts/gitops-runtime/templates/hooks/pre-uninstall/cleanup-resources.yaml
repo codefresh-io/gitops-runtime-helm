@@ -20,7 +20,8 @@ spec:
         command: ["sh", "-c"]
         args:
         - |
-          kubectl get applications -A -l codefresh.io/internal=true -o name | xargs -r -I{} kubectl patch {} -p '{"metadata":{"finalizers":null}}' --type=merge || true
+          kubectl get applications -n {{ .Release.Namespace }} -l codefresh.io/internal=true -o jsonpath='{.items[*].metadata.name}' \
+            | xargs -r -n1 -I{} kubectl patch application -n {{ .Release.Namespace }} {} -p '{"metadata":{"finalizers":null}}' --type=merge || true
       {{- with .Values.installer.nodeSelector | default .Values.global.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
