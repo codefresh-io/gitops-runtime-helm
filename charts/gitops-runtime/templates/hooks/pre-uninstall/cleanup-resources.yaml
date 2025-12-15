@@ -20,10 +20,7 @@ spec:
         command: ["sh", "-c"]
         args:
         - |
-          kubectl patch EventBus $(kubectl get eventbus -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge && \
-          kubectl patch Eventsource $(kubectl get EventSource -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge && \
-          kubectl patch Sensor $(kubectl get Sensor -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge ;
-          return 0
+          kubectl get applications -A -l codefresh.io/internal=true -o name | xargs -r -I{} kubectl patch {} -p '{"metadata":{"finalizers":null}}' --type=merge || true
       {{- with .Values.installer.nodeSelector | default .Values.global.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
