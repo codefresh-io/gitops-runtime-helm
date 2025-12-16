@@ -20,15 +20,22 @@ spec:
         command: ["sh", "-c"]
         args:
         - |
-          # Remove finalizers from internal Argo CD Applications in this runtime namespace
+          set -e
+
+          echo "[cleanup] Namespace: {{ .Release.Namespace }}"
+
+          echo "[cleanup] Patching internal Argo CD Applications finalizers..."
           kubectl get applications -n {{ .Release.Namespace }} -l codefresh.io/internal=true -o jsonpath='{.items[*].metadata.name}' \
-            | xargs -r -n1 -I{} kubectl patch application -n {{ .Release.Namespace }} {} -p '{"metadata":{"finalizers":null}}' --type=merge || true
+            | xargs -r -n1 -I{} sh -c 'echo "[cleanup] Patching application: {}"; kubectl patch application -n {{ .Release.Namespace }} {} -p '\''{"metadata":{"finalizers":null}}'\'' --type=merge' \
+          || echo "[cleanup] Failed to patch applications (see errors above)"
 
-          # Delete runtime token secret in this namespace (if present)
-          kubectl delete secret codefresh-token -n {{ .Release.Namespace }} --ignore-not-found || true
+          echo "[cleanup] Deleting codefresh-token secret..."
+          kubectl delete secret codefresh-token -n {{ .Release.Namespace }} --ignore-not-found \
+          || echo "[cleanup] Failed to delete codefresh-token (see errors above)"
 
-          # Delete default git integration secret in this namespace (if present)
-          kubectl delete secret -n {{ .Release.Namespace }} -l 'io.codefresh.integration-type=git,io.codefresh.integration-name=default' --ignore-not-found || true
+          echo "[cleanup] Deleting default git integration secrets..."
+          kubectl delete secret -n {{ .Release.Namespace }} -l 'io.codefresh.integration-type=git,io.codefresh.integration-name=default' --ignore-not-found \
+          || echo "[cleanup] Failed to delete default git integration secrets (see errors above)"
       {{- with .Values.installer.nodeSelector | default .Values.global.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
