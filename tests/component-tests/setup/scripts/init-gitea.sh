@@ -36,9 +36,7 @@ response=$(curl --location "http://127.0.0.1:3000/api/v1/users/$owner/tokens" \
 --data-binary "@./setup/fixture/payloads/create-user-token.json")
 
 token=$(echo "$response" | jq -r '.sha1')
-echo "token: $token"
-echo "owner: $pwd"
-pwd
+
 if [ "$OS_TYPE" = "Linux" ]; then
     sed -i "s/gitea-token/$token/g" ./setup/values/runtime.values.yaml
 else 
@@ -74,13 +72,6 @@ git push
 git checkout -b dev
 git config user.name "test-owner"
 git config user.email "test.owner@gmail.com"
-if [ "$OS_TYPE" = "Linux" ]; then
-    sed -i 's/latest/0.1/g' values.yaml
-else 
-    sed -i '' 's/latest/0.1/g' values.yaml
-fi
-git add --a
-git commit -m "update values.yaml"
 git push --set-upstream origin dev
 cd ..
 
@@ -93,7 +84,6 @@ git add --a
 git commit -m "Initial commit"
 git push
 cd ..
-
 
 
 
