@@ -5,6 +5,8 @@ kind: Role
 metadata:
   labels:
     app: cap-app-proxy
+  annotations:
+    argocd.argoproj.io/sync-options: Delete=false
   name: cap-app-proxy
 rules:
 - apiGroups:
@@ -77,6 +79,8 @@ kind: RoleBinding
 metadata:
   labels:
     app: cap-app-proxy
+  annotations:
+    argocd.argoproj.io/sync-options: Delete=false
   name: cap-app-proxy
 roleRef:
   apiGroup: rbac.authorization.k8s.io
