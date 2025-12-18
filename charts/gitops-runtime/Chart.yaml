@@ -16,11 +16,13 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix: cap-app-proxy SA should get argo-server Role to handle Workflow resources (#1009)'
+      description: 'fix: update app-proxy image tags to improve git providers support (#1015)'
+    - kind: changed
+      description: 'fix: app-proxy fails to create a Workflow instance (#1008) (#1009)'
     - kind: changed
       description: updated nats-server-config-reloader (#1004)
     - kind: changed
-      description: 'fix: update app-proxy image tags to latest version 5f0a3d5 (#1001) - feat: simplify clusters add/remove logic'
+      description: 'fix: update app-proxy image tags to latest version 5f0a3d5 (#1001)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
