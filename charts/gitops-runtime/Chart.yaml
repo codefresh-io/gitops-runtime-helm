@@ -14,11 +14,9 @@ maintainers:
 annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
-  artifacthub.io/changes: |
+  artifacthub.io/changes: |-
     - kind: changed
-      description: 'Update "argo-workflows" to 0.45.17-v3.6.7-cap-CR-31761'
-    - kind: security
-      description: 'Fix security vulnerabilities in "argo-workflows"'
+      description: 'fix: update app-proxy image tags to latest version 5f0a3d5 (#1001)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
