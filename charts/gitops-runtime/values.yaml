@@ -290,6 +290,9 @@ argo-cd:
     params:
       server.insecure: true
       application.namespaces: 'cf-*'
+  controller:
+    statefulsetAnnotations:
+      argocd.argoproj.io/sync-options: "Delete=false"
 #-----------------------------------------------------------------------------------------------------------------------
 # Argo Events
 #-----------------------------------------------------------------------------------------------------------------------

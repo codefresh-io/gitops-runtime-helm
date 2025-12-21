@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "cap-app-proxy.fullname" . }}
+  annotations:
+    argocd.argoproj.io/sync-options: Delete=false
   labels:
     {{- include "cap-app-proxy.labels" . | nindent 4 }}
 spec:

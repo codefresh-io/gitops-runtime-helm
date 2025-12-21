@@ -20,10 +20,22 @@ spec:
         command: ["sh", "-c"]
         args:
         - |
-          kubectl patch EventBus $(kubectl get eventbus -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge && \
-          kubectl patch Eventsource $(kubectl get EventSource -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge && \
-          kubectl patch Sensor $(kubectl get Sensor -l codefresh.io/internal=true | awk 'NR>1{print $1}' | xargs) -p '{"metadata":{"finalizers":null}}' --type=merge ;
-          return 0
+          set -e
+
+          echo "[cleanup] Namespace: {{ .Release.Namespace }}"
+
+          echo "[cleanup] Patching internal Argo CD Applications finalizers..."
+          kubectl get applications -n {{ .Release.Namespace }} -l codefresh.io/internal=true -o jsonpath='{.items[*].metadata.name}' \
+            | xargs -r -n1 -I{} sh -c 'echo "[cleanup] Patching application: {}"; kubectl patch application -n {{ .Release.Namespace }} {} -p '\''{"metadata":{"finalizers":null}}'\'' --type=merge' \
+          || echo "[cleanup] Failed to patch applications (see errors above)"
+
+          echo "[cleanup] Deleting codefresh-token secret..."
+          kubectl delete secret codefresh-token -n {{ .Release.Namespace }} --ignore-not-found \
+          || echo "[cleanup] Failed to delete codefresh-token (see errors above)"
+
+          echo "[cleanup] Deleting default git integration secrets..."
+          kubectl delete secret -n {{ .Release.Namespace }} -l 'io.codefresh.integration-type=git,io.codefresh.integration-name=default' --ignore-not-found \
+          || echo "[cleanup] Failed to delete default git integration secrets (see errors above)"
       {{- with .Values.installer.nodeSelector | default .Values.global.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
