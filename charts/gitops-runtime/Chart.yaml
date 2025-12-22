@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'fix(codefresh-tunnel-client): security vulnerabilities CVE-2025-9230, CVE-2025-9231, CVE-2025-9232, CVE-2025-46394, CVE-2024-58251 (#1025)'
+    - kind: changed
       description: 'chore: update argocd to v3.2.2 (#1020)'
 dependencies:
   - name: argo-cd
