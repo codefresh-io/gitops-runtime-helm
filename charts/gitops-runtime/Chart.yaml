@@ -42,7 +42,7 @@ dependencies:
     condition: sealed-secrets.enabled
   - name: codefresh-tunnel-client
     repository: oci://quay.io/codefresh/charts
-    version: 0.1.22
+    version: 0.1.23
     alias: tunnel-client
     condition: tunnel-client.enabled
   - name: redis-ha
