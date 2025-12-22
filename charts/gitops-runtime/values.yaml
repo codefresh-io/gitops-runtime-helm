@@ -260,7 +260,7 @@ sealed-secrets:
       cpu: 200m
       memory: 512Mi
 # *********************************************************************************************************************
-# DOCS: https://artifacthub.io/packages/helm/argo/argo-cd/9.0.2?modal=values
+# DOCS: https://artifacthub.io/packages/helm/argo/argo-cd/9.1.9?modal=values
 # *********************************************************************************************************************
 argo-cd:
   enabled: true
