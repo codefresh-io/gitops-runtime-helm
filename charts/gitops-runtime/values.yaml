@@ -429,7 +429,7 @@ internal-router:
     # -- Set number of pods that are unavailable after eviction as number or percentage
     maxUnavailable: ""
 # *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/codefresh-tunnel-charts/blob/codefresh-tunnel-client-0.1.22-helm/codefresh-tunnel-client/values.yaml
+# DOCS: https://github.com/codefresh-io/codefresh-tunnel-charts/blob/codefresh-tunnel-client-0.1.23-helm/codefresh-tunnel-client/values.yaml
 # *********************************************************************************************************************
 tunnel-client:
   # -- Will only be used if global.runtime.ingress.enabled = false
