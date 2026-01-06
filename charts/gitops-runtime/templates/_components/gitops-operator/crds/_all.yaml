@@ -12,6 +12,8 @@
 ---
   {{- include "gitops-operator.crds.promotion-template" $context }}
 ---
+  {{- include "gitops-operator.crds.product" $context }}
+---
   {{- if not (get .Values.global "runtime").singleNamespace }}
   {{- include "gitops-operator.crds.restricted-gitsource" $context }}
   {{- end }}
