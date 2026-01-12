@@ -16,7 +16,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix(codefresh-gitops-operator): security vulnerability CVE-2025-66626 (#1026)'
+      description: 'fix(cf-argocd-extras): security vulnerability CVE-2025-58181, CVE-2025-13281, CVE-2025-61727, CVE-2025-61729 (#1033)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
