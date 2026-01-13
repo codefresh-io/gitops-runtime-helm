@@ -847,7 +847,7 @@ global:
 | sealed-secrets.fullnameOverride | string | `"sealed-secrets-controller"` |  |
 | sealed-secrets.image.registry | string | `"quay.io"` |  |
 | sealed-secrets.image.repository | string | `"codefresh/sealed-secrets-controller"` |  |
-| sealed-secrets.image.tag | string | `"0.32.0"` |  |
+| sealed-secrets.image.tag | string | `"0.34.0"` |  |
 | sealed-secrets.keyrenewperiod | string | `"720h"` |  |
 | sealed-secrets.resources.limits.cpu | string | `"500m"` |  |
 | sealed-secrets.resources.limits.memory | string | `"1Gi"` |  |
