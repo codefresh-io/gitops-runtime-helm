@@ -16,11 +16,13 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'chore(CR-33123): updated kubectl for redis-secret-init job (#1040)'
+    - kind: changed
+      description: updated argo-cd to 3.2.3 (#1036)
+    - kind: changed
       description: 'fix(sealed-secrets-controller): security vulnerabilities CVE-2025-47912, CVE-2025-58181, CVE-2025-58186, CVE-2025-58187, CVE-2025-58188, CVE-2025-58189, CVE-2025-61723, CVE-2025-61724, CVE-2025-61727, CVE-2025-61729 (#1038)'
     - kind: changed
       description: 'fix(cf-argocd-extras): security vulnerability CVE-2025-58181, CVE-2025-13281, CVE-2025-61727, CVE-2025-61729 (#1033)'
-    - kind: changed
-      description: 'updated "argocd" to v3.2.3'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
