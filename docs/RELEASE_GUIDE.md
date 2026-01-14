@@ -18,12 +18,13 @@ The instructions below explain how to do everything manually if you prefer that 
 2. [Prerequisites](#prerequisites)
 3. [Release Types](#release-types)
 4. [Creating a New Minor Release](#creating-a-new-minor-release)
-5. [Publishing a Release](#publishing-a-release)
-6. [Creating a Patch Release](#creating-a-patch-release)
-7. [Cherry-Picking Fixes](#cherry-picking-fixes)
-8. [Writing Release Notes](#writing-release-notes)
-9. [Troubleshooting](#troubleshooting)
-10. [Reference](#reference)
+5. [Release Validation](#release-validation)
+6. [Publishing a Release](#publishing-a-release)
+7. [Creating a Patch Release](#creating-a-patch-release)
+8. [Cherry-Picking Fixes](#cherry-picking-fixes)
+9. [Writing Release Notes](#writing-release-notes)
+10. [Troubleshooting](#troubleshooting)
+11. [Reference](#reference)
 
 ---
 
@@ -141,6 +142,27 @@ Or visit:
 
 ---
 
+## Release Validation
+
+After the prepare-release PR is automatically created and before publishing the release, the release should be validated to ensure stability.
+
+### Current Approach
+
+The CI pipeline runs e2e tests on every PR. If these tests pass, the release is considered validated and ready to publish.
+
+> **Note**: Previously, releases were validated by deploying to staging environments and letting them run for a period before publishing. This approach is no longer in use. If additional validation is needed in the future, consider introducing a manual testing stage or dedicated validation environments.
+
+### Validation Checklist
+
+Before publishing, ensure:
+
+- [ ] All CI checks pass (unit tests, linting, e2e tests)
+- [ ] The prepare-release PR has been reviewed
+- [ ] Release notes accurately reflect the changes
+- [ ] No known critical issues exist in the changes being released
+
+---
+
 ## Publishing a Release
 
 ### Step 1: Check PR Status
@@ -185,6 +207,28 @@ Check the release:
 ```bash
 gh release view 0.27.0 --repo codefresh-io/gitops-runtime-helm
 ```
+
+### Step 5: Announce the Release
+
+After the release is published, announce it to the team:
+
+1. **Post in `#topic-cf-gitops-runtime`**:
+   - Introduce the release with a brief summary of key changes
+   - Include a link to the GitHub release notes
+
+   Example:
+   ```
+   :rocket: GitOps Runtime v0.27.0 has been released!
+
+   Highlights:
+   - [Key feature or fix 1]
+   - [Key feature or fix 2]
+
+   Release notes: https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.27.0
+   ```
+
+2. **Cross-post to `#team-support-announcements`**:
+   - Share the same announcement so the support team is aware of the new release
 
 ---
 
