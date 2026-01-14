@@ -755,7 +755,7 @@ redis-secret-init:
   image:
     registry: docker.io
     repository: alpine/kubectl
-    tag: 1.34.1
+    tag: 1.35.0
   nodeSelector: {}
   tolerations: []
   affinity: {}
