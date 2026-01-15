@@ -1,0 +1,59 @@
+# ABOUTME: GitHub Actions workflow that posts Slack notifications when a release is published.
+# ABOUTME: Notifies #topic-cf-gitops-runtime and cross-posts to #team-support-announcements.
+
+name: Release Notification
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to simulate (e.g., 0.27.0)'
+        required: true
+
+jobs:
+  notify-slack:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      RELEASE_URL: ${{ github.event.release.html_url || format('https://github.com/{0}/releases/tag/{1}', github.repository, inputs.tag) }}
+    steps:
+      - name: Notify #topic-cf-gitops-runtime
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: ${{ vars.SLACK_CHANNEL_GITOPS_RUNTIME }}
+            text: "GitOps Runtime ${{ env.RELEASE_TAG }} has been released"
+            blocks:
+              - type: header
+                text:
+                  type: plain_text
+                  text: "🚀 GitOps Runtime Release"
+              - type: section
+                fields:
+                  - type: mrkdwn
+                    text: "*Version:*\n${{ env.RELEASE_TAG }}"
+              - type: actions
+                elements:
+                  - type: button
+                    text:
+                      type: plain_text
+                      text: "View Release Notes"
+                    url: ${{ env.RELEASE_URL }}
+
+      - name: Cross-post to #team-support-announcements
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: ${{ vars.SLACK_CHANNEL_SUPPORT_ANNOUNCEMENTS }}
+            text: "GitOps Runtime ${{ env.RELEASE_TAG }} has been released"
+            blocks:
+              - type: section
+                text:
+                  type: mrkdwn
+                  text: "*GitOps Runtime ${{ env.RELEASE_TAG }}* has been released.\n\n<${{ env.RELEASE_URL }}|View release notes>"
