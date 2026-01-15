@@ -18,12 +18,13 @@ The instructions below explain how to do everything manually if you prefer that 
 2. [Prerequisites](#prerequisites)
 3. [Release Types](#release-types)
 4. [Creating a New Minor Release](#creating-a-new-minor-release)
-5. [Publishing a Release](#publishing-a-release)
-6. [Creating a Patch Release](#creating-a-patch-release)
-7. [Cherry-Picking Fixes](#cherry-picking-fixes)
-8. [Writing Release Notes](#writing-release-notes)
-9. [Troubleshooting](#troubleshooting)
-10. [Reference](#reference)
+5. [Release Validation](#release-validation)
+6. [Publishing a Release](#publishing-a-release)
+7. [Creating a Patch Release](#creating-a-patch-release)
+8. [Cherry-Picking Fixes](#cherry-picking-fixes)
+9. [Writing Release Notes](#writing-release-notes)
+10. [Troubleshooting](#troubleshooting)
+11. [Reference](#reference)
 
 ---
 
@@ -141,6 +142,27 @@ Or visit:
 
 ---
 
+## Release Validation
+
+After the prepare-release PR is automatically created and before publishing the release, the release should be validated to ensure stability.
+
+### Current Approach
+
+The CI pipeline runs e2e tests on every PR. If these tests pass, the release is considered validated and ready to publish.
+
+> **Note**: Previously, releases were validated by deploying to staging environments and letting them run for a period before publishing. This approach is no longer in use. If additional validation is needed in the future, consider introducing a manual testing stage or dedicated validation environments.
+
+### Validation Checklist
+
+Before publishing, ensure:
+
+- [ ] All CI checks pass (unit tests, linting, e2e tests)
+- [ ] The prepare-release PR has been reviewed
+- [ ] Release notes accurately reflect the changes
+- [ ] No known critical issues exist in the changes being released
+
+---
+
 ## Publishing a Release
 
 ### Step 1: Check PR Status
@@ -185,6 +207,14 @@ Check the release:
 ```bash
 gh release view 0.27.0 --repo codefresh-io/gitops-runtime-helm
 ```
+
+### Step 5: Announcement (Automated)
+
+When a release is published, a GitHub Actions workflow automatically posts announcements to:
+- `#topic-cf-gitops-runtime` - Primary announcement with release version and link
+- `#team-support-announcements` - Cross-post for the support team
+
+No manual action required. If notifications don't appear, see [Troubleshooting: Slack Notifications Not Sent](#slack-notifications-not-sent).
 
 ---
 
@@ -388,6 +418,25 @@ git push --force-with-lease
    gh release edit 0.27.0 --repo codefresh-io/gitops-runtime-helm --draft=false
    ```
 
+### Slack Notifications Not Sent
+
+**Symptom**: Release published but no Slack notifications appeared
+
+**Check**:
+1. Verify the `release-notification` workflow ran:
+   - Go to Actions tab → "Release Notification" workflow
+   - Check for failed runs
+2. If workflow failed, check for:
+   - Missing `SLACK_BOT_TOKEN` secret
+   - Missing `SLACK_CHANNEL_GITOPS_RUNTIME` or `SLACK_CHANNEL_SUPPORT_ANNOUNCEMENTS` variables
+   - Bot not invited to the channels
+3. Manual fallback - post manually to Slack:
+   ```
+   🚀 GitOps Runtime vX.Y.Z has been released!
+
+   Release notes: https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/X.Y.Z
+   ```
+
 ---
 
 ## Reference
@@ -428,6 +477,7 @@ git push --force-with-lease
 |------|---------|
 | `charts/gitops-runtime/Chart.yaml` | Version, changelog annotations |
 | `charts/gitops-runtime/values.yaml` | Component versions, defaults |
+| `.github/workflows/release-notification.yaml` | Slack release announcements |
 
 ---
 
