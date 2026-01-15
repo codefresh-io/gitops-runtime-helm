@@ -208,27 +208,13 @@ Check the release:
 gh release view 0.27.0 --repo codefresh-io/gitops-runtime-helm
 ```
 
-### Step 5: Announce the Release
+### Step 5: Announcement (Automated)
 
-After the release is published, announce it to the team:
+When a release is published, a GitHub Actions workflow automatically posts announcements to:
+- `#topic-cf-gitops-runtime` - Primary announcement with release version and link
+- `#team-support-announcements` - Cross-post for the support team
 
-1. **Post in `#topic-cf-gitops-runtime`**:
-   - Introduce the release with a brief summary of key changes
-   - Include a link to the GitHub release notes
-
-   Example:
-   ```
-   :rocket: GitOps Runtime v0.27.0 has been released!
-
-   Highlights:
-   - [Key feature or fix 1]
-   - [Key feature or fix 2]
-
-   Release notes: https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.27.0
-   ```
-
-2. **Cross-post to `#team-support-announcements`**:
-   - Share the same announcement so the support team is aware of the new release
+No manual action required. If notifications don't appear, see [Troubleshooting: Slack Notifications Not Sent](#slack-notifications-not-sent).
 
 ---
 
@@ -432,6 +418,25 @@ git push --force-with-lease
    gh release edit 0.27.0 --repo codefresh-io/gitops-runtime-helm --draft=false
    ```
 
+### Slack Notifications Not Sent
+
+**Symptom**: Release published but no Slack notifications appeared
+
+**Check**:
+1. Verify the `release-notification` workflow ran:
+   - Go to Actions tab → "Release Notification" workflow
+   - Check for failed runs
+2. If workflow failed, check for:
+   - Missing `SLACK_BOT_TOKEN` secret
+   - Missing `SLACK_CHANNEL_GITOPS_RUNTIME` or `SLACK_CHANNEL_SUPPORT_ANNOUNCEMENTS` variables
+   - Bot not invited to the channels
+3. Manual fallback - post manually to Slack:
+   ```
+   🚀 GitOps Runtime vX.Y.Z has been released!
+
+   Release notes: https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/X.Y.Z
+   ```
+
 ---
 
 ## Reference
@@ -472,6 +477,7 @@ git push --force-with-lease
 |------|---------|
 | `charts/gitops-runtime/Chart.yaml` | Version, changelog annotations |
 | `charts/gitops-runtime/values.yaml` | Component versions, defaults |
+| `.github/workflows/release-notification.yaml` | Slack release announcements |
 
 ---
 
