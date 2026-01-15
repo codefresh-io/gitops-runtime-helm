@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: '[app-proxy]fix: security vulnerabilities for app-proxy (CVE-2025-61729 and CVE-2025-61727) and app-proxy-init (CVE-2016-2781 and CVE-2024-10041) (#1048)'
+    - kind: changed
       description: 'fix: security vulnerabilities in cap-app-proxy-init: CVE-2016-2781 and CVE-2024-10041; cap-app-proxy: CVE-2025-61729 and CVE-2025-61727 (#1043)'
     - kind: changed
       description: 'chore(CR-33123): updated kubectl for redis-secret-init job (#1040)'
