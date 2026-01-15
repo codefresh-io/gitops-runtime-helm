@@ -291,7 +291,7 @@ Determine argocd redis url
 {{- else }}
   {{- printf "" }}
 {{- end }}
-{{- end}}
+{{- end }}
 
 {{/*
 Determine argo worklofws server name

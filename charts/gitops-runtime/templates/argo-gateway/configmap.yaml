@@ -1,7 +1,10 @@
 {{- define "argo-gateway.resources.configmap.defaults" }}
 argocd.server: {{ include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . }}
 repo.server: {{ include "codefresh-gitops-runtime.argocd.reposerver.url" . }}
-redis.server: {{ include "codefresh-gitops-runtime.argocd.redis.url" . }}
+  {{- $redisServer := (include "codefresh-gitops-runtime.argocd.redis.url" .) }}
+  {{- if $redisServer }}
+redis.server: {{ $redisServer }}
+  {{- end }}
 {{- end }}
 
 {{- $defaultConfig := (include "argo-gateway.resources.configmap.defaults" . | fromYaml ) }}
