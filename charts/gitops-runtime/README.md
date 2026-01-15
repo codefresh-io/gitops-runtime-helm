@@ -546,14 +546,14 @@ global:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"5f0a3d5"` |  |
+| app-proxy.image.tag | string | `"8765bbd"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"5f0a3d5"` |  |
+| app-proxy.initContainer.image.tag | string | `"8765bbd"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -836,7 +836,7 @@ global:
 | redis-ha.topologySpreadConstraints.maxSkew | string | `""` (defaults to `1`) | Max skew of pods tolerated |
 | redis-ha.topologySpreadConstraints.topologyKey | string | `""` (defaults to `topology.kubernetes.io/zone`) | Topology key for spread |
 | redis-ha.topologySpreadConstraints.whenUnsatisfiable | string | `""` (defaults to `ScheduleAnyway`) | Enforcement policy, hard or soft |
-| redis-secret-init | object | `{"affinity":{},"image":{"registry":"docker.io","repository":"alpine/kubectl","tag":"1.34.1"},"nodeSelector":{},"tolerations":[]}` | Enable hook job to create redis secret |
+| redis-secret-init | object | `{"affinity":{},"image":{"registry":"docker.io","repository":"alpine/kubectl","tag":"1.35.0"},"nodeSelector":{},"tolerations":[]}` | Enable hook job to create redis secret |
 | redis.image | object | `{"registry":"public.ecr.aws","repository":"docker/library/redis","tag":"8.2.1-alpine"}` | Redis image |
 | redis.metrics | object | `{"enabled":true,"env":{},"envFrom":[],"image":{"registry":"ghcr.io","repository":"oliver006/redis_exporter","tag":"v1.72.1"},"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"serviceMonitor":{"enabled":false}}` | Enable metrics sidecar |
 | redis.metrics.serviceMonitor | object | `{"enabled":false}` | Enable a prometheus ServiceMonitor |
