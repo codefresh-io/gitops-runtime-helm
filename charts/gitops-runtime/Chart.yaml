@@ -15,6 +15,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'fix: a simple runtime application ends up being out-of-sync (#1052)'
+    - kind: changed
       description: 'chore: Fix security vulnerabilities for argo-workflows (#1047)'
     - kind: changed
       description: 'feat: add automated Slack release notifications (#1045)'
