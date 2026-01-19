@@ -118,13 +118,6 @@ global:
         svc: argo-cd-repo-server
         # -- Port of the ArgoCD repo server
         port: 8081
-  # -- Configuration for external Argo Rollouts
-  external-argo-rollouts:
-    # -- Rollout reporter settings
-    rollout-reporter:
-      # -- Enable or disable rollout reporter
-      # Configuration is defined at .Values.event-reporters.rollout
-      enabled: false
   # -- Global nodeSelector for all components
   nodeSelector: {}
   # -- Global tolerations for all components
@@ -347,17 +340,6 @@ codefreshWorkflowLogStoreCM:
   enabled: true
   endpoint: gitops-workflow-logs.codefresh.io
   insecure: false
-#-----------------------------------------------------------------------------------------------------------------------
-# Argo rollouts
-#-----------------------------------------------------------------------------------------------------------------------
-# -- Argo Rollouts is deprecated and disabled by default. It will be completely removed in February 2026.
-# If you require Argo Rollouts, you can manually override this value to true in your Helm values files.
-argo-rollouts:
-  enabled: false
-  fullnameOverride: argo-rollouts
-  controller:
-    replicas: 1
-  installCRDs: true
 #-----------------------------------------------------------------------------------------------------------------------
 # Internal router
 #-----------------------------------------------------------------------------------------------------------------------

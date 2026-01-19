@@ -7,6 +7,3 @@ global:
       operator: Equal
       value: some-value
       effect: NoSchedule
-
-argo-rollouts:
-  enabled: true
