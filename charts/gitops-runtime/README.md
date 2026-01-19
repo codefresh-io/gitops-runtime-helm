@@ -457,6 +457,18 @@ global:
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| anchors.common-envs[0].OTEL_EXPORTER_OTLP_COMPRESSION | string | `"gzip"` | Specifies the compression algorithm to be used for all telemetry data. Ref: https://opentelemetry.io/docs/specs/otel/protocol/exporter/ |
+| anchors.common-envs[0].OTEL_EXPORTER_OTLP_ENDPOINT | string | `"http://localhost:4317"` | Base endpoint URL for all OpenTelemetry signals. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
+| anchors.common-envs[0].OTEL_EXPORTER_OTLP_PROTOCOL | string | `"grpc"` | Specifies the OTLP transport protocol to be used for all telemetry data. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
+| anchors.common-envs[0].OTEL_EXPORTER_PROMETHEUS_HOST | string | `"0.0.0.0"` | Host used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus |
+| anchors.common-envs[0].OTEL_EXPORTER_PROMETHEUS_PORT | string | `"9464"` | Port used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus |
+| anchors.common-envs[0].OTEL_LOGS_EXPORTER | string | `"none"` | OTel Logs exporter to be used. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| anchors.common-envs[0].OTEL_METRICS_EXPORTER | string | `"none"` | OTel metrics exporter to be used. Set to "prometheus" to export metrics in Prometheus format. If set to "prometheus", it's recommended to set METRICS_SCRAPE_TIMEOUT_MS=4×scrape_interval. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| anchors.common-envs[0].OTEL_METRIC_EXPORT_INTERVAL | string | `"10000"` | The time interval (in milliseconds) between the start of two export attempts for push metric exporters, such as "otlp". Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| anchors.common-envs[0].OTEL_METRIC_EXPORT_TIMEOUT | string | `"5000"` | Maximum allowed time (in milliseconds) to export data for push metric exporters, such as "otlp". Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| anchors.common-envs[0].OTEL_SEMCONV_STABILITY_OPT_IN | string | `"http"` | Emit the stable HTTP and networking OTel conventions if CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION=true. |
+| anchors.common-envs[0].OTEL_TRACES_EXPORTER | string | `"none"` | OTel traces exporter to be used. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| anchors.common-envs[0].OTEL_TRACES_SAMPLER | string | `"parentbased_always_on"` | OTel sampler to be used for traces. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
 | app-proxy.affinity | object | `{}` |  |
 | app-proxy.config.argoCdUrl | string | `nil` | ArgoCD Url. determined by chart logic. Do not change unless you are certain you need to |
 | app-proxy.config.argoCdUsername | string | `""` | deprecated. use `global.external-argo-cd.auth.username` instead |
@@ -467,17 +479,38 @@ global:
 | app-proxy.config.env | string | `"production"` |  |
 | app-proxy.config.logLevel | string | `"info"` | Log Level |
 | app-proxy.config.skipGitPermissionValidation | string | `"false"` | Skit git permissions validation |
-| app-proxy.env | object | `{}` |  |
+| app-proxy.env.<<[0].OTEL_EXPORTER_OTLP_COMPRESSION | string | `"gzip"` | Specifies the compression algorithm to be used for all telemetry data. Ref: https://opentelemetry.io/docs/specs/otel/protocol/exporter/ |
+| app-proxy.env.<<[0].OTEL_EXPORTER_OTLP_ENDPOINT | string | `"http://localhost:4317"` | Base endpoint URL for all OpenTelemetry signals. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
+| app-proxy.env.<<[0].OTEL_EXPORTER_OTLP_PROTOCOL | string | `"grpc"` | Specifies the OTLP transport protocol to be used for all telemetry data. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
+| app-proxy.env.<<[0].OTEL_EXPORTER_PROMETHEUS_HOST | string | `"0.0.0.0"` | Host used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus |
+| app-proxy.env.<<[0].OTEL_EXPORTER_PROMETHEUS_PORT | string | `"9464"` | Port used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus |
+| app-proxy.env.<<[0].OTEL_LOGS_EXPORTER | string | `"none"` | OTel Logs exporter to be used. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| app-proxy.env.<<[0].OTEL_METRICS_EXPORTER | string | `"none"` | OTel metrics exporter to be used. Set to "prometheus" to export metrics in Prometheus format. If set to "prometheus", it's recommended to set METRICS_SCRAPE_TIMEOUT_MS=4×scrape_interval. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| app-proxy.env.<<[0].OTEL_METRIC_EXPORT_INTERVAL | string | `"10000"` | The time interval (in milliseconds) between the start of two export attempts for push metric exporters, such as "otlp". Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| app-proxy.env.<<[0].OTEL_METRIC_EXPORT_TIMEOUT | string | `"5000"` | Maximum allowed time (in milliseconds) to export data for push metric exporters, such as "otlp". Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| app-proxy.env.<<[0].OTEL_SEMCONV_STABILITY_OPT_IN | string | `"http"` | Emit the stable HTTP and networking OTel conventions if CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION=true. |
+| app-proxy.env.<<[0].OTEL_TRACES_EXPORTER | string | `"none"` | OTel traces exporter to be used. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| app-proxy.env.<<[0].OTEL_TRACES_SAMPLER | string | `"parentbased_always_on"` | OTel sampler to be used for traces. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| app-proxy.env.CF_TELEMETRY_LOGS_LEVEL | string | `"info"` | Level of logging for app-proxy |
+| app-proxy.env.CF_TELEMETRY_LOGS_LEVEL_HTTP | string | `"debug"` | Level for logging HTTP requests |
+| app-proxy.env.CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION | string | `"false"` | Enable OTel HTTP instrumentation. Make sure to sanitize `url.full` and `url.query` span attributes on collector before enabling this flag, as it may contain sensitive information. |
+| app-proxy.env.CF_TELEMETRY_OTEL_ENABLE | string | `"false"` | Enable OpenTelemetry signals (logs, metrics, traces) |
+| app-proxy.env.CF_TELEMETRY_PROMETHEUS_ENABLE | string | `"false"` | Enable Prometheus server |
+| app-proxy.env.CF_TELEMETRY_PROMETHEUS_ENABLE_PROCESS_METRICS | string | `"false"` | Enable collecting process metrics |
+| app-proxy.env.CF_TELEMETRY_PROMETHEUS_HOST | string | `"0.0.0.0"` | Host for Prometheus metrics server |
+| app-proxy.env.CF_TELEMETRY_PROMETHEUS_PORT | string | `"9100"` | Port for Prometheus metrics server |
+| app-proxy.env.CF_TELEMETRY_PYROSCOPE_ENABLE | string | `"false"` | Enable Pyroscope profiling. If enabled, the Pyroscope server address must be set in PYROSCOPE_SERVER_ADDRESS. |
+| app-proxy.env.PYROSCOPE_SERVER_ADDRESS | string | `""` | Pyroscope server address |
 | app-proxy.extraVolumeMounts | list | `[]` | Extra volume mounts for main container |
 | app-proxy.extraVolumes | list | `[]` | extra volumes |
 | app-proxy.fullnameOverride | string | `"cap-app-proxy"` |  |
-| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.17-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.17-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.17-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
-| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.17-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.17-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.17-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
+| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.20-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.20-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.20-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
+| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.20-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.20-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.20-main"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
 | app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds | int | `5` | Client heartbeat interval in seconds for image enrichemnt workflow |
 | app-proxy.image-enrichment.config.concurrencyCmKey | string | `"imageReportExecutor"` | The name of the key in the configmap to use as synchronization semaphore |
 | app-proxy.image-enrichment.config.concurrencyCmName | string | `"workflow-synchronization-semaphores"` | The name of the configmap to use as synchronization semaphore, see https://argoproj.github.io/argo-workflows/synchronization/ |
-| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.17-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.17-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.17-main"}}` | Enrichemnt images |
-| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.17-main"}` | Report image enrichment task image |
+| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.20-main"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.20-main"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.20-main"}}` | Enrichemnt images |
+| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.20-main"}` | Report image enrichment task image |
 | app-proxy.image-enrichment.config.podGcStrategy | string | `"OnWorkflowCompletion"` | Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes. |
 | app-proxy.image-enrichment.config.ttlActiveInSeconds | int | `900` | Maximum allowed runtime for the enrichment workflow |
 | app-proxy.image-enrichment.config.ttlAfterCompletionInSeconds | int | `86400` | Number of seconds to live after completion |
@@ -488,14 +521,14 @@ global:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.3883.0"` |  |
+| app-proxy.image.tag | string | `"1.4020.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.3883.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.4020.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -558,8 +591,9 @@ global:
 | argo-cd.configs.cm."timeout.reconciliation" | string | `"20s"` |  |
 | argo-cd.configs.params."application.namespaces" | string | `"cf-*"` |  |
 | argo-cd.configs.params."server.insecure" | bool | `true` |  |
+| argo-cd.controller.statefulsetAnnotations."argocd.argoproj.io/sync-options" | string | `"Delete=false"` |  |
 | argo-cd.enabled | bool | `true` |  |
-| argo-cd.fullnameOverride | string | `"argocd"` |  |
+| argo-cd.fullnameOverride | string | `"argo-cd"` |  |
 | argo-cd.notifications.enabled | bool | `false` |  |
 | argo-cd.redis-ha.image.repository | string | `"ecr-public.aws.com/docker/library/redis"` | Redis repository |
 | argo-cd.redis-ha.image.tag | string | `"8.2.2-alpine"` | Redis tag |
@@ -576,7 +610,7 @@ global:
 | argo-events.crds.install | bool | `false` |  |
 | argo-events.enabled | bool | `true` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
-| argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"d4fefcb"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
+| argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"bc37d62"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.executor.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
@@ -584,11 +618,34 @@ global:
 | argo-workflows.mainContainer.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
 | argo-workflows.server.authModes | list | `["client"]` | auth-mode needs to be set to client to be able to see workflow logs from Codefresh UI |
 | argo-workflows.server.baseHref | string | `"/workflows/"` | Do not change. Workflows UI is only accessed through internal router, changing this values will break routing to workflows native UI from Codefresh. |
+| argo-workflows.singleNamespace | bool | `true` | Restrict Argo Workflows to operate only in a single namespace (the namespace of the Helm release). This ensures it does not interfere with any other instances of Argo Workflows installed on your cluster. |
 | codefreshWorkflowLogStoreCM | object | `{"enabled":true,"endpoint":"gitops-workflow-logs.codefresh.io","insecure":false}` | Argo workflows logs storage on Codefresh platform settings. Don't change unless instructed by Codefresh support. |
-| event-reporters.cluster-event-reporter | object | `{}` |  |
-| event-reporters.runtime-event-reporter | object | `{}` |  |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_EXPORTER_OTLP_COMPRESSION | string | `"gzip"` | Specifies the compression algorithm to be used for all telemetry data. Ref: https://opentelemetry.io/docs/specs/otel/protocol/exporter/ |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_EXPORTER_OTLP_ENDPOINT | string | `"http://localhost:4317"` | Base endpoint URL for all OpenTelemetry signals. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_EXPORTER_OTLP_PROTOCOL | string | `"grpc"` | Specifies the OTLP transport protocol to be used for all telemetry data. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_EXPORTER_PROMETHEUS_HOST | string | `"0.0.0.0"` | Host used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_EXPORTER_PROMETHEUS_PORT | string | `"9464"` | Port used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_LOGS_EXPORTER | string | `"none"` | OTel Logs exporter to be used. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_METRICS_EXPORTER | string | `"none"` | OTel metrics exporter to be used. Set to "prometheus" to export metrics in Prometheus format. If set to "prometheus", it's recommended to set METRICS_SCRAPE_TIMEOUT_MS=4×scrape_interval. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_METRIC_EXPORT_INTERVAL | string | `"10000"` | The time interval (in milliseconds) between the start of two export attempts for push metric exporters, such as "otlp". Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_METRIC_EXPORT_TIMEOUT | string | `"5000"` | Maximum allowed time (in milliseconds) to export data for push metric exporters, such as "otlp". Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_SEMCONV_STABILITY_OPT_IN | string | `"http"` | Emit the stable HTTP and networking OTel conventions if CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION=true. |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_TRACES_EXPORTER | string | `"none"` | OTel traces exporter to be used. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| event-reporters.cluster-event-reporter.env.<<[0].OTEL_TRACES_SAMPLER | string | `"parentbased_always_on"` | OTel sampler to be used for traces. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_EXPORTER_OTLP_COMPRESSION | string | `"gzip"` | Specifies the compression algorithm to be used for all telemetry data. Ref: https://opentelemetry.io/docs/specs/otel/protocol/exporter/ |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_EXPORTER_OTLP_ENDPOINT | string | `"http://localhost:4317"` | Base endpoint URL for all OpenTelemetry signals. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_EXPORTER_OTLP_PROTOCOL | string | `"grpc"` | Specifies the OTLP transport protocol to be used for all telemetry data. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_EXPORTER_PROMETHEUS_HOST | string | `"0.0.0.0"` | Host used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_EXPORTER_PROMETHEUS_PORT | string | `"9464"` | Port used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_LOGS_EXPORTER | string | `"none"` | OTel Logs exporter to be used. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_METRICS_EXPORTER | string | `"none"` | OTel metrics exporter to be used. Set to "prometheus" to export metrics in Prometheus format. If set to "prometheus", it's recommended to set METRICS_SCRAPE_TIMEOUT_MS=4×scrape_interval. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_METRIC_EXPORT_INTERVAL | string | `"10000"` | The time interval (in milliseconds) between the start of two export attempts for push metric exporters, such as "otlp". Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_METRIC_EXPORT_TIMEOUT | string | `"5000"` | Maximum allowed time (in milliseconds) to export data for push metric exporters, such as "otlp". Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_SEMCONV_STABILITY_OPT_IN | string | `"http"` | Emit the stable HTTP and networking OTel conventions if CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION=true. |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_TRACES_EXPORTER | string | `"none"` | OTel traces exporter to be used. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| event-reporters.runtime-event-reporter.env.<<[0].OTEL_TRACES_SAMPLER | string | `"parentbased_always_on"` | OTel sampler to be used for traces. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
 | gitops-operator.affinity | object | `{}` |  |
-| gitops-operator.config | object | `{"commitStatusPollingInterval":"10s","maxConcurrentReleases":100,"promotionWrapperTemplate":"","taskPollingInterval":"10s","workflowMonitorPollingInterval":"10s"}` | GitOps operator configuration |
+| gitops-operator.config | object | `{"commitStatusPollingInterval":"10s","maxConcurrentReleases":100,"maxReconcileRetries":10,"promotionWrapperTemplate":"","taskPollingInterval":"10s","workflowMonitorPollingInterval":"10s"}` | GitOps operator configuration |
 | gitops-operator.config.commitStatusPollingInterval | string | `"10s"` | Commit status polling interval |
 | gitops-operator.config.maxConcurrentReleases | int | `100` | Maximum number of concurrent releases being processed by the operator (this will not affect the number of releases being processed by the gitops runtime) |
 | gitops-operator.config.maxReconcileRetries | int | `10` | Maximum number of reconcile retries on promotion-related resources before failing a promotion task |
@@ -601,11 +658,21 @@ global:
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
 | gitops-operator.enabled | bool | `true` |  |
+| gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_COMPRESSION | string | `"gzip"` | Specifies the compression algorithm to be used for all telemetry data. Ref: https://opentelemetry.io/docs/specs/otel/protocol/exporter/ |
+| gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_ENDPOINT | string | `"http://localhost:4317"` | Base endpoint URL for all OpenTelemetry signals. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
+| gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_PROTOCOL | string | `"grpc"` | Specifies the OTLP transport protocol to be used for all telemetry data. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
+| gitops-operator.env.<<[0].OTEL_EXPORTER_PROMETHEUS_HOST | string | `"0.0.0.0"` | Host used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus |
+| gitops-operator.env.<<[0].OTEL_EXPORTER_PROMETHEUS_PORT | string | `"9464"` | Port used by the Prometheus OTel metrics exporter if OTEL_METRICS_EXPORTER=prometheus |
+| gitops-operator.env.<<[0].OTEL_LOGS_EXPORTER | string | `"none"` | OTel Logs exporter to be used. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| gitops-operator.env.<<[0].OTEL_METRICS_EXPORTER | string | `"none"` | OTel metrics exporter to be used. Set to "prometheus" to export metrics in Prometheus format. If set to "prometheus", it's recommended to set METRICS_SCRAPE_TIMEOUT_MS=4×scrape_interval. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| gitops-operator.env.<<[0].OTEL_METRIC_EXPORT_INTERVAL | string | `"10000"` | The time interval (in milliseconds) between the start of two export attempts for push metric exporters, such as "otlp". Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| gitops-operator.env.<<[0].OTEL_METRIC_EXPORT_TIMEOUT | string | `"5000"` | Maximum allowed time (in milliseconds) to export data for push metric exporters, such as "otlp". Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| gitops-operator.env.<<[0].OTEL_SEMCONV_STABILITY_OPT_IN | string | `"http"` | Emit the stable HTTP and networking OTel conventions if CF_TELEMETRY_OTEL_ALLOW_HTTP_INSTRUMENTATION=true. |
+| gitops-operator.env.<<[0].OTEL_TRACES_EXPORTER | string | `"none"` | OTel traces exporter to be used. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
+| gitops-operator.env.<<[0].OTEL_TRACES_SAMPLER | string | `"parentbased_always_on"` | OTel sampler to be used for traces. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
 | gitops-operator.env.GITOPS_OPERATOR_VERSION | string | `"0.11.1"` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
-| gitops-operator.image.registry | string | `"quay.io"` | defaults |
-| gitops-operator.image.repository | string | `"codefresh/codefresh-gitops-operator"` |  |
-| gitops-operator.image.tag | string | `"293f24f"` |  |
+| gitops-operator.image | object | `{"registry":"quay.io","repository":"codefresh/codefresh-gitops-operator","tag":"main-c182bdf"}` | GitOps operator image |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
@@ -635,12 +702,12 @@ global:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"d4fefcb"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
+| global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"bc37d62"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
 | global.httpProxy | string | `""` | global HTTP_PROXY for all components |
 | global.httpsProxy | string | `""` | global HTTPS_PROXY for all components |
 | global.imageRegistry | string | `""` |  |
 | global.integrations.argo-cd.repoServer.port | int | `8081` | Port of the ArgoCD repo server |
-| global.integrations.argo-cd.repoServer.svc | string | `"argocd-repo-server"` | Service name of the ArgoCD repo server |
+| global.integrations.argo-cd.repoServer.svc | string | `"argo-cd-repo-server"` | Service name of the ArgoCD repo server |
 | global.integrations.argo-cd.server.auth | object | `{"password":"","passwordSecretKeyRef":{"key":"password","name":"argocd-initial-admin-secret"},"token":"","tokenSecretKeyRef":{},"type":"password","username":"admin"}` | How GitOps Runtime should authenticate with ArgoCD server |
 | global.integrations.argo-cd.server.auth.password | string | `""` | ArgoCD password in plain text |
 | global.integrations.argo-cd.server.auth.passwordSecretKeyRef | object | `{"key":"password","name":"argocd-initial-admin-secret"}` | ArgoCD password referenced by an existing secret |
@@ -650,7 +717,7 @@ global:
 | global.integrations.argo-cd.server.auth.username | string | `"admin"` | ArgoCD username in plain text |
 | global.integrations.argo-cd.server.port | int | `80` | Port of the ArgoCD server |
 | global.integrations.argo-cd.server.rootpath | string | `""` | Set if Argo CD is running behind reverse proxy under subpath different from / e.g. rootpath: '/argocd' |
-| global.integrations.argo-cd.server.svc | string | `"argocd-server"` | Service name of the ArgoCD server |
+| global.integrations.argo-cd.server.svc | string | `"argo-cd-server"` | Service name of the ArgoCD server |
 | global.noProxy | string | `""` | global NO_PROXY for all components |
 | global.nodeSelector | object | `{}` | Global nodeSelector for all components |
 | global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null,"singleNamespace":false}` | Runtime level settings |
@@ -706,7 +773,7 @@ global:
 | internal-router.serviceAccount.create | bool | `true` |  |
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
-| redis | object | `{"affinity":{},"enabled":true,"env":{},"envFrom":[],"extraArgs":[],"fullnameOverride":"runtime-redis","image":{"registry":"public.ecr.aws","repository":"docker/library/redis","tag":"8.2.1-alpine"},"imagePullSecrets":[],"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"metrics":{"enabled":true,"env":{},"envFrom":[],"image":{"registry":"ghcr.io","repository":"oliver006/redis_exporter","tag":"v1.72.1"},"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"serviceMonitor":{"enabled":false}},"nodeSelector":{},"pdb":{"annotations":{},"enabled":false,"labels":{},"maxUnavailable":"","minAvailable":1},"podAnnotations":{},"podLabels":{},"podSecurityContext":{},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"securityContext":{},"service":{"annotations":{},"labels":{},"ports":{"metrics":{"port":9121,"targetPort":9121},"redis":{"port":6379,"targetPort":6379}},"type":"ClusterIP"},"serviceAccount":{"annotations":{},"create":true,"name":""},"tolerations":[],"topologySpreadConstraints":[]}` | Standalone redis deployment Will be replaced by redis-ha subchart when `redis-ha.enabled=true` |
+| redis | object | `{"affinity":{},"enabled":false,"env":{},"envFrom":[],"extraArgs":[],"fullnameOverride":"runtime-redis","image":{"registry":"public.ecr.aws","repository":"docker/library/redis","tag":"8.2.1-alpine"},"imagePullSecrets":[],"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"metrics":{"enabled":true,"env":{},"envFrom":[],"image":{"registry":"ghcr.io","repository":"oliver006/redis_exporter","tag":"v1.72.1"},"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"serviceMonitor":{"enabled":false}},"nodeSelector":{},"pdb":{"annotations":{},"enabled":false,"labels":{},"maxUnavailable":"","minAvailable":1},"podAnnotations":{},"podLabels":{},"podSecurityContext":{},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"securityContext":{},"service":{"annotations":{},"labels":{},"ports":{"metrics":{"port":9121,"targetPort":9121},"redis":{"port":6379,"targetPort":6379}},"type":"ClusterIP"},"serviceAccount":{"annotations":{},"create":true,"name":""},"tolerations":[],"topologySpreadConstraints":[]}` | Standalone redis deployment Will be replaced by redis-ha subchart when `redis-ha.enabled=true` |
 | redis-ha | object | `{"additionalAffinities":{},"affinity":"","auth":true,"containerSecurityContext":{"readOnlyRootFilesystem":true},"enabled":false,"existingSecret":"gitops-runtime-redis","exporter":{"enabled":false,"image":"ghcr.io/oliver006/redis_exporter","tag":"v1.69.0"},"fullnameOverride":"runtime-redis-ha","haproxy":{"additionalAffinities":{},"affinity":"","containerSecurityContext":{"readOnlyRootFilesystem":true},"enabled":true,"hardAntiAffinity":true,"metrics":{"enabled":true},"tolerations":[]},"hardAntiAffinity":true,"image":{"repository":"public.ecr.aws/docker/library/redis","tag":"8.2.1-alpine"},"persistentVolume":{"enabled":false},"redis":{"config":{"save":"\"\""},"masterGroupName":"gitops-runtime"},"tolerations":[],"topologySpreadConstraints":{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}}` | Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true` Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml |
 | redis-ha.additionalAffinities | object | `{}` | Additional affinities to add to the Redis server pods. |
 | redis-ha.affinity | string | `""` | Assign custom [affinity] rules to the Redis pods. |
@@ -738,7 +805,7 @@ global:
 | redis-ha.topologySpreadConstraints.maxSkew | string | `""` (defaults to `1`) | Max skew of pods tolerated |
 | redis-ha.topologySpreadConstraints.topologyKey | string | `""` (defaults to `topology.kubernetes.io/zone`) | Topology key for spread |
 | redis-ha.topologySpreadConstraints.whenUnsatisfiable | string | `""` (defaults to `ScheduleAnyway`) | Enforcement policy, hard or soft |
-| redis-secret-init | object | `{"affinity":{},"image":{"registry":"docker.io","repository":"alpine/kubectl","tag":"1.34.1"},"nodeSelector":{},"tolerations":[]}` | Enable hook job to create redis secret |
+| redis-secret-init | object | `{"affinity":{},"image":{"registry":"docker.io","repository":"alpine/kubectl","tag":"1.35.0"},"nodeSelector":{},"tolerations":[]}` | Enable hook job to create redis secret |
 | redis.image | object | `{"registry":"public.ecr.aws","repository":"docker/library/redis","tag":"8.2.1-alpine"}` | Redis image |
 | redis.metrics | object | `{"enabled":true,"env":{},"envFrom":[],"image":{"registry":"ghcr.io","repository":"oliver006/redis_exporter","tag":"v1.72.1"},"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"serviceMonitor":{"enabled":false}}` | Enable metrics sidecar |
 | redis.metrics.serviceMonitor | object | `{"enabled":false}` | Enable a prometheus ServiceMonitor |
@@ -746,7 +813,7 @@ global:
 | redis.readinessProbe | object | `{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15}` | Probes configuration |
 | redis.service | object | `{"annotations":{},"labels":{},"ports":{"metrics":{"port":9121,"targetPort":9121},"redis":{"port":6379,"targetPort":6379}},"type":"ClusterIP"}` | Service configuration |
 | redis.serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Create ServiceAccount for redis |
-| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.32.0"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
+| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.34.0"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
 | tunnel-client | object | `{"affinity":{},"enabled":true,"libraryMode":true,"nodeSelector":{},"tolerations":[],"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes. |
 | tunnel-client.enabled | bool | `true` | Will only be used if global.runtime.ingress.enabled = false |
 | tunnel-client.libraryMode | bool | `true` | Do not change this value! Breaks chart logic |
