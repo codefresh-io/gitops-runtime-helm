@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.72
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.0.0
+version: 0.27.0
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -13,6 +13,99 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: 'chore: Fix security vulnerabilities for argo-workflows (#1047)'
+    - kind: changed
+      description: 'feat: add automated Slack release notifications (#1045)'
+    - kind: changed
+      description: 'feat(app-proxy): support for the confirm deletion/pruning feature of ArgoCD (#1046)'
+    - kind: changed
+      description: updated kubectl for redis-secret-init job (#1041)
+    - kind: changed
+      description: 'feat: bump app proxy (#1044)'
+    - kind: changed
+      description: 'feat(event-reporter): added deleted field to app event payload (#1039)'
+    - kind: changed
+      description: updated argo-cd to 3.2.3 (#1037)
+    - kind: changed
+      description: 'fix(sealed-secrets-controller): security vulnerabilities CVE-2025-47912, CVE-2025-58181, CVE-2025-58186, CVE-2025-58187, CVE-2025-58188, CVE-2025-58189, CVE-2025-61723, CVE-2025-61724, CVE-2025-61727, CVE-2025-61729 (#1035)'
+    - kind: changed
+      description: 'fix(cf-argocd-extras): security vulnerability CVE-2025-58181, CVE-2025-13281, CVE-2025-61727, CVE-2025-61729 (#1032)'
+    - kind: changed
+      description: 'feat: bump app proxy (#1031)'
+    - kind: changed
+      description: 'docs: add release guide documentation (#1030)'
+    - kind: changed
+      description: 'Revert "feat: remove product crd (#997)" (#1029)'
+    - kind: changed
+      description: 'fix(codefresh-gitops-operator): security vulnerability CVE-2025-66626 (#1024)'
+    - kind: changed
+      description: 'fix(codefresh-tunnel-client): security vulnerabilities CVE-2025-9230, CVE-2025-9231, CVE-2025-9232, CVE-2025-46394, CVE-2024-58251 (#1023)'
+    - kind: changed
+      description: 'feat: added support for runtime uninstallation'
+    - kind: changed
+      description: updated argo-cd to 3.2.2 (#1019)
+    - kind: changed
+      description: 'fix: sync codefresh-gitops-operator image from `stable/0.26` branch with `main` branch (#1010)'
+    - kind: changed
+      description: 'fix: security fixes for enrichment images (CVE-2025-64756, CVE-2025-65945, CVE-2025-66031, CVE-2025-12816, CVE-2025-8291, CVE-2025-6075, CVE-2025-12084) (#1011)'
+    - kind: changed
+      description: 'fix: update app-proxy image tags to latest version to improve git providers support (#1014)'
+    - kind: changed
+      description: 'fix: app-proxy fails to create a Workflow instance (#1008)'
+    - kind: changed
+      description: '[cf-argocd-extras]feat: new MRC change revisions annotations support (#1005)'
+    - kind: changed
+      description: 'feat: remove product crd (#997)'
+    - kind: changed
+      description: 'fix: update app-proxy image tags to latest version 1.3982.0 (#999)'
+    - kind: changed
+      description: 'chore(CR-32163): updated cli-v2 for fixing CVE-2024-25621 "github.com/containerd (#993)'
+    - kind: changed
+      description: added labeler github action (#971)
+    - kind: changed
+      description: Feat/revert-app-proxy-and-operator (#980)
+    - kind: changed
+      description: 'fix: update namespace handling in cluster resource reporter (#965)'
+    - kind: changed
+      description: 'feat: add latest app version to release index data  (#961)'
+    - kind: changed
+      description: reset main version back to 0.0.0 (#959)
+    - kind: changed
+      description: 'chore: bump cap-app-proxy to 1.3953.0 (#958)'
+    - kind: changed
+      description: 'chore: Fix security vulnerabilities for argo-workflows (#948)'
+    - kind: changed
+      description: '[gitops-operator]fix: improve integration test coverage of setup code (#949)'
+    - kind: changed
+      description: '[gitops-operator]fix: remove git commit statuses (#940)'
+    - kind: changed
+      description: 'feat: multi-runtime installation (#939)'
+    - kind: changed
+      description: 'fix: update cap-app-proxy image tags to 1.3943.0 (#944)'
+    - kind: changed
+      description: 'chore: remove checksum_test'
+    - kind: changed
+      description: 'feat: remove codefresh-cm from helm unit tests'
+    - kind: changed
+      description: 'feat: checksum annotations (#938)'
+    - kind: changed
+      description: 'fix: update REQUIRED_VERSION_CONSTRAINT for Argo CD compatibility (#937)'
+    - kind: changed
+      description: '[cf-argocd-extras]chore: update depencencies (argo-cd 3.2) (#928)'
+    - kind: changed
+      description: 'feat: add branch data to pullrequest info (#926)'
+    - kind: changed
+      description: 'feat: disable runtime redis by default (#927)'
+    - kind: changed
+      description: 'feat: disable Argo Rollouts by default and enable namespace-scoped Argo Workflows (#920)'
+    - kind: changed
+      description: 'fix: set transient error on app sync failure (#922)'
+    - kind: changed
+      description: 'feat: allow running without redis configured (#919)'
+    - kind: changed
+      description: 'fix: retry on notFound before updating resource status (#912)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
