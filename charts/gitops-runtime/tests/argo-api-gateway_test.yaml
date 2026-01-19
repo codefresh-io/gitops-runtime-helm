@@ -12,9 +12,8 @@ tests:
       - equal:
           path: data["argocd.server"]
           value: argo-cd-server:80
-      - equal:
+      - notExists:
           path: data["redis.server"]
-          value: null
       - equal:
           path: data["repo.server"]
           value: argo-cd-repo-server:8081

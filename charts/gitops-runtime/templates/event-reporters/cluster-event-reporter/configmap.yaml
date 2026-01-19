@@ -1,7 +1,10 @@
 {{- define "cluster-event-reporter.resources.configmap.defaults" }}
 argocd.server: {{ include "codefresh-gitops-runtime.argocd.server.no-protocol-url" . }}
-redis.server: {{ include "codefresh-gitops-runtime.argocd.redis.url" . }}
 repo.server: {{ include "codefresh-gitops-runtime.argocd.reposerver.url" . }}
+  {{- $redisServer := (include "codefresh-gitops-runtime.argocd.redis.url" .) }}
+  {{- if $redisServer }}
+redis.server: {{ $redisServer }}
+  {{- end }}
 argo-gateway.server: http://argo-gateway
 resource.threadiness: '100'
 app.queue.size: '1000'
