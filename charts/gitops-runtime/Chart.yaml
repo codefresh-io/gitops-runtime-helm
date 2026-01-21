@@ -29,7 +29,7 @@ annotations:
     - kind: changed
       description: "Upgraded ArgoCD to version 3.2.2"
     - kind: changed
-      description: "Updated app-proxy to version 1.3982.0 with improved git providers support including Bitbucket, Bitbucket Server, and GitLab for the runtime installation wizard"
+      description: "Updated app-proxy with improved git providers support including Bitbucket, Bitbucket Server, and GitLab for the runtime installation wizard"
     - kind: removed
       description: "Removed argo-rollouts from gitops-runtime helm chart"
     - kind: fixed
