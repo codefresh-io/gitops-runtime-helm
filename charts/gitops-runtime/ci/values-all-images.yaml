@@ -23,10 +23,6 @@ global:
       username: 'username'
       password: 'dummy'
 
-argo-rollouts:
-  dashboard:
-    enabled: true
-
 argo-cd:
   redis-ha:
     enabled: true

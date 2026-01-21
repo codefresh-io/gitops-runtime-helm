@@ -8,7 +8,6 @@
 - [Codefresh official documentation](#codefresh-official-documentation)
 - [Argo-workflows artifact and log storage](#argo-workflows-artifact-and-log-storage)
 - [Installation with External ArgoCD](#installation-with-external-argocd)
-- [Installation with External Argo Rollouts](#installation-with-external-argo-rollouts)
 - [Using with private registries - Helper utility](#using-with-private-registries---helper-utility)
 - [Openshift](#openshift)
 - [High Availability](#high-availability)
@@ -62,8 +61,6 @@ argo-workflows:
   server:
     clusterWorkflowTemplates:
       enabled: false
-argo-rollouts:
-  enabled: false
 tunnel-client:
   enabled: false
 gitops-operator:
@@ -82,8 +79,6 @@ argo-cd:
 argo-workflows:
   crds:
     install: true
-argo-rollouts:
-  installCRDs: true
 gitops-operator:
   crds:
     install: true
@@ -192,26 +187,6 @@ metadata:
 data:
   accounts.admin: apiKey, login
   admin.enabled: "true"
-```
-
-## Installation with External Argo Rollouts
-
-If you want to use an existing Argo Rollouts installation, you can disable the built-in Argo Rollouts and configure the GitOps Runtime to use the external Argo Rollouts.
-See the `values.yaml` example below:
-
-```yaml
-global:
-  # -- Configuration for external Argo Rollouts
-  external-argo-rollouts:
-    # -- Rollout reporter settings
-    rollout-reporter:
-      # -- Enable rollout reporter
-      # Configuration is defined at .Values.event-reporters.rollout
-      enabled: true
-
-argo-rollouts:
-  # -- Disable built-in Argo Rollouts
-  enabled: false
 ```
 
 ## Using with private registries - Helper utility

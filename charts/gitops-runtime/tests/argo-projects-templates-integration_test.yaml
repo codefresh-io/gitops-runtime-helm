@@ -6,7 +6,6 @@ templates:
   - app-proxy/workflows-crb.yaml
   - app-proxy/config.yaml
   - internal-router/config.yaml
-  - event-reporters/rollout-reporter/clusterrolebinding.yaml
 tests:
 # ------------------------------------------------------------------------
 # ArgoCD
