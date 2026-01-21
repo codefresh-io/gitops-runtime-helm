@@ -127,16 +127,3 @@ event-reporters:
                     values:
                       - workflow-reporter
               topologyKey: "kubernetes.io/hostname"
-  rollout:
-    sensor:
-      replicas: 2
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: sensor-name
-                    operator: In
-                    values:
-                      - rollout-reporter
-              topologyKey: "kubernetes.io/hostname"

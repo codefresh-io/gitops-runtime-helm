@@ -118,13 +118,6 @@ global:
         svc: argo-cd-repo-server
         # -- Port of the ArgoCD repo server
         port: 8081
-  # -- Configuration for external Argo Rollouts
-  external-argo-rollouts:
-    # -- Rollout reporter settings
-    rollout-reporter:
-      # -- Enable or disable rollout reporter
-      # Configuration is defined at .Values.event-reporters.rollout
-      enabled: false
   # -- Global nodeSelector for all components
   nodeSelector: {}
   # -- Global tolerations for all components
@@ -347,15 +340,6 @@ codefreshWorkflowLogStoreCM:
   enabled: true
   endpoint: gitops-workflow-logs.codefresh.io
   insecure: false
-# *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-rollouts-2.37.3-7-v1.7.2-cap-OSS-697/charts/argo-rollouts
-# *********************************************************************************************************************
-argo-rollouts:
-  enabled: false
-  fullnameOverride: argo-rollouts
-  controller:
-    replicas: 1
-  installCRDs: true
 #-----------------------------------------------------------------------------------------------------------------------
 # Internal router
 #-----------------------------------------------------------------------------------------------------------------------
@@ -495,14 +479,14 @@ app-proxy:
           tag: 1.1.20-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.4018.0
+    tag: 1.4020.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.4018.0
+      tag: 1.4020.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh

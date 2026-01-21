@@ -8,7 +8,6 @@
 - [Codefresh official documentation](#codefresh-official-documentation)
 - [Argo-workflows artifact and log storage](#argo-workflows-artifact-and-log-storage)
 - [Installation with External ArgoCD](#installation-with-external-argocd)
-- [Installation with External Argo Rollouts](#installation-with-external-argo-rollouts)
 - [Using with private registries - Helper utility](#using-with-private-registries---helper-utility)
 - [Openshift](#openshift)
 - [High Availability](#high-availability)
@@ -62,8 +61,6 @@ argo-workflows:
   server:
     clusterWorkflowTemplates:
       enabled: false
-argo-rollouts:
-  enabled: false
 tunnel-client:
   enabled: false
 gitops-operator:
@@ -82,8 +79,6 @@ argo-cd:
 argo-workflows:
   crds:
     install: true
-argo-rollouts:
-  installCRDs: true
 gitops-operator:
   crds:
     install: true
@@ -189,26 +184,6 @@ metadata:
 data:
   accounts.admin: apiKey, login
   admin.enabled: "true"
-```
-
-## Installation with External Argo Rollouts
-
-If you want to use an existing Argo Rollouts installation, you can disable the built-in Argo Rollouts and configure the GitOps Runtime to use the external Argo Rollouts.
-See the `values.yaml` example below:
-
-```yaml
-global:
-  # -- Configuration for external Argo Rollouts
-  external-argo-rollouts:
-    # -- Rollout reporter settings
-    rollout-reporter:
-      # -- Enable rollout reporter
-      # Configuration is defined at .Values.event-reporters.rollout
-      enabled: true
-
-argo-rollouts:
-  # -- Disable built-in Argo Rollouts
-  enabled: false
 ```
 
 ## Using with private registries - Helper utility
@@ -546,14 +521,14 @@ global:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.4018.0"` |  |
+| app-proxy.image.tag | string | `"1.4020.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.4018.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.4020.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -636,10 +611,6 @@ global:
 | argo-events.enabled | bool | `true` |  |
 | argo-events.fullnameOverride | string | `"argo-events"` |  |
 | argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"bc37d62"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
-| argo-rollouts.controller.replicas | int | `1` |  |
-| argo-rollouts.enabled | bool | `false` |  |
-| argo-rollouts.fullnameOverride | string | `"argo-rollouts"` |  |
-| argo-rollouts.installCRDs | bool | `true` |  |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.executor.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
@@ -732,9 +703,6 @@ global:
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
 | global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"bc37d62"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
-| global.external-argo-rollouts | object | `{"rollout-reporter":{"enabled":false}}` | Configuration for external Argo Rollouts |
-| global.external-argo-rollouts.rollout-reporter | object | `{"enabled":false}` | Rollout reporter settings |
-| global.external-argo-rollouts.rollout-reporter.enabled | bool | `false` | Enable or disable rollout reporter Configuration is defined at .Values.event-reporters.rollout |
 | global.httpProxy | string | `""` | global HTTP_PROXY for all components |
 | global.httpsProxy | string | `""` | global HTTPS_PROXY for all components |
 | global.imageRegistry | string | `""` |  |
@@ -845,16 +813,8 @@ global:
 | redis.readinessProbe | object | `{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15}` | Probes configuration |
 | redis.service | object | `{"annotations":{},"labels":{},"ports":{"metrics":{"port":9121,"targetPort":9121},"redis":{"port":6379,"targetPort":6379}},"type":"ClusterIP"}` | Service configuration |
 | redis.serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Create ServiceAccount for redis |
-| sealed-secrets.fullnameOverride | string | `"sealed-secrets-controller"` |  |
-| sealed-secrets.image.registry | string | `"quay.io"` |  |
-| sealed-secrets.image.repository | string | `"codefresh/sealed-secrets-controller"` |  |
-| sealed-secrets.image.tag | string | `"0.34.0"` |  |
-| sealed-secrets.keyrenewperiod | string | `"720h"` |  |
-| sealed-secrets.resources.limits.cpu | string | `"500m"` |  |
-| sealed-secrets.resources.limits.memory | string | `"1Gi"` |  |
-| sealed-secrets.resources.requests.cpu | string | `"200m"` |  |
-| sealed-secrets.resources.requests.memory | string | `"512Mi"` |  |
-| tunnel-client.affinity | object | `{}` |  |
+| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.34.0"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
+| tunnel-client | object | `{"affinity":{},"enabled":true,"libraryMode":true,"nodeSelector":{},"tolerations":[],"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes. |
 | tunnel-client.enabled | bool | `true` | Will only be used if global.runtime.ingress.enabled = false |
 | tunnel-client.libraryMode | bool | `true` | Do not change this value! Breaks chart logic |
 | tunnel-client.nodeSelector | object | `{}` |  |

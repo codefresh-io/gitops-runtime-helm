@@ -124,18 +124,6 @@ Determine argocd repoServer url
 {{- end}}
 
 {{/*
-Determine rollouts name
-*/}}
-{{- define "codefresh-gitops-runtime.argo-rollouts.name" -}}
-  {{- if (index .Values "argo-rollouts" "enabled") }}
-    {{/* For now use template from rollouts chart until better approach */}}
-    {{- template "argo-rollouts.fullname" (dict "Values" (get .Values "argo-rollouts")) }}
-  {{- else }}
-    {{- printf "argo-rollouts" }}
-  {{- end }}
-{{- end }}
-
-{{/*
 Determine argocd server service port. Must be called with chart root context
 */}}
 {{- define "codefresh-gitops-runtime.argocd.server.serviceport" -}}
@@ -291,7 +279,7 @@ Determine argocd redis url
 {{- else }}
   {{- printf "" }}
 {{- end }}
-{{- end}}
+{{- end }}
 
 {{/*
 Determine argo worklofws server name
@@ -393,12 +381,6 @@ Output comma separated list of installed runtime components
   {{- if index (get .Values "argo-events") "enabled" }}
     {{- $argoEvents := dict "name" "argo-events" "version" (get .Subcharts "argo-events").Chart.AppVersion }}
     {{- $comptList = append $comptList $argoEvents }}
-  {{- end }}
-  {{- if index (get .Values "argo-rollouts") "enabled" }}
-    {{- $rolloutReporter := dict "name" "rollout-reporter" "version" .Chart.AppVersion }}
-    {{- $argoRollouts := dict "name" "argo-rollouts" "version" (get .Subcharts "argo-rollouts").Chart.AppVersion }}
-    {{- $comptList = append $comptList $argoRollouts }}
-    {{- $comptList = append $comptList $rolloutReporter }}
   {{- end }}
   {{- if index (get .Values "argo-workflows") "enabled" }}
     {{- $workflowReporter := dict "name" "workflow-reporter" "version" .Chart.AppVersion }}
