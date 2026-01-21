@@ -910,8 +910,7 @@ redis-ha:
   affinity: ""
   # -- [Tolerations] for use with node taints for Redis pods.
   tolerations: []
-  # -- Assign custom [TopologySpreadConstraints] rules to the Redis pods.
-  ## https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+  # -- Assign custom [TopologySpreadConstraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) rules to the Redis pods.
   topologySpreadConstraints:
     # -- Enable Redis HA topology spread constraints
     enabled: false
