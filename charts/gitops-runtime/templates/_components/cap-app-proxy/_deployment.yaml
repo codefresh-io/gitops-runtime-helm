@@ -62,6 +62,7 @@ spec:
         - name: http-metrics
           containerPort: 9100
         readinessProbe:
+          {{- if .Values.readinessProbe.enabled }}
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -70,6 +71,8 @@ spec:
           httpGet:
             port: http
             path: /api/readyz
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -79,6 +82,7 @@ spec:
           httpGet:
             port: http
             path: /api/healthz
+          {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         volumeMounts:
