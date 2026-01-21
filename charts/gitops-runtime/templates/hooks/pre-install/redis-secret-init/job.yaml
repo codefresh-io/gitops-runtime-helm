@@ -7,7 +7,6 @@ metadata:
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
     helm.sh/hook-weight: "10"
 spec:
-  backoffLimit: 0
   ttlSecondsAfterFinished: 300
   template:
     spec:
