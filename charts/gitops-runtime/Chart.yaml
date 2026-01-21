@@ -15,7 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix: a simple runtime application ends up being out-of-sync (#1052)'
+      description: 'chore: remove argo-rollouts from gitops-runtime helm chart (#1051)'
+    - kind: changed
+      description: 'fix: a simple runtime application ends up being out-of-sync'
     - kind: changed
       description: 'chore: Fix security vulnerabilities for argo-workflows (#1047)'
     - kind: changed
