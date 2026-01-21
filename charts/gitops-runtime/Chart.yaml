@@ -15,29 +15,31 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: added
-      description: "Support for running without Redis configured (#919)"
+      description: "Support for running without Redis configured"
     - kind: added
       description: "Support for runtime uninstallation"
     - kind: added
-      description: "Support for confirm deletion/pruning feature of ArgoCD (#1046)"
+      description: "Support for confirm deletion/pruning feature of ArgoCD"
     - kind: added
-      description: "New MRC change revisions annotations support (#1005)"
+      description: "New MRC change revisions annotations support"
     - kind: added
-      description: "Added deleted field to app event payload in event-reporter (#1039)"
+      description: "Added deleted field to app event payload in event-reporter"
+    - kind: added
+      description: "Automated Slack release notifications"
     - kind: changed
-      description: "Updated argo-cd to 3.2.2 (#1019)"
+      description: "Upgraded ArgoCD to version 3.2.2"
     - kind: changed
-      description: "Updated app-proxy to improve git providers support (#1014)"
+      description: "Updated app-proxy to version 1.3982.0 with improved git providers support including Bitbucket, Bitbucket Server, and GitLab for the runtime installation wizard"
     - kind: removed
-      description: "Removed argo-rollouts from gitops-runtime helm chart (#1051)"
+      description: "Removed argo-rollouts from gitops-runtime helm chart"
     - kind: fixed
-      description: "Set transient error on app sync failure (#922)"
+      description: "Set transient error on app sync failure"
     - kind: fixed
-      description: "Resolved runtime application out-of-sync issue"
+      description: "Fixed runtime application out-of-sync issue"
     - kind: fixed
-      description: "Removed git commit statuses from gitops-operator (#940)"
+      description: "Removed git commit statuses from gitops-operator"
     - kind: security
-      description: "Fixed security vulnerabilities for argo-workflows (#1047)"
+      description: "Fixed security vulnerabilities in argo-workflows"
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
