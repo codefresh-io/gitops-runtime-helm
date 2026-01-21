@@ -29,13 +29,6 @@ internal-router:
   tolerations: *tolerations
 
 event-reporters:
-  rollout:
-    eventSource:
-      nodeSelector: *nodeSelector
-      tolerations: *tolerations
-    sensor:
-      nodeSelector: *nodeSelector
-      tolerations: *tolerations
   workflow:
     eventSource:
       nodeSelector: *nodeSelector
@@ -65,12 +58,6 @@ argo-events:
     nodeSelector: *nodeSelector
     tolerations: *tolerations
   webhook:
-    nodeSelector: *nodeSelector
-    tolerations: *tolerations
-
-argo-rollouts:
-  enabled: true
-  controller:
     nodeSelector: *nodeSelector
     tolerations: *tolerations
 

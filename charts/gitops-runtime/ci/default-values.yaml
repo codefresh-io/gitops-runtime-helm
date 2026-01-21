@@ -20,7 +20,3 @@ global:
       url: 'https://github.com'
       username: 'username'
       password: 'dummy'
-
-
-argo-rollouts:
-  enabled: true

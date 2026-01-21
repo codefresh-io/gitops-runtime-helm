@@ -60,6 +60,3 @@ global:
       username: 'username'
       password: 'dummy'
 
-
-argo-rollouts:
-  enabled: true

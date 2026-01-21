@@ -23,14 +23,4 @@ TARGET_RUNTIME_ACCOUNT_ID: {{ .Values.global.codefresh.accountId }}
       {{- fail "global.codefresh.accountId must be provided for hosted runtimes"}}
     {{- end }}
   {{- end }}
-{{/*
-This will promote argo-rollouts dependency version to app-proxy.
-This will be used when installing argo-rollouts using button.
-*/}}
-{{- range $d := .Chart.Dependencies }}
-{{- if eq $d.Name "argo-rollouts" }}
-ROLLOUTS_HELM_REPOSITORY: {{ $d.Repository | quote }}
-ROLLOUTS_HELM_VERSION: {{ $d.Version | quote }}
-{{- end }}
-{{- end }}
 {{- end }}

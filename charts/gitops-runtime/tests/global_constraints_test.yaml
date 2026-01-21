@@ -14,7 +14,6 @@ templates:
   - hooks/pre-uninstall/cleanup-resources.yaml
   - hooks/pre-uninstall/delete-runtime-from-platform.yaml
   - charts/argo-events/*
-  - charts/argo-rollouts/*
   - charts/argo-workflows/*
   - _components/cap-app-proxy/_deployment.yaml
   - _components/cap-app-proxy/_config.yaml
@@ -236,21 +235,6 @@ tests:
         documentSelector:
           path: kind
           value: Deployment
-      # -- argo-rollouts controller
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: some-value
-            extra-key: extra-value
-        template: charts/argo-rollouts/templates/controller/deployment.yaml
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-          - key: some-key
-            operator: Equal
-            value: some-value
-            effect: NoSchedule
-        template: charts/argo-rollouts/templates/controller/deployment.yaml
       # -- argo-workflow controller
       - equal:
           path: spec.template.spec.nodeSelector
@@ -468,21 +452,6 @@ tests:
         documentSelector:
           path: kind
           value: Deployment
-      # -- argo-rollouts controller
-      - equal:
-          path: spec.template.spec.nodeSelector
-          value:
-            some-key: another-value
-            foo: bar
-        template: charts/argo-rollouts/templates/controller/deployment.yaml
-      - equal:
-          path: spec.template.spec.tolerations
-          value:
-            - key: another-key
-              operator: Equal
-              value: another-value
-              effect: NoSchedule
-        template: charts/argo-rollouts/templates/controller/deployment.yaml
       # -- argo-workflow controller
       - equal:
           path: spec.template.spec.nodeSelector
