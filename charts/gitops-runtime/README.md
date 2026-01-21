@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.27.0](https://img.shields.io/badge/Version-0.27.0-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
+![Version: 0.27.0](https://img.shields.io/badge/Version-0.27.0-informational?style=flat-square) ![AppVersion: 0.2.1](https://img.shields.io/badge/AppVersion-0.2.1-informational?style=flat-square)
 
 ## Table of Content
 
@@ -800,7 +800,7 @@ global:
 | redis-ha.redis.config.save | string | `'""'` | Will save the DB if both the given number of seconds and the given number of write operations against the DB occurred. `""`  is disabled |
 | redis-ha.redis.masterGroupName | string | `"gitops-runtime"` | Redis convention for naming the cluster group: must match `^[\\w-\\.]+$` and can be templated |
 | redis-ha.tolerations | list | `[]` | [Tolerations] for use with node taints for Redis pods. |
-| redis-ha.topologySpreadConstraints | object | `{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}` | Assign custom [TopologySpreadConstraints] rules to the Redis pods. # https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
+| redis-ha.topologySpreadConstraints | object | `{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}` | Assign custom [TopologySpreadConstraints] rules to the Redis pods. |
 | redis-ha.topologySpreadConstraints.enabled | bool | `false` | Enable Redis HA topology spread constraints |
 | redis-ha.topologySpreadConstraints.maxSkew | string | `""` (defaults to `1`) | Max skew of pods tolerated |
 | redis-ha.topologySpreadConstraints.topologyKey | string | `""` (defaults to `topology.kubernetes.io/zone`) | Topology key for spread |
@@ -813,8 +813,16 @@ global:
 | redis.readinessProbe | object | `{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15}` | Probes configuration |
 | redis.service | object | `{"annotations":{},"labels":{},"ports":{"metrics":{"port":9121,"targetPort":9121},"redis":{"port":6379,"targetPort":6379}},"type":"ClusterIP"}` | Service configuration |
 | redis.serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Create ServiceAccount for redis |
-| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.34.0"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
-| tunnel-client | object | `{"affinity":{},"enabled":true,"libraryMode":true,"nodeSelector":{},"tolerations":[],"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes. |
+| sealed-secrets.fullnameOverride | string | `"sealed-secrets-controller"` |  |
+| sealed-secrets.image.registry | string | `"quay.io"` |  |
+| sealed-secrets.image.repository | string | `"codefresh/sealed-secrets-controller"` |  |
+| sealed-secrets.image.tag | string | `"0.34.0"` |  |
+| sealed-secrets.keyrenewperiod | string | `"720h"` |  |
+| sealed-secrets.resources.limits.cpu | string | `"500m"` |  |
+| sealed-secrets.resources.limits.memory | string | `"1Gi"` |  |
+| sealed-secrets.resources.requests.cpu | string | `"200m"` |  |
+| sealed-secrets.resources.requests.memory | string | `"512Mi"` |  |
+| tunnel-client.affinity | object | `{}` |  |
 | tunnel-client.enabled | bool | `true` | Will only be used if global.runtime.ingress.enabled = false |
 | tunnel-client.libraryMode | bool | `true` | Do not change this value! Breaks chart logic |
 | tunnel-client.nodeSelector | object | `{}` |  |
