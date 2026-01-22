@@ -53,14 +53,6 @@ tunnel-client:
   nodeSelector: *nodeSelector
   tolerations: *tolerations
 
-argo-events:
-  controller:
-    nodeSelector: *nodeSelector
-    tolerations: *tolerations
-  webhook:
-    nodeSelector: *nodeSelector
-    tolerations: *tolerations
-
 argo-workflows:
   controller:
     nodeSelector: *nodeSelector

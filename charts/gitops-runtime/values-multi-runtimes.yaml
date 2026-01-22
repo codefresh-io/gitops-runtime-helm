@@ -10,10 +10,6 @@ argo-cd:
   configs:
     params:
       application.namespaces: ''
-argo-events:
-  controller:
-    rbac:
-      namespaced: true
 argo-workflows:
   crds:
     install: false

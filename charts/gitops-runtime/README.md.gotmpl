@@ -46,10 +46,6 @@ argo-cd:
   configs:
     params:
       application.namespaces: ''
-argo-events:
-  controller:
-    rbac:
-      namespaced: true
 argo-workflows:
   crds:
     install: false
@@ -233,12 +229,6 @@ argo-cd:
 
   openshift:
     enabled: true
-
-argo-events:
-  openshift: true
-
-  webhook:
-    port: 8443
 
 sealed-secrets:
   podSecurityContext:

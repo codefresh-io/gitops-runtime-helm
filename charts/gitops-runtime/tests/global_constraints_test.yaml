@@ -13,7 +13,6 @@ templates:
   - hooks/pre-install/validate-usage.yaml
   - hooks/pre-uninstall/cleanup-resources.yaml
   - hooks/pre-uninstall/delete-runtime-from-platform.yaml
-  - charts/argo-events/*
   - charts/argo-workflows/*
   - _components/cap-app-proxy/_deployment.yaml
   - _components/cap-app-proxy/_config.yaml
