@@ -45,10 +45,6 @@ dependencies:
     repository: https://argoproj.github.io/argo-helm
     condition: argo-cd.enabled
     version: 9.3.0
-  - name: argo-events
-    repository: https://codefresh-io.github.io/argo-helm
-    version: 2.4.9-cap-CR-30841
-    condition: argo-events.enabled
   - name: argo-workflows
     repository: https://codefresh-io.github.io/argo-helm
     version: 0.45.18-v3.6.7-cap-CR-32333

@@ -286,30 +286,9 @@ argo-cd:
   controller:
     statefulsetAnnotations:
       argocd.argoproj.io/sync-options: "Delete=false"
-# *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-events-2.4.9-cap-CR-30841/charts/argo-events
-# *********************************************************************************************************************
-argo-events:
-  enabled: true
-  fullnameOverride: argo-events
-  crds:
-    install: false
-  configs:
-    nats:
-      versions:
-        - version: 0.22.1
-          natsStreamingImage: nats-streaming:0.25.6
-          metricsExporterImage: natsio/prometheus-nats-exporter:0.16.0
-    jetstream:
-      versions:
-        - version: latest
-          natsImage: nats:2.11.4
-          metricsExporterImage: natsio/prometheus-nats-exporter:0.17.3
-          configReloaderImage: natsio/nats-server-config-reloader:0.19.1
-          startCommand: /nats-server
-# *********************************************************************************************************************
-# DOCS: https://github.com/codefresh-io/argo-helm/blob/argo-workflows-0.45.18-v3.6.7-cap-CR-32333/charts/argo-workflows
-# *********************************************************************************************************************
+#-----------------------------------------------------------------------------------------------------------------------
+# Argo Workflows
+#-----------------------------------------------------------------------------------------------------------------------
 argo-workflows:
   fullnameOverride: argo
   enabled: true
