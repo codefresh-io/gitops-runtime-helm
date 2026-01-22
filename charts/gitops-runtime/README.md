@@ -46,10 +46,6 @@ argo-cd:
   configs:
     params:
       application.namespaces: ''
-argo-events:
-  controller:
-    rbac:
-      namespaced: true
 argo-workflows:
   crds:
     install: false
@@ -228,12 +224,6 @@ argo-cd:
 
   openshift:
     enabled: true
-
-argo-events:
-  openshift: true
-
-  webhook:
-    port: 8443
 
 sealed-secrets:
   podSecurityContext:
@@ -599,17 +589,6 @@ global:
 | argo-cd.redis-ha.image.tag | string | `"8.2.2-alpine"` | Redis tag |
 | argo-cd.redis.image.repository | string | `"ecr-public.aws.com/docker/library/redis"` | Redis repository |
 | argo-cd.redis.image.tag | string | `"8.2.2-alpine"` | Redis tag |
-| argo-events.configs.jetstream.versions[0].configReloaderImage | string | `"natsio/nats-server-config-reloader:0.19.1"` |  |
-| argo-events.configs.jetstream.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.17.3"` |  |
-| argo-events.configs.jetstream.versions[0].natsImage | string | `"nats:2.11.4"` |  |
-| argo-events.configs.jetstream.versions[0].startCommand | string | `"/nats-server"` |  |
-| argo-events.configs.jetstream.versions[0].version | string | `"latest"` |  |
-| argo-events.configs.nats.versions[0].metricsExporterImage | string | `"natsio/prometheus-nats-exporter:0.16.0"` |  |
-| argo-events.configs.nats.versions[0].natsStreamingImage | string | `"nats-streaming:0.25.6"` |  |
-| argo-events.configs.nats.versions[0].version | string | `"0.22.1"` |  |
-| argo-events.crds.install | bool | `false` |  |
-| argo-events.enabled | bool | `true` |  |
-| argo-events.fullnameOverride | string | `"argo-events"` |  |
 | argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"bc37d62"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |

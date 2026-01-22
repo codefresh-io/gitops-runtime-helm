@@ -378,10 +378,6 @@ Output comma separated list of installed runtime components
     {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
     {{- $comptList = append $comptList $argoCD }}
   {{- end }}
-  {{- if index (get .Values "argo-events") "enabled" }}
-    {{- $argoEvents := dict "name" "argo-events" "version" (get .Subcharts "argo-events").Chart.AppVersion }}
-    {{- $comptList = append $comptList $argoEvents }}
-  {{- end }}
   {{- if index (get .Values "argo-workflows") "enabled" }}
     {{- $workflowReporter := dict "name" "workflow-reporter" "version" .Chart.AppVersion }}
     {{- $argoWorkflows := dict "name" "argo-workflows" "version" (get .Subcharts "argo-workflows").Chart.AppVersion }}
