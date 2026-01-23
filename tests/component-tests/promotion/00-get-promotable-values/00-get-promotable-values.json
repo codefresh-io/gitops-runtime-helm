@@ -1,0 +1,66 @@
+[
+    {
+      "httpRequest": {
+        "method": "GET",
+        "path": "/2.0/api/promotion-orchestrator/promotion/desired-promotion-tasks"
+      },
+      "httpResponse": {
+        "statusCode": 200,
+        "body":  [
+            {
+              "promotionTaskId": "635ae4b1a8d4ea001297e0e9",
+              "name": "dev-codefresh-simple-dev-68ea7699e1e47d0cd666f6b9",
+              "promotionId": "68ea7699e1e47d0cd666f6b8",
+              "productName": "echo",
+              "environment": "dev",
+              "applicationId": {
+                "name": "simple-dev",
+                "namespace": "codefresh"
+              },
+              "spec": {
+                "phase": "PENDING",
+                "steps": [
+                  {
+                    "type": "getPromotionValues",
+                    "targetApplication": {
+                      "name": "simple-dev",
+                      "namespace": "codefresh"
+                    },
+                    "commitSha": "source-commit-sha",
+                    "versionProperty": {
+                      "file": "Chart.yaml",
+                      "jsonPath": "$.version"
+                    },
+                    "commitAuthorId": {
+                      "username": "test-user",
+                      "email": "test-user@example.com"
+                    },
+                    "promotionProperties": [
+                      {
+                        "file": "values.yaml",
+                        "properties": [
+                          "$.image.tag"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "verifyApp",
+                    "targetApplication": {
+                      "name": "simple-dev",
+                      "namespace": "codefresh"
+                    },
+                    "commitSha": "source-commit-sha"
+                  }
+                ]
+              }
+            }
+          ]
+        
+      },
+      "times": {
+        "remainingTimes":1,
+        "unlimited": false
+      }
+    }
+  ]
