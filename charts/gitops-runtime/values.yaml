@@ -235,9 +235,9 @@ installer:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-# -----------------------------------------------------------------------------------------------------------------------
-# Sealed secrets
-# -----------------------------------------------------------------------------------------------------------------------
+# *********************************************************************************************************************
+# DOCS: https://artifacthub.io/packages/helm/bitnami-labs/sealed-secrets/2.18.0?modal=values
+# *********************************************************************************************************************
 sealed-secrets:
   fullnameOverride: sealed-secrets-controller
   keyrenewperiod: "720h"
@@ -252,9 +252,9 @@ sealed-secrets:
     requests:
       cpu: 200m
       memory: 512Mi
-#-----------------------------------------------------------------------------------------------------------------------
-# ArgoCD
-#-----------------------------------------------------------------------------------------------------------------------
+# *********************************************************************************************************************
+# DOCS: https://artifacthub.io/packages/helm/argo/argo-cd/9.3.0?modal=values
+# *********************************************************************************************************************
 argo-cd:
   enabled: true
   fullnameOverride: argo-cd
@@ -394,10 +394,9 @@ internal-router:
     minAvailable: 1
     # -- Set number of pods that are unavailable after eviction as number or percentage
     maxUnavailable: ""
-#-----------------------------------------------------------------------------------------------------------------------
-# tunnel client
-#-----------------------------------------------------------------------------------------------------------------------
-# -- Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes.
+# *********************************************************************************************************************
+# DOCS: https://github.com/codefresh-io/codefresh-tunnel-charts/blob/codefresh-tunnel-client-0.1.23-helm/codefresh-tunnel-client/values.yaml
+# *********************************************************************************************************************
 tunnel-client:
   # -- Will only be used if global.runtime.ingress.enabled = false
   enabled: true
@@ -890,8 +889,7 @@ redis-ha:
   affinity: ""
   # -- [Tolerations] for use with node taints for Redis pods.
   tolerations: []
-  # -- Assign custom [TopologySpreadConstraints] rules to the Redis pods.
-  ## https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+  # -- Assign custom [TopologySpreadConstraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) rules to the Redis pods.
   topologySpreadConstraints:
     # -- Enable Redis HA topology spread constraints
     enabled: false
