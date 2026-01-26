@@ -16,17 +16,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'updated argo-cd to 3.2.3'
-    - kind: security
-      description: 'app-proxy: fixed security vulnerabilities CVE-2025-61729 and CVE-2025-61727'
-    - kind: security
-      description: 'app-proxy-init: fixed security vulnerabilities CVE-2016-2781 and CVE-2024-10041'
-    - kind: security
-      description: 'cf-argocd-extras: fixed security vulnerabilities CVE-2025-58181, CVE-2025-13281, CVE-2025-61727 and CVE-2025-61729'
-    - kind: security
-      description: 'kubectl: fixed security vulnerabilities CVE-2025-47912, CVE-2025-61724, CVE-2025-58187, CVE-2025-47912, CVE-2025-58183, CVE-2025-58186, CVE-2025-58187, CVE-2025-58188, CVE-2025-58189 and CVE-2025-61723 for redis-secret-init job'
-    - kind: security
-      description: 'sealed-secrets-controller: fixed security vulnerabilities CVE-2025-47912, CVE-2025-58181, CVE-2025-58186, CVE-2025-58187, CVE-2025-58188, CVE-2025-58189, CVE-2025-61723, CVE-2025-61724, CVE-2025-61727 and CVE-2025-61729'
+      description: 'enrichment-images: fixed security vulnerabilities CVE-2025-15284, CVE-2025-14104, CVE-2025-66382, CVE-2025-13836 and CVE-2025-13837'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
