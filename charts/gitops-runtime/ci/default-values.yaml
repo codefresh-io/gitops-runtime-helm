@@ -6,3 +6,5 @@ global:
     ingress:
       enabled: true
       className: haproxy-ingress
+      hosts:
+        - domain.will.be.replaced.by.ci.pipeline
