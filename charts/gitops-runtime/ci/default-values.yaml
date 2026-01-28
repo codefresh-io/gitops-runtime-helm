@@ -4,4 +4,5 @@ global:
 
   runtime:
     ingress:
+      enabled: true
       className: haproxy-ingress
