@@ -13,35 +13,9 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
-  artifacthub.io/changes: |
-    - kind: removed
-      description: Removed Argo Rollouts controller from helm chart
-    - kind: removed
-      description: Removed Argo Events controller from helm chart
-    - kind: added
-      description: Enhanced runtime uninstallation with zero-footprint cleanup
-    - kind: added
-      description: ArgoCD sync and deletion guardrails with confirmation prompts
-    - kind: added
-      description: Improved installation wizard with Bitbucket, Bitbucket Server, and GitLab support
-    - kind: added
-      description: Support for running without Redis configured
-    - kind: added
-      description: MRC change revisions annotations support
-    - kind: added
-      description: Deleted field added to app event payload
-    - kind: added
-      description: Checksum annotations for config change detection
+  artifacthub.io/changes: |-
     - kind: changed
-      description: Runtime Redis disabled by default
-    - kind: changed
-      description: Namespace-scoped Argo Workflows enabled by default
-    - kind: fixed
-      description: Transient error handling on app sync failure
-    - kind: fixed
-      description: Runtime application out-of-sync issue
-    - kind: security
-      description: Security fixes for argo-workflows
+      description: 'fix: security vulnerability in qs library CVE-2025-15284 (#1070)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
