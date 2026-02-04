@@ -14,8 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: security
-      description: 'cap-app-proxy & cap-app-proxy-init: fix security vulnerability in qs library CVE-2025-15284'
+    - kind: changed
+      description: 'fix: deleted git-source appears in application dashboard (#1075)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
