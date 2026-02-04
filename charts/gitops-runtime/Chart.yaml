@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'feat: deleted git-source appears in application dashboard (#1075)'
+      description: 'fix: deleted git-source appears in application dashboard (#1075)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
