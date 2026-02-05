@@ -369,10 +369,20 @@ Output comma separated list of installed runtime components
   {{- $internalRouter := dict "name" "internal-router" "version" .Chart.AppVersion }}
   {{- $appProxy := dict "name" "app-proxy" "version" (index (get .Values "app-proxy") "image" "tag") }}
   {{- $argoApiGateway := dict "name" "argo-gateway" "version" (get .Values "argo-gateway").image.tag }}
-  {{- $comptList := list $appProxy $internalRouter $argoApiGateway }}
+  {{- $runtimeEventReporter := dict "name" "runtime-event-reporter" "version" (default (index .Values "global" "event-reporters" "image") (index .Values "event-reporters" "runtime-event-reporter" "image")).tag }}
+  {{- $clusterEventReporter := dict "name" "cluster-event-reporter" "version" (default (index .Values "global" "event-reporters" "image") (index .Values "event-reporters" "cluster-event-reporter" "image")).tag }}
+  {{- $comptList := list $appProxy $internalRouter $argoApiGateway $runtimeEventReporter $clusterEventReporter }}
   {{- if and (index .Values "sealed-secrets" "enabled") }}
     {{- $sealedSecrets := dict "name" "sealed-secrets" "version" (get .Subcharts "sealed-secrets").Chart.AppVersion }}
     {{- $comptList = append $comptList $sealedSecrets }}
+  {{- end }}
+  {{- if and (index .Values "redis" "enabled") }}
+    {{- $redisComp := dict "name" (include "redis.fullname" .) "version" (index (get .Values "redis") "image" "tag") }}
+    {{- $comptList = append $comptList $redisComp }}
+  {{- end }}
+  {{- if and (index .Values "redis-ha" "enabled") }}
+    {{- $redisHaComp := dict "name" (index (get .Values "redis-ha") "fullnameOverride") "version" (get .Subcharts "redis-ha").Chart.AppVersion }}
+    {{- $comptList = append $comptList $redisHaComp }}
   {{- end }}
   {{- if and (index .Values "argo-cd" "enabled") }}
     {{- $argoCD := dict "name" "argocd" "version" (get .Subcharts "argo-cd").Chart.AppVersion }}
