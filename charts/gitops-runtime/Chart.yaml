@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.2.0
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.26.0
+version: 0.26.8
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -16,7 +16,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'enrichment-images: fixed security vulnerabilities CVE-2025-15284, CVE-2025-14104, CVE-2025-66382, CVE-2025-13836 and CVE-2025-13837'
+      description:  bump app proxy with revert of git provider new support for 0.26 (#1079) to allow git credentials from values file
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
