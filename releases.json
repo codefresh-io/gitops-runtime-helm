@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-05T12:07:24.990Z",
+  "generatedAt": "2026-02-09T09:14:35.874Z",
   "repository": "codefresh-io/gitops-runtime-helm",
   "channels": {
     "stable": {
@@ -135,7 +135,7 @@
     }
   },
   "stats": {
-    "totalReleases": 140,
+    "totalReleases": 141,
     "stableSecure": null,
     "latestSecure": null
   }
