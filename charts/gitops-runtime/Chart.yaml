@@ -15,7 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: update argo-hub (#1092)'
+      description: 'chore: update argo-hub to 1.1.22 (#1092)'
+    - kind: fix
+      description: 'fix security vulnerabilities in argo-hub images (#1092)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
