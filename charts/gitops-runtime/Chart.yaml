@@ -16,7 +16,7 @@ annotations:
   artifacthub.io/changes: |-
     - kind: changed
       description: 'chore: update argo-hub to 1.1.22 (#1092)'
-    - kind: fix
+    - kind: security
       description: 'fix security vulnerabilities in argo-hub images (#1092)'
 dependencies:
   - name: argo-cd
