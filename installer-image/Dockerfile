@@ -3,7 +3,7 @@
 
 FROM octopusdeploy/dhi-golang:1.25-debian13-dev AS build
 ARG TARGETARCH
-ARG CF_CLI_VERSION=v0.2.16
+ARG CF_CLI_VERSION=v0.2.17
 RUN go install github.com/davidrjonas/semver-cli@latest \
   && cp $GOPATH/bin/semver-cli /tmp/semver-cli
 ADD --unpack=true --chown=nonroot:nonroot --chmod=755 https://github.com/codefresh-io/cli-v2/releases/download/${CF_CLI_VERSION}/cf-linux-${TARGETARCH}.tar.gz /tmp/cf/
