@@ -402,10 +402,22 @@ Output comma separated list of installed runtime components
     {{- $gitopsOperator := dict "name" "gitops-operator" "version" (get .Values "gitops-operator").image.tag }}
     {{- $comptList = append $comptList $gitopsOperator }}
   {{- end }}
-  {{- if not (index .Values "argo-cd" "enabled") }}
-    {{- $eventReporter := dict "name" "event-reporter" "version" (index .Values "global" "event-reporters" "image" "tag") }}
-    {{- $comptList = append $comptList $eventReporter }}
+
+  {{- $clusterEventReporterTag := (index .Values "global" "event-reporters" "image" "tag") }}
+  {{- if and (index .Values "event-reporters") (index .Values "event-reporters" "cluster-event-reporter" ) (index .Values "event-reporters" "cluster-event-reporter" "image") (index .Values "event-reporters" "cluster-event-reporter" "image" "tag") }}
+    {{- $clusterEventReporterTag = index .Values "event-reporters" "cluster-event-reporter" "image" "tag" }}
   {{- end }}
+
+  {{- $clusterEventReporter := dict "name" "cluster-event-reporter" "version" $clusterEventReporterTag }}
+  {{- $comptList = append $comptList $clusterEventReporter }}
+
+  {{- $runtimeEventReporterTag := (index .Values "global" "event-reporters" "image" "tag") }}
+  {{- if and (index .Values "event-reporters") (index .Values "event-reporters" "runtime-event-reporter" ) (index .Values "event-reporters" "runtime-event-reporter" "image") (index .Values "event-reporters" "runtime-event-reporter" "image" "tag") }}
+    {{- $runtimeEventReporterTag = index .Values "event-reporters" "runtime-event-reporter" "image" "tag" }}
+  {{- end }}
+
+  {{- $runtimeEventReporter := dict "name" "runtime-event-reporter" "version" $runtimeEventReporterTag }}
+  {{- $comptList = append $comptList $runtimeEventReporter }}
 {{- $comptList | toYaml }}
 {{- end }}
 
