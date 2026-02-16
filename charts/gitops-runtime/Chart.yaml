@@ -14,10 +14,12 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'fix(app-proxy-init): migrate to DHI base image; fix(nginx-unprivileged): update to 1.29-alpine3.23; update codefresh-gitops-operator; update gitops-runtime-installer (#1104)'
-    - kind: changed
-      description: 'fix: runtime components logs not working for some of components (#1087)'
+    - kind: security
+      description: 'migrate app-proxy-init and gitops-runtime-installer to DHI base images'
+    - kind: security
+      description: 'update nginx-unprivileged and codefresh-gitops-operator'
+    - kind: fixed
+      description: 'runtime components logs not working for some of components'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
