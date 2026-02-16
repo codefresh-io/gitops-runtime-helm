@@ -15,6 +15,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'fix(app-proxy-init): migrate to DHI base image; fix(nginx-unprivileged): update to 1.29-alpine3.23; update codefresh-gitops-operator; update gitops-runtime-installer (#1104)'
+    - kind: changed
       description: 'fix: runtime components logs not working for some of components (#1087)'
 dependencies:
   - name: argo-cd
