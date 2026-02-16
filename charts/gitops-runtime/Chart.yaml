@@ -14,10 +14,12 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'chore: update argo-hub to 1.1.22 (#1092)'
     - kind: security
-      description: 'fix security vulnerabilities in argo-hub images (#1092)'
+      description: 'migrate app-proxy-init and gitops-runtime-installer to DHI base images'
+    - kind: security
+      description: 'update nginx-unprivileged and codefresh-gitops-operator'
+    - kind: fixed
+      description: 'runtime components logs not working for some of components'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
