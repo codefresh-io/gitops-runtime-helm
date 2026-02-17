@@ -17,7 +17,7 @@ dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
     condition: argo-cd.enabled
-    version: 9.3.5
+    version: 9.4.2
   - name: argo-workflows
     repository: https://codefresh-io.github.io/argo-helm
     version: 0.45.18-v3.6.7-cap-CR-32333
