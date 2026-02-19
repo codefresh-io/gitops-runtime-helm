@@ -459,14 +459,14 @@ app-proxy:
           tag: 1.1.22-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.4046.0
+    tag: 1.4058.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.4046.0
+      tag: 1.4058.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -722,7 +722,7 @@ redis-secret-init:
   image:
     registry: docker.io
     repository: alpine/kubectl
-    tag: 1.35.0
+    tag: 1.35.1
   nodeSelector: {}
   tolerations: []
   affinity: {}
