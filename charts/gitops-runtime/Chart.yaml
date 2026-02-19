@@ -15,6 +15,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'chore: update argocd to v3.3.0 (#1101)'
+    - kind: changed
       description: 'fix(app-proxy-init): migrate to DHI base image; bump gitops-operator (#1103)'
     - kind: changed
       description: 'fix: update values for security (#1098)'
