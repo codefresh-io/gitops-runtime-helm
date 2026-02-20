@@ -13,13 +13,12 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
+  artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
     - kind: security
-      description: 'migrate app-proxy-init and gitops-runtime-installer to DHI base images'
+      description: 'bump Node.js to v22.22.0 for cap-app-proxy'
     - kind: security
-      description: 'update nginx-unprivileged and codefresh-gitops-operator'
-    - kind: fixed
-      description: 'runtime components logs not working for some of components'
+      description: 'bump alpine/kubectl to v1.35.1'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
