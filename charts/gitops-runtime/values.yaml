@@ -459,14 +459,14 @@ app-proxy:
           tag: 1.1.22-main
   image:
     repository: quay.io/codefresh/dev/cap-app-proxy
-    tag: 1.4062.0-fix-upd-argo-cd-to-3-3-0-5daacb6
+    tag: fix-updating-argocd-3-3-2-stable0-28-da72787
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/dev/cap-app-proxy-init
-      tag: 1.4062.0-fix-upd-argo-cd-to-3-3-0-5daacb6
+      tag: fix-updating-argocd-3-3-2-stable0-28-da72787
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
