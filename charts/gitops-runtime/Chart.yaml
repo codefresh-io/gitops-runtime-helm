@@ -15,10 +15,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
-    - kind: security
-      description: 'bump Node.js to v22.22.0 for cap-app-proxy'
-    - kind: security
-      description: 'bump alpine/kubectl to v1.35.1'
+    - kind: changed
+      description: 'chore: update tunnel-chart (#1115)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
