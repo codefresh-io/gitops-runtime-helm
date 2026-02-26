@@ -16,7 +16,9 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: update tunnel-chart (#1115)'
+      description: 'update codefresh-tunnel-chart to 0.1.24 (#1115)'
+    - kind: security
+      description: 'fix multiple security vulnerabilities in codefresh/frps (#1115)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
