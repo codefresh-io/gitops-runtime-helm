@@ -15,15 +15,15 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'updated app-proxy to 1.4068.0'
+      description: 'update app-proxy to 1.4068.0'
     - kind: security
       description: 'fix various security vulnerabilities in app-proxy'
     - kind: changed
-      description: 'updated cf-argocd-extras tag'
+      description: 'update cf-argocd-extras tag'
     - kind: security
       description: 'fix various security vulnerabilities in cf-argocd-extras'
     - kind: changed
-      description: 'updated sealed-secrets-controller to 0.36.0'
+      description: 'update sealed-secrets-controller to 0.36.0'
     - kind: security
       description: 'fix various security vulnerabilities in sealed-secrets-controller'
 dependencies:
