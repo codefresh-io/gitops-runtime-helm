@@ -15,7 +15,17 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'full changelog look at https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.28.0'
+      description: 'update app-proxy to 1.4068.0'
+    - kind: security
+      description: 'fix various security vulnerabilities in app-proxy'
+    - kind: changed
+      description: 'update cf-argocd-extras tag'
+    - kind: security
+      description: 'fix various security vulnerabilities in cf-argocd-extras'
+    - kind: changed
+      description: 'update sealed-secrets-controller to 0.36.0'
+    - kind: security
+      description: 'fix various security vulnerabilities in sealed-secrets-controller'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
