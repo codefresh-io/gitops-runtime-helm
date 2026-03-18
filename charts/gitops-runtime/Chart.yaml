@@ -14,8 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'feat: add ABAC validation to the application existence query (#1127)'
+    - kind: added
+      description: "Added ABAC validation to application existence query"
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
