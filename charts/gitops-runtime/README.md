@@ -24,7 +24,7 @@
 
 ```console
 helm show all oci://quay.io/codefresh/gitops-runtime
-``` 
+```
 See [Use OCI-based registries](https://helm.sh/docs/topics/registries/)
 
 ## Codefresh official documentation:
