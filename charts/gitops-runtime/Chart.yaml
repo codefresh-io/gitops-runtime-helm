@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 0.1.72
+appVersion: 0.1.73
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.0.0
+version: 0.29.0
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -13,6 +13,9 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
+  artifacthub.io/changes: |-
+    - kind: added
+      description: "Added ABAC validation to application existence query"
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
