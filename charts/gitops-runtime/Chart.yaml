@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix: update constrains of byoa argocd upto 3.3 (#1123)'
+      description: 'chore: fix various security vulnerabilities in cap-app-proxy (#1138)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
