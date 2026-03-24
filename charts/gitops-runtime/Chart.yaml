@@ -15,7 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: fix various security vulnerabilities in cap-app-proxy (#1138)'
+      description: 'update app-proxy to 1.4074.0'
+    - kind: security
+      description: 'fix various security vulnerabilities in app-proxy'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
