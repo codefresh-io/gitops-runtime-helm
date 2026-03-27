@@ -15,9 +15,9 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'update app-proxy to 1.4074.0'
+      description: 'update alpine/kubectl to 1.35.3'
     - kind: security
-      description: 'fix various security vulnerabilities in app-proxy'
+      description: 'fix various security vulnerabilities in argo-workflows'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
