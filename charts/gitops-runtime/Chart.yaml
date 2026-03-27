@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.72
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.28.3
+version: 0.28.4
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -25,7 +25,7 @@ dependencies:
     version: 9.4.4
   - name: argo-workflows
     repository: https://codefresh-io.github.io/argo-helm
-    version: 0.45.18-v3.6.7-cap-CR-32333
+    version: 0.45.19-v3.6.7-cap-CR-38032
     condition: argo-workflows.enabled
   - name: sealed-secrets
     repository: https://bitnami-labs.github.io/sealed-secrets/
