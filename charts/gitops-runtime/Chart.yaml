@@ -15,9 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'update alpine/kubectl to 1.35.3'
-    - kind: security
-      description: 'fix various security vulnerabilities in argo-workflows'
+      description: 'chore: Fix various security vulnerabilities in argo-workflows (#1149)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
