@@ -15,9 +15,11 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: fix various security vulnerabilities in argo-workflows (#1149)'
+      description: 'fix: security fixes (#1157) (#1158)'
     - kind: changed
-      description: 'chore: update argocd to 3.3.6, dex to 2.45.1 (#1155)'
+      description: update argocd to 3.3.6, dex to 2.45.1 (#1155)
+    - kind: changed
+      description: 'chore: Fix various security vulnerabilities in argo-workflows (#1149)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
