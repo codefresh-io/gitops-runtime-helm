@@ -13,11 +13,12 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
+  artifacthub.io/containsSecurityUpdates: true
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'update alpine/kubectl to 1.35.3'
     - kind: security
-      description: 'fix various security vulnerabilities in argo-workflows'
+      description: 'fix various security vulnerabilities in argo-workflows, cap-app-proxy, cf-argocd-extras, codefresh-gitops-operator, gitops-runtime-installer'
+    - kind: changed
+      description: 'update argocd to 3.3.6, dex to 2.45.1'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
