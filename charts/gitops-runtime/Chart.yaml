@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix: security fixes (#1157) (#1158)'
+      description: 'chore: Fix various security vulnerabilities in cap-app-proxy, cf-argocd-extras, codefresh-gitops-operator, gitops-runtime-installer (#1158)'
     - kind: changed
       description: update argocd to 3.3.6, dex to 2.45.1 (#1155)
     - kind: changed
