@@ -16,9 +16,7 @@ annotations:
   artifacthub.io/containsSecurityUpdates: true
   artifacthub.io/changes: |-
     - kind: security
-      description: 'fix various security vulnerabilities in argo-workflows, cap-app-proxy, cf-argocd-extras, codefresh-gitops-operator, gitops-runtime-installer'
-    - kind: changed
-      description: 'update argocd to 3.3.6, dex to 2.45.1'
+      description: 'fix various security vulnerabilities in cf-argocd-extras, gitops-runtime-installer'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
