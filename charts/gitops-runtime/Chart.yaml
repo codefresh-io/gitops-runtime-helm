@@ -15,8 +15,8 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/containsSecurityUpdates: true
   artifacthub.io/changes: |-
-    - kind: security
-      description: 'fix various security vulnerabilities in cf-argocd-extras, gitops-runtime-installer'
+    - kind: changed
+      description: 'fix: restore functionality and apply security fixes to the Gitops Operator(#1166)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
