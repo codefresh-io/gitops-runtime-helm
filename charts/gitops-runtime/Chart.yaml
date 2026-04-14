@@ -16,7 +16,7 @@ annotations:
   artifacthub.io/containsSecurityUpdates: true
   artifacthub.io/changes: |-
     - kind: changed
-      description: '[Backport 0.29] chore: Apply CVE fixes on new main (tip of stable/0.26) (#1165) (#1166)'
+      description: 'fix: restore functionality and apply security fixes to the Gitops Operator(#1166)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
