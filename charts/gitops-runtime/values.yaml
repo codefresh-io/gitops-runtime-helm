@@ -136,7 +136,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: "3190219"
+      tag: "06801ec"
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -647,7 +647,7 @@ gitops-operator:
   image:
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: b9540c4
+    tag: bc5c4eb
   env:
     !!merge <<:
       - *otel-config
@@ -679,7 +679,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: "3190219"
+    tag: "06801ec"
   nodeSelector: {}
   tolerations: []
   affinity: {}
