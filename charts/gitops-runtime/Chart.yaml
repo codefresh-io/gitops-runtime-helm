@@ -18,9 +18,9 @@ annotations:
     - kind: changed
       description: 'restored previous functionality and applied security fixes to the Gitops Operator'
     - kind: changed
-      description: 'Update cap-app-proxy to 1.4081.0'
+      description: 'update cap-app-proxy to 1.4081.0'
     - kind: changed
-      description: 'The cap-app-proxy has been reconfigured to execute under a non-root user'
+      description: 'reconfigure cap-app-proxy to execute under a non-root user'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
