@@ -1,0 +1,23 @@
+charts/gitops-runtime/values.yaml
+  fd7fa9aae733f5b5 650
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.6",
+  "base_commit_sha": "e49f09df5058172ae6859b72538243ef1a09901f",
+  "prompts": {
+    "fd7fa9aae733f5b5": {
+      "agent_id": {
+        "tool": "github-copilot-jetbrains",
+        "id": "1775808601973",
+        "model": "unknown"
+      },
+      "human_author": "scme0",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
