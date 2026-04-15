@@ -16,7 +16,7 @@ annotations:
   artifacthub.io/containsSecurityUpdates: true
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'restored previous functionality and applied security fixes to the Gitops Operator'
+      description: 'restore previous functionality and apply security fixes to the Gitops Operator'
     - kind: changed
       description: 'update cap-app-proxy to 1.4081.0'
     - kind: changed
