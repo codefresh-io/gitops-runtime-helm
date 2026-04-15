@@ -16,11 +16,15 @@ annotations:
   artifacthub.io/containsSecurityUpdates: true
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'restore previous functionality and apply security fixes to the Gitops Operator'
+      description: 'update "gitops-operator" to bc5c4eb'
     - kind: changed
-      description: 'update cap-app-proxy to 1.4081.0'
-    - kind: changed
-      description: 'reconfigure cap-app-proxy to execute under a non-root user'
+      description: 'update "cap-app-proxy" to 1.4081.0'
+    - kind: fixed
+      description: 'fix Promotions functionality broken since Chart v0.27'
+    - kind: security
+      description: 'execute "cap-app-proxy" with non-root user'
+    - kind: security
+      description: 'fix various CVE in different components'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
