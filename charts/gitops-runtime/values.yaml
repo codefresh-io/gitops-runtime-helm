@@ -831,6 +831,8 @@ redis-ha:
   enabled: false
   # -- Full name of the Redis HA Resources
   fullnameOverride: "runtime-redis-ha"
+  # -- Name of the Redis HA Resources used for selectors
+  nameOverride: runtime-redis
   ## Redis image
   image:
     # -- Redis repository
