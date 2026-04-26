@@ -1,0 +1,21 @@
+# Caller workflow for git-ai authorship preservation.
+# This workflow calls the centralized preserve-ai-authorship workflow in
+# codefresh-io/shared-github-workflows repo, which migrates git-ai authorship notes from
+# original branch commits onto the new commits created by GitHub's
+# squash/rebase merge - so AI attribution is preserved after merging PRs.
+
+name: Preserve AI Authorship
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  preserve-authorship:
+    uses: codefresh-io/shared-github-workflows/.github/workflows/preserve-ai-authorship.yaml@main
