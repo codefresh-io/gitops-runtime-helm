@@ -182,6 +182,17 @@ data:
   admin.enabled: "true"
 ```
 
+### ArgoCD compatibility
+
+| GitOps Runtime version | Supported ArgoCD versions |
+|------------------------|---------------------------|
+| 0.29.x                 | >=3.1 <=3.3               |
+| 0.28.x                 | >=3.0 <=3.2               |
+| 0.27.x                 | >=3.0 <=3.2               |
+| 0.26.x                 | >=3.0 <=3.2               |
+| 0.25.x                 | >=2.12 <=3.0              |
+| 0.24.x                 | >=2.12 <=3.0              |
+
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
 We have created a helper utility to resolve this issue:
@@ -753,7 +764,7 @@ global:
 | internal-router.serviceAccount.name | string | `""` |  |
 | internal-router.tolerations | list | `[]` |  |
 | redis | object | `{"affinity":{},"enabled":false,"env":{},"envFrom":[],"extraArgs":[],"fullnameOverride":"runtime-redis","image":{"registry":"public.ecr.aws","repository":"docker/library/redis","tag":"8.2.1-alpine"},"imagePullSecrets":[],"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"metrics":{"enabled":true,"env":{},"envFrom":[],"image":{"registry":"ghcr.io","repository":"oliver006/redis_exporter","tag":"v1.72.1"},"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"serviceMonitor":{"enabled":false}},"nodeSelector":{},"pdb":{"annotations":{},"enabled":false,"labels":{},"maxUnavailable":"","minAvailable":1},"podAnnotations":{},"podLabels":{},"podSecurityContext":{},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"securityContext":{},"service":{"annotations":{},"labels":{},"ports":{"metrics":{"port":9121,"targetPort":9121},"redis":{"port":6379,"targetPort":6379}},"type":"ClusterIP"},"serviceAccount":{"annotations":{},"create":true,"name":""},"tolerations":[],"topologySpreadConstraints":[]}` | Standalone redis deployment Will be replaced by redis-ha subchart when `redis-ha.enabled=true` |
-| redis-ha | object | `{"additionalAffinities":{},"affinity":"","auth":true,"containerSecurityContext":{"readOnlyRootFilesystem":true},"enabled":false,"existingSecret":"gitops-runtime-redis","exporter":{"enabled":false,"image":"ghcr.io/oliver006/redis_exporter","tag":"v1.69.0"},"fullnameOverride":"runtime-redis-ha","haproxy":{"additionalAffinities":{},"affinity":"","containerSecurityContext":{"readOnlyRootFilesystem":true},"enabled":true,"hardAntiAffinity":true,"metrics":{"enabled":true},"tolerations":[]},"hardAntiAffinity":true,"image":{"repository":"public.ecr.aws/docker/library/redis","tag":"8.2.1-alpine"},"persistentVolume":{"enabled":false},"redis":{"config":{"save":"\"\""},"masterGroupName":"gitops-runtime"},"tolerations":[],"topologySpreadConstraints":{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}}` | Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true` Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml |
+| redis-ha | object | `{"additionalAffinities":{},"affinity":"","auth":true,"containerSecurityContext":{"readOnlyRootFilesystem":true},"enabled":false,"existingSecret":"gitops-runtime-redis","exporter":{"enabled":false,"image":"ghcr.io/oliver006/redis_exporter","tag":"v1.69.0"},"fullnameOverride":"runtime-redis-ha","haproxy":{"additionalAffinities":{},"affinity":"","containerSecurityContext":{"readOnlyRootFilesystem":true},"enabled":true,"hardAntiAffinity":true,"metrics":{"enabled":true},"tolerations":[]},"hardAntiAffinity":true,"image":{"repository":"public.ecr.aws/docker/library/redis","tag":"8.2.1-alpine"},"nameOverride":"runtime-redis","persistentVolume":{"enabled":false},"redis":{"config":{"save":"\"\""},"masterGroupName":"gitops-runtime"},"tolerations":[],"topologySpreadConstraints":{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}}` | Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true` Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml |
 | redis-ha.additionalAffinities | object | `{}` | Additional affinities to add to the Redis server pods. |
 | redis-ha.affinity | string | `""` | Assign custom [affinity] rules to the Redis pods. |
 | redis-ha.auth | bool | `true` | Configures redis-ha with AUTH |
@@ -774,6 +785,7 @@ global:
 | redis-ha.hardAntiAffinity | bool | `true` | Whether the Redis server pods should be forced to run on separate nodes. |
 | redis-ha.image.repository | string | `"public.ecr.aws/docker/library/redis"` | Redis repository |
 | redis-ha.image.tag | string | `"8.2.1-alpine"` | Redis tag |
+| redis-ha.nameOverride | string | `"runtime-redis"` | Name of the Redis HA Resources used for selectors |
 | redis-ha.persistentVolume.enabled | bool | `false` | Configures persistence on Redis nodes |
 | redis-ha.redis.config | object | See [values.yaml] | Any valid redis config options in this section will be applied to each server (see `redis-ha` chart) |
 | redis-ha.redis.config.save | string | `'""'` | Will save the DB if both the given number of seconds and the given number of write operations against the DB occurred. `""`  is disabled |
