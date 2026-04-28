@@ -185,6 +185,17 @@ data:
   admin.enabled: "true"
 ```
 
+### ArgoCD compatibility
+
+| GitOps Runtime version | Supported ArgoCD versions |
+|------------------------|---------------------------|
+| 0.29.x                 | >=3.1 <=3.3               |
+| 0.28.x                 | >=3.0 <=3.2               |
+| 0.27.x                 | >=3.0 <=3.2               |
+| 0.26.x                 | >=3.0 <=3.2               |
+| 0.25.x                 | >=2.12 <=3.0              |
+| 0.24.x                 | >=2.12 <=3.0              |
+
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
 We have created a helper utility to resolve this issue:
