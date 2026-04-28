@@ -8,6 +8,7 @@
 - [Codefresh official documentation](#codefresh-official-documentation)
 - [Argo-workflows artifact and log storage](#argo-workflows-artifact-and-log-storage)
 - [Installation with External ArgoCD](#installation-with-external-argocd)
+  - [ArgoCD compatibility](#argocd-compatibility)
 - [Using with private registries - Helper utility](#using-with-private-registries---helper-utility)
 - [Openshift](#openshift)
 - [High Availability](#high-availability)
