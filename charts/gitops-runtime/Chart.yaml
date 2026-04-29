@@ -13,10 +13,11 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
-  artifacthub.io/containsSecurityUpdates: true
+  artifacthub.io/containsSecurityUpdates: "false"
+  # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'docs(0.29): document ArgoCD compatibility (#1183)'
+      description: 'document ArgoCD compatibility with the Runtime'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
