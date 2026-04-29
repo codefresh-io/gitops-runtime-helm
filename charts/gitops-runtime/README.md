@@ -8,6 +8,7 @@
 - [Codefresh official documentation](#codefresh-official-documentation)
 - [Argo-workflows artifact and log storage](#argo-workflows-artifact-and-log-storage)
 - [Installation with External ArgoCD](#installation-with-external-argocd)
+  - [ArgoCD compatibility](#argocd-compatibility)
 - [Using with private registries - Helper utility](#using-with-private-registries---helper-utility)
 - [Openshift](#openshift)
 - [High Availability](#high-availability)
@@ -181,6 +182,17 @@ data:
   accounts.admin: apiKey, login
   admin.enabled: "true"
 ```
+
+### ArgoCD compatibility
+
+| GitOps Runtime version | Supported ArgoCD versions |
+|------------------------|---------------------------|
+| 0.29.x                 | >=3.1 <=3.3               |
+| 0.28.x                 | >=3.0 <=3.2               |
+| 0.27.x                 | >=3.0 <=3.2               |
+| 0.26.x                 | >=3.0 <=3.2               |
+| 0.25.x                 | >=2.12 <=3.0              |
+| 0.24.x                 | >=2.12 <=3.0              |
 
 ## Using with private registries - Helper utility
 The GitOps Runtime comprises multiple subcharts and container images. Subcharts also vary in values structure, making it difficult to override image specific values to use private registries.
@@ -779,7 +791,7 @@ global:
 | redis-ha.redis.config.save | string | `'""'` | Will save the DB if both the given number of seconds and the given number of write operations against the DB occurred. `""`  is disabled |
 | redis-ha.redis.masterGroupName | string | `"gitops-runtime"` | Redis convention for naming the cluster group: must match `^[\\w-\\.]+$` and can be templated |
 | redis-ha.tolerations | list | `[]` | [Tolerations] for use with node taints for Redis pods. |
-| redis-ha.topologySpreadConstraints | object | `{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}` | Assign custom [TopologySpreadConstraints] rules to the Redis pods. # https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
+| redis-ha.topologySpreadConstraints | object | `{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}` | Assign custom [TopologySpreadConstraints] rules to the Redis pods. |
 | redis-ha.topologySpreadConstraints.enabled | bool | `false` | Enable Redis HA topology spread constraints |
 | redis-ha.topologySpreadConstraints.maxSkew | string | `""` (defaults to `1`) | Max skew of pods tolerated |
 | redis-ha.topologySpreadConstraints.topologyKey | string | `""` (defaults to `topology.kubernetes.io/zone`) | Topology key for spread |
