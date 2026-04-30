@@ -17,7 +17,7 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'update argo-workflows to 0.45.21-v3.6.7-cap-CR-38757'    
+      description: 'update argo-workflows to 0.45.21-v3.6.7-cap-CR-38757'
     - kind: security
       description: 'fix various security vulnerabilities in argo-workflows'
     - kind: changed
