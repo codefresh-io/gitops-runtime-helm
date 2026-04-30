@@ -17,9 +17,11 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: fix various security vulnerabilities in argo-workflows (#1185)'
+      description: 'update argo-workflows to 0.45.21-v3.6.7-cap-CR-38757'    
+    - kind: security
+      description: 'fix various security vulnerabilities in argo-workflows'
     - kind: changed
-      description: 'docs(0.29): document ArgoCD compatibility (#1183)'
+      description: 'document ArgoCD compatibility with the Runtime'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
