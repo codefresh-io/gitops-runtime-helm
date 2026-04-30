@@ -24,7 +24,7 @@ dependencies:
     version: 9.4.17
   - name: argo-workflows
     repository: https://codefresh-io.github.io/argo-helm
-    version: 0.45.20-v3.6.7-cap-CR-36597
+    version: 0.45.21-v3.6.7-cap-CR-38757
     condition: argo-workflows.enabled
   - name: sealed-secrets
     repository: https://bitnami-labs.github.io/sealed-secrets/
