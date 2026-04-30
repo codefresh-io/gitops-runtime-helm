@@ -17,7 +17,9 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'document ArgoCD compatibility with the Runtime'
+      description: 'chore: fix various security vulnerabilities in argo-workflows (#1185)'
+    - kind: changed
+      description: 'docs(0.29): document ArgoCD compatibility (#1183)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
