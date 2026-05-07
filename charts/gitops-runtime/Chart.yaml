@@ -17,9 +17,7 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'chore: upgrade argo-cd to 9.5.11'
-    - kind: security
-      description: 'chore: patch fix for a critical argo-cd vulnerability.'
+      description: 'chore: fix various security vulnerabilities (#1190)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
