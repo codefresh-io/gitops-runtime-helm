@@ -21,7 +21,7 @@ annotations:
     - kind: changed
       description: 'update cap-app-proxy to 1.4091.0'
     - kind: security
-      description: 'fix various security vulnerabilities in cap-app-proxy and argo-hub-codefresh-csdp plugins'
+      description: 'fix various security vulnerabilities in cap-app-proxy and argo-hub codefresh-csdp plugins'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
