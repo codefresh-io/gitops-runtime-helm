@@ -13,11 +13,11 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
-  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/containsSecurityUpdates: "false"
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'fix(cap-app-proxy): support arbitrary user IDs on OpenShift (#1193)'
+    - kind: fixed
+      description: 'cap-app-proxy: support arbitrary user IDs for OpenShift'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
