@@ -13,15 +13,11 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
-  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/containsSecurityUpdates: "false"
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'update argo-hub codefresh-csdp plugins to 1.1.27'
-    - kind: changed
-      description: 'update cap-app-proxy to 1.4091.0'
-    - kind: security
-      description: 'fix various security vulnerabilities in cap-app-proxy and argo-hub codefresh-csdp plugins'
+    - kind: fixed
+      description: 'cap-app-proxy: support arbitrary user IDs for OpenShift'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
