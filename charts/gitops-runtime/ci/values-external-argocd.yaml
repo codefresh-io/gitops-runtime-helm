@@ -23,3 +23,6 @@ argo-cd:
 
 garage-workflows-artifact-storage:
   enabled: true
+
+installer:
+  skipValidation: true
