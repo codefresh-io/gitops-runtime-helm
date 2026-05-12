@@ -2,10 +2,10 @@ global:
   codefresh:
     accountId: 63dbba4928d5fd1ef065b781 # `gitops-helm-test` Codefresh account
     userToken:
-      token: "" # set in `gitops-runtime-helm/ci` pipeline
+      token: "dummy" # set in `gitops-runtime-helm/ci` pipeline
 
   runtime:
-    name: "" # set in `gitops-runtime-helm/ci` pipeline
+    name: "dummy" # set in `gitops-runtime-helm/ci` pipeline
 
     ingress:
       enabled: true
