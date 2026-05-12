@@ -1,0 +1,19 @@
+charts/gitops-runtime/ci/argocd-values.yaml
+  h_bdc637847e5b6a 1-3
+installer-image/Dockerfile
+  h_bdc637847e5b6a 15-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "0f27ab4997e53e567d3f8ea833e541f193705c03",
+  "prompts": {},
+  "humans": {
+    "h_02538178b2163d": {
+      "author": "Mikhail Klimko"
+    },
+    "h_bdc637847e5b6a": {
+      "author": "Mikhail Klimko <mikhail.klimko@octopus.com>"
+    }
+  }
+}
