@@ -8,6 +8,7 @@ global:
     name: "" # set in `gitops-runtime-helm/ci` pipeline
 
     ingress:
+      enabled: true
       className: haproxy-ingress
       hosts: [] # set in `gitops-runtime-helm/ci` pipeline
 
