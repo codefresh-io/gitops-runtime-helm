@@ -12,9 +12,6 @@ ADD --unpack=true --chown=nonroot:nonroot --chmod=755 https://github.com/codefre
 # DHI source: https://hub.docker.com/repository/docker/octopusdeploy/dhi-debian-base/customizations/8106437942896324135
 FROM octopusdeploy/dhi-debian-base:trixie_cf-gitops-runtime-installer-debian13@sha256:ab35aedc53ad95d3a95094d6f2c9d052c2cdb43b605ce1f9a4ea677911373b99 AS production
 ARG TARGETARCH
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends sed \
-  && rm -rf /var/lib/apt/lists/*
 COPY --from=build --chown=nonroot:nonroot --chmod=755 /tmp/cf/cf-linux-${TARGETARCH} /usr/local/bin/cf
 COPY --from=build --chown=nonroot:nonroot --chmod=755 /tmp/semver-cli /usr/local/bin/semver-cli
 WORKDIR /home/codefresh
