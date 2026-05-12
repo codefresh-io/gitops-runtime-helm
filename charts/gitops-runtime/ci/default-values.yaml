@@ -1,20 +1,15 @@
 global:
   codefresh:
-    accountId: 63dbba4928d5fd1ef065b781 # Codefresh Account id for ilia-codefresh for now, needs to be some test account
+    accountId: 63dbba4928d5fd1ef065b781 # `gitops-helm-test` Codefresh account
     userToken:
-      secretKeyRef:
-        name: mysecret
-        key: myvalue
-        optional: true
+      token: "" # set in `gitops-runtime-helm/ci` pipeline
 
   runtime:
-    name: default
-    cluster: test-cluster
+    name: "" # set in `gitops-runtime-helm/ci` pipeline
 
     ingress:
-      className: "nginx"
-      hosts:
-      - runtime.codefresh.local
+      className: haproxy-ingress
+      hosts: [] # set in `gitops-runtime-helm/ci` pipeline
 
     repoCredentialsTemplate:
       url: 'https://github.com'
