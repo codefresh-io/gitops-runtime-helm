@@ -10,7 +10,8 @@ global:
     ingress:
       enabled: true
       className: haproxy-ingress
-      hosts: [] # set in `gitops-runtime-helm/ci` pipeline
+      hosts:
+        - "runtime.example.com" # set in `gitops-runtime-helm/ci` pipeline
 
     repoCredentialsTemplate:
       url: 'https://github.com'
