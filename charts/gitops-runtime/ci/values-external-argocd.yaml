@@ -18,6 +18,13 @@ global:
       username: 'username'
       password: 'dummy'
 
+  integrations:
+    argo-cd:
+      server:
+        svc: argocd-server
+      repoServer:
+        svc: argocd-repo-server
+
 argo-cd:
   enabled: false
 
