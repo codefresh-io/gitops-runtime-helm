@@ -16,8 +16,8 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "false"
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
-    - kind: fixed
-      description: 'cap-app-proxy: support arbitrary user IDs for OpenShift'
+    - kind: changed
+      description: 'feat: move CI from argo workflows to classic builds (#1196) (#1198)'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
