@@ -1,8 +1,8 @@
 global:
   codefresh:
-    accountId: 63dbba4928d5fd1ef065b781 # `gitops-helm-test` Codefresh account
+    accountId: 63dbba4928d5fd1ef065b781 # `gitops-helm-test` Codefresh account (see "gitops-runtime-helm CI" note in 1Password)
     userToken:
-      token: "dummy" # set in `gitops-runtime-helm/ci` pipeline
+      token: "dummy" # set in `gitops-runtime-helm/ci` pipeline (see "gitops-runtime-helm CI" note in 1Password)
 
   runtime:
     name: "dummy" # set in `gitops-runtime-helm/ci` pipeline
