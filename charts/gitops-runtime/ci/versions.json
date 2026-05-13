@@ -1,0 +1,7 @@
+[
+  {
+    "argo-cd": {
+      "chartVersion": "8.0.0"
+    }
+  }
+]
