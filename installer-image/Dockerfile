@@ -6,6 +6,7 @@ ARG TARGETARCH
 ARG CF_CLI_VERSION=v1.0.2
 RUN go install github.com/davidrjonas/semver-cli@latest \
   && cp $GOPATH/bin/semver-cli /tmp/semver-cli
+RUN apt-get update && apt-get install -y --no-install-recommends sed && rm -rf /var/lib/apt/lists/*
 ADD --unpack=true --chown=nonroot:nonroot --chmod=755 https://github.com/codefresh-io/cli-v2/releases/download/${CF_CLI_VERSION}/cf-linux-${TARGETARCH}.tar.gz /tmp/cf/
 
 
@@ -14,5 +15,6 @@ FROM octopusdeploy/dhi-debian-base:trixie_cf-gitops-runtime-installer-debian13@s
 ARG TARGETARCH
 COPY --from=build --chown=nonroot:nonroot --chmod=755 /tmp/cf/cf-linux-${TARGETARCH} /usr/local/bin/cf
 COPY --from=build --chown=nonroot:nonroot --chmod=755 /tmp/semver-cli /usr/local/bin/semver-cli
+COPY --from=build /usr/bin/sed /usr/bin/sed
 WORKDIR /home/codefresh
 USER nonroot
