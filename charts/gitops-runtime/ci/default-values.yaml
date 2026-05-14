@@ -1,4 +1,6 @@
 global:
+  imagePullSecrets:
+    - name: dockerhub-creds
   codefresh:
     accountId: 63dbba4928d5fd1ef065b781 # `gitops-helm-test` Codefresh account (see "gitops-runtime-helm CI" note in 1Password)
     userToken:
@@ -17,3 +19,7 @@ global:
       url: 'https://github.com'
       username: 'username'
       password: 'dummy'
+
+internal-router:
+  imagePullSecrets:
+    - name: dockerhub-creds
