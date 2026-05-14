@@ -17,6 +17,8 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'feat: test promote (#1202)'
+    - kind: changed
       description: 'feat: move CI from argo workflows to classic builds (#1196) (#1198)'
 dependencies:
   - name: argo-cd
