@@ -258,6 +258,9 @@ sealed-secrets:
 argo-cd:
   enabled: true
   fullnameOverride: argo-cd
+  global:
+    image:
+      tag: v3.3.10
   notifications:
     enabled: false
   redis:
