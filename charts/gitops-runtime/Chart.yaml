@@ -14,6 +14,8 @@ maintainers:
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
 dependencies:
+  # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
+  # Don't forget to remove the image override after updating to a new version of the chart.
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
     condition: argo-cd.enabled
