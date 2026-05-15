@@ -19,13 +19,15 @@ annotations:
     - kind: fixed
       description: 'cap-app-proxy: support arbitrary user IDs for OpenShift'
 dependencies:
+  # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
+  # Don't forget to remove the image override after updating to a new version of the chart.
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
     condition: argo-cd.enabled
     version: 9.5.11
   - name: argo-workflows
     repository: https://codefresh-io.github.io/argo-helm
-    version: 0.45.21-v3.6.7-cap-CR-38757
+    version: 0.45.22-v3.6.7-cap-CR-39681
     condition: argo-workflows.enabled
   - name: sealed-secrets
     repository: https://bitnami-labs.github.io/sealed-secrets/
