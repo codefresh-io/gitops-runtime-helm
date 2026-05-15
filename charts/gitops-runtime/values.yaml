@@ -136,7 +136,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: "06801ec"
+      tag: "7d96f83"
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -459,14 +459,14 @@ app-proxy:
           tag: 1.1.27-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.4092.0
+    tag: 1.4093.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.4092.0
+      tag: 1.4093.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -647,7 +647,7 @@ gitops-operator:
   image:
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: bc5c4eb
+    tag: 79a7f3b
   env:
     !!merge <<:
       - *otel-config
@@ -679,7 +679,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: "06801ec"
+    tag: "7d96f83"
   nodeSelector: {}
   tolerations: []
   affinity: {}
