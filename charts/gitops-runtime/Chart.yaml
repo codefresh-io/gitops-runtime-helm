@@ -17,6 +17,8 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: changed
+      description: 'chore: fix various security vulnerabilities in argo-cd, argo-workflows, cap-app-proxy, cf-argocd-extras, codefresh-gitops-operator, gitops-runtime-installer (#1206)'
+    - kind: changed
       description: 'feat: test release-branch-updated pipeline (#1204)'
     - kind: changed
       description: 'feat: add imagePullSecrets to CI'
