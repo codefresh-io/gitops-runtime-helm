@@ -13,11 +13,17 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
-  artifacthub.io/containsSecurityUpdates: "false"
+  artifacthub.io/containsSecurityUpdates: "true"
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
-    - kind: fixed
-      description: 'cap-app-proxy: support arbitrary user IDs for OpenShift'
+    - kind: changed
+      description: 'update "argo-cd" to 3.3.10'
+    - kind: changed
+      description: 'update "argo-workflows" to 0.45.22-v3.6.7-cap-CR-39681'
+    - kind: changed
+      description: 'update "cap-app-proxy" to 1.4093.0'
+    - kind: security
+      description: 'fix various security vulnerabilities in argo-cd, argo-workflows, cap-app-proxy, cf-argocd-extras, codefresh-gitops-operator, gitops-runtime-installer'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
