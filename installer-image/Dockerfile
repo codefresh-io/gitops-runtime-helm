@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # DHI source: https://hub.docker.com/repository/docker/octopusdeploy/dhi-golang/tags/1.25-debian13-dev
-FROM octopusdeploy/dhi-golang:1.25-debian13-dev@sha256:6ab2431d046a2e21dbcbcb5111e94bec59650d302ec0ac34e696e7e44f708044 AS build
+FROM octopusdeploy/dhi-golang:1.25-debian13-dev@sha256:9df1a12a7a9ee811efe2929045a7eabb8617329e8ce01a3296f4af095f89522c AS build
 ARG TARGETARCH
 ARG CF_CLI_VERSION=v1.0.3
 RUN go install github.com/davidrjonas/semver-cli@latest \
@@ -11,7 +11,7 @@ ADD --unpack=true --chown=nonroot:nonroot --chmod=755 https://github.com/codefre
 
 
 # DHI source: https://hub.docker.com/repository/docker/octopusdeploy/dhi-debian-base/customizations/8106437942896324135
-FROM octopusdeploy/dhi-debian-base:trixie_cf-gitops-runtime-installer-debian13@sha256:3c5a8f5bf49a3777527797677b3c8c426b0a38a466f3a79f5e059b6adc21943d AS production
+FROM octopusdeploy/dhi-debian-base:trixie_cf-gitops-runtime-installer-debian13@sha256:5de4afaf8d55ff711756e2ebd9e27fc05374c37d3805acf85dfed70ef07fbee2 AS production
 ARG TARGETARCH
 COPY --from=build --chown=nonroot:nonroot --chmod=755 /tmp/cf/cf-linux-${TARGETARCH} /usr/local/bin/cf
 COPY --from=build --chown=nonroot:nonroot --chmod=755 /tmp/semver-cli /usr/local/bin/semver-cli
