@@ -69,7 +69,7 @@ global:
     httpRoute:
       # -- Enable HTTPRoute
       enabled: false
-      # -- The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https.
+      # -- The protocol that Codefresh platform will use to access the runtime. Can be http or https.
       protocol: https
       # -- Required! List of parent Gateway references this HTTPRoute should attach to
       # ref: https://gateway-api.sigs.k8s.io/reference/api-spec/main/spec/#parentreference
