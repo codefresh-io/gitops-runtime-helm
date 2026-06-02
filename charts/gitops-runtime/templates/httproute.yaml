@@ -22,7 +22,7 @@ spec:
     {{- fail "ERROR: global.runtime.httpRoute.parentRefs is required when httpRoute is enabled" }}
   {{- end }}
   hostnames:
-  {{ - if .Values.global.runtime.httpRoute.hostnames }}
+  {{- if .Values.global.runtime.httpRoute.hostnames }}
      {{- toYaml .Values.global.runtime.httpRoute.hostnames | nindent 4 }}
   {{- else }}
      {{- fail "ERROR: global.runtime.httpRoute.hostnames is required when httpRoute is enabled" }}
