@@ -16,5 +16,4 @@
 rm -rf ./test/component-tests/setup/codefresh-isc
 rm -rf ./test/component-tests/setup/simple-app
 git restore ./test/component-tests/setup/values/runtime.values.yaml
-git restore ./test/component-tests/promotion/01-git-commit/00-app-sync.json
-git restore ./test/component-tests/promotion/01-git-commit/01-app-promote.json
+git restore ./test/component-tests/promotion/00-get-promotable-values/00-get-promotable-values.json
