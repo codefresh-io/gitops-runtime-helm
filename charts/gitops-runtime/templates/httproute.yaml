@@ -1,0 +1,41 @@
+{{- if .Values.global.runtime.httpRoute.enabled -}}
+{{- $svcName := include "internal-router.fullname" (dict "Values" (get .Values "internal-router")) -}}
+{{- $svcPort := index .Values "internal-router" "service" "port" -}}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: codefresh-gitops-runtime
+  labels:
+    {{- include "codefresh-gitops-runtime.labels" . | nindent 4 }}
+  {{- with .Values.global.runtime.httpRoute.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.global.runtime.httpRoute.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+  {{- if .Values.global.runtime.httpRoute.parentRefs }}
+    {{- toYaml .Values.global.runtime.httpRoute.parentRefs | nindent 4 }}
+  {{- else }}
+    {{- fail "ERROR: global.runtime.httpRoute.parentRefs is required when httpRoute is enabled" }}
+  {{- end }}
+  hostnames: {{- toYaml .Values.global.runtime.httpRoute.hostnames | nindent 4 }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /webhooks
+        - path:
+            type: PathPrefix
+            value : /app-proxy
+        {{- if (index (get $.Values "argo-workflows") "enabled") }}
+        - path:
+            type: PathPrefix
+            value : /workflows
+        {{- end }}
+      backendRefs:
+        - name: {{ $svcName }}
+          port: {{ $svcPort }}
+{{- end }}
