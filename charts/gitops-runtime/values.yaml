@@ -67,12 +67,27 @@ global:
       hosts: []
     # -- HTTPRoute settings
     httpRoute:
+      # -- Enable HTTPRoute
       enabled: false
+      # -- The protocol that Codefresh platform will use to access the runtime ingress. Can be http or https.
       protocol: https
-      annotations: {}
-      labels: {}
+      # -- Required! List of parent Gateway references this HTTPRoute should attach to
+      # ref: https://gateway-api.sigs.k8s.io/reference/api-spec/main/spec/#parentreference
+      # E.g.
+      # parentRefs:
+      #   - name: traefik-gateway
+      #     namespace: traefik
       parentRefs: []
+      # -- List of hostnames to be covered by this HTTPRoute
+      # ref: https://gateway-api.sigs.k8s.io/reference/api-spec/main/spec/#hostname
+      # E.g.
+      # hostnames:
+      #   - runtime.example.com
       hostnames: []
+      # -- Set annotations on the HTTPRoute resource
+      annotations: {}
+      # -- Set labels on the HTTPRoute resource
+      labels: {}
     # -- Explicit url for runtime ingress. Provide this value only if you don't want the chart to create and ingress (global.runtime.ingress.enabled=false) and tunnel-client is not used (tunnel-client.enabled=false)
     ingressUrl: ""
     # -- is the runtime set as a "configuration runtime".
