@@ -1,0 +1,14 @@
+charts/gitops-runtime/templates/httproute.yaml
+  h_bdc637847e5b6a 25-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "cce1e508bd48572658529bd44772c6e1a8a77107",
+  "prompts": {},
+  "humans": {
+    "h_bdc637847e5b6a": {
+      "author": "Mikhail Klimko <mikhail.klimko@octopus.com>"
+    }
+  }
+}
