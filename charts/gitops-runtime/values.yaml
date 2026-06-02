@@ -68,6 +68,7 @@ global:
     # -- HTTPRoute settings
     httpRoute:
       enabled: false
+      protocol: https
       annotations: {}
       labels: {}
       parentRefs: []
