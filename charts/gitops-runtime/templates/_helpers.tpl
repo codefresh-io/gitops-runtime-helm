@@ -363,7 +363,7 @@ Get ingress url for both tunnel based and ingress based runtimes
             {{- fail "ERROR: Only http and https are supported for global.runtime.ingressUrl"}}
           {{- end }}
       {{- else }}
-        {{- fail "ERROR: When global.runtime.ingress.enabled is false and tunnel-client.enabled is false -  global.runtime.ingressUrl must be provided" }}
+        {{- fail "ERROR: When global.runtime.ingress.enabled and global.runtime.httpRoute.enabled are false and tunnel-client.enabled is false -  global.runtime.ingressUrl must be provided" }}
       {{- end }}
     {{- end }}
 {{- end }}
