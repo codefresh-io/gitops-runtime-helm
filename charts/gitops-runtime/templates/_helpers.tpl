@@ -341,6 +341,12 @@ Get ingress url for both tunnel based and ingress based runtimes
       {{- else }}
           {{ fail (printf "ERROR: Unsupported protocol %s for ingress. Only http and https supported" .Values.global.runtime.ingress.protocol)}}
       {{- end }}
+    {{- else if .Values.global.runtime.httpRoute.enabled }}
+      {{- if has .Values.global.runtime.httpRoute.protocol $supportedProtocols }}
+        {{- printf "%s://%s" .Values.global.runtime.httpRoute.protocol  (index .Values.global.runtime.httpRoute.hostnames 0)}}
+      {{- else }}
+          {{ fail (printf "ERROR: Unsupported protocol %s for httpRoute. Only http and https supported" .Values.global.runtime.httpRoute.protocol)}}
+      {{- end }}
     {{/* If tunnel client is enabled - ingress url is <accoundId>-<runtimename>.<tunnel-subdomain> */}}
     {{- else if index .Values "tunnel-client" "enabled" }}
       {{- $accoundId := required "global.codefresh.accountId is required for tunnel based runtime" .Values.global.codefresh.accountId }}
@@ -357,7 +363,7 @@ Get ingress url for both tunnel based and ingress based runtimes
             {{- fail "ERROR: Only http and https are supported for global.runtime.ingressUrl"}}
           {{- end }}
       {{- else }}
-        {{- fail "ERROR: When global.runtime.ingress.enabled is false and tunnel-client.enabled is false -  global.runtime.ingressUrl must be provided" }}
+        {{- fail "ERROR: When global.runtime.ingress.enabled and global.runtime.httpRoute.enabled are false and tunnel-client.enabled is false -  global.runtime.ingressUrl must be provided" }}
       {{- end }}
     {{- end }}
 {{- end }}
