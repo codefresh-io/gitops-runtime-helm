@@ -42,18 +42,17 @@ tests:
     - failedTemplate:
         errorMessage: codefresh.accountId is required
 
-
-
 - it: when both tunnel-client and ingress are disabled fail rendering if ingressUrl is not provided
   template: templates/codefresh-cm.yaml
   values:
   - ./values/mandatory-values.yaml
   set:
     global.runtime.ingress.enabled: false
+    global.runtime.httpRoute.enabled: false
     tunnel-client.enabled: false
   asserts:
     - failedTemplate:
-        errorMessage: "ERROR: When global.runtime.ingress.enabled is false and tunnel-client.enabled is false -  global.runtime.ingressUrl must be provided"
+        errorMessage: "ERROR: When global.runtime.ingress.enabled and global.runtime.httpRoute.enabled are false and tunnel-client.enabled is false -  global.runtime.ingressUrl must be provided"
 
 - it: fail on ingressUrl that is not http or https
   template: templates/codefresh-cm.yaml

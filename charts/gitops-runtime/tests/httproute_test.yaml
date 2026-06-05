@@ -1,0 +1,104 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: httproute test
+templates:
+  - templates/httproute.yaml
+  - templates/tunnel-client.yaml
+  - templates/codefresh-cm.yaml
+tests:
+- it: no httproute is rendered when tunnel runtime is configured
+  template: templates/httproute.yaml
+  values:
+  - ./values/mandatory-values.yaml
+  asserts:
+    - hasDocuments:
+        count: 0
+
+- it: no tunnel when httproute is configured
+  template: templates/tunnel-client.yaml
+  values:
+  - ./values/mandatory-values-httproute.yaml
+  asserts:
+  - hasDocuments:
+      count: 0
+
+- it: httproute is rendered correctly when enabled
+  template: templates/httproute.yaml
+  values:
+  - ./values/mandatory-values-httproute.yaml
+  asserts:
+    - hasDocuments:
+        count: 1
+    - equal:
+        path: spec.parentRefs
+        value:
+          - name: traefik-gateway
+            namespace: traefik
+    - equal:
+        path: spec.hostnames
+        value:
+          - runtime.example.com
+    - equal:
+        path: spec.rules
+        value:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /webhooks
+              - path:
+                  type: PathPrefix
+                  value : /app-proxy
+              - path:
+                  type: PathPrefix
+                  value : /workflows
+            backendRefs:
+              - name: internal-router
+                port: 80
+
+- it: httroute has custom labels and annotations
+  template: templates/httproute.yaml
+  values:
+  - ./values/mandatory-values-httproute.yaml
+  set:
+    global:
+      runtime:
+        httpRoute:
+          labels:
+            customLabel: customValue
+          annotations:
+            customAnnotation: customAnnotationValue
+  asserts:
+    - equal:
+        path: metadata.labels.customLabel
+        value: customValue
+    - equal:
+        path: metadata.annotations.customAnnotation
+        value: customAnnotationValue
+
+- it: codefresh-cm ingressHost is set correctly when httproute is enabled
+  template: templates/codefresh-cm.yaml
+  values:
+  - ./values/mandatory-values-httproute.yaml
+  asserts:
+  - equal:
+      path: data.ingressHost
+      value:  https://runtime.example.com
+
+- it: error is thrown when httpRoute is enabled but parentRefs is missing
+  template: templates/httproute.yaml
+  values:
+  - ./values/mandatory-values-httproute.yaml
+  set:
+    global.runtime.httpRoute.parentRefs: null
+  asserts:
+  - failedTemplate:
+      errorMessage: "ERROR: global.runtime.httpRoute.parentRefs is required when httpRoute is enabled"
+
+- it: error is thrown when httpRoute is enabled but hostnames is missing
+  template: templates/httproute.yaml
+  values:
+  - ./values/mandatory-values-httproute.yaml
+  set:
+    global.runtime.httpRoute.hostnames: null
+  asserts:
+  - failedTemplate:
+      errorMessage: "ERROR: global.runtime.httpRoute.hostnames is required when httpRoute is enabled"
