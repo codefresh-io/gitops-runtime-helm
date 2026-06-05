@@ -159,7 +159,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: "7d96f83"
+      tag: "71b7e7c"
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -705,7 +705,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: "7d96f83"
+    tag: "71b7e7c"
   nodeSelector: {}
   tolerations: []
   affinity: {}
