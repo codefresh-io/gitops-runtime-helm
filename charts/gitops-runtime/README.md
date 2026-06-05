@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.29.12](https://img.shields.io/badge/Version-0.29.12-informational?style=flat-square) ![AppVersion: 0.2.3](https://img.shields.io/badge/AppVersion-0.2.3-informational?style=flat-square)
+![Version: 0.29.13](https://img.shields.io/badge/Version-0.29.13-informational?style=flat-square) ![AppVersion: 0.2.3](https://img.shields.io/badge/AppVersion-0.2.3-informational?style=flat-square)
 
 ## Table of Content
 
@@ -205,7 +205,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.29.12 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.29.13 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -218,7 +218,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.29.12 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.29.13 <local_registry>
 ```
 
 ## Openshift
@@ -712,7 +712,7 @@ global:
 | global.integrations.argo-cd.server.svc | string | `"argo-cd-server"` | Service name of the ArgoCD server |
 | global.noProxy | string | `""` | global NO_PROXY for all components |
 | global.nodeSelector | object | `{}` | Global nodeSelector for all components |
-| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null,"singleNamespace":false}` | Runtime level settings |
+| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"httpRoute":{"annotations":{},"enabled":false,"hostnames":[],"labels":{},"parentRefs":[],"protocol":"https"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null,"singleNamespace":false}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
 | global.runtime.gitCredentials | object | `{"password":{"secretKeyRef":{},"value":null},"username":"username"}` | Git credentials runtime. Runtime is not fully functional without those credentials. If not provided through the installation, they must be provided through the Codefresh UI. |
@@ -720,6 +720,13 @@ global:
 | global.runtime.gitCredentials.password.secretKeyRef | object | `{}` | secretKeyReference for Git credentials password. Provide name and key fields. |
 | global.runtime.gitCredentials.password.value | string | `nil` | Plain text password |
 | global.runtime.gitCredentials.username | string | `"username"` | Username. Optional when using token in password. |
+| global.runtime.httpRoute | object | `{"annotations":{},"enabled":false,"hostnames":[],"labels":{},"parentRefs":[],"protocol":"https"}` | HTTPRoute settings |
+| global.runtime.httpRoute.annotations | object | `{}` | Set annotations on the HTTPRoute resource |
+| global.runtime.httpRoute.enabled | bool | `false` | Enable HTTPRoute |
+| global.runtime.httpRoute.hostnames | list | `[]` | List of hostnames to be covered by this HTTPRoute ref: https://gateway-api.sigs.k8s.io/reference/api-spec/main/spec/#hostname E.g. hostnames:   - runtime.example.com |
+| global.runtime.httpRoute.labels | object | `{}` | Set labels on the HTTPRoute resource |
+| global.runtime.httpRoute.parentRefs | list | `[]` | Required! List of parent Gateway references this HTTPRoute should attach to ref: https://gateway-api.sigs.k8s.io/reference/api-spec/main/spec/#parentreference E.g. parentRefs:   - name: traefik-gateway     namespace: traefik |
+| global.runtime.httpRoute.protocol | string | `"https"` | The protocol that Codefresh platform will use to access the runtime. Can be http or https. |
 | global.runtime.ingress | object | `{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]}` | Ingress settings |
 | global.runtime.ingress.enabled | bool | `false` | Defines if ingress-based access mode is enabled for runtime. To use tunnel-based (ingressless) access mode, set to false. |
 | global.runtime.ingress.hosts | list | `[]` | Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime. |
@@ -792,7 +799,7 @@ global:
 | redis-ha.redis.config.save | string | `'""'` | Will save the DB if both the given number of seconds and the given number of write operations against the DB occurred. `""`  is disabled |
 | redis-ha.redis.masterGroupName | string | `"gitops-runtime"` | Redis convention for naming the cluster group: must match `^[\\w-\\.]+$` and can be templated |
 | redis-ha.tolerations | list | `[]` | [Tolerations] for use with node taints for Redis pods. |
-| redis-ha.topologySpreadConstraints | object | `{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}` | Assign custom [TopologySpreadConstraints] rules to the Redis pods. |
+| redis-ha.topologySpreadConstraints | object | `{"enabled":false,"maxSkew":"","topologyKey":"","whenUnsatisfiable":""}` | Assign custom [TopologySpreadConstraints] rules to the Redis pods. # https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/ |
 | redis-ha.topologySpreadConstraints.enabled | bool | `false` | Enable Redis HA topology spread constraints |
 | redis-ha.topologySpreadConstraints.maxSkew | string | `""` (defaults to `1`) | Max skew of pods tolerated |
 | redis-ha.topologySpreadConstraints.topologyKey | string | `""` (defaults to `topology.kubernetes.io/zone`) | Topology key for spread |
