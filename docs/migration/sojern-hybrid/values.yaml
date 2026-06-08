@@ -1,0 +1,210 @@
+# ABOUTME: Translated values.yaml for Sojern's Hybrid GitOps Runtime install.
+# ABOUTME: Source = Hosted runtime hgr-sojern-1e325d9 (paying tier), target = gitops-runtime chart 0.29.10.
+#
+# What changed vs. their old Hosted values.yaml:
+#   - Dropped `app-proxy.image` override (was a private CR-37307 dev build — they get the chart-default cap-app-proxy version)
+#   - Dropped `argo-cd.server.env CODEFRESH_PRIORITY_QUEUE=true` (Codefresh-fork only; runtime now ships OSS Argo CD ≥3.0)
+#   - Dropped `gitops-operator.argoCdNotifications.*` (path removed from the chart; the Codefresh-operator-side notifications
+#     subsystem was deleted entirely — this is NOT the same as upstream `argo-cd.notifications.*`)
+#   - Dropped `gitops-operator.resources` (chart defaults are appropriate; can re-introduce if observed pressure)
+#   - Dropped `argo-cd.eventReporter.*` entirely. Reasons:
+#       * old reporter was a single argo-events-based binary; new chart splits into `runtime-event-reporter` + `cluster-event-reporter`
+#       * `replicas: 10` doesn't translate — it scales the wrong workload
+#       * `RATE_LIMITER_*` env vars aren't consumed by the new cf-argocd-extras-based reporter (it's configmap-driven:
+#         app.queue.size, threadiness, sharding.algorithm)
+#     Start on chart defaults (replicaCount: 2 each); tune from observed load post-install.
+#
+# What was added (Hybrid-only required block, was implicit on Hosted):
+#   - `global.codefresh.{url,accountId,userToken}`
+#   - `global.runtime.name`
+#   - tunnel-based connectivity (matches Hosted default)
+#   - `global.integrations.argo-cd.server.auth` (admin password from chart-managed `argocd-initial-admin-secret`)
+#   - HA topology to match Hosted paying-tier (replicas, PDBs, redis-ha) — see "HA topology" sections below
+#
+# Kept:
+#   - `global.runtime.isConfigurationRuntime: true` — they're decommissioning Hosted, so this Hybrid takes over
+#     as their account's configuration runtime
+#   - All Sojern-specific Argo CD knobs: resources, gerritssh.p.sojern.net knownHost, self-heal timeout=60s,
+#     resource exclusions/compareoptions, repo-server ARGOCD_EXEC_TIMEOUT=3m
+#
+# Note on git credentials:
+#   `global.runtime.gitCredentials` is intentionally not set here — Sojern can provide them via the Codefresh UI
+#   after install (or layer in another values file with secretKeyRef).
+
+global:
+  codefresh:
+    url: "https://g.codefresh.io"
+    accountId: "63d97e6762d88367f72f43b8"  # Sojern's account
+    userToken:
+      secretKeyRef:
+        name: codefresh-user-token
+        key: token
+
+  runtime:
+    name: "sojern-hybrid-prod"
+    cluster: https://kubernetes.default.svc
+
+    # This Hybrid takes over as the account's configuration runtime (Hosted is going away).
+    # Exactly one runtime per account should have this set to true.
+    isConfigurationRuntime: true
+
+    # Tunnel mode (matches Hosted default). Set ingress.enabled=true and disable tunnel-client below if exposing via ingress.
+    ingress:
+      enabled: false
+      protocol: https
+      className: nginx
+      hosts: []
+      tls: []
+      annotations: {}
+
+  # Argo CD auth — runtime authenticates to bundled Argo CD via admin password from chart-managed secret.
+  integrations:
+    argo-cd:
+      server:
+        auth:
+          type: password
+          username: "admin"
+          passwordSecretKeyRef:
+            name: argocd-initial-admin-secret
+            key: password
+
+# Tunnel-based ingress (matches Hosted default). Disable if you set global.runtime.ingress.enabled=true.
+tunnel-client:
+  enabled: true
+
+# -------------------------------------------------------------------------
+# Runtime-level redis-ha — required by app-proxy when replicaCount > 1.
+# This is the gitops-runtime's own redis (used for app-proxy leader-election cache),
+# separate from `argo-cd.redis-ha` below which is internal to the Argo CD subchart.
+# Without this, helm install fails with:
+#   ".Values.redis.enabled or .Values.redis-ha.enabled must be true when .Values.app-proxy.replicaCount > 1"
+# -------------------------------------------------------------------------
+redis-ha:
+  enabled: true
+
+# -------------------------------------------------------------------------
+# HA topology — replicas + PDBs for non-Argo-CD components
+# Mirrors hosted-gitops-runtimes-charts/charts/runtime/paying-tier/values.yaml
+# -------------------------------------------------------------------------
+internal-router:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+
+app-proxy:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  resources:
+    limits:
+      memory: 4Gi
+  config:
+    skipGitPermissionValidation: "true"
+
+# -------------------------------------------------------------------------
+# Argo CD — preserves Sojern's resource sizing + Gerrit knownHost + self-heal workaround,
+# adds HA topology (redis-ha, replicas, PDBs) to match Hosted paying-tier.
+# -------------------------------------------------------------------------
+argo-cd:
+  # Disable standalone redis; use redis-ha instead (paying-tier topology).
+  redis:
+    enabled: false
+  redis-ha:
+    enabled: true
+    podDisruptionBudget:
+      minAvailable: 2
+    redis:
+      resources:
+        requests:
+          memory: 2000Mi
+        limits:
+          memory: 2500Mi
+    haproxy:
+      podDisruptionBudget:
+        minAvailable: 2
+
+  controller:
+    replicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+    resources:
+      requests:
+        memory: 12Gi
+        cpu: "8"
+      limits:
+        memory: 16Gi
+        cpu: "10"
+    extraArgs:
+      - --status-processors=50
+      - --operation-processors=25
+
+  server:
+    replicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+    resources:
+      requests:
+        memory: 8Gi
+        cpu: "1"
+      limits:
+        memory: 16Gi
+        cpu: "3"
+    # Old Hosted values had `CODEFRESH_PRIORITY_QUEUE=true` — that env var is a Codefresh-Argo-CD-fork feature.
+    # Bundled Argo CD here is OSS, so the env var has no effect. Dropped intentionally.
+
+  repoServer:
+    replicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+    resources:
+      requests:
+        memory: 4Gi
+        cpu: "1"
+        ephemeral-storage: 8Gi
+      limits:
+        cpu: "2"
+        memory: 8Gi
+        ephemeral-storage: 24Gi
+    env:
+      - name: ARGOCD_EXEC_TIMEOUT
+        value: "3m"
+
+  applicationSet:
+    replicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
+
+  configs:
+    cm:
+      resource.exclusions: |
+        - apiGroups:
+          - policy
+          kinds:
+          - PodSecurityPolicy
+      resource.compareoptions: |
+        ignoreAggregatedRoles: true
+      timeout.reconciliation: "90s"
+
+    params:
+      # Sojern-specific workaround for conflicting apps/controllers in their Gerrit-driven dev flow.
+      # Carry-over from Hosted values; revisit once the new flow stabilises.
+      controller.self.heal.timeout.seconds: "60"
+
+    ssh:
+      knownHosts: |
+        bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+        github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+        gitlab.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFSMqzJeV9rUzU4kWitGjeR4PWSa29SPqJ1fVkhtj3Hw9xjLVXVYrU9QlYWrOLXBpQ6KWjbjTDTdDkoohFzgbEY=
+        gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf
+        gitlab.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsj2bNKTBSpIYDEGk9KxsGh3mySTRgMtXL583qmBpzeQ+jqCMRgBqB98u3z++J1sKlXHWfM9dyhSevkMwSbhoR8XIq/U0tCNyokEi/ueaBMCvbcTHhO7FcwzY92WK4Yt0aGROY5qX2UKSeOvuP4D6TPqKF1onrSzH9bx9XUf2lEdWT/ia1NEKjunUqu1xOB/StKDHMoX4/OKyIzuS0q/T1zOATthvasJFoPrAjkohTyaDUz2LN5JoH839hViyEG82yB+MjcFV5MU3N1l1QL3cVUCh93xSaua1N85qivl+siMkPGbO5xR/En4iEY6K2XPASUEMaieWVNTRCtJ4S8H+9
+        ssh.dev.azure.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Hr1oTWqNqOlzGJOfGJ4NakVyIzf1rXYd4d7wo6jBlkLvCA4odBlL0mDUyZ0/QUfTTqeu+tm22gOsv+VrVTMk6vwRU75gY/y9ut5Mb3bR5BV58dKXyq9A9UeB5Cakehn5Zgm6x1mKoVyf+FFn26iYqXJRgzIZZcZ5V6hrE0Qg39kZm4az48o0AUbf6Sp4SLdvnuMa2sVNwHBboS7EJkm57XQPVU3/QpyNLHbWDdzwtrlS+ez30S3AdYhLKEOxAG8weOnyrtLJAUen9mTkol8oII1edf7mWWbWVf0nBmly21+nZcmCTISQBtdcyPaEno7fFQMDD26/s0lfKob4Kw8H
+        vs-ssh.visualstudio.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Hr1oTWqNqOlzGJOfGJ4NakVyIzf1rXYd4d7wo6jBlkLvCA4odBlL0mDUyZ0/QUfTTqeu+tm22gOsv+VrVTMk6vwRU75gY/y9ut5Mb3bR5BV58dKXyq9A9UeB5Cakehn5Zgm6x1mKoVyf+FFn26iYqXJRgzIZZcZ5V6hrE0Qg39kZm4az48o0AUbf6Sp4SLdvnuMa2sVNwHBboS7EJkm57XQPVU3/QpyNLHbWDdzwtrlS+ez30S3AdYhLKEOxAG8weOnyrtLJAUen9mTkol8oII1edf7mWWbWVf0nBmly21+nZcmCTISQBtdcyPaEno7fFQMDD26/s0lfKob4Kw8H
+        github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
+        github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+        [gerritssh.p.sojern.net]:29418 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQCXJ3cQ+TJbonB+nw9YFKD9AXvqDDde5X/xzhYc2FrbLzqds/hKkkaL3N22VR42cmhLXojsCNCDqommKB7IP/0yrygfEzXgwVprSd2616S7BOIIc9IvOfWGEKTni83nvUfUzf4JnMrTXuCHonSQ6AMuYoNTaS9vrYLnnYaluxHOxQ==
