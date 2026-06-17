@@ -1,0 +1,17 @@
+charts/gitops-runtime/ci/versions.json
+  h_bdc637847e5b6a 1-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "fcbadde6608be7e8812369b036267b24361fbc65",
+  "prompts": {},
+  "humans": {
+    "h_02538178b2163d": {
+      "author": "Mikhail Klimko"
+    },
+    "h_bdc637847e5b6a": {
+      "author": "Mikhail Klimko <mikhail.klimko@octopus.com>"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+charts/gitops-runtime/values.yaml
+  h_bdc637847e5b6a 71
+charts/gitops-runtime/templates/_helpers.tpl
+  h_bdc637847e5b6a 344-349
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "e573431a97daf22019347fec2c13a259c8b25d13",
+  "prompts": {},
+  "humans": {
+    "h_bdc637847e5b6a": {
+      "author": "Mikhail Klimko <mikhail.klimko@octopus.com>"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+charts/gitops-runtime/values.yaml
+  h_104939d4aa3383 162,708
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "0f8f594ca5e32bac36b76c4fff3a136ab287d8d9",
+  "prompts": {},
+  "humans": {
+    "h_104939d4aa3383": {
+      "author": "Vasil Sudakou <vasil.sudakov@codefresh.io>"
+    }
+  }
+}
