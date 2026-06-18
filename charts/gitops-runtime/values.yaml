@@ -673,7 +673,7 @@ gitops-operator:
   image:
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: 79a7f3b
+    tag: c03bf91
   env:
     !!merge <<:
       - *otel-config
@@ -705,7 +705,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: "71b7e7c"
+    tag: "3683869"
   nodeSelector: {}
   tolerations: []
   affinity: {}
