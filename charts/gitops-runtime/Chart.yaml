@@ -17,9 +17,7 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'update cf-argocd-extras to "71b7e7c"'
-    - kind: security
-      description: 'fix various security vulnerabilities in security'
+      description: 'fix: security vulnerabilities in gitops-runtime-installer (#1218)'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
