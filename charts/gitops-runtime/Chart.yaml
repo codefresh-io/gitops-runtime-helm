@@ -25,7 +25,7 @@ dependencies:
     version: 0.45.23-v3.6.7-cap-CFS-7012
     condition: argo-workflows.enabled
   - name: sealed-secrets
-    repository: https://bitnami-labs.github.io/sealed-secrets/
+    repository: https://bitnami.github.io/sealed-secrets
     version: 2.18.0
     condition: sealed-secrets.enabled
   - name: codefresh-tunnel-client
