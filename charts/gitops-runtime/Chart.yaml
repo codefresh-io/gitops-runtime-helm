@@ -17,11 +17,7 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: security
-      description: 'Update "codefresh-tunnel-client" to 0.1.25. Security fixes'
-    - kind: security
-      description: 'Update "nginx-unprivileged" to 1.31.2-alpine3.23. Security fixes'
-    - kind: security
-      description: 'Update "alpine/kubectl" to 1.36.2. Security fixes'
+      description: 'Update "cf-argocd-extras" to ace3860. Security fix.'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
