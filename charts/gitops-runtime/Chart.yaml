@@ -17,7 +17,7 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix(cf-argocd-extras): security fix, bump image tag to ace3860 (#1227)'
+      description: 'Update "cf-argocd-extras" to ace3860. Security fix.'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
