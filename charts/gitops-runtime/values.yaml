@@ -485,14 +485,14 @@ app-proxy:
           tag: 1.1.28-main
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.4103.0
+    tag: 1.4114.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.4103.0
+      tag: 1.4114.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -705,7 +705,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: "ace3860"
+    tag: "73334da"
   nodeSelector: {}
   tolerations: []
   affinity: {}
