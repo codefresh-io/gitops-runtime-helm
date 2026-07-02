@@ -17,7 +17,9 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix: version of applications with a Helm-only source (#1232)'
+      description: 'fix: version of applications with a Helm-only source'
+    - kind: changed
+      description: 'fix: add ignoreDifference to the in-cluster application to prevent drift detection'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
