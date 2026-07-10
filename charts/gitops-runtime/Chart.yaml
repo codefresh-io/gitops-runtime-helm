@@ -13,13 +13,17 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
-  artifacthub.io/containsSecurityUpdates: "false"
+  artifacthub.io/containsSecurityUpdates: "true"
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'fix: version of applications with a Helm-only source'
-    - kind: changed
-      description: 'fix: add ignoreDifference to the in-cluster application to prevent drift detection'
+    - kind: security
+      description: 'Update "argo-gateway" to cd53e9b. Security fix.'
+    - kind: security
+      description: 'Update "codefresh-gitops-operator" to c0ef368. Security fix.'
+    - kind: security
+      description: 'Update "argo-hub-codefresh-csdp-image-enricher" to 1.1.29. Security fix.'
+    - kind: security
+      description: 'Update "cap-app-proxy" to 1.4116.0. Security fix.'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
