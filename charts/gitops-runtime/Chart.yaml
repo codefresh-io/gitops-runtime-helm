@@ -17,9 +17,7 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'fix: version of applications with a Helm-only source'
-    - kind: changed
-      description: 'fix: add ignoreDifference to the in-cluster application to prevent drift detection'
+      description: 'chore: fix various security vulnerabilities for argo-gateway, codefresh-gitops-operator, csdp-image-enrichers, cap-app-proxy (#1234)'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
