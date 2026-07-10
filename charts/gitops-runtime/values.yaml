@@ -159,7 +159,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: "ace3860"
+      tag: "cd53e9b"
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -472,27 +472,27 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.28-main
+          tag: 1.1.29
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.28-main
+          tag: 1.1.29
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.28-main
+          tag: 1.1.29
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.4114.0
+    tag: 1.4116.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.4114.0
+      tag: 1.4116.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -673,7 +673,7 @@ gitops-operator:
   image:
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: c03bf91
+    tag: c0ef368
   env:
     !!merge <<:
       - *otel-config
@@ -705,7 +705,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: "73334da"
+    tag: "cd53e9b"
   nodeSelector: {}
   tolerations: []
   affinity: {}
