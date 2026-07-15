@@ -16,8 +16,8 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'chore: fix various security vulnerabilities for cap-app-proxy (#1237)'
+    - kind: security
+      description: 'Update "cap-app-proxy" to 1.4117.0. Security fix.'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
