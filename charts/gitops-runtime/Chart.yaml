@@ -17,13 +17,9 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: security
-      description: 'Update "argo-gateway" to cd53e9b. Security fix.'
+      description: 'Update "cap-app-proxy" to 1.4117.0. Security fix.'
     - kind: security
-      description: 'Update "codefresh-gitops-operator" to c0ef368. Security fix.'
-    - kind: security
-      description: 'Update "argo-hub-codefresh-csdp-image-enricher" to 1.1.29. Security fix.'
-    - kind: security
-      description: 'Update "cap-app-proxy" to 1.4116.0. Security fix.'
+      description: 'fix various security vulnerabilities for gitops-runtime-installer'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
