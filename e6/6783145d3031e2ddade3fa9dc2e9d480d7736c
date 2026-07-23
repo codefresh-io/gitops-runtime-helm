@@ -1,0 +1,16 @@
+charts/gitops-runtime/values.yaml
+  h_48b74706cf95a4 356
+charts/gitops-runtime/README.md
+  h_48b74706cf95a4 743
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "e66783145d3031e2ddade3fa9dc2e9d480d7736c",
+  "prompts": {},
+  "humans": {
+    "h_48b74706cf95a4": {
+      "author": "Bohdan Pysarenko <bohdan.pisarenko@octopus.com>"
+    }
+  }
+}
