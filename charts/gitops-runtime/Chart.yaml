@@ -16,9 +16,9 @@ annotations:
   artifacthub.io/containsSecurityUpdates: "true"
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
-    - kind: changed
-      description: 'chore: fix security vulnarabilities (#1247)'
-    - kind: changed
+    - kind: security
+      description: 'bump nginxinc/nginx-unprivileged up to "1.31.2-alpine3.23". Security fix (#1247)'
+    - kind: security
       description: 'chore: fix various security vulnerabilities for argo-workflows (#1246)'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
