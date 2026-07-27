@@ -23,9 +23,9 @@ annotations:
     - kind: security
       description: 'fix various security vulnerabilities for cap-app-proxy'
     - kind: security
-      description: 'fix various security vulnerabilities for cf-argocd-extras'      
+      description: 'fix various security vulnerabilities for cf-argocd-extras'
     - kind: security
-      description: 'fix various security vulnerabilities for gitops-runtime-installer'       
+      description: 'fix various security vulnerabilities for gitops-runtime-installer'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
