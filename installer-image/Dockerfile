@@ -3,7 +3,7 @@
 # DHI source: https://hub.docker.com/repository/docker/octopusdeploy/dhi-golang/tags/1.25-debian13-dev
 FROM octopusdeploy/dhi-golang:1.25-debian13-dev@sha256:e6e6523b8d28c9e31354de5ecf58b849c18410b2bb7065b533066740fca549af AS build
 ARG TARGETARCH
-ARG CF_CLI_VERSION=v1.0.6
+ARG CF_CLI_VERSION=v1.0.7
 RUN go install github.com/davidrjonas/semver-cli@latest \
   && cp $GOPATH/bin/semver-cli /tmp/semver-cli
 RUN apt-get update && apt-get install -y --no-install-recommends sed && rm -rf /var/lib/apt/lists/*
