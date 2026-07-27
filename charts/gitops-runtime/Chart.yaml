@@ -17,9 +17,15 @@ annotations:
   # Supported kinds: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`:
   artifacthub.io/changes: |-
     - kind: security
-      description: 'bump nginxinc/nginx-unprivileged up to "1.31.2-alpine3.23". Security fix (#1247)'
+      description: 'bump nginxinc/nginx-unprivileged up to "1.31.2-alpine3.23". Security fix'
     - kind: security
-      description: 'chore: fix various security vulnerabilities for argo-workflows (#1246)'
+      description: 'fix various security vulnerabilities for argo-workflows'
+    - kind: security
+      description: 'fix various security vulnerabilities for cap-app-proxy'
+    - kind: security
+      description: 'fix various security vulnerabilities for cf-argocd-extras'
+    - kind: security
+      description: 'fix various security vulnerabilities for gitops-runtime-installer'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
