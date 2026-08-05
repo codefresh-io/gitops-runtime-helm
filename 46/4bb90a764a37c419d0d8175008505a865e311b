@@ -1,0 +1,14 @@
+charts/gitops-runtime/README.md.gotmpl
+  h_eda8e5529fa171 11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "464bb90a764a37c419d0d8175008505a865e311b",
+  "prompts": {},
+  "humans": {
+    "h_eda8e5529fa171": {
+      "author": "Zhenya Tikhonov"
+    }
+  }
+}

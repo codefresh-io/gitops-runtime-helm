@@ -1,0 +1,17 @@
+charts/gitops-runtime/ci/values-external-argocd.yaml
+  h_bdc637847e5b6a 3,5,8,11-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "1b222780521384be24466830b1ddd32174d8d5f3",
+  "prompts": {},
+  "humans": {
+    "h_02538178b2163d": {
+      "author": "Mikhail Klimko"
+    },
+    "h_bdc637847e5b6a": {
+      "author": "Mikhail Klimko <mikhail.klimko@octopus.com>"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+docs/migration/sojern-hybrid/values.yaml
+  s_b15cedb74824a6::t_6a3c666a13ed04 2
+  s_b15cedb74824a6::t_92bc6baf3b1016 1,3-210
+docs/migration/sojern-hybrid/README.md
+  s_b15cedb74824a6::t_cb8a0480faa0c7 1-2,4-26,28-60,62-111
+  s_b15cedb74824a6::t_41edda6e62f1de 27
+  s_b15cedb74824a6::t_cd2e555b547f55 3
+  s_b15cedb74824a6::t_2ae738e0d06029 61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "a0f98206228a9e7f9cb57a44794d100b214241d2",
+  "prompts": {},
+  "sessions": {
+    "s_b15cedb74824a6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2cbe9caa-9959-4a27-a859-4b32df03b173",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Daniel Maizel <dani98000k@gmail.com>"
+    }
+  }
+}

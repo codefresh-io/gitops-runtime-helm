@@ -1,0 +1,25 @@
+charts/gitops-runtime/Chart.yaml
+  s_406b391c3567c7::t_f40ad6a802e705 24
+  h_104939d4aa3383 20,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.11",
+  "base_commit_sha": "cbc53c75411b12bb72a9a4124730b27513218be9",
+  "prompts": {},
+  "humans": {
+    "h_104939d4aa3383": {
+      "author": "Vasil Sudakou <vasil.sudakov@codefresh.io>"
+    }
+  },
+  "sessions": {
+    "s_406b391c3567c7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "513776a7-6e9f-457e-bac3-bb2acdf7b9d8",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Vasil Sudakou <vasil.sudakov@codefresh.io>"
+    }
+  }
+}

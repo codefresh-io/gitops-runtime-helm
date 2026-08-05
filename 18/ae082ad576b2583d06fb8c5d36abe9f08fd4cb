@@ -1,0 +1,28 @@
+installer-image/Dockerfile
+  s_aaf7b0ca8b4b89::t_2156d13856f397 9
+  s_aaf7b0ca8b4b89::t_f4352f212205cf 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "18ae082ad576b2583d06fb8c5d36abe9f08fd4cb",
+  "prompts": {},
+  "humans": {
+    "h_02538178b2163d": {
+      "author": "Mikhail Klimko"
+    },
+    "h_bdc637847e5b6a": {
+      "author": "Mikhail Klimko <mikhail.klimko@octopus.com>"
+    }
+  },
+  "sessions": {
+    "s_aaf7b0ca8b4b89": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bea14135-6d19-48b6-a8b4-32930bc31783",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Mikhail Klimko <mikhail.klimko@octopus.com>"
+    }
+  }
+}

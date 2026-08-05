@@ -1,0 +1,14 @@
+charts/gitops-runtime/templates/tunnel-client.yaml
+  h_bdc637847e5b6a 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "139657d6b53e8d4aa1063f804e62a930ee507365",
+  "prompts": {},
+  "humans": {
+    "h_bdc637847e5b6a": {
+      "author": "Mikhail Klimko <mikhail.klimko@octopus.com>"
+    }
+  }
+}

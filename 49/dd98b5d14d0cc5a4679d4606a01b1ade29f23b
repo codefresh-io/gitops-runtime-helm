@@ -1,0 +1,22 @@
+charts/gitops-runtime/tests/ingress_test.yaml
+  h_bdc637847e5b6a 51,55
+charts/gitops-runtime/templates/_helpers.tpl
+  h_bdc637847e5b6a 366
+charts/gitops-runtime/tests/httproute_test.yaml
+  h_bdc637847e5b6a 1-104
+charts/gitops-runtime/tests/values/mandatory-values.yaml
+  h_bdc637847e5b6a 11-12
+charts/gitops-runtime/tests/values/mandatory-values-httproute.yaml
+  h_bdc637847e5b6a 1-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "49dd98b5d14d0cc5a4679d4606a01b1ade29f23b",
+  "prompts": {},
+  "humans": {
+    "h_bdc637847e5b6a": {
+      "author": "Mikhail Klimko <mikhail.klimko@octopus.com>"
+    }
+  }
+}

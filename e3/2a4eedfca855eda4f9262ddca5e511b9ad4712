@@ -1,0 +1,14 @@
+charts/gitops-runtime/Chart.yaml
+  h_104939d4aa3383 36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "e32a4eedfca855eda4f9262ddca5e511b9ad4712",
+  "prompts": {},
+  "humans": {
+    "h_104939d4aa3383": {
+      "author": "Vasil Sudakou <vasil.sudakov@codefresh.io>"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+installer-image/Dockerfile
+  h_104939d4aa3383 4,14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.1",
+  "base_commit_sha": "16b00cda0b6741c9d42f595a625281ad64389690",
+  "prompts": {},
+  "humans": {
+    "h_104939d4aa3383": {
+      "author": "Vasil Sudakou <vasil.sudakov@codefresh.io>"
+    }
+  }
+}
