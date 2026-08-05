@@ -1,0 +1,14 @@
+charts/gitops-runtime/ci/versions.json
+  h_51acfbafc7319b 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "f1fa89eb476088c93db4048d8e55ea0d7dfd0cc1",
+  "prompts": {},
+  "humans": {
+    "h_51acfbafc7319b": {
+      "author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  }
+}
