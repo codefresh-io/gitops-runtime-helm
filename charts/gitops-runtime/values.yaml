@@ -279,11 +279,11 @@ sealed-secrets:
 # ArgoCD
 #-----------------------------------------------------------------------------------------------------------------------
 argo-cd:
+  global:
+    networkPolicy:
+      create: false
   enabled: true
   fullnameOverride: argo-cd
-  global:
-    image:
-      tag: v3.3.10
   notifications:
     enabled: false
   redis:
