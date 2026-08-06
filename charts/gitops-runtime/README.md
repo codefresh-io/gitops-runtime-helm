@@ -597,7 +597,7 @@ global:
 | argo-cd.controller.statefulsetAnnotations."argocd.argoproj.io/sync-options" | string | `"Delete=false"` |  |
 | argo-cd.enabled | bool | `true` |  |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
-| argo-cd.global.image.tag | string | `"v3.3.10"` |  |
+| argo-cd.global.networkPolicy.create | bool | `false` |  |
 | argo-cd.notifications.enabled | bool | `false` |  |
 | argo-cd.redis-ha.image.repository | string | `"ecr-public.aws.com/docker/library/redis"` | Redis repository |
 | argo-cd.redis-ha.image.tag | string | `"8.2.2-alpine"` | Redis tag |
