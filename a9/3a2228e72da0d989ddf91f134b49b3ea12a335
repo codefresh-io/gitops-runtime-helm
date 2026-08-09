@@ -1,0 +1,28 @@
+charts/gitops-runtime/templates/argocd-repo-server-networkpolicy.yaml
+  s_0c3aeca764f686::t_4d683474d92313 2-26,36-39
+  s_0c3aeca764f686::t_5dd45e7222b439 30-35
+  s_0c3aeca764f686::t_bedbb5e91b4969 40
+  s_0c3aeca764f686::t_7d4dbadc1a8836 1
+  s_0c3aeca764f686::t_ed21004eed3fb9 27-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "a93a2228e72da0d989ddf91f134b49b3ea12a335",
+  "prompts": {},
+  "humans": {
+    "h_51acfbafc7319b": {
+      "author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  },
+  "sessions": {
+    "s_0c3aeca764f686": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "983169f8-4788-452b-a80e-8821ba3b252b",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  }
+}
