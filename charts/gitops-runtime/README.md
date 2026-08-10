@@ -506,13 +506,13 @@ global:
 | app-proxy.extraVolumeMounts | list | `[]` | Extra volume mounts for main container |
 | app-proxy.extraVolumes | list | `[]` | extra volumes |
 | app-proxy.fullnameOverride | string | `"cap-app-proxy"` |  |
-| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.30"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.30"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.30"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
-| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.30"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.30"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.30"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
+| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.31"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.31"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.31"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
+| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.31"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.31"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.31"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
 | app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds | int | `5` | Client heartbeat interval in seconds for image enrichemnt workflow |
 | app-proxy.image-enrichment.config.concurrencyCmKey | string | `"imageReportExecutor"` | The name of the key in the configmap to use as synchronization semaphore |
 | app-proxy.image-enrichment.config.concurrencyCmName | string | `"workflow-synchronization-semaphores"` | The name of the configmap to use as synchronization semaphore, see https://argoproj.github.io/argo-workflows/synchronization/ |
-| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.30"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.30"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.30"}}` | Enrichemnt images |
-| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.30"}` | Report image enrichment task image |
+| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.31"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.31"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.31"}}` | Enrichemnt images |
+| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.31"}` | Report image enrichment task image |
 | app-proxy.image-enrichment.config.podGcStrategy | string | `"OnWorkflowCompletion"` | Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes. |
 | app-proxy.image-enrichment.config.ttlActiveInSeconds | int | `900` | Maximum allowed runtime for the enrichment workflow |
 | app-proxy.image-enrichment.config.ttlAfterCompletionInSeconds | int | `86400` | Number of seconds to live after completion |
@@ -523,14 +523,14 @@ global:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.4091.0"` |  |
+| app-proxy.image.tag | string | `"1.4124.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.4091.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.4124.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
@@ -596,12 +596,13 @@ global:
 | argo-cd.controller.statefulsetAnnotations."argocd.argoproj.io/sync-options" | string | `"Delete=false"` |  |
 | argo-cd.enabled | bool | `true` |  |
 | argo-cd.fullnameOverride | string | `"argo-cd"` |  |
+| argo-cd.global.image.tag | string | `"v3.3.10"` |  |
 | argo-cd.notifications.enabled | bool | `false` |  |
 | argo-cd.redis-ha.image.repository | string | `"ecr-public.aws.com/docker/library/redis"` | Redis repository |
 | argo-cd.redis-ha.image.tag | string | `"8.2.2-alpine"` | Redis tag |
 | argo-cd.redis.image.repository | string | `"ecr-public.aws.com/docker/library/redis"` | Redis repository |
 | argo-cd.redis.image.tag | string | `"8.2.2-alpine"` | Redis tag |
-| argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"06801ec"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
+| argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"4212bc7"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.executor.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
@@ -663,7 +664,7 @@ global:
 | gitops-operator.env.<<[0].OTEL_TRACES_SAMPLER | string | `"parentbased_always_on"` | OTel sampler to be used for traces. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
 | gitops-operator.env.GITOPS_OPERATOR_VERSION | string | `"0.11.1"` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
-| gitops-operator.image | object | `{"registry":"quay.io","repository":"codefresh/codefresh-gitops-operator","tag":"bc5c4eb"}` | GitOps operator image |
+| gitops-operator.image | object | `{"registry":"quay.io","repository":"codefresh/codefresh-gitops-operator","tag":"c0ef368"}` | GitOps operator image |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
@@ -693,7 +694,7 @@ global:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"06801ec"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
+| global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"4212bc7"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
 | global.httpProxy | string | `""` | global HTTP_PROXY for all components |
 | global.httpsProxy | string | `""` | global HTTPS_PROXY for all components |
 | global.imageRegistry | string | `""` |  |
@@ -711,7 +712,7 @@ global:
 | global.integrations.argo-cd.server.svc | string | `"argo-cd-server"` | Service name of the ArgoCD server |
 | global.noProxy | string | `""` | global NO_PROXY for all components |
 | global.nodeSelector | object | `{}` | Global nodeSelector for all components |
-| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null,"singleNamespace":false}` | Runtime level settings |
+| global.runtime | object | `{"cluster":"https://kubernetes.default.svc","codefreshHosted":false,"gitCredentials":{"password":{"secretKeyRef":{},"value":null},"username":"username"},"httpRoute":{"annotations":{},"enabled":false,"hostnames":[],"labels":{},"parentRefs":[],"protocol":"https"},"ingress":{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]},"ingressUrl":"","isConfigurationRuntime":false,"name":null,"singleNamespace":false}` | Runtime level settings |
 | global.runtime.cluster | string | `"https://kubernetes.default.svc"` | Runtime cluster. Should not be changed. |
 | global.runtime.codefreshHosted | bool | `false` | Defines whether this is a Codefresh hosted runtime. Should not be changed. |
 | global.runtime.gitCredentials | object | `{"password":{"secretKeyRef":{},"value":null},"username":"username"}` | Git credentials runtime. Runtime is not fully functional without those credentials. If not provided through the installation, they must be provided through the Codefresh UI. |
@@ -719,6 +720,13 @@ global:
 | global.runtime.gitCredentials.password.secretKeyRef | object | `{}` | secretKeyReference for Git credentials password. Provide name and key fields. |
 | global.runtime.gitCredentials.password.value | string | `nil` | Plain text password |
 | global.runtime.gitCredentials.username | string | `"username"` | Username. Optional when using token in password. |
+| global.runtime.httpRoute | object | `{"annotations":{},"enabled":false,"hostnames":[],"labels":{},"parentRefs":[],"protocol":"https"}` | HTTPRoute settings |
+| global.runtime.httpRoute.annotations | object | `{}` | Set annotations on the HTTPRoute resource |
+| global.runtime.httpRoute.enabled | bool | `false` | Enable HTTPRoute |
+| global.runtime.httpRoute.hostnames | list | `[]` | List of hostnames to be covered by this HTTPRoute ref: https://gateway-api.sigs.k8s.io/reference/api-spec/main/spec/#hostname E.g. hostnames:   - runtime.example.com |
+| global.runtime.httpRoute.labels | object | `{}` | Set labels on the HTTPRoute resource |
+| global.runtime.httpRoute.parentRefs | list | `[]` | Required! List of parent Gateway references this HTTPRoute should attach to ref: https://gateway-api.sigs.k8s.io/reference/api-spec/main/spec/#parentreference E.g. parentRefs:   - name: traefik-gateway     namespace: traefik |
+| global.runtime.httpRoute.protocol | string | `"https"` | The protocol that Codefresh platform will use to access the runtime. Can be http or https. |
 | global.runtime.ingress | object | `{"annotations":{},"className":"nginx","enabled":false,"hosts":[],"labels":{},"protocol":"https","skipValidation":false,"tls":[]}` | Ingress settings |
 | global.runtime.ingress.enabled | bool | `false` | Defines if ingress-based access mode is enabled for runtime. To use tunnel-based (ingressless) access mode, set to false. |
 | global.runtime.ingress.hosts | list | `[]` | Hosts for runtime ingress. Note that Codefresh platform will always use the first host in the list to access the runtime. |
@@ -797,7 +805,7 @@ global:
 | redis-ha.topologySpreadConstraints.maxSkew | string | `""` (defaults to `1`) | Max skew of pods tolerated |
 | redis-ha.topologySpreadConstraints.topologyKey | string | `""` (defaults to `topology.kubernetes.io/zone`) | Topology key for spread |
 | redis-ha.topologySpreadConstraints.whenUnsatisfiable | string | `""` (defaults to `ScheduleAnyway`) | Enforcement policy, hard or soft |
-| redis-secret-init | object | `{"affinity":{},"image":{"registry":"docker.io","repository":"alpine/kubectl","tag":"1.35.4"},"nodeSelector":{},"tolerations":[]}` | Enable hook job to create redis secret |
+| redis-secret-init | object | `{"affinity":{},"image":{"registry":"docker.io","repository":"alpine/kubectl","tag":"1.36.2"},"nodeSelector":{},"tolerations":[]}` | Enable hook job to create redis secret |
 | redis.image | object | `{"registry":"public.ecr.aws","repository":"docker/library/redis","tag":"8.2.1-alpine"}` | Redis image |
 | redis.metrics | object | `{"enabled":true,"env":{},"envFrom":[],"image":{"registry":"ghcr.io","repository":"oliver006/redis_exporter","tag":"v1.72.1"},"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"serviceMonitor":{"enabled":false}}` | Enable metrics sidecar |
 | redis.metrics.serviceMonitor | object | `{"enabled":false}` | Enable a prometheus ServiceMonitor |
