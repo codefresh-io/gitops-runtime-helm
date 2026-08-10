@@ -15,10 +15,10 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-    description: 'Release 0.30.0'
-    links:
-      - name: 'Release notes'
-        url: 'https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.30.0'
+      description: 'Release 0.30.0'
+      links:
+       - name: 'Release notes'
+         url: 'https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.30.0'
 dependencies:
   # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
   # Don't forget to remove the image override after updating to a new version of the chart.
