@@ -1,0 +1,18 @@
+charts/gitops-runtime/templates/hooks/pre-install/_env.yaml
+  h_51acfbafc7319b 25
+charts/gitops-runtime/README.md.gotmpl
+  h_51acfbafc7319b 193
+charts/gitops-runtime/README.md
+  h_51acfbafc7319b 190,804
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "7f907076edcf345505d7c1ec7ae7109bfa9fa88e",
+  "prompts": {},
+  "humans": {
+    "h_51acfbafc7319b": {
+      "author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  }
+}

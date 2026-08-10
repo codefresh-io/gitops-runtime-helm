@@ -1,0 +1,16 @@
+charts/gitops-runtime/Chart.yaml
+  h_51acfbafc7319b 18-21
+charts/gitops-runtime/templates/hooks/pre-install/_env.yaml
+  h_51acfbafc7319b 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "e5cd1f878ed1b672c442cf15ffd4483758589fa4",
+  "prompts": {},
+  "humans": {
+    "h_51acfbafc7319b": {
+      "author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  }
+}
