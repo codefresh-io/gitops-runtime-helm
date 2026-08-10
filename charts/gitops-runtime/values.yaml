@@ -472,27 +472,27 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.30
+          tag: 1.1.31
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.30
+          tag: 1.1.31
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.30
+          tag: 1.1.31
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.4117.0
+    tag: 1.4124.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.4117.0
+      tag: 1.4124.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
