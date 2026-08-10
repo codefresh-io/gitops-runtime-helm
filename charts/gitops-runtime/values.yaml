@@ -281,7 +281,7 @@ sealed-secrets:
 argo-cd:
   global:
     networkPolicy:
-      create: false
+      create: true
   enabled: true
   fullnameOverride: argo-cd
   notifications:
