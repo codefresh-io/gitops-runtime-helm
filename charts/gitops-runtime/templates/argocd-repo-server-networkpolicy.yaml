@@ -1,0 +1,40 @@
+{{- if index .Values "argo-cd" "enabled" }}
+{{- $argoCdGlobalNP := index .Values "argo-cd" "global" "networkPolicy" }}
+{{- $repoServerNP := index .Values "argo-cd" "repoServer" "networkPolicy" }}
+{{- if or $argoCdGlobalNP.create $repoServerNP.create }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: codefresh-to-argocd-repo-server
+  labels:
+    app.kubernetes.io/part-of: gitops-runtime
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: argocd-repo-server
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: cap-app-proxy
+        - podSelector:
+            matchLabels:
+              app: gitops-operator
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: argo-gateway
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: cluster-event-reporter
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: runtime-event-reporter
+      ports:
+        - protocol: TCP
+          port: repo-server
+{{- end }}
+{{- end }}
