@@ -1,0 +1,22 @@
+charts/gitops-runtime/templates/argocd-repo-server-networkpolicy.yaml
+  h_51acfbafc7319b 1-40
+charts/gitops-runtime/README.md
+  h_51acfbafc7319b 190
+charts/gitops-runtime/Chart.yaml
+  h_51acfbafc7319b 22
+charts/gitops-runtime/templates/hooks/pre-install/_env.yaml
+  h_51acfbafc7319b 25
+charts/gitops-runtime/README.md.gotmpl
+  h_51acfbafc7319b 193
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "beb0bd6b2f10c3ff4b4653c053c1252a9e560061",
+  "prompts": {},
+  "humans": {
+    "h_51acfbafc7319b": {
+      "author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  }
+}
