@@ -1,0 +1,18 @@
+installer-image/Dockerfile
+  h_51acfbafc7319b 6
+charts/gitops-runtime/Chart.yaml
+  h_51acfbafc7319b 5,18,21,31
+charts/gitops-runtime/values.yaml
+  h_51acfbafc7319b 472,477,482,485,492
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "064f67f0938e33fe649ec98f37b5e9d77752047f",
+  "prompts": {},
+  "humans": {
+    "h_51acfbafc7319b": {
+      "author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  }
+}
