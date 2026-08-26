@@ -1,0 +1,14 @@
+charts/gitops-runtime/README.md
+  h_51acfbafc7319b 509-510,514-515,526,533
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "b10c192813efc3fd012f8bea734a9db151e56ad5",
+  "prompts": {},
+  "humans": {
+    "h_51acfbafc7319b": {
+      "author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  }
+}
