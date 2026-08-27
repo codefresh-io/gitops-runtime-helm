@@ -281,9 +281,6 @@ sealed-secrets:
 argo-cd:
   enabled: true
   fullnameOverride: argo-cd
-  global:
-    image:
-      tag: v3.3.10
   notifications:
     enabled: false
   redis:
@@ -472,17 +469,17 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.31
+          tag: 1.1.32
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.31
+          tag: 1.1.32
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.31
+          tag: 1.1.32
   image:
     repository: quay.io/codefresh/cap-app-proxy
     tag: 1.4136.0
