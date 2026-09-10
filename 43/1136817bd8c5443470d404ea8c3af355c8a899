@@ -1,0 +1,20 @@
+charts/gitops-runtime/Chart.yaml
+  h_51acfbafc7319b 5,16-21,26
+charts/gitops-runtime/templates/hooks/pre-install/_env.yaml
+  h_51acfbafc7319b 25
+charts/gitops-runtime/README.md.gotmpl
+  h_51acfbafc7319b 193
+charts/gitops-runtime/README.md
+  h_51acfbafc7319b 2,190,210,223
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "431136817bd8c5443470d404ea8c3af355c8a899",
+  "prompts": {},
+  "humans": {
+    "h_51acfbafc7319b": {
+      "author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  }
+}
