@@ -1,0 +1,14 @@
+installer-image/Dockerfile
+  h_9fd7d1a18c4091 4,14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "48090b1c388f774e14fcc3d8ec470d8dd89b33a0",
+  "prompts": {},
+  "humans": {
+    "h_9fd7d1a18c4091": {
+      "author": "Alina <alina.shportiuk@codefresh.io>"
+    }
+  }
+}
