@@ -13,13 +13,17 @@ maintainers:
     url: https://codefresh-io.github.io/
 annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: 'Release 0.31.1'
+      links:
+       - name: 'Release notes'
+         url: 'https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.31.1'
 dependencies:
-  # The image for this chart was overridden because argocd doesn’t release the chart for 3.3.10 version.
-  # Don't forget to remove the image override after updating to a new version of the chart.
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
     condition: argo-cd.enabled
-    version: 10.2.2
+    version: 10.8.4
   - name: argo-workflows
     repository: https://codefresh-io.github.io/argo-helm
     version: 0.45.25-v3.6.7-cap-CFS-15235
