@@ -265,8 +265,8 @@ sealed-secrets:
   fullnameOverride: sealed-secrets-controller
   keyrenewperiod: "720h"
   image:
-    registry: 'quay.io'
-    repository: 'codefresh/sealed-secrets-controller'
+    registry: 'docker.io'
+    repository: 'octopusdeploy/dhi-sealed-secrets-controller'
     # TODO this corresponds to bitnami chart version 2.18.2 but we had 2.18.0, sync them
     tag: '0.36.0'
   resources:

@@ -25,8 +25,7 @@ dependencies:
     version: 0.45.25-v3.6.7-cap-CFS-15235
     condition: argo-workflows.enabled
   - name: sealed-secrets
-    # TODO: remove dev for release
-    repository: oci://quay.io/codefresh/dev/sealed-secrets-controller
+    repository: https://bitnami.github.io/sealed-secrets
     # TODO: should be safe to upgrade to latest
     version: 2.18.0
     condition: sealed-secrets.enabled
