@@ -15,10 +15,10 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'Release 0.31.1'
+      description: 'Release 0.31.2'
       links:
        - name: 'Release notes'
-         url: 'https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.31.1'
+         url: 'https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.31.2'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
