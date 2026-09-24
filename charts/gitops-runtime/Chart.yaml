@@ -26,7 +26,8 @@ dependencies:
     condition: argo-workflows.enabled
   - name: sealed-secrets
     repository: https://bitnami.github.io/sealed-secrets
-    version: 2.18.0
+    # TODO: should be safe to upgrade to latest
+    version: 2.18.6
     condition: sealed-secrets.enabled
   - name: codefresh-tunnel-client
     repository: oci://quay.io/codefresh/charts
