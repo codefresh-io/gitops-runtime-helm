@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.72
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.31.1
+version: 0.31.2
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,10 +15,10 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'Release 0.31.1'
+      description: 'Release 0.31.2'
       links:
        - name: 'Release notes'
-         url: 'https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.31.1'
+         url: 'https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.31.2'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
@@ -34,7 +34,7 @@ dependencies:
     condition: sealed-secrets.enabled
   - name: codefresh-tunnel-client
     repository: oci://quay.io/codefresh/charts
-    version: 0.1.25
+    version: 0.1.26
     alias: tunnel-client
     condition: tunnel-client.enabled
   - name: redis-ha
