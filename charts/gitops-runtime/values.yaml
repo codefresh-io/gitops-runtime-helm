@@ -350,7 +350,7 @@ internal-router:
   image:
     repository: docker.io/nginxinc/nginx-unprivileged
     pullPolicy: IfNotPresent
-    tag: 1.31.3-alpine3.24
+    tag: 1.31.6-alpine3.24
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
@@ -469,27 +469,27 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.33
+          tag: 1.1.34
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.33
+          tag: 1.1.34
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.33
+          tag: 1.1.34
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.4141.0
+    tag: 1.4154.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.4140.0
+      tag: 1.4154.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -745,7 +745,7 @@ redis-secret-init:
   image:
     registry: docker.io
     repository: alpine/kubectl
-    tag: 1.36.2
+    tag: 1.37.0
   nodeSelector: {}
   tolerations: []
   affinity: {}
