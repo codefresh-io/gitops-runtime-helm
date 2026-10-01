@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
 
 # DHI source: https://hub.docker.com/repository/docker/octopusdeploy/dhi-golang/tags/1.25-debian13-dev
-FROM octopusdeploy/dhi-golang:1.27-debian13-dev@sha256:baa8e6b0fe23dcfdcaec24af47e091660ba539685fe8340d0f5172227afadaf8 AS build
+FROM octopusdeploy/dhi-golang:1.27-debian13-dev@sha256:e2e776afd69ca84181107b77325df3debb5e81f5386c6c4c4b0f5ab6681d8175 AS build
 ARG TARGETARCH
-ARG CF_CLI_VERSION=v1.0.9
+ARG CF_CLI_VERSION=v1.0.10
 RUN go install github.com/davidrjonas/semver-cli@latest \
   && cp $GOPATH/bin/semver-cli /tmp/semver-cli
 RUN apt-get update && apt-get install -y --no-install-recommends sed && rm -rf /var/lib/apt/lists/*
@@ -11,7 +11,7 @@ ADD --unpack=true --chown=nonroot:nonroot --chmod=755 https://github.com/codefre
 
 
 # DHI source: https://hub.docker.com/repository/docker/octopusdeploy/dhi-debian-base/customizations/8106437942896324135
-FROM octopusdeploy/dhi-debian-base:trixie_cf-gitops-runtime-installer-debian13@sha256:2e5be5688d72eaa8c578f7608b77c84b2024f510874d93a056f601d2901cd38b AS production
+FROM octopusdeploy/dhi-debian-base:trixie_cf-gitops-runtime-installer-debian13@sha256:00340d01b29d04e01363bfb754380d47155fc75d0af3f311d09d849d43bab518 AS production
 ARG TARGETARCH
 COPY --from=build --chown=nonroot:nonroot --chmod=755 /tmp/cf/cf-linux-${TARGETARCH} /usr/local/bin/cf
 COPY --from=build --chown=nonroot:nonroot --chmod=755 /tmp/semver-cli /usr/local/bin/semver-cli
