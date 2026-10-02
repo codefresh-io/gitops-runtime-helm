@@ -2,14 +2,6 @@
 
 This guide explains how to perform releases for the GitOps Runtime Helm chart.
 
-> **Tip**: There's a CLI that automates most of these steps:
-> ```bash
-> npx @codefresh-io/gitops-release --help
-> ```
-> See the [CLI repository](https://github.com/codefresh-io/gitops-release) for details.
-
-The instructions below explain how to do everything manually if you prefer that approach, don't have an Anthropic API key for AI release notes, or need to troubleshoot.
-
 ---
 
 ## Table of Contents
