@@ -22,7 +22,7 @@ This guide explains how to perform releases for the GitOps Runtime Helm chart.
 
 ## Overview
 
-The GitOps Runtime release process uses **Argo Events and Workflows** to automate most of the work. Your job as release manager is to:
+The GitOps Runtime release process uses **Codefresh CI** to automate most of the work. Your job as release manager is to:
 
 1. **Trigger pipelines** by creating branches or merging PRs
 2. **Review and approve** the automatically created prepare-release PRs
@@ -34,13 +34,13 @@ The GitOps Runtime release process uses **Argo Events and Workflows** to automat
 ```
 You create stable/X.Y branch
         ↓
-[Argo Workflow: prepare-release] runs automatically
+[CF CI: prepare-release] runs automatically
         ↓
 Creates prep/vX.Y.0 branch + PR + draft GitHub release
         ↓
 You review, edit release notes, then merge the PR
         ↓
-[Argo Workflow: promote] runs automatically
+[CF CI: promote] runs automatically
         ↓
 Chart published to quay.io + GitHub release published
 ```
@@ -348,18 +348,6 @@ Valid `kind` values: `added`, `changed`, `deprecated`, `removed`, `fixed`, `secu
 ---
 
 ## Troubleshooting
-
-### Pipeline Didn't Run
-
-**Symptom**: Created stable branch but no prep PR appeared
-
-**Check**:
-1. Verify the branch was created correctly:
-   ```bash
-   gh api repos/codefresh-io/gitops-runtime-helm/branches/stable/0.27
-   ```
-2. Check Argo Events sensor logs (requires cluster access)
-3. Try creating a small commit to the branch to re-trigger
 
 ### PR Doesn't Have `prepare-release` Label
 
