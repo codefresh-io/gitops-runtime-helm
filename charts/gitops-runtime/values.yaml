@@ -640,7 +640,8 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
-  enabled: true
+  # -- Enable the GitOps operator. Disabled by default, the operator is End-of-Life. Set to `true` only if you still rely on it
+  enabled: false
   replicaCount: 1
   # -- Codefresh gitops operator crds
   crds:
