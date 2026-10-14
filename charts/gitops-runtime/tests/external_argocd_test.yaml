@@ -8,6 +8,8 @@ templates:
   - _components/gitops-operator/*
   - app-proxy/external-argocd-token.yaml
   - codefresh-cm.yaml
+set:
+  gitops-operator.enabled: true
 tests:
   - it: app-proxy ConfigMap should have valid ArgoCd URL
     values:

@@ -3,6 +3,8 @@ suite: Test GitOps Operator
 templates:
   - gitops-operator/**
   - _components/gitops-operator/**
+set:
+  gitops-operator.enabled: true
 tests:
   - it: should have LEADER_ELECT set to true if replicaCount is greater than 1
     values:

@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.31.3](https://img.shields.io/badge/Version-0.31.3-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
+![Version: 0.32.0](https://img.shields.io/badge/Version-0.32.0-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
 
 ## Table of Content
 
@@ -16,6 +16,7 @@
 - [Upgrading](#upgrading)
   - [To 0.23.x](#to-023x)
   - [> 0.24.x](#-024x)
+  - [To 0.32.x](#to-032x)
 
 ## Prerequisites
 
@@ -60,6 +61,7 @@ argo-workflows:
       enabled: false
 tunnel-client:
   enabled: false
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   crds:
     install: false
@@ -76,6 +78,7 @@ argo-cd:
 argo-workflows:
   crds:
     install: true
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   crds:
     install: true
@@ -207,7 +210,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.31.3 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.32.0 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -220,7 +223,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.31.3 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.32.0 <local_registry>
 ```
 
 ## Openshift
@@ -280,6 +283,7 @@ app-proxy:
         matchLabels:
           app: cap-app-proxy
 
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   replicaCount: 2
   pdb:
@@ -455,6 +459,25 @@ global:
         svc: argocd-server
         port: 80
       ...
+```
+
+### To 0.32.x
+
+#### GitOps operator is disabled by default
+
+The GitOps operator has reached End-of-Life and `.Values.gitops-operator.enabled` now defaults to `false`.
+On upgrade, the chart removes the `gitops-operator` Deployment, ServiceAccount, RBAC, PDB, the `promotion-template` ServiceAccount/RBAC, and the operator CRDs
+(`products`, `promotionflows`, `promotionpolicies`, `promotiontasks`, `promotiontemplates`, `restrictedgitsources` in the `codefresh.io` group).
+
+> [!WARNING]
+> Deleting a CRD deletes all custom resources of that kind in the cluster.
+> To keep the CRDs and their resources, set `gitops-operator.crds.keep: true` in your **currently installed** release (run `helm upgrade` with it first), and only then upgrade to 0.32.x.
+
+If you still rely on the GitOps operator(you use restricted-git-sources with your runtime), enable it explicitly when upgrading:
+
+```yaml
+gitops-operator:
+  enabled: true
 ```
 
 ## Values
@@ -650,7 +673,7 @@ global:
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
-| gitops-operator.enabled | bool | `true` |  |
+| gitops-operator.enabled | bool | `false` | Enable the GitOps operator. Disabled by default, the operator is End-of-Life. Set to `true` only if you still rely on it |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_COMPRESSION | string | `"gzip"` | Specifies the compression algorithm to be used for all telemetry data. Ref: https://opentelemetry.io/docs/specs/otel/protocol/exporter/ |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_ENDPOINT | string | `"http://localhost:4317"` | Base endpoint URL for all OpenTelemetry signals. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_PROTOCOL | string | `"grpc"` | Specifies the OTLP transport protocol to be used for all telemetry data. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
