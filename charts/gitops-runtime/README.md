@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.31.3](https://img.shields.io/badge/Version-0.31.3-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
+![Version: 0.32.0](https://img.shields.io/badge/Version-0.32.0-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
 
 ## Table of Content
 
@@ -61,6 +61,10 @@ argo-workflows:
       enabled: false
 tunnel-client:
   enabled: false
+# gitops-operator is disabled by default (End-of-Life).
+gitops-operator:
+  crds:
+    install: false
 ```
 
 Note that for the first runtime in the cluster, you have to configure it to install the CRDs, with setting these values:
@@ -72,6 +76,10 @@ argo-cd:
   crds:
     install: true
 argo-workflows:
+  crds:
+    install: true
+# gitops-operator is disabled by default (End-of-Life).
+gitops-operator:
   crds:
     install: true
 ```
@@ -202,7 +210,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.31.3 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.32.0 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -215,7 +223,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.31.3 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.32.0 <local_registry>
 ```
 
 ## Openshift
@@ -274,6 +282,20 @@ app-proxy:
       labelSelector:
         matchLabels:
           app: cap-app-proxy
+
+# gitops-operator is disabled by default (End-of-Life).
+gitops-operator:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: gitops-operator
 
 internal-router:
   replicaCount: 2
@@ -451,7 +473,7 @@ On upgrade, the chart removes the `gitops-operator` Deployment, ServiceAccount, 
 > Deleting a CRD deletes all custom resources of that kind in the cluster.
 > To keep the CRDs and their resources, set `gitops-operator.crds.keep: true` in your **currently installed** release (run `helm upgrade` with it first), and only then upgrade to 0.32.x.
 
-If you still rely on the GitOps operator, enable it explicitly when upgrading:
+If you still rely on the GitOps operator(you use restricted-git-sources with your runtime), enable it explicitly when upgrading:
 
 ```yaml
 gitops-operator:

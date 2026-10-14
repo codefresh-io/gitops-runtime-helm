@@ -61,6 +61,10 @@ argo-workflows:
       enabled: false
 tunnel-client:
   enabled: false
+# gitops-operator is disabled by default (End-of-Life).
+gitops-operator:
+  crds:
+    install: false
 ```
 
 Note that for the first runtime in the cluster, you have to configure it to install the CRDs, with setting these values:
@@ -72,6 +76,10 @@ argo-cd:
   crds:
     install: true
 argo-workflows:
+  crds:
+    install: true
+# gitops-operator is disabled by default (End-of-Life).
+gitops-operator:
   crds:
     install: true
 ```
@@ -279,6 +287,20 @@ app-proxy:
       labelSelector:
         matchLabels:
           app: cap-app-proxy
+
+# gitops-operator is disabled by default (End-of-Life).
+gitops-operator:
+  replicaCount: 2
+  pdb:
+    enabled: true
+    minAvailable: 1
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: gitops-operator
 
 internal-router:
   replicaCount: 2
