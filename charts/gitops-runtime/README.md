@@ -16,6 +16,7 @@
 - [Upgrading](#upgrading)
   - [To 0.23.x](#to-023x)
   - [> 0.24.x](#-024x)
+  - [To 0.32.x](#to-032x)
 
 ## Prerequisites
 
@@ -60,9 +61,6 @@ argo-workflows:
       enabled: false
 tunnel-client:
   enabled: false
-gitops-operator:
-  crds:
-    install: false
 ```
 
 Note that for the first runtime in the cluster, you have to configure it to install the CRDs, with setting these values:
@@ -74,9 +72,6 @@ argo-cd:
   crds:
     install: true
 argo-workflows:
-  crds:
-    install: true
-gitops-operator:
   crds:
     install: true
 ```
@@ -279,19 +274,6 @@ app-proxy:
         matchLabels:
           app: cap-app-proxy
 
-gitops-operator:
-  replicaCount: 2
-  pdb:
-    enabled: true
-    minAvailable: 1
-  topologySpreadConstraints:
-    - maxSkew: 1
-      topologyKey: kubernetes.io/hostname
-      whenUnsatisfiable: DoNotSchedule
-      labelSelector:
-        matchLabels:
-          app: gitops-operator
-
 internal-router:
   replicaCount: 2
   pdb:
@@ -454,6 +436,25 @@ global:
         svc: argocd-server
         port: 80
       ...
+```
+
+### To 0.32.x
+
+#### GitOps operator is disabled by default
+
+The GitOps operator has reached End-of-Life and `.Values.gitops-operator.enabled` now defaults to `false`.
+On upgrade, the chart removes the `gitops-operator` Deployment, ServiceAccount, RBAC, PDB, the `promotion-template` ServiceAccount/RBAC, and the operator CRDs
+(`products`, `promotionflows`, `promotionpolicies`, `promotiontasks`, `promotiontemplates`, `restrictedgitsources` in the `codefresh.io` group).
+
+> [!WARNING]
+> Deleting a CRD deletes all custom resources of that kind in the cluster.
+> To keep the CRDs and their resources, set `gitops-operator.crds.keep: true` in your **currently installed** release (run `helm upgrade` with it first), and only then upgrade to 0.32.x.
+
+If you still rely on the GitOps operator, enable it explicitly when upgrading:
+
+```yaml
+gitops-operator:
+  enabled: true
 ```
 
 ## Values
@@ -649,7 +650,7 @@ global:
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
-| gitops-operator.enabled | bool | `true` |  |
+| gitops-operator.enabled | bool | `false` | Enable the GitOps operator. Disabled by default, the operator is End-of-Life. Set to `true` only if you still rely on it |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_COMPRESSION | string | `"gzip"` | Specifies the compression algorithm to be used for all telemetry data. Ref: https://opentelemetry.io/docs/specs/otel/protocol/exporter/ |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_ENDPOINT | string | `"http://localhost:4317"` | Base endpoint URL for all OpenTelemetry signals. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_PROTOCOL | string | `"grpc"` | Specifies the OTLP transport protocol to be used for all telemetry data. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
