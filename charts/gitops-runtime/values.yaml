@@ -265,10 +265,10 @@ sealed-secrets:
   fullnameOverride: sealed-secrets-controller
   keyrenewperiod: "720h"
   image:
-    registry: 'docker.io'
-    repository: 'octopusdeploy/dhi-sealed-secrets-controller'
+    registry: 'quay.io'
+    repository: 'codefresh/sealed-secrets-controller'
     # NB: this overrides version 0.37.0 from bitnami chart version 2.18.6
-    tag: '0.40.0'
+    tag: '0.41.2'
   resources:
     limits:
       cpu: 500m
