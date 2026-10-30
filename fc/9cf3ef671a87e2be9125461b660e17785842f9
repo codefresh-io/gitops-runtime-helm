@@ -1,0 +1,20 @@
+charts/gitops-runtime/Chart.yaml
+  h_9fd7d1a18c4091 25
+charts/gitops-runtime/README.md
+  h_9fd7d1a18c4091 510-511,515-516,527,534,605,667,697
+charts/gitops-runtime/values.yaml
+  h_9fd7d1a18c4091 162,472,477,482,485,492,673,705
+installer-image/Dockerfile
+  h_9fd7d1a18c4091 4,6,14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "fc9cf3ef671a87e2be9125461b660e17785842f9",
+  "prompts": {},
+  "humans": {
+    "h_9fd7d1a18c4091": {
+      "author": "Alina <alina.shportiuk@codefresh.io>"
+    }
+  }
+}

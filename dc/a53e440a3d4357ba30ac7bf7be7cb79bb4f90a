@@ -1,0 +1,16 @@
+charts/gitops-runtime/README.md
+  h_9fd7d1a18c4091 2,209,222,510-511,515-516,527,534
+charts/gitops-runtime/values.yaml
+  h_9fd7d1a18c4091 472,477,482,485,492
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "dca53e440a3d4357ba30ac7bf7be7cb79bb4f90a",
+  "prompts": {},
+  "humans": {
+    "h_9fd7d1a18c4091": {
+      "author": "Alina <alina.shportiuk@codefresh.io>"
+    }
+  }
+}

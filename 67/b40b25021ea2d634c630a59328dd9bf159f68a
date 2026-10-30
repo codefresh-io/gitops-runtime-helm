@@ -1,0 +1,14 @@
+charts/gitops-runtime/Chart.yaml
+  h_9fd7d1a18c4091 33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "67b40b25021ea2d634c630a59328dd9bf159f68a",
+  "prompts": {},
+  "humans": {
+    "h_9fd7d1a18c4091": {
+      "author": "Alina <alina.shportiuk@codefresh.io>"
+    }
+  }
+}
