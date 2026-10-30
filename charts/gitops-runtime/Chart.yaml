@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: 0.1.72
 description: A Helm chart for Codefresh gitops runtime
 name: gitops-runtime
-version: 0.31.7
+version: 0.31.8
 home: https://github.com/codefresh-io/gitops-runtime-helm
 icon: https://avatars1.githubusercontent.com/u/11412079?v=3
 keywords:
@@ -15,18 +15,18 @@ annotations:
   artifacthub.io/alternativeName: "codefresh-gitops-runtime"
   artifacthub.io/changes: |-
     - kind: changed
-      description: 'Release 0.31.6'
+      description: 'Release 0.31.8'
       links:
        - name: 'Release notes'
-         url: 'https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.31.6'
+         url: 'https://github.com/codefresh-io/gitops-runtime-helm/releases/tag/0.31.8'
 dependencies:
   - name: argo-cd
     repository: https://argoproj.github.io/argo-helm
     condition: argo-cd.enabled
-    version: 10.8.4
+    version: 10.11.6
   - name: argo-workflows
     repository: https://codefresh-io.github.io/argo-helm
-    version: 0.45.27-v3.6.7-cap-CFS-16765
+    version: 0.45.28-v3.6.7-cap-CF-2552-security
     condition: argo-workflows.enabled
   - name: sealed-secrets
     repository: https://bitnami.github.io/sealed-secrets
