@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.31.9](https://img.shields.io/badge/Version-0.31.9-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
+![Version: 0.31.10](https://img.shields.io/badge/Version-0.31.10-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
 
 ## Table of Content
 
@@ -207,7 +207,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.31.9 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.31.10 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -220,7 +220,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.31.9 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.31.10 <local_registry>
 ```
 
 ## Openshift
@@ -748,8 +748,8 @@ global:
 | internal-router.env | object | `{}` | Environment variables - see values.yaml inside the chart for usage |
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
-| internal-router.image.repository | string | `"docker.io/nginxinc/nginx-unprivileged"` |  |
-| internal-router.image.tag | string | `"1.31.7-alpine3.24"` |  |
+| internal-router.image.repository | string | `"docker.io/nginx/nginx-unprivileged"` |  |
+| internal-router.image.tag | string | `"1.31.8-alpine3.24"` |  |
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.ipv6 | object | `{"enabled":false}` | For ipv6 enabled clusters switch ipv6 enabled to true |
 | internal-router.nameOverride | string | `""` |  |
