@@ -187,7 +187,6 @@ data:
 
 | GitOps Runtime version | Supported ArgoCD versions |
 |------------------------|---------------------------|
-| 0.31.x                 | >=3.3 <=3.5               |
 | 0.30.x                 | >=3.2 <=3.4               |
 | 0.29.x                 | >=3.1 <=3.3               |
 | 0.28.x                 | >=3.0 <=3.2               |
@@ -525,14 +524,14 @@ global:
 | app-proxy.image-enrichment.serviceAccount.name | string | `"codefresh-image-enrichment-sa"` | Name of the service account to create or the name of the existing one to use |
 | app-proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.image.repository | string | `"quay.io/codefresh/cap-app-proxy"` |  |
-| app-proxy.image.tag | string | `"1.4182.0"` |  |
+| app-proxy.image.tag | string | `"1.4186.0"` |  |
 | app-proxy.imagePullSecrets | list | `[]` |  |
 | app-proxy.initContainer.command[0] | string | `"./init.sh"` |  |
 | app-proxy.initContainer.env | object | `{}` |  |
 | app-proxy.initContainer.extraVolumeMounts | list | `[]` | Extra volume mounts for init container |
 | app-proxy.initContainer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | app-proxy.initContainer.image.repository | string | `"quay.io/codefresh/cap-app-proxy-init"` |  |
-| app-proxy.initContainer.image.tag | string | `"1.4182.0"` |  |
+| app-proxy.initContainer.image.tag | string | `"1.4186.0"` |  |
 | app-proxy.initContainer.resources.limits | object | `{}` |  |
 | app-proxy.initContainer.resources.requests.cpu | string | `"0.2"` |  |
 | app-proxy.initContainer.resources.requests.memory | string | `"256Mi"` |  |
