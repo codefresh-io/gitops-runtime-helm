@@ -1,0 +1,22 @@
+charts/gitops-runtime/README.md
+  s_06776176e7ca1e::t_c4f005e8e198cc 2,64-67,81-84,213,226,286-299,476
+charts/gitops-runtime/README.md.gotmpl
+  s_06776176e7ca1e::t_459f07fd63d2ca 64-67,81-84,291-303
+  s_06776176e7ca1e::t_b14f5d16f63db1 304
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d7745fe5c955f217c723a0be527f203c5c37fff7",
+  "prompts": {},
+  "sessions": {
+    "s_06776176e7ca1e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "36b0d49a-05f0-4132-a39c-233bd8f470f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Bohdan Pysarenko <bohdan.pisarenko@octopus.com>"
+    }
+  }
+}

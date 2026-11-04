@@ -1,0 +1,19 @@
+charts/gitops-runtime/Chart.yaml
+  h_51acfbafc7319b 5,18,21,37,41
+charts/gitops-runtime/values.yaml
+  h_51acfbafc7319b 352,354
+  h_51acfbafc7319b 555,676,845,849
+charts/gitops-runtime/README.md
+  h_51acfbafc7319b 2,210,223,751-752
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3c487f6dab7df9fb3be3399273483ff22e6f2fe9",
+  "prompts": {},
+  "humans": {
+    "h_51acfbafc7319b": {
+      "author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  }
+}
