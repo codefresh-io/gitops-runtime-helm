@@ -349,9 +349,9 @@ codefreshWorkflowLogStoreCM:
 internal-router:
   replicaCount: 1
   image:
-    repository: docker.io/nginxinc/nginx-unprivileged
+    repository: docker.io/nginx/nginx-unprivileged
     pullPolicy: IfNotPresent
-    tag: 1.31.7-alpine3.24
+    tag: 1.31.8-alpine3.24
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
@@ -552,7 +552,7 @@ app-proxy:
     # -- Cors settings for app-proxy. This is the list of allowed domains for platform (comma separated).
     cors: "https://g.codefresh.io"
   env:
-    !!merge <<:
+    <<:
       - *otel-config
     # -- Level of logging for app-proxy
     CF_TELEMETRY_LOGS_LEVEL: 'info'
@@ -673,7 +673,7 @@ gitops-operator:
     repository: codefresh/codefresh-gitops-operator
     tag: a0697bc
   env:
-    !!merge <<:
+    <<:
       - *otel-config
     GITOPS_OPERATOR_VERSION: 0.11.1
   serviceAccount:
@@ -746,7 +746,7 @@ redis-secret-init:
   image:
     registry: docker.io
     repository: alpine/kubectl
-    tag: 1.37.1
+    tag: 1.37.2
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -842,11 +842,11 @@ redis:
 event-reporters:
   cluster-event-reporter:
     env:
-      !!merge <<:
+      <<:
         - *otel-config
   runtime-event-reporter:
     env:
-      !!merge <<:
+      <<:
         - *otel-config
 # -- Redis-HA subchart replaces custom redis deployment when `redis-ha.enabled=true`
 # Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
