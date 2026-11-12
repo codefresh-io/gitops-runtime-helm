@@ -8,6 +8,7 @@ argo-cd:
 argo-workflows:
   crds:
     install: true
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   crds:
     install: true
