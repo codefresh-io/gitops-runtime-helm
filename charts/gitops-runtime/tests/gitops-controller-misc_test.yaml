@@ -2,6 +2,8 @@ suite: misc tests on gitops-operator templates generation
 templates:
   - gitops-operator/*
   - _components/gitops-operator/*
+set:
+  gitops-operator.enabled: true
 tests:
 - it: override both images works
   template: gitops-operator/deployment.yaml

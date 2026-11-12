@@ -11,6 +11,8 @@ templates:
   - _components/cap-app-proxy/_deployment.yaml
   - _components/cap-app-proxy/_config.yaml
   - codefresh-cm.yaml
+set:
+  gitops-operator.enabled: true
 tests:
 
 - it: test chart created secret contents - default secret key
