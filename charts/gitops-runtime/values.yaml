@@ -159,7 +159,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: "30ad19e"
+      tag: "a289436"
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -350,7 +350,7 @@ internal-router:
   image:
     repository: docker.io/nginx/nginx-unprivileged
     pullPolicy: IfNotPresent
-    tag: 1.31.10-alpine3.24
+    tag: 1.31.8-alpine3.24
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
@@ -469,27 +469,27 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.38
+          tag: 1.1.37
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.38
+          tag: 1.1.37
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.38
+          tag: 1.1.37
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.4198.0
+    tag: 1.4186.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.4198.0
+      tag: 1.4186.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -703,7 +703,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: "30ad19e"
+    tag: "a289436"
   nodeSelector: {}
   tolerations: []
   affinity: {}
