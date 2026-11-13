@@ -1,0 +1,40 @@
+charts/gitops-runtime/README.md
+  h_48b74706cf95a4 19,64,81,287,677
+  h_48b74706cf95a4 465-483,630,722
+charts/gitops-runtime/README.md.gotmpl
+  h_48b74706cf95a4 19,64,81,292,470-486
+  h_48b74706cf95a4 487-488
+charts/gitops-runtime/tests/custom-ca_test.yaml
+  h_48b74706cf95a4 14-15
+charts/gitops-runtime/tests/external_argocd_test.yaml
+  h_48b74706cf95a4 11-12
+charts/gitops-runtime/tests/gitops-controller-misc_test.yaml
+  h_48b74706cf95a4 5-6
+charts/gitops-runtime/tests/gitops-operator-disabled_test.yaml
+  h_48b74706cf95a4 1-11
+charts/gitops-runtime/tests/gitops-operator_test.yaml
+  h_48b74706cf95a4 6-7
+charts/gitops-runtime/tests/global_constraints_test.yaml
+  h_48b74706cf95a4 22-23
+charts/gitops-runtime/values-ha.yaml
+  h_48b74706cf95a4 20
+charts/gitops-runtime/values-multi-runtimes-first.yaml
+  h_48b74706cf95a4 11
+charts/gitops-runtime/values-multi-runtimes.yaml
+  h_48b74706cf95a4 26
+charts/gitops-runtime/values.yaml
+  h_48b74706cf95a4 643-644
+tests/component-tests/setup/values/runtime.values.yaml
+  h_48b74706cf95a4 15,53-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2216d3e26150accf445e4f1b9ee685b7bf85966c",
+  "prompts": {},
+  "humans": {
+    "h_48b74706cf95a4": {
+      "author": "Bohdan Pysarenko <bohdan.pisarenko@octopus.com>"
+    }
+  }
+}
