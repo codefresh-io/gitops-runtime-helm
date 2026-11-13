@@ -1,5 +1,5 @@
 ## Codefresh gitops runtime
-![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
+![Version: 0.32.0](https://img.shields.io/badge/Version-0.32.0-informational?style=flat-square) ![AppVersion: 0.1.72](https://img.shields.io/badge/AppVersion-0.1.72-informational?style=flat-square)
 
 ## Table of Content
 
@@ -16,6 +16,7 @@
 - [Upgrading](#upgrading)
   - [To 0.23.x](#to-023x)
   - [> 0.24.x](#-024x)
+  - [To 0.32.x](#to-032x)
 
 ## Prerequisites
 
@@ -60,6 +61,7 @@ argo-workflows:
       enabled: false
 tunnel-client:
   enabled: false
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   crds:
     install: false
@@ -76,6 +78,7 @@ argo-cd:
 argo-workflows:
   crds:
     install: true
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   crds:
     install: true
@@ -187,6 +190,8 @@ data:
 
 | GitOps Runtime version | Supported ArgoCD versions |
 |------------------------|---------------------------|
+| 0.32.x                 | >=3.4 <=3.6               |
+| 0.31.x                 | >=3.3 <=3.5               |
 | 0.30.x                 | >=3.2 <=3.4               |
 | 0.29.x                 | >=3.1 <=3.3               |
 | 0.28.x                 | >=3.0 <=3.2               |
@@ -206,7 +211,7 @@ We have created a helper utility to resolve this issue:
 The utility is packaged in a container image. Below are instructions on executing the utility using Docker:
 
 ```
-docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.0.0 <local_registry>
+docker run -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.32.0 <local_registry>
 ```
 `output_dir` - is a local directory where the utility will output files. <br>
 `local_registry` - is your local registry where you want to mirror the images to
@@ -219,7 +224,7 @@ The utility will output 4 files into the folder:
 
 For usage with external ArgoCD run the utility with `EXTERNAL_ARGOCD` environment variable set to `true`.
 ```
-docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.0.0 <local_registry>
+docker run -e EXTERNAL_ARGOCD=true  -v <output_dir>:/output quay.io/codefresh/gitops-runtime-private-registry-utils:0.32.0 <local_registry>
 ```
 
 ## Openshift
@@ -279,6 +284,7 @@ app-proxy:
         matchLabels:
           app: cap-app-proxy
 
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   replicaCount: 2
   pdb:
@@ -456,6 +462,25 @@ global:
       ...
 ```
 
+### To 0.32.x
+
+#### GitOps operator is disabled by default
+
+The GitOps operator has reached End-of-Life and `.Values.gitops-operator.enabled` now defaults to `false`.
+On upgrade, the chart removes the `gitops-operator` Deployment, ServiceAccount, RBAC, PDB, the `promotion-template` ServiceAccount/RBAC, and the operator CRDs
+(`products`, `promotionflows`, `promotionpolicies`, `promotiontasks`, `promotiontemplates`, `restrictedgitsources` in the `codefresh.io` group).
+
+> [!WARNING]
+> Deleting a CRD deletes all custom resources of that kind in the cluster.
+> To keep the CRDs and their resources, set `gitops-operator.crds.keep: true` in your **currently installed** release (run `helm upgrade` with it first), and only then upgrade to 0.32.x.
+
+If you still rely on the GitOps operator(you use restricted-git-sources with your runtime), enable it explicitly when upgrading:
+
+```yaml
+gitops-operator:
+  enabled: true
+```
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -507,13 +532,13 @@ global:
 | app-proxy.extraVolumeMounts | list | `[]` | Extra volume mounts for main container |
 | app-proxy.extraVolumes | list | `[]` | extra volumes |
 | app-proxy.fullnameOverride | string | `"cap-app-proxy"` |  |
-| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.36"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.36"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.36"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
-| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.36"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.36"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.36"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
+| app-proxy.image-enrichment | object | `{"config":{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.37"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.37"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.37"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400},"enabled":true,"serviceAccount":{"annotations":null,"create":true,"name":"codefresh-image-enrichment-sa"}}` | Image enrichment process configuration |
+| app-proxy.image-enrichment.config | object | `{"clientHeartbeatIntervalInSeconds":5,"concurrencyCmKey":"imageReportExecutor","concurrencyCmName":"workflow-synchronization-semaphores","images":{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.37"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.37"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.37"}},"podGcStrategy":"OnWorkflowCompletion","ttlActiveInSeconds":900,"ttlAfterCompletionInSeconds":86400}` | Configurations for image enrichment workflow |
 | app-proxy.image-enrichment.config.clientHeartbeatIntervalInSeconds | int | `5` | Client heartbeat interval in seconds for image enrichemnt workflow |
 | app-proxy.image-enrichment.config.concurrencyCmKey | string | `"imageReportExecutor"` | The name of the key in the configmap to use as synchronization semaphore |
 | app-proxy.image-enrichment.config.concurrencyCmName | string | `"workflow-synchronization-semaphores"` | The name of the configmap to use as synchronization semaphore, see https://argoproj.github.io/argo-workflows/synchronization/ |
-| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.36"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.36"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.36"}}` | Enrichemnt images |
-| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.36"}` | Report image enrichment task image |
+| app-proxy.image-enrichment.config.images | object | `{"gitEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info","tag":"1.1.37"},"jiraEnrichment":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info","tag":"1.1.37"},"reportImage":{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.37"}}` | Enrichemnt images |
+| app-proxy.image-enrichment.config.images.reportImage | object | `{"registry":"quay.io","repository":"codefreshplugins/argo-hub-codefresh-csdp-report-image-info","tag":"1.1.37"}` | Report image enrichment task image |
 | app-proxy.image-enrichment.config.podGcStrategy | string | `"OnWorkflowCompletion"` | Pod grabage collection strategy. By default all pods will be deleted when the enrichment workflow completes. |
 | app-proxy.image-enrichment.config.ttlActiveInSeconds | int | `900` | Maximum allowed runtime for the enrichment workflow |
 | app-proxy.image-enrichment.config.ttlAfterCompletionInSeconds | int | `86400` | Number of seconds to live after completion |
@@ -602,7 +627,7 @@ global:
 | argo-cd.redis-ha.image.tag | string | `"8.2.2-alpine"` | Redis tag |
 | argo-cd.redis.image.repository | string | `"ecr-public.aws.com/docker/library/redis"` | Redis repository |
 | argo-cd.redis.image.tag | string | `"8.2.2-alpine"` | Redis tag |
-| argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"70aa9f5"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
+| argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"a289436"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.executor.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
@@ -649,7 +674,7 @@ global:
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
-| gitops-operator.enabled | bool | `true` |  |
+| gitops-operator.enabled | bool | `false` | Enable the GitOps operator. Disabled by default, the operator is End-of-Life. Set to `true` only if you still rely on it |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_COMPRESSION | string | `"gzip"` | Specifies the compression algorithm to be used for all telemetry data. Ref: https://opentelemetry.io/docs/specs/otel/protocol/exporter/ |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_ENDPOINT | string | `"http://localhost:4317"` | Base endpoint URL for all OpenTelemetry signals. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_PROTOCOL | string | `"grpc"` | Specifies the OTLP transport protocol to be used for all telemetry data. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
@@ -664,7 +689,7 @@ global:
 | gitops-operator.env.<<[0].OTEL_TRACES_SAMPLER | string | `"parentbased_always_on"` | OTel sampler to be used for traces. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
 | gitops-operator.env.GITOPS_OPERATOR_VERSION | string | `"0.11.1"` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
-| gitops-operator.image | object | `{"registry":"quay.io","repository":"codefresh/codefresh-gitops-operator","tag":"569808d"}` | GitOps operator image |
+| gitops-operator.image | object | `{"registry":"quay.io","repository":"codefresh/codefresh-gitops-operator","tag":681822}` | GitOps operator image |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
@@ -694,7 +719,7 @@ global:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"70aa9f5"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
+| global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"a289436"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
 | global.httpProxy | string | `""` | global HTTP_PROXY for all components |
 | global.httpsProxy | string | `""` | global HTTPS_PROXY for all components |
 | global.imageRegistry | string | `""` |  |
@@ -747,8 +772,8 @@ global:
 | internal-router.env | object | `{}` | Environment variables - see values.yaml inside the chart for usage |
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
-| internal-router.image.repository | string | `"docker.io/nginxinc/nginx-unprivileged"` |  |
-| internal-router.image.tag | string | `"1.31.6-alpine3.24"` |  |
+| internal-router.image.repository | string | `"docker.io/nginx/nginx-unprivileged"` |  |
+| internal-router.image.tag | string | `"1.31.8-alpine3.24"` |  |
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.ipv6 | object | `{"enabled":false}` | For ipv6 enabled clusters switch ipv6 enabled to true |
 | internal-router.nameOverride | string | `""` |  |
@@ -805,7 +830,7 @@ global:
 | redis-ha.topologySpreadConstraints.maxSkew | string | `""` (defaults to `1`) | Max skew of pods tolerated |
 | redis-ha.topologySpreadConstraints.topologyKey | string | `""` (defaults to `topology.kubernetes.io/zone`) | Topology key for spread |
 | redis-ha.topologySpreadConstraints.whenUnsatisfiable | string | `""` (defaults to `ScheduleAnyway`) | Enforcement policy, hard or soft |
-| redis-secret-init | object | `{"affinity":{},"image":{"registry":"docker.io","repository":"alpine/kubectl","tag":"1.37.0"},"nodeSelector":{},"tolerations":[]}` | Enable hook job to create redis secret |
+| redis-secret-init | object | `{"affinity":{},"image":{"registry":"docker.io","repository":"alpine/kubectl","tag":"1.37.2"},"nodeSelector":{},"tolerations":[]}` | Enable hook job to create redis secret |
 | redis.image | object | `{"registry":"public.ecr.aws","repository":"docker/library/redis","tag":"8.2.1-alpine"}` | Redis image |
 | redis.metrics | object | `{"enabled":true,"env":{},"envFrom":[],"image":{"registry":"ghcr.io","repository":"oliver006/redis_exporter","tag":"v1.72.1"},"livenessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"readinessProbe":{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15},"resources":{},"serviceMonitor":{"enabled":false}}` | Enable metrics sidecar |
 | redis.metrics.serviceMonitor | object | `{"enabled":false}` | Enable a prometheus ServiceMonitor |
@@ -813,7 +838,7 @@ global:
 | redis.readinessProbe | object | `{"enabled":true,"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":15,"successThreshold":1,"timeoutSeconds":15}` | Probes configuration |
 | redis.service | object | `{"annotations":{},"labels":{},"ports":{"metrics":{"port":9121,"targetPort":9121},"redis":{"port":6379,"targetPort":6379}},"type":"ClusterIP"}` | Service configuration |
 | redis.serviceAccount | object | `{"annotations":{},"create":true,"name":""}` | Create ServiceAccount for redis |
-| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.36.0"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
+| sealed-secrets | object | `{"fullnameOverride":"sealed-secrets-controller","image":{"registry":"quay.io","repository":"codefresh/sealed-secrets-controller","tag":"0.41.2"},"keyrenewperiod":"720h","resources":{"limits":{"cpu":"500m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"512Mi"}}}` | --------------------------------------------------------------------------------------------------------------------- |
 | tunnel-client | object | `{"affinity":{},"enabled":true,"libraryMode":true,"nodeSelector":{},"tolerations":[],"tunnelServer":{"host":"register-tunnels.cf-cd.com","subdomainHost":"tunnels.cf-cd.com"}}` | Tunnel based runtime. Not supported for on-prem platform. In on-prem use ingress based runtimes. |
 | tunnel-client.enabled | bool | `true` | Will only be used if global.runtime.ingress.enabled = false |
 | tunnel-client.libraryMode | bool | `true` | Do not change this value! Breaks chart logic |
