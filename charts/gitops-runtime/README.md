@@ -16,6 +16,7 @@
 - [Upgrading](#upgrading)
   - [To 0.23.x](#to-023x)
   - [> 0.24.x](#-024x)
+  - [To 0.32.x](#to-032x)
 
 ## Prerequisites
 
@@ -60,6 +61,7 @@ argo-workflows:
       enabled: false
 tunnel-client:
   enabled: false
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   crds:
     install: false
@@ -76,6 +78,7 @@ argo-cd:
 argo-workflows:
   crds:
     install: true
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   crds:
     install: true
@@ -281,6 +284,7 @@ app-proxy:
         matchLabels:
           app: cap-app-proxy
 
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   replicaCount: 2
   pdb:
@@ -458,6 +462,25 @@ global:
       ...
 ```
 
+### To 0.32.x
+
+#### GitOps operator is disabled by default
+
+The GitOps operator has reached End-of-Life and `.Values.gitops-operator.enabled` now defaults to `false`.
+On upgrade, the chart removes the `gitops-operator` Deployment, ServiceAccount, RBAC, PDB, the `promotion-template` ServiceAccount/RBAC, and the operator CRDs
+(`products`, `promotionflows`, `promotionpolicies`, `promotiontasks`, `promotiontemplates`, `restrictedgitsources` in the `codefresh.io` group).
+
+> [!WARNING]
+> Deleting a CRD deletes all custom resources of that kind in the cluster.
+> To keep the CRDs and their resources, set `gitops-operator.crds.keep: true` in your **currently installed** release (run `helm upgrade` with it first), and only then upgrade to 0.32.x.
+
+If you still rely on the GitOps operator(you use restricted-git-sources with your runtime), enable it explicitly when upgrading:
+
+```yaml
+gitops-operator:
+  enabled: true
+```
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -604,7 +627,7 @@ global:
 | argo-cd.redis-ha.image.tag | string | `"8.2.2-alpine"` | Redis tag |
 | argo-cd.redis.image.repository | string | `"ecr-public.aws.com/docker/library/redis"` | Redis repository |
 | argo-cd.redis.image.tag | string | `"8.2.2-alpine"` | Redis tag |
-| argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"a289436"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
+| argo-gateway | object | `{"affinity":{},"hpa":{"enabled":true,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":70},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"3f6586b"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Argo Gateway Argo Gateway is used to perform operations on ArgoCD from Codefresh platform |
 | argo-workflows.crds.install | bool | `true` | Install and upgrade CRDs |
 | argo-workflows.enabled | bool | `true` |  |
 | argo-workflows.executor.resources.requests.ephemeral-storage | string | `"10Mi"` |  |
@@ -651,7 +674,7 @@ global:
 | gitops-operator.crds.annotations | object | `{}` | Annotations on gitops operator CRDs |
 | gitops-operator.crds.install | bool | `true` | Whether or not to install CRDs |
 | gitops-operator.crds.keep | bool | `false` | Keep CRDs if gitops runtime release is uninstalled |
-| gitops-operator.enabled | bool | `true` |  |
+| gitops-operator.enabled | bool | `false` | Enable the GitOps operator. Disabled by default, the operator is End-of-Life. Set to `true` only if you still rely on it |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_COMPRESSION | string | `"gzip"` | Specifies the compression algorithm to be used for all telemetry data. Ref: https://opentelemetry.io/docs/specs/otel/protocol/exporter/ |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_ENDPOINT | string | `"http://localhost:4317"` | Base endpoint URL for all OpenTelemetry signals. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
 | gitops-operator.env.<<[0].OTEL_EXPORTER_OTLP_PROTOCOL | string | `"grpc"` | Specifies the OTLP transport protocol to be used for all telemetry data. Ref: https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ |
@@ -696,7 +719,7 @@ global:
 | global.codefresh.userToken | object | `{"secretKeyRef":{},"token":""}` | User token. Used for runtime registration against the patform. One of token (for plain text value) or secretKeyRef must be provided. |
 | global.codefresh.userToken.secretKeyRef | object | `{}` | User token that references an existing secret containing the token. |
 | global.codefresh.userToken.token | string | `""` | User token in plain text. The chart creates and manages the secret for this token. |
-| global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"a289436"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
+| global.event-reporters | object | `{"affinity":{},"config":{},"image":{"registry":"quay.io","repository":"codefresh/cf-argocd-extras","tag":"3f6586b"},"livenessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"nodeSelector":{},"pdb":{"enabled":true,"maxUnavailable":"","minAvailable":"50%"},"readinessProbe":{"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":10},"replicaCount":2,"resources":{"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"ports":{"http":{"port":8088,"targetPort":8088},"metrics":{"port":8087,"targetPort":8087}},"type":"ClusterIP"},"serviceAccount":{"create":true},"serviceMonitor":{"enabled":false,"interval":"30s","labels":{},"scrapeTimeout":"10s"},"tolerations":[]}` | Global settings for event reporters Event reporters are used for reporting runtime and cluster resources to Codefresh platform |
 | global.httpProxy | string | `""` | global HTTP_PROXY for all components |
 | global.httpsProxy | string | `""` | global HTTPS_PROXY for all components |
 | global.imageRegistry | string | `""` |  |

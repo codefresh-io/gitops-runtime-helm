@@ -17,6 +17,7 @@ app-proxy:
         matchLabels:
           app: cap-app-proxy
 
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   replicaCount: 2
   pdb:
