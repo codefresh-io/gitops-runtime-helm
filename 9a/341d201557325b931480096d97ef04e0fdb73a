@@ -1,0 +1,38 @@
+charts/gitops-runtime/README.md
+  h_51acfbafc7319b 19,64,81,287,465-483,630,677,722
+charts/gitops-runtime/README.md.gotmpl
+  h_51acfbafc7319b 19,64,81,292,470-488
+charts/gitops-runtime/tests/custom-ca_test.yaml
+  h_51acfbafc7319b 14-15
+charts/gitops-runtime/tests/external_argocd_test.yaml
+  h_51acfbafc7319b 11-12
+charts/gitops-runtime/tests/gitops-controller-misc_test.yaml
+  h_51acfbafc7319b 5-6
+charts/gitops-runtime/tests/gitops-operator-disabled_test.yaml
+  h_51acfbafc7319b 1-11
+charts/gitops-runtime/tests/gitops-operator_test.yaml
+  h_51acfbafc7319b 6-7
+charts/gitops-runtime/tests/global_constraints_test.yaml
+  h_51acfbafc7319b 22-23
+charts/gitops-runtime/values-ha.yaml
+  h_51acfbafc7319b 20
+charts/gitops-runtime/values-multi-runtimes-first.yaml
+  h_51acfbafc7319b 11
+charts/gitops-runtime/values-multi-runtimes.yaml
+  h_51acfbafc7319b 26
+charts/gitops-runtime/values.yaml
+  h_51acfbafc7319b 643-644
+tests/component-tests/setup/values/runtime.values.yaml
+  h_51acfbafc7319b 15,53-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9a341d201557325b931480096d97ef04e0fdb73a",
+  "prompts": {},
+  "humans": {
+    "h_51acfbafc7319b": {
+      "author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  }
+}
