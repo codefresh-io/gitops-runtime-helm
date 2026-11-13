@@ -689,7 +689,7 @@ gitops-operator:
 | gitops-operator.env.<<[0].OTEL_TRACES_SAMPLER | string | `"parentbased_always_on"` | OTel sampler to be used for traces. Ref: https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/ |
 | gitops-operator.env.GITOPS_OPERATOR_VERSION | string | `"0.11.1"` |  |
 | gitops-operator.fullnameOverride | string | `""` |  |
-| gitops-operator.image | object | `{"registry":"quay.io","repository":"codefresh/codefresh-gitops-operator","tag":"a0697bc"}` | GitOps operator image |
+| gitops-operator.image | object | `{"registry":"quay.io","repository":"codefresh/codefresh-gitops-operator","tag":681822}` | GitOps operator image |
 | gitops-operator.imagePullSecrets | list | `[]` |  |
 | gitops-operator.nameOverride | string | `""` |  |
 | gitops-operator.nodeSelector | object | `{}` |  |
