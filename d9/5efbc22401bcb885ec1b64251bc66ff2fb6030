@@ -1,0 +1,16 @@
+charts/gitops-runtime/values.yaml
+  h_51acfbafc7319b 162,705
+charts/gitops-runtime/README.md
+  h_51acfbafc7319b 607,699
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d95efbc22401bcb885ec1b64251bc66ff2fb6030",
+  "prompts": {},
+  "humans": {
+    "h_51acfbafc7319b": {
+      "author": "vitaliichyrka <vitalii.chyrka@codefresh.io>"
+    }
+  }
+}
