@@ -19,6 +19,8 @@ templates:
   - codefresh-cm.yaml
 values:
   - ./values/mandatory-values.yaml
+set:
+  gitops-operator.enabled: true
 tests:
   - it: components should have nodeSelector and tolerations from .Values.global
     values:

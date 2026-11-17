@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: Test GitOps Operator is disabled by default
+templates:
+  - gitops-operator/*
+values:
+  - ./values/mandatory-values.yaml
+tests:
+  - it: should not render any gitops-operator resources by default
+    asserts:
+      - hasDocuments:
+          count: 0

@@ -12,6 +12,7 @@
 #   - Configures internal router and app-proxy for test networking.
 #   - Sets a unique runtime name and disables validation steps.
 #   - Uses a test-specific image tag for the gitops-operator.
+#   - Enables the gitops-operator (disabled by default in the chart).
 #
 # These values are used by the Helm install command in the test suite.
 # -----------------------------------------------------------------------------
@@ -49,3 +50,7 @@ internal-router:
 app-proxy:
   config:
     cors: "http://mockserver.mockserver:1080"
+
+# gitops-operator is disabled by default; component tests cover promotions, so it must be enabled
+gitops-operator:
+  enabled: true

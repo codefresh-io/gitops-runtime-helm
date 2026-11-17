@@ -23,6 +23,7 @@ argo-workflows:
       enabled: false
 tunnel-client:
   enabled: false
+# gitops-operator is disabled by default (End-of-Life).
 gitops-operator:
   crds:
     install: false
