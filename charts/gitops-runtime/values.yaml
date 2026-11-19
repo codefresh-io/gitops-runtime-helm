@@ -469,17 +469,17 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.36
+          tag: 1.1.37
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.36
+          tag: 1.1.37
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.36
+          tag: 1.1.37
   image:
     repository: quay.io/codefresh/cap-app-proxy
     tag: 1.4186.0
@@ -640,7 +640,7 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
-  enabled: true
+  enabled: false
   replicaCount: 1
   # -- Codefresh gitops operator crds
   crds:
@@ -670,7 +670,7 @@ gitops-operator:
   image:
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: 569808d
+    tag: 0681822
   env:
     !!merge <<:
       - *otel-config
@@ -702,7 +702,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: "70aa9f5"
+    tag: "a289436"
   nodeSelector: {}
   tolerations: []
   affinity: {}
