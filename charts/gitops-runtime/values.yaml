@@ -350,7 +350,7 @@ internal-router:
   image:
     repository: docker.io/nginx/nginx-unprivileged
     pullPolicy: IfNotPresent
-    tag: 1.31.8-alpine3.24
+    tag: 1.31.9-alpine3.24
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
@@ -469,17 +469,17 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.37
+          tag: 1.1.36
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.37
+          tag: 1.1.36
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.37
+          tag: 1.1.36
   image:
     repository: quay.io/codefresh/cap-app-proxy
     tag: 1.4186.0
@@ -640,8 +640,7 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
-  # -- Enable the GitOps operator. Disabled by default, the operator is End-of-Life. Set to `true` only if you still rely on it
-  enabled: false
+  enabled: true
   replicaCount: 1
   # -- Codefresh gitops operator crds
   crds:
@@ -671,7 +670,7 @@ gitops-operator:
   image:
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: 0681822
+    tag: 569808d
   env:
     !!merge <<:
       - *otel-config
@@ -703,7 +702,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: "a289436"
+    tag: "70aa9f5"
   nodeSelector: {}
   tolerations: []
   affinity: {}

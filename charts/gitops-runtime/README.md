@@ -773,7 +773,7 @@ gitops-operator:
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
 | internal-router.image.repository | string | `"docker.io/nginx/nginx-unprivileged"` |  |
-| internal-router.image.tag | string | `"1.31.8-alpine3.24"` |  |
+| internal-router.image.tag | string | `"1.31.9-alpine3.24"` |  |
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.ipv6 | object | `{"enabled":false}` | For ipv6 enabled clusters switch ipv6 enabled to true |
 | internal-router.nameOverride | string | `""` |  |
