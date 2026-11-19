@@ -747,8 +747,8 @@ global:
 | internal-router.env | object | `{}` | Environment variables - see values.yaml inside the chart for usage |
 | internal-router.fullnameOverride | string | `"internal-router"` |  |
 | internal-router.image.pullPolicy | string | `"IfNotPresent"` |  |
-| internal-router.image.repository | string | `"docker.io/nginxinc/nginx-unprivileged"` |  |
-| internal-router.image.tag | string | `"1.31.6-alpine3.24"` |  |
+| internal-router.image.repository | string | `"docker.io/nginx/nginx-unprivileged"` |  |
+| internal-router.image.tag | string | `"1.31.9-alpine3.24"` |  |
 | internal-router.imagePullSecrets | list | `[]` |  |
 | internal-router.ipv6 | object | `{"enabled":false}` | For ipv6 enabled clusters switch ipv6 enabled to true |
 | internal-router.nameOverride | string | `""` |  |
