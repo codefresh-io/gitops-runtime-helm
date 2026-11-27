@@ -26,7 +26,7 @@ dependencies:
     version: 10.17.2
   - name: argo-workflows
     repository: https://codefresh-io.github.io/argo-helm
-    version: 0.45.28-v3.6.7-cap-CF-2552-security
+    version: 0.45.29-v3.6.7-cap-CF-23509
     condition: argo-workflows.enabled
   - name: sealed-secrets
     repository: https://bitnami.github.io/sealed-secrets
