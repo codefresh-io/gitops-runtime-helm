@@ -267,7 +267,7 @@ sealed-secrets:
   image:
     registry: 'quay.io'
     repository: 'codefresh/sealed-secrets-controller'
-    tag: '0.36.0'
+    tag: '0.41.2'
   resources:
     limits:
       cpu: 500m
@@ -640,7 +640,8 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
-  enabled: true
+  # -- Enable the GitOps operator. Disabled by default, the operator is End-of-Life. Set to `true` only if you still rely on it
+  enabled: false
   replicaCount: 1
   # -- Codefresh gitops operator crds
   crds:
@@ -670,7 +671,7 @@ gitops-operator:
   image:
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: 569808d
+    tag: 0681822
   env:
     !!merge <<:
       - *otel-config
@@ -745,7 +746,7 @@ redis-secret-init:
   image:
     registry: docker.io
     repository: alpine/kubectl
-    tag: 1.37.0
+    tag: 1.37.2
   nodeSelector: {}
   tolerations: []
   affinity: {}
