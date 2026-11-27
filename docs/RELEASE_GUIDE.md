@@ -109,6 +109,7 @@ to the non-prod environments and letting them run for a period before publishing
 
 Before publishing, ensure:
 
+- [ ] Version has been updated so CI can pass
 - [ ] All CI checks pass (unit tests, linting, e2e tests)
 - [ ] The PR has been reviewed by the right reviewers
 - [ ] Release notes accurately reflect the changes
@@ -131,9 +132,8 @@ Before publishing, verify:
 
 ### Step 2: Review the PR
 
-1. Open the PR in GitHub
-2. Review the changes (version bump, changelog)
-3. Ensure release notes in the draft GitHub release are accurate
+1. Review the PR changes in GitHub
+2. Ensure release notes in the draft GitHub release are accurate
 
 ### Step 3: Merge the PR
 
@@ -145,7 +145,10 @@ Or click "Merge" in the GitHub UI.
 
 ### Step 4: Verify Publication
 
-The **promote** pipeline will automatically:
+The **promote** pipeline will be triggered by the merge into main.
+Its status can be tracked at https://g.codefresh.io/pipelines/edit/new/builds?id=6a05947a1959495326513a41&pipeline=promote&projects=gitops-runtime-helm&projectId=6979b366b3a340e7abc7965a
+
+It will automatically:
 - Publish the chart to `quay.io/codefresh/gitops-runtime`
 - Convert the draft release to published
 - Sign container images
@@ -176,25 +179,6 @@ No manual action required. If notifications don't appear, see [Troubleshooting: 
 3. **Bug Fixes** - Issues that were resolved
 4. **Breaking Changes** - CRITICAL: Always call these out prominently
 5. **Component Versions** - Updated dependencies (ArgoCD, app-proxy, etc.)
-
-### ArtifactHub Changelog Format
-
-The `Chart.yaml` needs an `artifacthub.io/changes` annotation in YAML format:
-
-```yaml
-annotations:
-  artifacthub.io/changes: |
-    - kind: added
-      description: Support for ArgoCD 2.10 application sets
-    - kind: changed
-      description: Updated app-proxy to v1.5.0 with improved caching
-    - kind: fixed
-      description: Memory leak in event-reporter under high load
-    - kind: security
-      description: Updated base images to patch CVE-2024-XXXXX
-```
-
-Valid `kind` values: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`
 
 ### GitHub Release Notes Format
 
@@ -404,7 +388,7 @@ See: https://github.com/argoproj/argo-cd/releases/tag/v2.10.0
 
 ### Security Fixes
 
-Always mention CVEs:
+If there are CVEs that are especially noteworthy, mention them:
 
 ```
 fix(security): update base images for CVE-2024-12345
