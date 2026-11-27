@@ -97,9 +97,13 @@ After the PR is reviewed and approved, the release should be validated to ensure
 
 ### Current Approach
 
-The CI pipeline runs e2e tests on every PR. If these tests pass, the release is considered validated and ready to publish.
+The CI pipeline "ci" runs on every PR.
 
-> **Note**: Previously, releases were validated by deploying to staging environments and letting them run for a period before publishing. This approach is no longer in use. If additional validation is needed in the future, consider introducing a manual testing stage or dedicated validation environments.
+GitHub comment /e2e triggers the e2e pipeline to run, which is a
+prerequisite for a release.
+
+If there are any breaking changes, the PR needs to be validated by deploying
+to the non-prod environments and letting them run for a period before publishing.
 
 ### Validation Checklist
 
