@@ -159,7 +159,7 @@ global:
     image:
       registry: quay.io
       repository: codefresh/cf-argocd-extras
-      tag: "a289436"
+      tag: "30ad19e"
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -267,7 +267,7 @@ sealed-secrets:
   image:
     registry: 'quay.io'
     repository: 'codefresh/sealed-secrets-controller'
-    tag: '0.41.2'
+    tag: '0.36.0'
   resources:
     limits:
       cpu: 500m
@@ -350,7 +350,7 @@ internal-router:
   image:
     repository: docker.io/nginx/nginx-unprivileged
     pullPolicy: IfNotPresent
-    tag: 1.31.8-alpine3.24
+    tag: 1.31.10-alpine3.24
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: "internal-router"
@@ -469,27 +469,27 @@ app-proxy:
         reportImage:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-report-image-info
-          tag: 1.1.37
+          tag: 1.1.38
         # Git enrichment task image
         gitEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-git-info
-          tag: 1.1.37
+          tag: 1.1.38
         # Jira enrichment task image
         jiraEnrichment:
           registry: quay.io
           repository: codefreshplugins/argo-hub-codefresh-csdp-image-enricher-jira-info
-          tag: 1.1.37
+          tag: 1.1.38
   image:
     repository: quay.io/codefresh/cap-app-proxy
-    tag: 1.4186.0
+    tag: 1.4198.0
     pullPolicy: IfNotPresent
   # -- Extra volume mounts for main container
   extraVolumeMounts: []
   initContainer:
     image:
       repository: quay.io/codefresh/cap-app-proxy-init
-      tag: 1.4186.0
+      tag: 1.4198.0
       pullPolicy: IfNotPresent
     command:
       - ./init.sh
@@ -640,8 +640,7 @@ app-proxy:
 # gitops-operator
 #-----------------------------------------------------------------------------------------------------------------------
 gitops-operator:
-  # -- Enable the GitOps operator. Disabled by default, the operator is End-of-Life. Set to `true` only if you still rely on it
-  enabled: false
+  enabled: true
   replicaCount: 1
   # -- Codefresh gitops operator crds
   crds:
@@ -671,7 +670,7 @@ gitops-operator:
   image:
     registry: quay.io
     repository: codefresh/codefresh-gitops-operator
-    tag: 0681822
+    tag: 569808d
   env:
     !!merge <<:
       - *otel-config
@@ -703,7 +702,7 @@ argo-gateway:
   image:
     registry: quay.io
     repository: codefresh/cf-argocd-extras
-    tag: "a289436"
+    tag: "30ad19e"
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -746,7 +745,7 @@ redis-secret-init:
   image:
     registry: docker.io
     repository: alpine/kubectl
-    tag: 1.37.2
+    tag: 1.37.0
   nodeSelector: {}
   tolerations: []
   affinity: {}
