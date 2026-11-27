@@ -2,14 +2,6 @@
 
 This guide explains how to perform releases for the GitOps Runtime Helm chart.
 
-> **Tip**: There's a CLI that automates most of these steps:
-> ```bash
-> npx @codefresh-io/gitops-release --help
-> ```
-> See the [CLI repository](https://github.com/codefresh-io/gitops-release) for details.
-
-The instructions below explain how to do everything manually if you prefer that approach, don't have an Anthropic API key for AI release notes, or need to troubleshoot.
-
 ---
 
 ## Table of Contents
@@ -30,25 +22,20 @@ The instructions below explain how to do everything manually if you prefer that 
 
 ## Overview
 
-The GitOps Runtime release process uses **Argo Events and Workflows** to automate most of the work. Your job as release manager is to:
+The GitOps Runtime release process uses **Codefresh CI** to automate most of the work.
+The developers:
 
-1. **Trigger pipelines** by creating branches or merging PRs
-2. **Review and approve** the automatically created prepare-release PRs
+1. **Trigger pipelines** by creating branches
+2. **Review and approve** the PRs
 3. **Write/edit release notes** (the AI can help, but human review is essential)
-4. **Publish releases** by merging the prepare-release PR
+4. **Publish releases** by merging the PR
 
 ### How It Works
 
 ```
-You create stable/X.Y branch
+You complete work on a PR for main, edit release notes, then merge the PR
         ↓
-[Argo Workflow: prepare-release] runs automatically
-        ↓
-Creates prep/vX.Y.0 branch + PR + draft GitHub release
-        ↓
-You review, edit release notes, then merge the PR
-        ↓
-[Argo Workflow: promote] runs automatically
+[CF CI: promote] runs automatically
         ↓
 Chart published to quay.io + GitHub release published
 ```
@@ -81,56 +68,18 @@ gh auth login
 
 ## Release Types
 
-| Type | When | Branch Created | Example |
-|------|------|----------------|---------|
-| **Minor Release** | New features, starting a release line | `stable/0.27` | 0.27.0 |
-| **Patch Release** | Bug fixes to existing release | Already exists | 0.26.6 |
+| Type | When | Example |
+|------|------|---------|
+| **Minor Release** | New features, starting a release line | 0.27.0 |
+| **Patch Release** | Bug fixes to existing release | 0.26.6 |
 
 ---
 
-## Creating a New Minor Release
+## Basic release sanity checks
 
-Use this when starting a new release line (e.g., 0.27.x).
-
-### Step 1: Create the Stable Branch
-
-**Option A: GitHub UI (easiest)**
-1. Go to https://github.com/codefresh-io/gitops-runtime-helm
-2. Click the branch dropdown
-3. Type `stable/0.27` (replace with your version)
-4. Click "Create branch: stable/0.27 from main"
-
-**Option B: Git command line**
-```bash
-git fetch origin
-git checkout main
-git pull
-git checkout -b stable/0.27
-git push -u origin stable/0.27
-```
-
-**From a specific commit:**
-```bash
-git checkout -b stable/0.27 abc1234
-git push -u origin stable/0.27
-```
-
-### Step 2: Wait for the Pipeline
-
-The **prepare-release** pipeline will automatically:
-- Create `prep/v0.27.0` branch
-- Bump version in `Chart.yaml`
-- Open a PR with the `prepare-release` label
-- Create a draft GitHub release
-
-This usually takes 2-5 minutes.
-
-### Step 3: Verify
-
-Check that everything was created:
 ```bash
 # Check for the PR
-gh pr list --repo codefresh-io/gitops-runtime-helm --head prep/v0.27.0
+gh pr list --repo codefresh-io/gitops-runtime-helm --head your-branch-name
 
 # Check for draft release
 gh release list --repo codefresh-io/gitops-runtime-helm | head -5
@@ -144,20 +93,25 @@ Or visit:
 
 ## Release Validation
 
-After the prepare-release PR is automatically created and before publishing the release, the release should be validated to ensure stability.
+After the PR is reviewed and approved, the release should be validated to ensure stability.
 
 ### Current Approach
 
-The CI pipeline runs e2e tests on every PR. If these tests pass, the release is considered validated and ready to publish.
+The CI pipeline "ci" runs on every PR.
 
-> **Note**: Previously, releases were validated by deploying to staging environments and letting them run for a period before publishing. This approach is no longer in use. If additional validation is needed in the future, consider introducing a manual testing stage or dedicated validation environments.
+GitHub comment /e2e triggers the e2e pipeline to run, which is a
+prerequisite for a release.
+
+If there are any breaking changes, the PR needs to be validated by deploying
+to the non-prod environments and letting them run for a period before publishing.
 
 ### Validation Checklist
 
 Before publishing, ensure:
 
+- [ ] Version has been updated so CI can pass
 - [ ] All CI checks pass (unit tests, linting, e2e tests)
-- [ ] The prepare-release PR has been reviewed
+- [ ] The PR has been reviewed by the right reviewers
 - [ ] Release notes accurately reflect the changes
 - [ ] No known critical issues exist in the changes being released
 
@@ -174,23 +128,16 @@ Before publishing, verify:
    gh pr checks <PR-NUMBER> --repo codefresh-io/gitops-runtime-helm
    ```
 
-2. **PR has the `prepare-release` label** (CRITICAL - this triggers the promote pipeline)
-   ```bash
-   gh pr view <PR-NUMBER> --repo codefresh-io/gitops-runtime-helm --json labels
-   ```
-
 3. **Release notes are complete** (see [Writing Release Notes](#writing-release-notes))
 
 ### Step 2: Review the PR
 
-1. Open the PR in GitHub
-2. Review the changes (version bump, changelog)
-3. Ensure release notes in the draft GitHub release are accurate
+1. Review the PR changes in GitHub
+2. Ensure release notes in the draft GitHub release are accurate
 
 ### Step 3: Merge the PR
 
 ```bash
-# Merge the prepare-release PR
 gh pr merge <PR-NUMBER> --repo codefresh-io/gitops-runtime-helm --squash
 ```
 
@@ -198,7 +145,10 @@ Or click "Merge" in the GitHub UI.
 
 ### Step 4: Verify Publication
 
-The **promote** pipeline will automatically:
+The **promote** pipeline will be triggered by the merge into main.
+Its status can be tracked at https://g.codefresh.io/pipelines/edit/new/builds?id=6a05947a1959495326513a41&pipeline=promote&projects=gitops-runtime-helm&projectId=6979b366b3a340e7abc7965a
+
+It will automatically:
 - Publish the chart to `quay.io/codefresh/gitops-runtime`
 - Convert the draft release to published
 - Sign container images
@@ -218,63 +168,6 @@ No manual action required. If notifications don't appear, see [Troubleshooting: 
 
 ---
 
-## Creating a Patch Release
-
-Patch releases (e.g., 0.26.6) happen when fixes are merged to an existing stable branch.
-
-### Step 1: Merge Fixes to Stable Branch
-
-Either:
-- Merge PRs directly to `stable/0.26`
-- Cherry-pick commits (see [Cherry-Picking Fixes](#cherry-picking-fixes))
-
-### Step 2: Pipeline Creates New Prep PR
-
-When commits are merged to `stable/X.Y`, the prepare-release pipeline automatically:
-- Creates `prep/v0.26.6` (incremented patch version)
-- Opens a new prepare-release PR
-- Creates a new draft release
-
-### Step 3: Publish
-
-Follow the same [Publishing a Release](#publishing-a-release) steps.
-
----
-
-## Cherry-Picking Fixes
-
-To backport a fix from `main` to a stable branch:
-
-```bash
-# Make sure you have the latest
-git fetch origin
-
-# Checkout stable branch
-git checkout stable/0.26
-git pull
-
-# Create backport branch
-git checkout -b backport/fix-memory-leak
-
-# Cherry-pick the commit(s) from main
-git cherry-pick abc1234
-
-# If there are conflicts, resolve them, then:
-git add .
-git cherry-pick --continue
-
-# Push and create PR
-git push -u origin backport/fix-memory-leak
-gh pr create --base stable/0.26 --title "Backport: Fix memory leak" --body "Cherry-picked from main"
-```
-
-**Multiple commits:**
-```bash
-git cherry-pick abc1234 def5678 ghi9012
-```
-
----
-
 ## Writing Release Notes
 
 > **Important**: AI-generated release notes are only as good as the commit messages. If commits are not descriptive or miss important context (like breaking changes), you MUST manually edit the notes.
@@ -286,25 +179,6 @@ git cherry-pick abc1234 def5678 ghi9012
 3. **Bug Fixes** - Issues that were resolved
 4. **Breaking Changes** - CRITICAL: Always call these out prominently
 5. **Component Versions** - Updated dependencies (ArgoCD, app-proxy, etc.)
-
-### ArtifactHub Changelog Format
-
-The `Chart.yaml` needs an `artifacthub.io/changes` annotation in YAML format:
-
-```yaml
-annotations:
-  artifacthub.io/changes: |
-    - kind: added
-      description: Support for ArgoCD 2.10 application sets
-    - kind: changed
-      description: Updated app-proxy to v1.5.0 with improved caching
-    - kind: fixed
-      description: Memory leak in event-reporter under high load
-    - kind: security
-      description: Updated base images to patch CVE-2024-XXXXX
-```
-
-Valid `kind` values: `added`, `changed`, `deprecated`, `removed`, `fixed`, `security`
 
 ### GitHub Release Notes Format
 
@@ -357,27 +231,6 @@ Valid `kind` values: `added`, `changed`, `deprecated`, `removed`, `fixed`, `secu
 
 ## Troubleshooting
 
-### Pipeline Didn't Run
-
-**Symptom**: Created stable branch but no prep PR appeared
-
-**Check**:
-1. Verify the branch was created correctly:
-   ```bash
-   gh api repos/codefresh-io/gitops-runtime-helm/branches/stable/0.27
-   ```
-2. Check Argo Events sensor logs (requires cluster access)
-3. Try creating a small commit to the branch to re-trigger
-
-### PR Doesn't Have `prepare-release` Label
-
-**Symptom**: PR exists but missing the label
-
-**Fix**:
-```bash
-gh pr edit <PR-NUMBER> --repo codefresh-io/gitops-runtime-helm --add-label prepare-release
-```
-
 ### CI Checks Failing
 
 **Symptom**: PR checks are red
@@ -386,37 +239,6 @@ gh pr edit <PR-NUMBER> --repo codefresh-io/gitops-runtime-helm --add-label prepa
 1. Review the failing checks in GitHub
 2. Fix issues on the `prep/vX.Y.Z` branch
 3. Push fixes - checks will re-run
-
-### Merge Conflicts
-
-**Symptom**: PR shows merge conflicts
-
-**Fix**:
-```bash
-# Checkout the prep branch
-git fetch origin
-git checkout prep/v0.27.0
-
-# Rebase or merge from stable
-git rebase origin/stable/0.27
-# OR
-git merge origin/stable/0.27
-
-# Resolve conflicts, then force push
-git push --force-with-lease
-```
-
-### Release Not Publishing After Merge
-
-**Symptom**: Merged the PR but release is still draft
-
-**Check**:
-1. Verify the PR had the `prepare-release` label when merged
-2. Check promote pipeline logs (requires cluster access)
-3. Manual fallback - publish the release:
-   ```bash
-   gh release edit 0.27.0 --repo codefresh-io/gitops-runtime-helm --draft=false
-   ```
 
 ### Slack Notifications Not Sent
 
@@ -454,15 +276,8 @@ git push --force-with-lease
 
 | Pattern | Purpose | Example |
 |---------|---------|---------|
-| `main` | Development branch | - |
-| `stable/X.Y` | Release branch | `stable/0.27` |
-| `prep/vX.Y.Z` | Prepare-release branch | `prep/v0.27.0` |
-
-### Important Labels
-
-| Label | Purpose |
-|-------|---------|
-| `prepare-release` | **CRITICAL**: Triggers promote pipeline when PR is merged |
+| `main` | Release branch | - |
+| `(feat|fix|...)/XX-YYYY-desc` | Development branches | `feat/CF-1234-fancy-stuff` |
 
 ### Version Formats
 
@@ -573,7 +388,7 @@ See: https://github.com/argoproj/argo-cd/releases/tag/v2.10.0
 
 ### Security Fixes
 
-Always mention CVEs:
+If there are CVEs that are especially noteworthy, mention them:
 
 ```
 fix(security): update base images for CVE-2024-12345
@@ -590,8 +405,8 @@ Updates alpine base image to 3.19.1 which patches CVE-2024-12345
 # List recent releases
 gh release list --repo codefresh-io/gitops-runtime-helm
 
-# View open prepare-release PRs
-gh pr list --repo codefresh-io/gitops-runtime-helm --label prepare-release
+# View open PRs
+gh pr list --repo codefresh-io/gitops-runtime-helm
 
 # Check PR status
 gh pr view <PR-NUMBER> --repo codefresh-io/gitops-runtime-helm
@@ -599,14 +414,9 @@ gh pr view <PR-NUMBER> --repo codefresh-io/gitops-runtime-helm
 # Check PR CI status
 gh pr checks <PR-NUMBER> --repo codefresh-io/gitops-runtime-helm
 
-# Merge prepare-release PR
+# Merge a PR
 gh pr merge <PR-NUMBER> --repo codefresh-io/gitops-runtime-helm --squash
 
 # View a release
 gh release view <VERSION> --repo codefresh-io/gitops-runtime-helm
-
-# Create stable branch from main
-git fetch origin && git checkout main && git pull
-git checkout -b stable/0.27
-git push -u origin stable/0.27
 ```
